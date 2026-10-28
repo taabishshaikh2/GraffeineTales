@@ -1,0 +1,200 @@
+{% liquid
+ assign related_entries = section.settings.products | default: section.settings.collection.products
+ assign related_count = 0
+ for entry in related_entries limit:12
+  if entry.id != product.id
+   assign related_count = related_count | plus:1
+  endif
+ endfor
+%}
+{% if related_count > 0 %}
+{{ 'journal-companions.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-showcase.js' | asset_url }}" defer></script><script src="{{ 'journal-companions.js' | asset_url }}" defer></script>
+<atelier-product-showcase class="journal-companions" data-adding-label="{{ section.settings.adding_label | escape }}" data-added-label="{{ section.settings.added_label | escape }}" data-error-label="{{ section.settings.error_label | escape }}" style="--companion-width:{{ section.settings.width }}px;--companion-gap:{{ section.settings.gap }}px;--companion-background:{{ section.settings.background }};--companion-card:{{ section.settings.card_background }};--companion-border:{{ section.settings.border }};--companion-text:{{ section.settings.text }};--companion-accent:{{ section.settings.accent }};--companion-button:{{ section.settings.button }};--companion-button-text:{{ section.settings.button_text }}">
+<journal-companions>
+ <div class="journal-companions__inner">
+  <header><h2>{{ section.settings.heading | escape }}</h2><div><button type="button" data-companion-direction="-1" aria-label="{{ section.settings.previous_label | escape }}">{% render 'reel-icon', name:'previous' %}</button><button type="button" data-companion-direction="1" aria-label="{{ section.settings.next_label | escape }}">{% render 'reel-icon', name:'next' %}</button></div></header>
+  <div class="journal-companions__track" data-companion-track>
+   {% assign companion_products = section.settings.products | default: section.settings.collection.products %}
+   {% for companion in companion_products limit:12 %}{% unless companion.id == product.id %}
+    {% liquid
+     assign variant = companion.selected_or_first_available_variant
+     assign category = companion.metafields.graffeine_product.category_label.value | default: companion.type | split:'•' | first
+     assign form_id = 'Companion-' | append:section.id | append:'-' | append:companion.id
+    %}
+    <article class="journal-companion">
+     <a class="journal-companion__image" href="{{ companion.url }}" aria-label="{{ companion.title | escape }}">{% if companion.featured_image %}{{ companion.featured_image | image_url:width:720 | image_tag:widths:'240,360,540,720',sizes:'(min-width: 990px) 25vw, 75vw',loading:'lazy' }}{% else %}{{ 'product-1' | placeholder_svg_tag }}{% endif %}</a>
+     {% if category != blank %}<p class="journal-companion__category">{{ category | escape }}</p>{% endif %}
+     <h3><a href="{{ companion.url }}">{{ companion.title | escape }}</a></h3>
+     <div class="journal-companion__footer"><span>{{ section.settings.currency_symbol | escape }}{{ variant.price | money_without_currency | remove:'.00' }}</span>
+      {% if companion.available == false %}<button type="button" disabled>{{ section.settings.sold_label | escape }}</button>
+      {% elsif companion.has_only_default_variant and companion.requires_selling_plan == false %}
+       {% form 'product',companion,id:form_id,data-atelier-product-form:'' %}<input type="hidden" name="id" value="{{ variant.id }}"><input type="hidden" name="quantity" value="1"><button type="submit">{{ section.settings.add_label | escape }}</button><p data-cart-error role="alert" hidden></p>{% endform %}
+      {% else %}<a href="{{ companion.url }}">{{ section.settings.choose_label | escape }}</a>{% endif %}
+     </div>
+    </article>
+   {% endunless %}{% endfor %}
+  </div>
+  <p class="visually-hidden" data-showcase-status role="status" aria-live="polite"></p>
+ </div>
+</journal-companions>
+</atelier-product-showcase>
+
+{% else %}{% style %}#shopify-section-{{ section.id }}{display:none}{% endstyle %}{% endif %}
+{% schema %}
+{
+  "name": "Journal companion cards",
+  "tag": "section",
+  "class": "journal-companions-section",
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Companion products",
+      "limit": 12,
+      "info": "Select and reorder existing products. If empty, the collection below is used."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Fallback collection"
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Add button label",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "choose_label",
+      "label": "Multiple-option product label",
+      "default": "Choose options"
+    },
+    {
+      "type": "text",
+      "id": "sold_label",
+      "label": "Sold out label",
+      "default": "Sold out"
+    },
+    {
+      "type": "text",
+      "id": "adding_label",
+      "label": "Adding label",
+      "default": "Adding…"
+    },
+    {
+      "type": "text",
+      "id": "added_label",
+      "label": "Success announcement",
+      "default": "Added to your bag"
+    },
+    {
+      "type": "text",
+      "id": "error_label",
+      "label": "Error message",
+      "default": "Could not add this item. Please try again."
+    },
+    {
+      "type": "text",
+      "id": "previous_label",
+      "label": "Previous arrow label",
+      "default": "Previous products"
+    },
+    {
+      "type": "text",
+      "id": "next_label",
+      "label": "Next arrow label",
+      "default": "Next products"
+    },
+    {
+      "type": "text",
+      "id": "currency_symbol",
+      "label": "Price symbol",
+      "default": "₹"
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Content width",
+      "min": 1000,
+      "max": 1440,
+      "step": 20,
+      "default": 1120,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Card spacing",
+      "min": 12,
+      "max": 36,
+      "step": 2,
+      "default": 22,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Section background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#F8F5ED"
+    },
+    {
+      "type": "color",
+      "id": "border",
+      "label": "Card border",
+      "default": "#E6D9C1"
+    },
+    {
+      "type": "color",
+      "id": "text",
+      "label": "Text",
+      "default": "#16120F"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Category label",
+      "default": "#987137"
+    },
+    {
+      "type": "color",
+      "id": "button",
+      "label": "Button background",
+      "default": "#4D351D"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "#F8F5ED"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Journal companion cards"
+    }
+  ]
+}
+{% endschema %}

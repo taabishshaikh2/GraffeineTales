@@ -1,0 +1,25 @@
+{% doc %}
+  Renders editable links inside a header dropdown.
+  @param {object} block - Navigation block.
+{% enddoc %}
+<ul class="atelier-header__submenu" role="list">
+{% if block.settings.menu != blank %}
+  {% for link in block.settings.menu.links %}
+    <li><a href="{{ link.url }}">{{ link.title | escape }}</a>
+      {% if link.links != blank %}<ul role="list">{% for child in link.links %}<li><a href="{{ child.url }}">{{ child.title | escape }}</a></li>{% endfor %}</ul>{% endif %}
+    </li>
+  {% endfor %}
+{% else %}
+  {% for number in (1..6) %}
+    {% liquid
+      assign label_key = 'label_' | append: number
+      assign link_key = 'link_' | append: number
+      assign description_key = 'description_' | append: number
+      assign menu_link_url = block.settings[link_key] | default:block.settings.link
+    %}
+    {% if block.settings[label_key] != blank and menu_link_url != blank %}
+      <li><a href="{{ menu_link_url }}"><span>{{ block.settings[label_key] | escape }}</span>{% if block.settings[description_key] != blank %}<small>{{ block.settings[description_key] | escape }}</small>{% endif %}</a></li>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+</ul>

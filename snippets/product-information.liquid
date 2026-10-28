@@ -1,0 +1,37 @@
+{% doc %}
+Shared product information, populated only by this product's metafields.
+@param {product} product - Current product.
+@param {string} inside_heading - What's inside label.
+@param {string} features_heading - Product features label.
+@param {string} shipping_heading - Shipping label.
+{% enddoc %}
+{% liquid
+ assign information = product.metafields.graffeine_product
+ assign information_keys = 'whats_inside,features,shipping' | split: ','
+ assign has_information = false
+ for key in information_keys
+  if information[key].value != blank
+   assign has_information = true
+  endif
+ endfor
+ for entry in information.accordions.value
+  if entry.heading.value != blank and entry.content.value != blank
+   assign has_information = true
+  endif
+ endfor
+%}
+{% if has_information %}
+ <div class="atelier-pdp__accordions">
+  {% for key in information_keys %}
+   {% if information[key].value != blank %}
+    {% case key %}{% when 'whats_inside' %}{% assign heading = inside_heading %}{% when 'features' %}{% assign heading = features_heading %}{% when 'shipping' %}{% assign heading = shipping_heading %}{% endcase %}
+    <details><summary>{{ heading | escape }}<span class="atelier-pdp__accordion-chevron" aria-hidden="true">{% render 'header-icon', name: 'chevron' %}</span></summary><div class="atelier-pdp__accordion-content">{{ information[key] | metafield_tag }}</div></details>
+   {% endif %}
+  {% endfor %}
+  {% for entry in information.accordions.value %}
+   {% if entry.heading.value != blank and entry.content.value != blank %}
+    <details{% if entry.open.value %} open{% endif %}><summary>{{ entry.heading.value | escape }}<span class="atelier-pdp__accordion-chevron" aria-hidden="true">{% render 'header-icon', name: 'chevron' %}</span></summary><div class="atelier-pdp__accordion-content">{{ entry.content | metafield_tag }}</div></details>
+   {% endif %}
+  {% endfor %}
+ </div>
+{% endif %}

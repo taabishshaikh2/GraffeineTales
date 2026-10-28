@@ -1,0 +1,71 @@
+{% doc %}
+  Renders a product card using live Shopify product data.
+  @param {product} card_product - Product to display.
+  @param {object} section - Product showcase section.
+  @param {object} [block] - Optional curated product block.
+{% enddoc %}
+{% liquid
+  assign selected_variant = card_product.selected_or_first_available_variant
+  assign card_image = block.settings.image | default: card_product.featured_image
+  assign badge = block.settings.badge | default: section.settings.default_badge
+  assign badge_style = block.settings.badge_style | default: section.settings.default_badge_style | default: 'sage'
+  if section.settings.use_product_badges
+    for product_tag in card_product.tags
+      assign tag_prefix = product_tag | slice: 0, 6
+      assign style_prefix = product_tag | slice: 0, 12
+      if tag_prefix == 'badge:'
+        assign badge = product_tag | remove_first: 'badge:'
+      elsif style_prefix == 'badge-style:'
+        assign product_badge_style = product_tag | remove_first: 'badge-style:'
+        if product_badge_style == 'gold' or product_badge_style == 'sage'
+          assign badge_style = product_badge_style
+        endif
+      endif
+    endfor
+  endif
+  assign form_id = 'ShowcaseProduct-' | append: section.id | append: '-' | append: card_product.id | append: '-' | append: block.id
+  assign rating = card_product.metafields.reviews.rating.value
+  assign rating_count = card_product.metafields.reviews.rating_count.value
+%}
+<article class="atelier-product-card" data-product-handle="{{ card_product.handle | escape }}"{% if block != blank %} {{ block.shopify_attributes }}{% endif %}>
+  <div class="atelier-product-card__media">
+    <a class="atelier-product-card__image-link" href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
+      {% if card_image != blank %}{{ card_image | image_url: width: 900 | image_tag: class: 'atelier-product-card__image', widths: '300,450,600,900', sizes: '(max-width: 749px) 275px, (max-width: 1023px) 45vw, 30vw', loading: 'lazy' }}{% else %}{{ 'product-1' | placeholder_svg_tag: 'atelier-product-card__placeholder' }}{% endif %}
+    </a>
+    {% if section.settings.show_badges and badge != blank %}<span class="atelier-product-card__badge atelier-product-card__badge--{{ badge_style }}">{{ badge | escape }}</span>{% endif %}
+    {% if section.settings.show_wishlist %}<button type="button" class="atelier-product-card__wishlist" data-wishlist-toggle="{{ card_product.handle | escape }}" aria-pressed="false" aria-label="{{ section.settings.wishlist_label | escape }}: {{ card_product.title | escape }}">{% render 'header-icon', name: 'heart' %}</button>{% endif %}
+    {% if section.settings.show_quick_view and card_product.requires_selling_plan == false %}<a class="atelier-product-card__quick-view" href="{{ card_product.url }}" data-quick-view="{{ card_product.handle | escape }}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><span>{{ section.settings.quick_view_label | default: 'View Details' | escape }}</span></a>{% endif %}
+  </div>
+  <div class="atelier-product-card__details">
+    <div>
+      {% if section.settings.show_category and card_product.type != blank %}<p class="atelier-product-card__category">{{ card_product.type | escape }}</p>{% endif %}
+      <h3><a href="{{ card_product.url }}">{{ card_product.title | escape }}</a></h3>
+      <div class="atelier-product-card__rating">
+        {% if section.settings.show_ratings and rating != blank %}
+          {% assign rating_width = rating.rating | times: 100.0 | divided_by: rating.scale_max %}
+          <span class="atelier-product-card__stars" role="img" aria-label="{{ rating.rating }} / {{ rating.scale_max }}" style="--rating-width:{{ rating_width }}%"><span aria-hidden="true"><svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true"><path d="m10 1 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L10 15.3l-5.6 2.9 1.1-6.2L1 7.6l6.2-.9Z"/></svg><svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true"><path d="m10 1 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L10 15.3l-5.6 2.9 1.1-6.2L1 7.6l6.2-.9Z"/></svg><svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true"><path d="m10 1 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L10 15.3l-5.6 2.9 1.1-6.2L1 7.6l6.2-.9Z"/></svg><svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true"><path d="m10 1 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L10 15.3l-5.6 2.9 1.1-6.2L1 7.6l6.2-.9Z"/></svg><svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true"><path d="m10 1 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L10 15.3l-5.6 2.9 1.1-6.2L1 7.6l6.2-.9Z"/></svg></span><span aria-hidden="true"><svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true"><path d="m10 1 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L10 15.3l-5.6 2.9 1.1-6.2L1 7.6l6.2-.9Z"/></svg><svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true"><path d="m10 1 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L10 15.3l-5.6 2.9 1.1-6.2L1 7.6l6.2-.9Z"/></svg><svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true"><path d="m10 1 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L10 15.3l-5.6 2.9 1.1-6.2L1 7.6l6.2-.9Z"/></svg><svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true"><path d="m10 1 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L10 15.3l-5.6 2.9 1.1-6.2L1 7.6l6.2-.9Z"/></svg><svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true"><path d="m10 1 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L10 15.3l-5.6 2.9 1.1-6.2L1 7.6l6.2-.9Z"/></svg></span></span>
+          {% if rating_count != blank %}<span class="atelier-product-card__review-count">({{ rating_count }})</span>{% endif %}
+        {% endif %}
+      </div>
+      <div class="atelier-product-card__pricing">
+        <span class="atelier-product-card__price">{{ selected_variant.price | money }}</span>
+        {% if section.settings.show_compare_price and selected_variant.compare_at_price > selected_variant.price %}
+          <s class="atelier-product-card__compare">{{ selected_variant.compare_at_price | money }}</s>
+          {% if section.settings.show_discount %}{% assign discount = selected_variant.compare_at_price | minus: selected_variant.price | times: 100.0 | divided_by: selected_variant.compare_at_price | round %}<span class="atelier-product-card__discount">{{ discount }}% {{ section.settings.discount_label | escape }}</span>{% endif %}
+        {% endif %}
+      </div>
+    </div>
+    {% if card_product.available == false %}
+      <button class="atelier-product-card__add" type="button" disabled>{{ section.settings.sold_out_label | escape }}</button>
+    {% elsif card_product.has_only_default_variant and card_product.requires_selling_plan == false %}
+      {% form 'product', card_product, id: form_id, class: 'atelier-product-card__form', data-atelier-product-form: '' %}
+        <input type="hidden" name="id" value="{{ selected_variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button class="atelier-product-card__add" type="submit">{{ section.settings.add_label | escape }}</button>
+      {% endform %}
+    {% else %}
+      <a class="atelier-product-card__add" href="{{ card_product.url }}"{% unless card_product.requires_selling_plan %} data-quick-view="{{ card_product.handle | escape }}"{% endunless %}>{{ section.settings.choose_label | escape }}</a>
+    {% endif %}
+    <p class="atelier-product-card__error" role="alert" hidden></p>
+  </div>
+</article>

@@ -1,0 +1,15 @@
+{% doc %}
+  Renders an accessible-control icon for the reels player.
+  @param {string} name - Icon name.
+{% enddoc %}
+<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+{% case name %}
+{% when 'play' %}<path d="m8 5 11 7-11 7Z" fill="currentColor" stroke="none"/>
+{% when 'pause' %}<path d="M8 5v14M16 5v14" stroke-width="4"/>
+{% when 'muted' %}<path d="m11 5-5 4H2v6h4l5 4Z"/><path d="m17 9 5 6m-5 0 5-6"/>
+{% when 'sound' %}<path d="m11 5-5 4H2v6h4l5 4Z"/><path d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>
+{% when 'previous' %}<path d="m15 5-7 7 7 7"/>
+{% when 'next' %}<path d="m9 5 7 7-7 7"/>
+{% when 'share' %}<path d="M12 16V3m-5 5 5-5 5 5M5 13v7h14v-7"/>
+{% endcase %}
+</svg>

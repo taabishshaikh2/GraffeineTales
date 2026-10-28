@@ -1,0 +1,32 @@
+{% doc %}
+  Renders editable footer navigation.
+  @param {object} block - Footer link-column block.
+  @param {object} section - Footer section.
+{% enddoc %}
+<ul class="atelier-footer__links" role="list">
+{% if block.settings.menu != blank %}
+  {% for link in block.settings.menu.links %}<li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>{% endfor %}
+{% else %}
+  {% for number in (1..8) %}
+    {% liquid
+      assign label_key = 'label_' | append: number
+      assign link_key = 'link_' | append: number
+      assign link_label = block.settings[label_key]
+      assign link_url = block.settings[link_key]
+      if number == block.settings.contact_link
+        assign contact_email = section.settings.contact_email | default: shop.email
+        assign link_url = 'mailto:' | append: contact_email
+      endif
+      assign first_character = link_url | slice: 0, 1
+      if first_character == '#'
+        assign link_url = routes.root_url | append: link_url
+      endif
+    %}
+    {% if link_label != blank %}
+      {% if link_url != blank %}<li><a href="{{ link_url }}">{{ link_label | escape }}</a></li>{% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{% if block.settings.include_policies %}{% for policy in shop.policies %}{% if policy.url != blank and policy.body != blank %}<li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>{% endif %}{% endfor %}{% endif %}
+{% if block.settings.include_account and shop.customer_accounts_enabled %}<li><a href="{{ routes.account_url }}">{{ section.settings.account_label | escape }}</a></li>{% endif %}
+</ul>

@@ -1,0 +1,254 @@
+{
+  "sections": {
+    "main": {
+      "type": "product-editorial",
+      "settings": {
+        "swatch_option_name": "Cover Tone",
+        "shimmer": true,
+        "dynamic_checkout": false,
+        "show_delivery": false,
+        "width": 1320,
+        "column_gap": 52,
+        "title_size": 32,
+        "mobile_title_size": 28,
+        "image_fit": "cover",
+        "background": "#F8F5ED",
+        "purchase_background": "#FFFFFF",
+        "purchase_border": "#E6D9C1",
+        "purchase_radius": 26,
+        "purchase_padding": 36,
+        "purchase_shadow": true,
+        "button_radius": 28,
+        "compact_money": true,
+        "currency_symbol": "₹",
+        "delivery_heading": "Estimated Delivery Date"
+      },
+      "blocks": {
+        "espresso": {
+          "type": "option_detail",
+          "settings": {
+            "value": "Midnight Espresso",
+            "color": "#35261E"
+          }
+        },
+        "clay": {
+          "type": "option_detail",
+          "settings": {
+            "value": "Terracotta Bloom",
+            "color": "#C85A32"
+          }
+        },
+        "sage": {
+          "type": "option_detail",
+          "settings": {
+            "value": "Sage Atelier",
+            "color": "#6B7964"
+          }
+        },
+        "indigo": {
+          "type": "option_detail",
+          "settings": {
+            "value": "Celestial Indigo",
+            "color": "#303D67"
+          }
+        },
+        "dated": {
+          "type": "option_detail",
+          "settings": {
+            "value": "Dated 2027 Year",
+            "note": "Jan – Dec Calendar",
+            "icon": "calendar"
+          }
+        },
+        "undated": {
+          "type": "option_detail",
+          "settings": {
+            "value": "Undated 365 Days",
+            "note": "Start Anytime • 0 Waste",
+            "icon": "book"
+          }
+        },
+        "prod_39_tone_0": {
+          "type": "option_detail",
+          "settings": {
+            "enabled": true,
+            "value": "Sage Atelier Herbarium",
+            "color": "#2d6a4f",
+            "note": "Botanical Gold Foil",
+            "badge": "",
+            "icon": "book"
+          }
+        },
+        "prod_39_tone_1": {
+          "type": "option_detail",
+          "settings": {
+            "enabled": true,
+            "value": "Terracotta Bloom Cloth",
+            "color": "#c85a32",
+            "note": "Morning Sun Tone",
+            "badge": "",
+            "icon": "book"
+          }
+        },
+        "prod_39_tone_2": {
+          "type": "option_detail",
+          "settings": {
+            "enabled": true,
+            "value": "Midnight Espresso Roast",
+            "color": "#363638",
+            "note": "Rich Coffee Hue",
+            "badge": "",
+            "icon": "book"
+          }
+        },
+        "prod_39_tone_3": {
+          "type": "option_detail",
+          "settings": {
+            "enabled": true,
+            "value": "Warm Sand Cream",
+            "color": "#c6b58e",
+            "note": "Gentle Linen",
+            "badge": "",
+            "icon": "book"
+          }
+        },
+        "prod_38_tone_0": {
+          "type": "option_detail",
+          "settings": {
+            "enabled": true,
+            "value": "Natural Oat Woven Linen",
+            "color": "#dfd6c3",
+            "note": "Raw Tactile Texture",
+            "badge": "",
+            "icon": "book"
+          }
+        },
+        "prod_38_tone_1": {
+          "type": "option_detail",
+          "settings": {
+            "enabled": true,
+            "value": "Midnight Espresso Linen",
+            "color": "#363638",
+            "note": "Deep Archival Tone",
+            "badge": "",
+            "icon": "book"
+          }
+        },
+        "prod_38_tone_2": {
+          "type": "option_detail",
+          "settings": {
+            "enabled": true,
+            "value": "Sage Herbarium Linen",
+            "color": "#2d6a4f",
+            "note": "Forest Weave",
+            "badge": "",
+            "icon": "book"
+          }
+        },
+        "prod_38_tone_3": {
+          "type": "option_detail",
+          "settings": {
+            "enabled": true,
+            "value": "Terracotta Earth Linen",
+            "color": "#c85a32",
+            "note": "Sunbaked Clay",
+            "badge": "",
+            "icon": "book"
+          }
+        }
+      },
+      "block_order": [
+        "espresso",
+        "clay",
+        "sage",
+        "indigo",
+        "dated",
+        "undated",
+        "prod_39_tone_0",
+        "prod_39_tone_1",
+        "prod_39_tone_2",
+        "prod_39_tone_3",
+        "prod_38_tone_0",
+        "prod_38_tone_1",
+        "prod_38_tone_2",
+        "prod_38_tone_3"
+      ]
+    },
+    "disclosures": {
+      "type": "disclosures",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "related-products": {
+      "type": "atelier-related-products",
+      "settings": {
+        "heading": "You May Also Like",
+        "collection": "bestsellers",
+        "limit": 4,
+        "link_label": "EXPLORE FULL CATALOG →",
+        "link": "shopify://collections/atelier-collection",
+        "button_label": "View Details",
+        "show_category": true,
+        "show_compare": true,
+        "currency_symbol": "₹",
+        "store_money_format": false,
+        "width": 1400,
+        "gap": 28,
+        "radius": 18,
+        "heading_size": 34,
+        "padding_top": 44,
+        "padding_bottom": 44,
+        "show_divider": true,
+        "image_fit": "cover",
+        "background": "#F8F5ED",
+        "card_background": "#FFFFFF",
+        "text": "#242424",
+        "accent": "#8A6B40",
+        "border": "#E6D9C1",
+        "button_background": "#F8F5ED"
+      }
+    },
+    "preview": {
+      "type": "journal-flipbook",
+      "settings": {
+        "heading": "Flip through a few inner pages!",
+        "back_label": "‹ Back",
+        "next_label": "Next ›",
+        "peel_label": "Flip page ›",
+        "counter_label": "Page",
+        "error_label": "Use Back and Next to browse the page images.",
+        "page_width": 380,
+        "turn_time": 700,
+        "background": "#f8f5ed",
+        "coffee": "#4d351d",
+        "peel_hint": false,
+        "card_background": "#fdfcfa",
+        "card_border": "#e6d9c1",
+        "card_radius": 24,
+        "card_width": 840,
+        "drag_back": "← Drag corner or tap to turn back",
+        "drag_next": "Drag corner or tap to turn next →",
+        "show_counter": false
+      }
+    },
+    "faqs": {
+      "type": "product-faqs",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "background": "#ffffff",
+        "panel_background": "#faf8f2",
+        "text": "#363638",
+        "width": 900
+      }
+    }
+  },
+  "order": [
+    "main",
+    "preview",
+    "disclosures",
+    "faqs",
+    "related-products"
+  ]
+}

@@ -1,0 +1,272 @@
+{% liquid
+ assign hero_entries = '|'
+ assign hero_count = 0
+ for entry in section.blocks
+  if entry.settings.image != blank or entry.settings.mobile_image != blank or entry.settings.reference_image != blank
+   assign hero_entries = hero_entries | append:entry.id | append:'|'
+   assign hero_count = hero_count | plus:1
+  endif
+ endfor
+%}
+{% if hero_count > 0 %}
+{{ 'hero-carousel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hero-carousel.js' | asset_url }}" defer></script>
+<hero-banner-slider class="atelier-hero" data-autoplay="{{ section.settings.autoplay }}" data-interval="{{ section.settings.interval | times: 1000 }}" data-content="{{ section.settings.show_content }}" data-responsive-height="{{ section.settings.responsive_height }}" style="--hero-arrow-background:{{ section.settings.arrow_background }};--hero-arrow-color:{{ section.settings.arrow_color }};--hero-desktop-height:{{ section.settings.desktop_height }}px;--hero-mobile-height:{{ section.settings.mobile_height }}px;--hero-overlay:{{ section.settings.overlay | divided_by: 100.0 }}" role="region" aria-roledescription="carousel" aria-label="{{ 'atelier.hero.label' | t }}">
+  <div class="atelier-hero__viewport">
+    <div class="atelier-hero__track" id="HeroTrack-{{ section.id }}">
+      {% assign hero_position = 0 %}{% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless hero_entries contains entry_token %}{% continue %}{% endunless %}
+        {% liquid
+          assign hero_number = hero_position | plus:1
+          assign desktop_image = block.settings.image | default: block.settings.mobile_image
+          assign loading = 'lazy'
+          assign priority = 'auto'
+          if hero_position == 0
+            assign loading = 'eager'
+            assign priority = 'high'
+          endif
+        %}
+        <article class="atelier-hero__slide" data-block-id="{{ block.id }}" role="group" aria-roledescription="slide" aria-label="{{ hero_number }} / {{ hero_count }}" {{ block.shopify_attributes }}>
+          <picture class="atelier-hero__media">
+            {% if block.settings.mobile_image != blank %}
+              <source media="(max-width: 749px)" srcset="{{ block.settings.mobile_image | image_url: width: 450 }} 450w, {{ block.settings.mobile_image | image_url: width: 750 }} 750w, {{ block.settings.mobile_image | image_url: width: 1100 }} 1100w" sizes="100vw">
+            {% endif %}
+            {% if desktop_image != blank %}
+              {{ desktop_image | image_url: width: 2400 | image_tag: widths: '750,1100,1500,2000,2400', sizes: '100vw', loading: loading, fetchpriority: priority }}
+            {% else %}
+              <img src="{{ block.settings.reference_image | asset_url }}" alt="{{ block.settings.image_description | escape }}" width="1600" height="900" loading="{{ loading }}" fetchpriority="{{ priority }}">
+            {% endif %}
+          </picture>
+          {% unless section.settings.show_content %}{% if hero_position == 0 %}<h1 class="visually-hidden">{{ block.settings.heading | default: shop.name | escape }}</h1>{% endif %}{% endunless %}
+          <div class="atelier-hero__content page-width{% unless section.settings.show_content %} visually-hidden{% endunless %}"{% unless section.settings.show_content %} inert{% endunless %}>
+            {% if block.settings.eyebrow != blank %}<p class="atelier-eyebrow">{{ block.settings.eyebrow | escape }}</p>{% endif %}
+            {% if block.settings.heading != blank %}{% if hero_position == 0 and section.settings.show_content %}<h1>{{ block.settings.heading | escape }}</h1>{% else %}<h2>{{ block.settings.heading | escape }}</h2>{% endif %}{% endif %}
+            {% if block.settings.description != blank %}<div class="atelier-hero__description">{{ block.settings.description }}</div>{% endif %}
+            <div class="atelier-hero__actions">
+              {% if block.settings.primary_label != blank %}<a class="button" href="{{ block.settings.primary_link | default: routes.all_products_collection_url }}">{{ block.settings.primary_label | escape }} <span aria-hidden="true">&rarr;</span></a>{% endif %}
+              {% if block.settings.secondary_label != blank and block.settings.secondary_link != blank %}<a class="atelier-hero__secondary" href="{{ block.settings.secondary_link }}">{{ block.settings.secondary_label | escape }}</a>{% endif %}
+            </div>
+            {% if block.settings.note != blank %}<p class="atelier-hero__note">{{ block.settings.note | escape }}</p>{% endif %}
+          </div>
+        </article>{% assign hero_position = hero_position | plus:1 %}
+      {% endfor %}
+    </div>
+  </div>
+  {% if hero_count > 1 %}
+    {% if section.settings.show_arrows %}
+      <button type="button" class="atelier-hero__arrow atelier-hero__arrow--previous" data-hero-previous aria-label="{{ section.settings.previous_label | escape }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg></button>
+      <button type="button" class="atelier-hero__arrow atelier-hero__arrow--next" data-hero-next aria-label="{{ section.settings.next_label | escape }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></button>
+    {% endif %}
+    <div class="atelier-hero__controls" hidden>
+      <div class="atelier-hero__pagination" aria-label="{{ 'atelier.hero.pagination' | t }}">
+        <span class="atelier-hero__indicator" aria-hidden="true"></span>
+        {% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless hero_entries contains entry_token %}{% continue %}{% endunless %}<button class="atelier-hero__dot" type="button" data-slide="{{ forloop.index0 }}" aria-label="{{ 'atelier.hero.slide' | t: number: forloop.index }}" aria-controls="HeroTrack-{{ section.id }}"{% if forloop.first %} aria-current="true"{% endif %}><span></span></button>{% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</hero-banner-slider>
+
+{% else %}{% style %}#shopify-section-{{ section.id }}{display:none}{% endstyle %}{% endif %}
+{% schema %}
+{
+  "name": "Hero banner slider",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate banners",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "interval",
+      "label": "Time between banners",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop banner height",
+      "min": 400,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "default": 640
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile banner height",
+      "min": 360,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "overlay",
+      "label": "Image overlay strength",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "checkbox",
+      "id": "show_content",
+      "label": "Show text and buttons over banners",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "responsive_height",
+      "label": "Scale desktop height with screen width",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "arrow_background",
+      "label": "Arrow background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow colour",
+      "default": "#363638"
+    },
+    {
+      "type": "text",
+      "id": "previous_label",
+      "label": "Previous arrow label",
+      "default": "Previous banner"
+    },
+    {
+      "type": "text",
+      "id": "next_label",
+      "label": "Next arrow label",
+      "default": "Next banner"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop image",
+          "info": "Recommended: 2400 × 1000 px."
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image",
+          "info": "Recommended: 900 × 1200 px. Falls back to desktop image."
+        },
+        {
+          "type": "text",
+          "id": "image_description",
+          "label": "Fallback image description",
+          "default": "Graffeine Tales studio collection"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "GRAFFEINE TALES / THE CREATIVE ATELIER"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Where stories become art."
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "primary_label",
+          "label": "Primary button label",
+          "default": "Explore the collection"
+        },
+        {
+          "type": "url",
+          "id": "primary_link",
+          "label": "Primary button link"
+        },
+        {
+          "type": "text",
+          "id": "secondary_label",
+          "label": "Secondary button label"
+        },
+        {
+          "type": "url",
+          "id": "secondary_link",
+          "label": "Secondary button link"
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Handwritten note"
+        },
+        {
+          "type": "select",
+          "id": "reference_image",
+          "label": "Reference banner",
+          "options": [
+            {
+              "value": "hero-banner.jpg",
+              "label": "Journal and coffee"
+            },
+            {
+              "value": "cat_journals.jpg",
+              "label": "Stacked journals"
+            },
+            {
+              "value": "cat_stationaries.jpg",
+              "label": "Botanical stationery"
+            }
+          ],
+          "default": "hero-banner.jpg"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero banner slider",
+      "blocks": [
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,328 @@
+{% liquid
+ assign category_entries = '|'
+ assign category_count = 0
+ for entry in section.blocks
+  assign image = entry.settings.image | default: entry.settings.collection.featured_image
+  if image != blank or entry.settings.reference_image != blank
+   if entry.settings.title != blank or entry.settings.collection.title != blank
+    assign category_entries = category_entries | append:entry.id | append:'|'
+    assign category_count = category_count | plus:1
+   endif
+  endif
+ endfor
+%}
+{% if category_count > 0 %}
+{{ 'categories-grid.css' | asset_url | stylesheet_tag }}
+<div class="atelier-category-strip" id="category-section" style="--category-width:{{ section.settings.width }}px;--category-title-size:{{ section.settings.heading_size }}px;--category-radius:{{ section.settings.card_radius }}px;--category-gap:{{ section.settings.card_gap }}px;--category-mobile-columns:{{ section.settings.mobile_columns }};--category-background:{{ section.settings.background }};--category-heading:{{ section.settings.heading_color }};--category-button:{{ section.settings.button_background }};--category-button-text:{{ section.settings.button_text }};--category-top:{{ section.settings.padding_top }}px;--category-bottom:{{ section.settings.padding_bottom }}px">
+  <div class="atelier-category-strip__inner">
+    {% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}
+    <div class="atelier-category-strip__track">
+      {% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless category_entries contains entry_token %}{% continue %}{% endunless %}
+        {% liquid
+          assign category_collection = block.settings.collection
+          assign category_image = block.settings.image | default: category_collection.featured_image
+          assign category_link = block.settings.link | default: category_collection.url | default: routes.all_products_collection_url
+        %}
+        <a class="atelier-category-strip__card atelier-category-strip__card--{{ block.settings.image_position }}" href="{{ category_link }}" {{ block.shopify_attributes }}>
+          <div class="atelier-category-strip__media">
+            {% if category_image != blank %}{{ category_image | image_url: width: 600 | image_tag: widths: '180,300,450,600', sizes: '(max-width: 749px) 33vw, 155px', loading: 'lazy', alt: '' }}{% else %}<img src="{{ block.settings.reference_image | asset_url }}" width="300" height="400" loading="lazy" decoding="async" alt="">{% endif %}
+          </div>
+          <div class="atelier-category-strip__info"><span>{{ block.settings.title | default: category_collection.title | escape }}</span><span class="atelier-category-strip__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span></div>
+        </a>
+      {% endfor %}
+    </div>
+    {% if section.settings.show_button and section.settings.button_label != blank %}<a class="atelier-category-strip__all" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}{% render 'header-icon', name: 'arrow' %}</a>{% endif %}
+  </div>
+</div>
+
+{% else %}{% style %}#shopify-section-{{ section.id }}{display:none}{% endstyle %}{% endif %}
+{% schema %}
+{
+  "name": "Shop by category",
+  "tag": "section",
+  "class": "category-strip-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "SHOP BY CATEGORY."
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Content width",
+      "min": 1000,
+      "max": 1400,
+      "step": 20,
+      "unit": "px",
+      "default": 1240
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Desktop heading size",
+      "min": 24,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corners",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Card gap",
+      "min": 6,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "2",
+          "label": "Two"
+        },
+        {
+          "value": "3",
+          "label": "Three"
+        },
+        {
+          "value": "4",
+          "label": "Four"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Section background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading colour",
+      "default": "#363638"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "View all background",
+      "default": "#0D0C0B"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "View all text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Show view all button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "View all products"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button destination"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 8,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 8,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Stationaries"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card image"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom destination",
+          "info": "Overrides the collection. Falls back to All Products."
+        },
+        {
+          "type": "select",
+          "id": "reference_image",
+          "label": "Reference image",
+          "options": [
+            {
+              "value": "cat_stationaries.jpg",
+              "label": "Stationaries"
+            },
+            {
+              "value": "cat_journals.jpg",
+              "label": "Journals"
+            },
+            {
+              "value": "lady_teatrip.jpg",
+              "label": "Coasters"
+            },
+            {
+              "value": "wood_book_oclock.jpg",
+              "label": "Bookmarks"
+            },
+            {
+              "value": "cat_decor.jpg",
+              "label": "Décor"
+            },
+            {
+              "value": "cat_events.jpg",
+              "label": "Gifting"
+            },
+            {
+              "value": "cat_bulk.jpg",
+              "label": "Bulk Orders"
+            },
+            {
+              "value": "chugli_chai.jpg",
+              "label": "Bestsellers"
+            }
+          ],
+          "default": "cat_stationaries.jpg"
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image focal position",
+          "options": [
+            {
+              "value": "center",
+              "label": "Centre"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            }
+          ],
+          "default": "center"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by category",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "title": "Stationaries",
+            "reference_image": "cat_stationaries.jpg"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Journals",
+            "reference_image": "cat_journals.jpg"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Coasters",
+            "reference_image": "lady_teatrip.jpg"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Bookmarks",
+            "reference_image": "wood_book_oclock.jpg"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Décor",
+            "reference_image": "cat_decor.jpg"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Gifting",
+            "reference_image": "cat_events.jpg"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Bulk Orders",
+            "reference_image": "cat_bulk.jpg"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Bestsellers",
+            "reference_image": "chugli_chai.jpg"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

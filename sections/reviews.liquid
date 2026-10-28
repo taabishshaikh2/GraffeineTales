@@ -1,0 +1,356 @@
+{% liquid
+  assign published_reviews = 0
+  assign sample_reviews = 0
+  for block in section.blocks
+    if block.settings.quote == blank or block.settings.author == blank
+      continue
+    endif
+    if block.settings.publish_review
+      assign published_reviews = published_reviews | plus: 1
+    else
+      assign sample_reviews = sample_reviews | plus: 1
+    endif
+  endfor
+%}
+{% if published_reviews > 0 or sample_reviews > 0 and request.design_mode %}
+{{ 'reviews.css' | asset_url | stylesheet_tag }}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<script src="{{ 'reviews.js' | asset_url }}" defer></script>
+<atelier-reviews id="reviews-section" data-autoplay="{{ section.settings.autoplay }}" data-fade="{{ section.settings.fade_edges }}" style="--reviews-background:{{ section.settings.background }};--reviews-card-background:{{ section.settings.card_background }};--reviews-text:{{ section.settings.text }};--reviews-muted:{{ section.settings.muted_text }};--reviews-accent:{{ section.settings.accent }};--reviews-avatar-background:{{ section.settings.avatar_background }};--reviews-avatar-text:{{ section.settings.avatar_text }};--reviews-width:{{ section.settings.width }}px;--reviews-heading-size:{{ section.settings.heading_size }}px;--reviews-card-width:{{ section.settings.card_width }}px;--reviews-mobile-width:{{ section.settings.mobile_width }}px;--reviews-gap:{{ section.settings.gap }}px;--reviews-radius:{{ section.settings.radius }}px;--reviews-quote-size:{{ section.settings.quote_size }}px;--reviews-top:{{ section.settings.padding_top }}px;--reviews-bottom:{{ section.settings.padding_bottom }}px;--reviews-duration:{{ section.settings.duration }}s">
+  <div class="atelier-reviews__inner">
+    <header class="atelier-reviews__heading">{% if section.settings.eyebrow != blank %}<p>{{ section.settings.eyebrow | escape }}</p>{% endif %}{% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}{% if section.settings.description != blank %}<div>{{ section.settings.description | escape }}</div>{% endif %}</header>
+    {% if request.design_mode and sample_reviews > 0 %}<p class="atelier-reviews__preview-note">{{ section.settings.preview_note | escape }}</p>{% endif %}
+    <p id="ReviewInstructions-{{ section.id }}" class="visually-hidden">{{ section.settings.keyboard_hint | escape }}</p>
+    <div class="atelier-reviews__viewport" data-reviews-viewport role="region" aria-label="{{ section.settings.region_label | escape }}" aria-describedby="ReviewInstructions-{{ section.id }}" tabindex="0">
+      <div class="atelier-reviews__track" data-reviews-track>
+        <div class="atelier-reviews__group" data-reviews-group role="list">
+          {% for block in section.blocks %}{% if block.settings.quote != blank and block.settings.author != blank %}{% if block.settings.publish_review or request.design_mode %}{% render 'review-card', block: block, section: section %}{% endif %}{% endif %}{% endfor %}
+        </div>
+      </div>
+    </div>
+    {% if section.settings.show_controls %}<div class="atelier-reviews__controls"><button type="button" data-reviews-toggle data-pause-label="{{ section.settings.pause_label | escape }}" data-resume-label="{{ section.settings.resume_label | escape }}" aria-pressed="false">{{ section.settings.pause_label | escape }}</button></div>{% endif %}
+    
+  </div>
+</atelier-reviews>
+{% else %}{% style %}#shopify-section-{{ section.id }}{display:none}{% endstyle %}{% endif %}
+{% schema %}
+{
+  "name": "Loved by Storytellers",
+  "tag": "section",
+  "class": "customer-reviews-section",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Words from Our Circle"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Loved by Storytellers"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Optional introduction"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Content width",
+      "min": 1000,
+      "max": 1440,
+      "step": 20,
+      "unit": "px",
+      "default": 1320
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 28,
+      "max": 52,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "label": "Desktop card width",
+      "min": 280,
+      "max": 440,
+      "step": 10,
+      "unit": "px",
+      "default": 360
+    },
+    {
+      "type": "range",
+      "id": "mobile_width",
+      "label": "Mobile card width",
+      "min": 240,
+      "max": 340,
+      "step": 10,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Card gap",
+      "min": 12,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "Card corners",
+      "min": 0,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "quote_size",
+      "label": "Review text size",
+      "min": 14,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 24,
+      "max": 104,
+      "step": 8,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 24,
+      "max": 104,
+      "step": 8,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "checkbox",
+      "id": "fade_edges",
+      "label": "Fade carousel edges",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Continuously scroll reviews",
+      "default": true,
+      "info": "Pauses on hover, keyboard focus and when off-screen. Disabled for reduced-motion preferences."
+    },
+    {
+      "type": "range",
+      "id": "duration",
+      "label": "Time per complete loop",
+      "min": 20,
+      "max": 90,
+      "step": 2,
+      "unit": "s",
+      "default": 42
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Show pause and resume button",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Section background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#F8F5ED"
+    },
+    {
+      "type": "color",
+      "id": "text",
+      "label": "Review text and heading",
+      "default": "#363638"
+    },
+    {
+      "type": "color",
+      "id": "muted_text",
+      "label": "Customer details",
+      "default": "#6B6966"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Stars and eyebrow",
+      "default": "#927B53"
+    },
+    {
+      "type": "color",
+      "id": "avatar_background",
+      "label": "Initials background",
+      "default": "#E9DFC2"
+    },
+    {
+      "type": "color",
+      "id": "avatar_text",
+      "label": "Initials text",
+      "default": "#4D351D"
+    },
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "text",
+      "id": "region_label",
+      "label": "Carousel accessible label",
+      "default": "Customer reviews"
+    },
+    {
+      "type": "text",
+      "id": "rating_label",
+      "label": "Star rating label",
+      "default": "Rating"
+    },
+    {
+      "type": "text",
+      "id": "verified_label",
+      "label": "Verified buyer label",
+      "default": "Verified buyer"
+    },
+    {
+      "type": "text",
+      "id": "sample_label",
+      "label": "Reference preview badge",
+      "default": "Reference sample"
+    },
+    {
+      "type": "text",
+      "id": "preview_note",
+      "label": "Theme Editor sample note",
+      "default": "Sample reviews are shown here for layout preview. Add genuine reviews and enable Display on storefront for each one."
+    },
+    {
+      "type": "text",
+      "id": "keyboard_hint",
+      "label": "Accessible reading instructions",
+      "default": "Focus or hover over the reviews to pause scrolling. Use the arrow keys to browse."
+    },
+    {
+      "type": "text",
+      "id": "pause_label",
+      "label": "Pause button label",
+      "default": "Pause reviews"
+    },
+    {
+      "type": "text",
+      "id": "resume_label",
+      "label": "Resume button label",
+      "default": "Resume reviews"
+    },
+    {
+      "type": "text",
+      "id": "empty_label",
+      "label": "Empty editor message",
+      "default": "Add customer reviews to display this section."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Customer review",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "publish_review",
+          "label": "Display on storefront",
+          "default": false,
+          "info": "Leave off for sample content. Enable after entering a genuine customer review."
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Review text",
+          "default": "Add a customer review here."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Customer name",
+          "default": "Customer name"
+        },
+        {
+          "type": "text",
+          "id": "meta",
+          "label": "Location or customer details"
+        },
+        {
+          "type": "text",
+          "id": "initials",
+          "label": "Avatar initials"
+        },
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Customer photo"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Verified purchase",
+          "default": false,
+          "info": "Use only for a purchase you have verified."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loved by Storytellers"
+    }
+  ]
+}
+{% endschema %}

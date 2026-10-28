@@ -1,0 +1,576 @@
+{% liquid
+ assign catalogue_collection = section.settings.collection
+ if catalogue_collection.products.size == 0 or catalogue_collection == blank
+  for entry in section.blocks
+   if entry.settings.collection.products.size > 0
+    assign catalogue_collection = entry.settings.collection
+    break
+   endif
+  endfor
+ endif
+%}
+{% if catalogue_collection.products.size > 0 %}
+{{ 'product-showcase.css' | asset_url | stylesheet_tag }}
+{{ 'catalogue.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'catalogue.js' | asset_url }}" defer></script>
+<script src="{{ 'product-showcase.js' | asset_url }}" defer></script>
+<atelier-product-showcase id="catalogue-section" data-catalogue data-showcase-columns="{{ section.settings.columns }}" data-currency="{{ cart.currency.iso_code | escape }}" data-add-label="{{ section.settings.add_label | escape }}" data-adding-label="{{ section.settings.adding_label | escape }}" data-added-label="{{ section.settings.added_label | escape }}" data-error-label="{{ section.settings.error_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}" style="--catalogue-filter-background:{{ section.settings.filter_background }};--catalogue-filter-text:{{ section.settings.filter_text }};--catalogue-active-background:{{ section.settings.active_filter_background }};--catalogue-active-text:{{ section.settings.active_filter_text }};--showcase-background:{{ section.settings.background }};--showcase-card:{{ section.settings.card_background }};--showcase-image:{{ section.settings.image_background }};--showcase-text:{{ section.settings.text_color }};--showcase-accent:{{ section.settings.accent }};--showcase-button:{{ section.settings.button_background }};--showcase-button-text:{{ section.settings.button_color }};--showcase-badge:{{ section.settings.badge_background }};--showcase-badge-text:{{ section.settings.badge_color }};--showcase-gold:{{ section.settings.gold_badge_background }};--showcase-gold-text:{{ section.settings.gold_badge_color }};--showcase-width:{{ section.settings.width }}px;--showcase-columns:{{ section.settings.columns }};--showcase-gap:{{ section.settings.gap }}px;--showcase-mobile-width:{{ section.settings.mobile_width }}px;--showcase-card-height:{{ section.settings.card_height }}px;--showcase-image-height:{{ section.settings.image_height }}px;--showcase-image-padding:{{ section.settings.image_padding }}px;--showcase-radius:{{ section.settings.radius }}px;--showcase-heading-size:{{ section.settings.heading_size }}px;--showcase-top:{{ section.settings.padding_top }}px;--showcase-bottom:{{ section.settings.padding_bottom }}px">
+  <div class="atelier-showcase__inner">
+    <header class="atelier-showcase__heading">
+      {% if section.settings.eyebrow != blank %}<p>{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      {% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}
+      {% if section.settings.description != blank %}<div class="atelier-showcase__intro">{{ section.settings.description | escape }}</div>{% endif %}
+    </header>
+    <catalogue-filters data-results-label="{{ section.settings.results_label | escape }}">
+      <div class="atelier-catalogue__filters" data-catalogue-filter-controls hidden role="group" aria-label="{{ section.settings.filter_label | escape }}">
+        <button type="button" class="atelier-catalogue__filter" data-catalogue-filter="all" aria-pressed="true" aria-controls="CatalogueGrid-{{ section.id }}">{{ section.settings.all_label | escape }}</button>
+        {% for block in section.blocks %}{% if block.settings.collection.products.size > 0 %}<button type="button" class="atelier-catalogue__filter" data-catalogue-filter="{{ block.id }}" data-block-id="{{ block.id }}" aria-pressed="false" aria-controls="CatalogueGrid-{{ section.id }}" {{ block.shopify_attributes }}>{{ block.settings.label | default: block.settings.collection.title | escape }}</button>{% endif %}{% endfor %}
+      </div>
+      <div class="atelier-showcase__grid" id="CatalogueGrid-{{ section.id }}" data-catalogue-grid>
+        {% for card_product in catalogue_collection.products limit: section.settings.product_limit %}{% render 'product-card', card_product: card_product, section: section %}{% endfor %}
+      </div>
+      <p class="visually-hidden" data-catalogue-status role="status" aria-live="polite"></p>
+      {% if section.settings.show_collection_link %}<a class="atelier-catalogue__collection-link" data-catalogue-collection-link href="{{ catalogue_collection.url | default: routes.all_products_collection_url }}">{{ section.settings.collection_link_label | escape }}{% render 'header-icon', name: 'arrow' %}</a>{% endif %}
+      <template data-catalogue-template="all" data-collection-url="{{ catalogue_collection.url | default: routes.all_products_collection_url }}">
+        {% for card_product in catalogue_collection.products limit: section.settings.product_limit %}{% render 'product-card', card_product: card_product, section: section %}{% endfor %}
+      </template>
+      {% for block in section.blocks %}
+        {% if block.settings.collection.products.size > 0 %}
+          <template data-catalogue-template="{{ block.id }}" data-collection-url="{{ block.settings.collection.url }}">
+            {% for card_product in block.settings.collection.products limit: section.settings.product_limit %}{% render 'product-card', card_product: card_product, section: section %}{% endfor %}
+          </template>
+        {% endif %}
+      {% endfor %}
+    </catalogue-filters>
+    <p class="atelier-showcase__status visually-hidden" data-showcase-status role="status" aria-live="polite"></p>
+  </div>
+  <dialog class="atelier-quick-view" data-quick-view-dialog aria-labelledby="QuickViewTitle-{{ section.id }}">
+    <button type="button" class="atelier-quick-view__close" data-close-quick-view aria-label="{{ section.settings.close_label | escape }}">{% render 'header-icon', name: 'close' %}</button>
+    <p class="atelier-quick-view__loading" data-quick-view-loading>{{ section.settings.loading_label | escape }}</p>
+    <div class="atelier-quick-view__layout" data-quick-view-body hidden>
+      <div class="atelier-quick-view__media"><img data-quick-view-image alt="" width="600" height="700"></div>
+      <div class="atelier-quick-view__details">
+        <h2 id="QuickViewTitle-{{ section.id }}" data-quick-view-title>{{ section.settings.quick_view_label | escape }}</h2>
+        <p class="atelier-quick-view__price" data-quick-view-price></p>
+        <div class="atelier-quick-view__description" data-quick-view-description></div>
+        <form data-atelier-product-form data-quick-view-form action="{{ routes.cart_add_url }}" method="post">
+          <div data-quick-view-variant-row><label for="QuickViewVariant-{{ section.id }}">{{ section.settings.variant_label | escape }}</label><select id="QuickViewVariant-{{ section.id }}" name="id" data-quick-view-variants></select></div>
+          <label for="QuickViewQuantity-{{ section.id }}">{{ section.settings.quantity_label | escape }}</label>
+          <div class="atelier-quick-view__quantity"><button type="button" data-quantity-change="-1" aria-label="{{ 'products.product.quantity.decrease' | t: product: section.settings.quick_view_label }}">−</button><input id="QuickViewQuantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" step="1" inputmode="numeric"><button type="button" data-quantity-change="1" aria-label="{{ 'products.product.quantity.increase' | t: product: section.settings.quick_view_label }}">+</button></div>
+          <button class="atelier-product-card__add" type="submit" data-quick-view-add>{{ section.settings.add_label | escape }}</button>
+        </form>
+        <p class="atelier-product-card__error" data-quick-view-error role="alert" hidden></p>
+        <a class="atelier-quick-view__link" data-quick-view-link>{{ section.settings.details_label | escape }}</a>
+      </div>
+    </div>
+  </dialog>
+</atelier-product-showcase>
+
+
+{% else %}{% style %}#shopify-section-{{ section.id }}{display:none}{% endstyle %}{% endif %}
+{% stylesheet %}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  atelier-product-showcase[data-showcase-columns="4"] .atelier-showcase__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Atelier catalogue",
+  "tag": "section",
+  "class": "product-showcase-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content and products"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Full Studio Archive"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Complete Atelier Collection"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Optional introduction"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Products and their order are managed in this collection in Shopify admin."
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Maximum products",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 48,
+      "info": "Maximum cards per filter. Use the collection link below to browse more products."
+    },
+    {
+      "type": "text",
+      "id": "default_badge",
+      "label": "Default badge",
+      "default": "Studio Edit"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_product_badges",
+      "label": "Use product badge tags",
+      "default": true,
+      "info": "Use product tags such as badge:Artisan and badge-style:gold or badge-style:sage."
+    },
+    {
+      "type": "select",
+      "id": "default_badge_style",
+      "label": "Badge style",
+      "options": [
+        {
+          "value": "sage",
+          "label": "Sage"
+        },
+        {
+          "value": "gold",
+          "label": "Gold"
+        }
+      ],
+      "default": "gold"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Content width",
+      "min": 1000,
+      "max": 1440,
+      "step": 20,
+      "unit": "px",
+      "default": 1340
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Desktop columns",
+      "options": [
+        {
+          "value": "2",
+          "label": "Two"
+        },
+        {
+          "value": "3",
+          "label": "Three"
+        },
+        {
+          "value": "4",
+          "label": "Four"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Desktop card spacing",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "mobile_width",
+      "label": "Mobile card width",
+      "min": 240,
+      "max": 320,
+      "step": 5,
+      "unit": "px",
+      "default": 275
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "label": "Desktop card height",
+      "min": 440,
+      "max": 560,
+      "step": 10,
+      "unit": "px",
+      "default": 490
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Desktop image area height",
+      "min": 200,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "image_padding",
+      "label": "Image inset",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 28,
+      "max": 52,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 24,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 24,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Section background",
+      "default": "#FDFBF7"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "image_background",
+      "label": "Image background",
+      "default": "#F8F6F0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text colour",
+      "default": "#363638"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Eyebrow and rating colour",
+      "default": "#927B53"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#4A3525"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button text",
+      "default": "#FAF7F2"
+    },
+    {
+      "type": "color",
+      "id": "badge_background",
+      "label": "Sage badge background",
+      "default": "#A8B39A"
+    },
+    {
+      "type": "color",
+      "id": "badge_color",
+      "label": "Sage badge text",
+      "default": "#263320"
+    },
+    {
+      "type": "color",
+      "id": "gold_badge_background",
+      "label": "Gold badge background",
+      "default": "#927B53"
+    },
+    {
+      "type": "color",
+      "id": "gold_badge_color",
+      "label": "Gold badge text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Card features"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show badges",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category",
+      "label": "Show product type",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show wishlist",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_view",
+      "label": "Show quick view",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ratings",
+      "label": "Show real review ratings",
+      "default": true,
+      "info": "Uses reviews.rating and reviews.rating_count product metafields. Hidden when no ratings exist."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_price",
+      "label": "Show compare-at prices",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_discount",
+      "label": "Show discount percentage",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Buttons and messages"
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Add button",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "choose_label",
+      "label": "Variant selection button",
+      "default": "Choose options"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Sold out label",
+      "default": "Sold out"
+    },
+    {
+      "type": "text",
+      "id": "quick_view_label",
+      "label": "Quick view label",
+      "default": "Quick View"
+    },
+    {
+      "type": "text",
+      "id": "wishlist_label",
+      "label": "Wishlist label",
+      "default": "Save to wishlist"
+    },
+    {
+      "type": "text",
+      "id": "discount_label",
+      "label": "Discount suffix",
+      "default": "OFF"
+    },
+    {
+      "type": "text",
+      "id": "loading_label",
+      "label": "Loading label",
+      "default": "Loading…"
+    },
+    {
+      "type": "text",
+      "id": "adding_label",
+      "label": "Adding label",
+      "default": "Adding…"
+    },
+    {
+      "type": "text",
+      "id": "added_label",
+      "label": "Success label",
+      "default": "Added to your bag"
+    },
+    {
+      "type": "text",
+      "id": "error_label",
+      "label": "Error message",
+      "default": "Something went wrong. Please try again."
+    },
+    {
+      "type": "text",
+      "id": "close_label",
+      "label": "Close label",
+      "default": "Close"
+    },
+    {
+      "type": "text",
+      "id": "variant_label",
+      "label": "Variant field label",
+      "default": "Edition"
+    },
+    {
+      "type": "text",
+      "id": "quantity_label",
+      "label": "Quantity label",
+      "default": "Quantity"
+    },
+    {
+      "type": "text",
+      "id": "details_label",
+      "label": "Product page link",
+      "default": "View full details"
+    },
+    {
+      "type": "text",
+      "id": "empty_label",
+      "label": "Theme Editor empty-state message",
+      "default": "Choose a collection containing products."
+    },
+    {
+      "type": "header",
+      "content": "Category filters"
+    },
+    {
+      "type": "text",
+      "id": "all_label",
+      "label": "All products tab",
+      "default": "All Editions"
+    },
+    {
+      "type": "text",
+      "id": "filter_label",
+      "label": "Accessible filter label",
+      "default": "Filter the atelier collection"
+    },
+    {
+      "type": "text",
+      "id": "results_label",
+      "label": "Results announcement",
+      "default": "Products shown"
+    },
+    {
+      "type": "text",
+      "id": "no_results",
+      "label": "Empty collection message",
+      "default": "New stories are on their way. Check back soon."
+    },
+    {
+      "type": "color",
+      "id": "filter_background",
+      "label": "Filter background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "filter_text",
+      "label": "Filter text",
+      "default": "#5A5149"
+    },
+    {
+      "type": "color",
+      "id": "active_filter_background",
+      "label": "Active filter background",
+      "default": "#363638"
+    },
+    {
+      "type": "color",
+      "id": "active_filter_text",
+      "label": "Active filter text",
+      "default": "#E9DFC2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_link",
+      "label": "Show full collection link",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "collection_link_label",
+      "label": "Collection link label",
+      "default": "Explore the full collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier catalogue"
+    }
+  ],
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "filter",
+      "name": "Category filter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label",
+          "default": "Stationaries & Calendars"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,557 @@
+{{ 'atelier-footer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'footer-menus.js' | asset_url }}" defer></script>
+{% liquid
+  assign newsletter_form_id = 'FooterNewsletter-' | append: section.id
+  assign desk_ratio = section.settings.desk_image.aspect_ratio | default: 4.2666667
+  assign visible_art_fraction = 100 | minus: section.settings.art_crop_top | divided_by: 100.0
+  assign visible_art_ratio = desk_ratio | divided_by: visible_art_fraction
+%}
+<div class="atelier-footer" id="main-footer" style="--footer-background:{{ section.settings.background }};--footer-text:{{ section.settings.text }};--footer-muted:{{ section.settings.muted_text }};--footer-social:{{ section.settings.social_background }};--footer-bottom:{{ section.settings.bottom_background }};--footer-bottom-text:{{ section.settings.bottom_text }};--footer-input:{{ section.settings.input_background }};--footer-logo-height:{{ section.settings.logo_height }}px;--footer-width:{{ section.settings.content_width }}px;--footer-top:{{ section.settings.padding_top }}px;--footer-art-ratio:{{ visible_art_ratio }}">
+  <div class="atelier-footer__stage">
+    {% if section.settings.show_vines %}
+      <div class="atelier-footer__vine atelier-footer__vine--left" aria-hidden="true">{% if section.settings.vine_left != blank %}{{ section.settings.vine_left | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,240', sizes: '95px', alt: '' }}{% else %}<img src="{{ 'footer_vine_left_clean.png' | asset_url }}" width="85" height="290" loading="lazy" alt="">{% endif %}</div>
+      <div class="atelier-footer__vine atelier-footer__vine--right" aria-hidden="true">{% if section.settings.vine_right != blank %}{{ section.settings.vine_right | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,240', sizes: '100px', alt: '' }}{% else %}<img src="{{ 'footer_vine_right_clean.png' | asset_url }}" width="84" height="220" loading="lazy" alt="">{% endif %}</div>
+    {% endif %}
+    <div class="atelier-footer__main">
+      <div class="atelier-footer__brand">
+        <a class="atelier-footer__logo" href="{{ routes.root_url }}" aria-label="{{ section.settings.brand_name | escape }}">
+          {% if section.settings.show_cup %}<span class="atelier-footer__cup{% if section.settings.animate_steam %} atelier-footer__cup--steam{% endif %}">{% if section.settings.cup_image != blank %}{{ section.settings.cup_image | image_url: width: 120 | image_tag: loading: 'lazy', widths: '60,120', alt: '' }}{% else %}<img src="{{ 'header-cup.png' | asset_url }}" width="30" height="44" loading="lazy" alt="">{% endif %}<span aria-hidden="true"></span><span aria-hidden="true"></span></span>{% endif %}
+          {% if section.settings.logo != blank %}{{ section.settings.logo | image_url: width: 440 | image_tag: class: 'atelier-footer__wordmark', widths: '220,440', loading: 'lazy', alt: '' }}{% else %}<img class="atelier-footer__wordmark" src="{{ 'brand-wordmark.png' | asset_url }}" width="140" height="44" loading="lazy" alt="">{% endif %}
+        </a>
+        {% if section.settings.tagline != blank %}<p class="atelier-footer__tagline">{{ section.settings.tagline | escape | newline_to_br }}</p>{% endif %}
+        {% if section.settings.bio != blank %}<p class="atelier-footer__bio">{{ section.settings.bio | escape }}</p>{% endif %}
+        {% capture footer_social_markup %}<div class="atelier-footer__social" role="group" aria-label="{{ section.settings.social_label | escape }}">
+          {% assign social_names = 'instagram,pinterest,facebook,youtube' | split: ',' %}
+          {% for social_name in social_names %}
+            {% liquid
+              assign global_key = 'social_' | append: social_name | append: '_link'
+              assign social_url = section.settings[social_name] | default: settings[global_key]
+            %}
+            {% if social_url != blank %}<a href="{{ social_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ social_name | capitalize }}">{% render 'footer-icon', name: social_name %}</a>{% endif %}
+          {% endfor %}
+        </div>{% endcapture %}{% if footer_social_markup contains '<a ' %}{{ footer_social_markup }}{% endif %}
+      </div>
+      {% for block in section.blocks %}{% if block.type == 'links' %}{% capture footer_link_markup %}{% render 'footer-links', block: block, section: section %}{% endcapture %}{% assign footer_link_text = footer_link_markup | strip_html | strip %}{% if footer_link_text != blank %}<nav class="atelier-footer__column" aria-label="{{ block.settings.heading | escape }}" {{ block.shopify_attributes }}><footer-menu><details open><summary><h2 class="atelier-footer__menu-heading">{{ block.settings.heading | escape }}<span class="atelier-footer__chevron" aria-hidden="true">{% render 'header-icon', name: 'chevron' %}</span></h2></summary><div class="atelier-footer__menu-content">{{ footer_link_markup }}</div></details></footer-menu></nav>{% endif %}{% endif %}{% endfor %}
+      {% if section.settings.show_newsletter %}
+        <div class="atelier-footer__newsletter">
+          <h2>{{ section.settings.newsletter_heading | escape }}</h2>
+          <p>{{ section.settings.newsletter_text | escape }}</p>
+          {% form 'customer', id: newsletter_form_id, class: 'atelier-footer__subscribe' %}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <label class="visually-hidden" for="FooterEmail-{{ section.id }}">{{ section.settings.email_label | escape }}</label>
+            <div class="atelier-footer__email">
+              <input id="FooterEmail-{{ section.id }}" type="email" name="contact[email]" value="{{ form.email | escape }}" required autocorrect="off" autocapitalize="off" autocomplete="email" placeholder="{{ section.settings.email_label | escape }}"{% if form.errors %} aria-invalid="true" aria-describedby="FooterEmailError-{{ section.id }}"{% endif %}>
+              <button type="submit" aria-label="{{ section.settings.subscribe_label | escape }}">{% render 'header-icon', name: 'arrow' %}</button>
+            </div>
+            {% if section.settings.show_consent %}<label class="atelier-footer__consent"><input type="checkbox" name="contact[accepts_marketing]" value="true" required><span>{{ section.settings.consent_label | escape }}</span></label>{% endif %}
+            {% if form.posted_successfully? %}<p class="atelier-footer__form-success" role="status">{{ section.settings.success_message | escape }}</p>{% endif %}
+            {% if form.errors %}<div id="FooterEmailError-{{ section.id }}" class="atelier-footer__form-error" role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+          {% endform %}
+        </div>
+      {% endif %}
+    </div>
+    {% if section.settings.show_desk %}
+      <div class="atelier-footer__desk" aria-hidden="true">
+        {% if section.settings.desk_image != blank %}{{ section.settings.desk_image | image_url: width: 2400 | image_tag: loading: 'lazy', widths: '600,1000,1600,2400', sizes: '100vw', alt: '' }}{% else %}<img src="{{ 'footer_desk_art_clean.png' | asset_url }}" width="1024" height="240" loading="lazy" alt="">{% endif %}
+      </div>
+    {% endif %}
+  </div>
+  <div class="atelier-footer__bottom">
+    {% if section.settings.show_flourishes %}
+      <div class="atelier-footer__flourish atelier-footer__flourish--left" aria-hidden="true">{% if section.settings.flourish_left != blank %}{{ section.settings.flourish_left | image_url: width: 620 | image_tag: loading: 'lazy', widths: '310,620', sizes: '260px', alt: '' }}{% else %}<img src="{{ 'footer_bottom_left_feathered.png' | asset_url }}" width="310" height="194" loading="lazy" alt="">{% endif %}</div>
+      <div class="atelier-footer__flourish atelier-footer__flourish--right" aria-hidden="true">{% if section.settings.flourish_right != blank %}{{ section.settings.flourish_right | image_url: width: 400 | image_tag: loading: 'lazy', widths: '200,400', sizes: '200px', alt: '' }}{% else %}<img src="{{ 'footer_bottom_right_feathered.png' | asset_url }}" width="194" height="194" loading="lazy" alt="">{% endif %}</div>
+    {% endif %}
+    <div class="atelier-footer__bottom-inner">
+      {% capture footer_benefit_markup %}<div class="atelier-footer__benefits" role="list">{% for block in section.blocks %}{% if block.type == 'benefit' and block.settings.label != blank %}<div class="atelier-footer__benefit" role="listitem" {{ block.shopify_attributes }}>{% render 'footer-icon', name: block.settings.icon %}<span>{{ block.settings.label | escape }}</span></div>{% endif %}{% endfor %}</div>{% endcapture %}{% assign footer_benefit_text = footer_benefit_markup | strip_html | strip %}{% if footer_benefit_text != blank %}{{ footer_benefit_markup }}{% endif %}
+      <div class="atelier-footer__legal">
+        <span>&copy; {{ 'now' | date: '%Y' }} {{ section.settings.brand_name | escape }}. {{ section.settings.copyright_text | escape }}</span>
+        {% if section.settings.legal_menu != blank %}{% for link in section.settings.legal_menu.links %}<a href="{{ link.url }}">{{ link.title | escape }}</a>{% endfor %}{% elsif section.settings.show_policies %}{% for policy in shop.policies %}{% if policy.url != blank and policy.body != blank %}<a href="{{ policy.url }}">{{ policy.title | escape }}</a>{% endif %}{% endfor %}{% endif %}
+      </div>
+      {% if section.settings.show_payment_icons %}<ul class="atelier-footer__payments" role="list">{% for payment_type in shop.enabled_payment_types %}<li>{{ payment_type | payment_type_svg_tag }}</li>{% endfor %}</ul>{% endif %}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Atelier footer",
+  "tag": "footer",
+  "class": "atelier-footer-section",
+  "limit": 1,
+  "enabled_on": {
+    "groups": [
+      "footer"
+    ]
+  },
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand name",
+      "default": "Graffeine Tales"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Wordmark"
+    },
+    {
+      "type": "image_picker",
+      "id": "cup_image",
+      "label": "Cup illustration"
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Wordmark height",
+      "min": 28,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cup",
+      "label": "Show cup illustration",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "animate_steam",
+      "label": "Animate cup steam",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "ARTFUL THINGS.\nTHOUGHTFUL LIVING."
+    },
+    {
+      "type": "textarea",
+      "id": "bio",
+      "label": "Brand introduction",
+      "default": "Creative stationery, handmade art and quirky gifts for everyday moments and special people."
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Contact email",
+      "info": "Leave blank to use the store’s contact email."
+    },
+    {
+      "type": "header",
+      "content": "Social profiles"
+    },
+    {
+      "type": "url",
+      "id": "instagram",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "pinterest",
+      "label": "Pinterest URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "youtube",
+      "label": "YouTube URL"
+    },
+    {
+      "type": "text",
+      "id": "social_label",
+      "label": "Social links accessible label",
+      "default": "Social media profiles"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Heading",
+      "default": "Stay in the Loop"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Description",
+      "default": "Sign up for new launches, creative finds, exclusive offers and a little inspiration."
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email field label",
+      "default": "Your email address"
+    },
+    {
+      "type": "text",
+      "id": "subscribe_label",
+      "label": "Subscribe button label",
+      "default": "Subscribe to newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_consent",
+      "label": "Require newsletter consent checkbox",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "consent_label",
+      "label": "Consent text",
+      "default": "Yes, send me the good stuff!"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thank you for joining our circle."
+    },
+    {
+      "type": "header",
+      "content": "Artwork"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vines",
+      "label": "Show botanical corners",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "vine_left",
+      "label": "Left botanical image"
+    },
+    {
+      "type": "image_picker",
+      "id": "vine_right",
+      "label": "Right botanical image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_desk",
+      "label": "Show illustrated desk border",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "desk_image",
+      "label": "Desk illustration"
+    },
+    {
+      "type": "range",
+      "id": "art_crop_top",
+      "label": "Trim illustration top",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "%",
+      "default": 17
+    },
+    {
+      "type": "checkbox",
+      "id": "show_flourishes",
+      "label": "Show bottom floral artwork",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "flourish_left",
+      "label": "Bottom left artwork"
+    },
+    {
+      "type": "image_picker",
+      "id": "flourish_right",
+      "label": "Bottom right artwork"
+    },
+    {
+      "type": "header",
+      "content": "Layout and colours"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Maximum content width",
+      "min": 1200,
+      "max": 1920,
+      "step": 40,
+      "unit": "px",
+      "default": 1920
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 24,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Main background",
+      "default": "#F4ECE1"
+    },
+    {
+      "type": "color",
+      "id": "text",
+      "label": "Headings and icons",
+      "default": "#362339"
+    },
+    {
+      "type": "color",
+      "id": "muted_text",
+      "label": "Body text and links",
+      "default": "#554136"
+    },
+    {
+      "type": "color",
+      "id": "social_background",
+      "label": "Social button background",
+      "default": "#EFA19C"
+    },
+    {
+      "type": "color",
+      "id": "bottom_background",
+      "label": "Bottom bar",
+      "default": "#382239"
+    },
+    {
+      "type": "color",
+      "id": "bottom_text",
+      "label": "Bottom bar text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Email input background",
+      "default": "#FAF7F2"
+    },
+    {
+      "type": "header",
+      "content": "Policies and copyright"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policies",
+      "label": "Show configured store policy links",
+      "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "legal_menu",
+      "label": "Custom legal links menu",
+      "info": "Overrides the automatic store policy links."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show enabled payment method icons",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright text",
+      "default": "All rights reserved."
+    },
+    {
+      "type": "text",
+      "id": "account_label",
+      "label": "Account link label",
+      "default": "Track Your Order"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "links",
+      "name": "Link column",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Column heading",
+          "default": "Shop"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Navigation menu",
+          "info": "Select a Shopify menu or use the editable links below."
+        },
+        {
+          "type": "range",
+          "id": "contact_link",
+          "label": "Use contact email for link number",
+          "min": 0,
+          "max": 8,
+          "step": 1,
+          "default": 0,
+          "info": "0 disables this. Uses the footer contact email or the store email."
+        },
+        {
+          "type": "checkbox",
+          "id": "include_policies",
+          "label": "Append configured store policies",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "include_account",
+          "label": "Append customer account link",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "label_1",
+          "label": "Link 1 label"
+        },
+        {
+          "type": "url",
+          "id": "link_1",
+          "label": "Link 1 destination"
+        },
+        {
+          "type": "text",
+          "id": "label_2",
+          "label": "Link 2 label"
+        },
+        {
+          "type": "url",
+          "id": "link_2",
+          "label": "Link 2 destination"
+        },
+        {
+          "type": "text",
+          "id": "label_3",
+          "label": "Link 3 label"
+        },
+        {
+          "type": "url",
+          "id": "link_3",
+          "label": "Link 3 destination"
+        },
+        {
+          "type": "text",
+          "id": "label_4",
+          "label": "Link 4 label"
+        },
+        {
+          "type": "url",
+          "id": "link_4",
+          "label": "Link 4 destination"
+        },
+        {
+          "type": "text",
+          "id": "label_5",
+          "label": "Link 5 label"
+        },
+        {
+          "type": "url",
+          "id": "link_5",
+          "label": "Link 5 destination"
+        },
+        {
+          "type": "text",
+          "id": "label_6",
+          "label": "Link 6 label"
+        },
+        {
+          "type": "url",
+          "id": "link_6",
+          "label": "Link 6 destination"
+        },
+        {
+          "type": "text",
+          "id": "label_7",
+          "label": "Link 7 label"
+        },
+        {
+          "type": "url",
+          "id": "link_7",
+          "label": "Link 7 destination"
+        },
+        {
+          "type": "text",
+          "id": "label_8",
+          "label": "Link 8 label"
+        },
+        {
+          "type": "url",
+          "id": "link_8",
+          "label": "Link 8 destination"
+        }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Service detail",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Thoughtful Packaging"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "truck",
+              "label": "Delivery"
+            },
+            {
+              "value": "shield",
+              "label": "Secure payments"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            }
+          ],
+          "default": "gift"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier footer"
+    }
+  ]
+}
+{% endschema %}

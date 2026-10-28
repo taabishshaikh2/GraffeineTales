@@ -1,0 +1,544 @@
+{% liquid
+ assign reel_entries = '|'
+ assign reel_count = 0
+ for entry in section.blocks
+  if entry.settings.poster != blank or entry.settings.poster_url != blank or entry.settings.video != blank or entry.settings.mp4_url != blank or entry.settings.instagram_url != blank or entry.settings.product != blank
+   assign reel_entries = reel_entries | append: entry.id | append:'|'
+   assign reel_count = reel_count | plus: 1
+  endif
+ endfor
+%}
+{% if reel_count > 0 %}
+{{ 'stories-reels.css' | asset_url | stylesheet_tag }}
+{{ 'journal-reels.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-showcase.js' | asset_url }}" defer></script>
+<script src="{{ 'stories-reels.js' | asset_url }}" defer></script>
+<atelier-product-showcase class="atelier-video-commerce journal-video-commerce" id="journal-in-action" data-currency="{{ cart.currency.iso_code | escape }}" data-add-label="{{ section.settings.add_label | escape }}" data-adding-label="{{ section.settings.adding_label | escape }}" data-added-label="{{ section.settings.added_label | escape }}" data-error-label="{{ section.settings.error_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}" style="--showcase-background:{{ section.settings.background }};--showcase-text:{{ section.settings.text_color }};--showcase-top:{{ section.settings.padding_top }}px;--showcase-bottom:{{ section.settings.padding_bottom }}px;--reels-caption:{{ section.settings.caption_color }};--reels-accent:{{ section.settings.accent }};--reels-button:{{ section.settings.button_background }};--reels-button-text:{{ section.settings.button_text }};--reels-width:{{ section.settings.width }}px;--reels-heading-size:{{ section.settings.heading_size }}px;--reels-card-width:{{ section.settings.card_width }}px;--reels-mobile-width:{{ section.settings.mobile_card_width }}px;--reels-gap:{{ section.settings.gap }}px;--reels-radius:{{ section.settings.radius }}px">
+<atelier-reels data-autoplay="{{ section.settings.autoplay }}" data-play-label="{{ section.settings.play_label | escape }}" data-pause-label="{{ section.settings.pause_label | escape }}" data-mute-label="{{ section.settings.mute_label | escape }}" data-unmute-label="{{ section.settings.unmute_label | escape }}" data-shared-label="{{ section.settings.shared_label | escape }}" data-error-label="{{ section.settings.video_error_label | escape }}">
+  <div class="atelier-reels__inner">
+    <div class="atelier-reels__heading">
+      <div><h2>{{ section.settings.heading | escape }}</h2>{% if section.settings.description != blank %}<p>{{ section.settings.description | escape }}</p>{% endif %}</div>
+      {% if section.settings.show_arrows %}<div class="atelier-reels__arrows"><button type="button" class="atelier-reels__control" data-track-direction="-1" aria-label="{{ section.settings.previous_label | escape }}">{% render 'reel-icon', name: 'previous' %}</button><button type="button" class="atelier-reels__control" data-track-direction="1" aria-label="{{ section.settings.next_label | escape }}">{% render 'reel-icon', name: 'next' %}</button></div>{% endif %}
+    </div>
+    <div class="atelier-reels__viewport" data-reels-viewport>
+      <div class="atelier-reels__track">
+        {% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless reel_entries contains entry_token %}{% continue %}{% endunless %}
+          {% liquid
+            assign reel_product = block.settings.product
+            if section.settings.use_current_product
+              assign reel_product = product
+            endif
+            assign cover = block.settings.poster | default: block.settings.video.preview_image | default: reel_product.featured_image
+            assign cover_url = ''
+            if block.settings.poster != blank
+              assign cover_url = block.settings.poster | image_url: width: 900
+            elsif block.settings.poster_url != blank
+              assign cover_url = block.settings.poster_url
+            elsif cover != blank
+              assign cover_url = cover | image_url: width: 900
+            endif
+            assign has_video = false
+            if block.settings.source == 'shopify' and block.settings.video != blank
+              assign has_video = true
+            elsif block.settings.source == 'mp4' and block.settings.mp4_url != blank
+              assign has_video = true
+            endif
+            assign form_id = 'ReelProduct-' | append: section.id | append: '-' | append: block.id
+          %}
+          <article class="atelier-reel" id="Reel-{{ section.id }}-{{ block.id }}" data-reel-card data-reel-id="{{ block.id }}" data-title="{{ block.settings.title | escape }}" data-caption="{{ block.settings.caption | escape }}" data-instagram="{% if block.settings.source == 'instagram' %}{{ block.settings.instagram_url | escape }}{% endif %}" {{ block.shopify_attributes }}>
+            <div class="atelier-reel__media">
+              {% if cover_url != blank %}<img class="atelier-reel__poster" src="{{ cover_url }}" alt="" width="580" height="1032" loading="lazy">{% else %}{{ 'product-1' | placeholder_svg_tag: 'atelier-reel__poster' }}{% endif %}
+              {% if has_video %}
+                <video class="atelier-reel__video" data-card-video muted playsinline loop preload="none"{% if block.settings.captions_url != blank %} crossorigin="anonymous"{% endif %}{% if cover_url != blank %} poster="{{ cover_url }}"{% endif %} aria-hidden="true" tabindex="-1" disablepictureinpicture>
+                  {% if block.settings.source == 'shopify' %}{% for video_source in block.settings.video.sources %}<source src="{{ video_source.url | escape }}" type="{{ video_source.mime_type | escape }}">{% endfor %}{% else %}<source src="{{ block.settings.mp4_url | escape }}" type="video/mp4">{% endif %}
+                  {% if block.settings.captions_url != blank %}<track kind="captions" src="{{ block.settings.captions_url | escape }}" srclang="{{ block.settings.captions_language | escape }}" label="{{ block.settings.captions_label | escape }}" default>{% endif %}
+                </video>
+              {% endif %}
+            </div>
+            <button type="button" class="atelier-reel__open" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ block.settings.title | escape }}"><span class="atelier-reel__play-mark" aria-hidden="true">{% render 'reel-icon', name: 'play' %}</span></button>
+            <div class="atelier-reel__top">
+              <span class="atelier-reel__duration" data-card-duration hidden></span>
+              {% if has_video %}<button type="button" class="atelier-reels__control" data-card-sound aria-label="{{ section.settings.unmute_label | escape }}" aria-pressed="false"><span data-icon-muted>{% render 'reel-icon', name: 'muted' %}</span><span data-icon-sound hidden>{% render 'reel-icon', name: 'sound' %}</span></button>{% endif %}
+            </div>
+            <div class="atelier-reel__bottom">
+             {% assign reel_variant = reel_product.selected_or_first_available_variant %}<div class="journal-reel-pill" data-reel-product>
+              <div>{% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}{% if block.settings.caption != blank %}<p>{% if block.settings.show_price %}{{ section.settings.currency_symbol | escape }}{{ reel_variant.price | money_without_currency | remove: '.00' }} • {% endif %}{{ block.settings.caption | escape }}</p>{% endif %}</div>
+              {% assign reel_variant = reel_product.selected_or_first_available_variant %}
+              {% if reel_product.available and reel_product.requires_selling_plan == false %}
+               {% if reel_product.has_only_default_variant or reel_product.id == product.id %}
+                {% form 'product', reel_product, id: form_id, data-atelier-product-form: '' %}<input type="hidden" name="id" value="{{ reel_variant.id }}"{% if reel_product.id == product.id %} data-journal-product="{{ product.id }}"{% endif %}><input type="hidden" name="quantity" value="1"><button type="submit" data-preserve-button-content aria-label="{{ section.settings.add_label | escape }}: {{ reel_product.title | escape }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>{% endform %}
+               {% else %}<a href="{{ reel_product.url }}" aria-label="{{ section.settings.product_label | escape }}: {{ reel_product.title | escape }}">+</a>{% endif %}
+              {% else %}<button type="button" disabled aria-label="{{ section.settings.sold_out_label | escape }}">+</button>{% endif %}
+              <p data-cart-error role="alert" hidden></p>
+             </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+    {% if section.settings.show_dots %}<div class="atelier-reels__dots">{% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless reel_entries contains entry_token %}{% continue %}{% endunless %}<button type="button" data-reel-dot="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ block.settings.title | escape }}"{% if forloop.first %} aria-current="true"{% endif %}><span></span></button>{% endfor %}</div>{% endif %}
+    <p data-showcase-status class="visually-hidden" role="status" aria-live="polite"></p>
+  </div>
+  <dialog class="atelier-reels__theater" data-reels-dialog aria-labelledby="ReelTheaterTitle-{{ section.id }}">
+    <button type="button" class="atelier-reels__control atelier-reels__close" data-close-reels aria-label="{{ section.settings.close_label | escape }}">{% render 'header-icon', name: 'close' %}</button>
+    <button type="button" class="atelier-reels__control atelier-reels__theater-nav atelier-reels__theater-nav--previous" data-viewer-direction="-1" aria-label="{{ section.settings.previous_label | escape }}">{% render 'reel-icon', name: 'previous' %}</button>
+    <button type="button" class="atelier-reels__control atelier-reels__theater-nav atelier-reels__theater-nav--next" data-viewer-direction="1" aria-label="{{ section.settings.next_label | escape }}">{% render 'reel-icon', name: 'next' %}</button>
+    <div class="atelier-reels__stage">
+      <img class="atelier-reels__stage-poster" data-stage-poster alt="" width="580" height="1032">
+      <video class="atelier-reels__stage-video" data-stage-video muted playsinline loop preload="none" hidden></video>
+      <div class="atelier-reels__embed" data-instagram-container hidden></div>
+      <button type="button" class="atelier-reels__instagram-button" data-load-instagram hidden>{{ section.settings.instagram_label | escape }}</button>
+      <div class="atelier-reels__stage-actions">
+        <button type="button" class="atelier-reels__control" data-stage-play aria-label="{{ section.settings.play_label | escape }}" hidden><span data-icon-play>{% render 'reel-icon', name: 'play' %}</span><span data-icon-pause hidden>{% render 'reel-icon', name: 'pause' %}</span></button>
+        <button type="button" class="atelier-reels__control" data-stage-sound aria-label="{{ section.settings.unmute_label | escape }}" hidden><span data-icon-muted>{% render 'reel-icon', name: 'muted' %}</span><span data-icon-sound hidden>{% render 'reel-icon', name: 'sound' %}</span></button>
+        {% if section.settings.show_like %}<button type="button" class="atelier-reels__control" data-save-reel aria-label="{{ section.settings.save_label | escape }}" aria-pressed="false">{% render 'header-icon', name: 'heart' %}</button>{% endif %}
+        {% if section.settings.show_share %}<button type="button" class="atelier-reels__control" data-share-reel aria-label="{{ section.settings.share_label | escape }}">{% render 'reel-icon', name: 'share' %}</button>{% endif %}
+      </div>
+      <div class="atelier-reels__stage-bottom">
+        <h3 id="ReelTheaterTitle-{{ section.id }}" data-stage-title>{{ section.settings.heading | escape }}</h3>
+        <p class="atelier-reel__caption" data-stage-caption></p>
+        <p class="atelier-reels__video-error" data-video-error role="alert" hidden>{{ section.settings.video_error_label | escape }}</p>
+        <div data-stage-product></div>
+        <input class="atelier-reels__timeline" data-stage-timeline type="range" min="0" max="100" value="0" step="0.1" aria-label="{{ section.settings.seek_label | escape }}" hidden>
+      </div>
+    </div>
+    <p class="atelier-reels__share-status" data-reel-share-status role="status" aria-live="polite"></p>
+  </dialog>
+</atelier-reels>
+</atelier-product-showcase>
+
+{% else %}{% style %}#shopify-section-{{ section.id }}{display:none}{% endstyle %}{% endif %}
+{% schema %}
+{
+  "name": "Journal in action",
+  "tag": "section",
+  "class": "stories-reels-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "use_current_product",
+      "label": "Tag the journal being viewed",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Art in Action, Stories in Motion."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Optional introduction"
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Content width",
+      "min": 1100,
+      "max": 1440,
+      "step": 20,
+      "unit": "px",
+      "default": 1360
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Desktop heading size",
+      "min": 28,
+      "max": 52,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "label": "Desktop reel width",
+      "min": 240,
+      "max": 340,
+      "step": 2,
+      "unit": "px",
+      "default": 290
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_width",
+      "label": "Mobile reel width",
+      "min": 220,
+      "max": 290,
+      "step": 10,
+      "unit": "px",
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Space between reels",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "Reel corners",
+      "min": 8,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 24,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 24,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 68
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#363638"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Heading and text",
+      "default": "#E9DFC2"
+    },
+    {
+      "type": "color",
+      "id": "caption_color",
+      "label": "Caption colour",
+      "default": "#C6B58E"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Control and product background",
+      "default": "#4D351D"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Buy button",
+      "default": "#E9DFC2"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Buy button icon",
+      "default": "#363638"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay visible video, muted",
+      "default": true,
+      "info": "Respects reduced-motion and data-saving preferences. Only one preview plays at a time."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show carousel arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show mobile pagination",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_captions",
+      "label": "Show captions on cards",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_price",
+      "label": "Show compare-at prices",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_like",
+      "label": "Show save-story button",
+      "default": true,
+      "info": "Saved stories are stored on the visitor’s device."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share",
+      "label": "Show share button",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Control labels"
+    },
+    {
+      "type": "text",
+      "id": "previous_label",
+      "label": "Previous button",
+      "default": "Previous story"
+    },
+    {
+      "type": "text",
+      "id": "next_label",
+      "label": "Next button",
+      "default": "Next story"
+    },
+    {
+      "type": "text",
+      "id": "watch_label",
+      "label": "Open story",
+      "default": "Open story"
+    },
+    {
+      "type": "text",
+      "id": "play_label",
+      "label": "Play video",
+      "default": "Play video"
+    },
+    {
+      "type": "text",
+      "id": "pause_label",
+      "label": "Pause video",
+      "default": "Pause video"
+    },
+    {
+      "type": "text",
+      "id": "mute_label",
+      "label": "Mute video",
+      "default": "Mute video"
+    },
+    {
+      "type": "text",
+      "id": "unmute_label",
+      "label": "Unmute video",
+      "default": "Unmute video"
+    },
+    {
+      "type": "text",
+      "id": "close_label",
+      "label": "Close viewer",
+      "default": "Close story"
+    },
+    {
+      "type": "text",
+      "id": "save_label",
+      "label": "Save story",
+      "default": "Save this story"
+    },
+    {
+      "type": "text",
+      "id": "share_label",
+      "label": "Share story",
+      "default": "Share this story"
+    },
+    {
+      "type": "text",
+      "id": "shared_label",
+      "label": "Link copied message",
+      "default": "Story link copied"
+    },
+    {
+      "type": "text",
+      "id": "instagram_label",
+      "label": "Instagram loading button",
+      "default": "Load Instagram reel"
+    },
+    {
+      "type": "text",
+      "id": "seek_label",
+      "label": "Video timeline",
+      "default": "Video timeline"
+    },
+    {
+      "type": "text",
+      "id": "product_label",
+      "label": "Product link label",
+      "default": "View product"
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Buy button label",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "adding_label",
+      "label": "Adding message",
+      "default": "Adding…"
+    },
+    {
+      "type": "text",
+      "id": "added_label",
+      "label": "Cart success message",
+      "default": "Added to your bag"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Sold-out message",
+      "default": "Sold out"
+    },
+    {
+      "type": "text",
+      "id": "error_label",
+      "label": "Error message",
+      "default": "Something went wrong. Please try again."
+    },
+    {
+      "type": "text",
+      "id": "video_error_label",
+      "label": "Video unavailable message",
+      "default": "This video is unavailable. You can still explore the featured product."
+    },
+    {
+      "type": "text",
+      "id": "currency_symbol",
+      "label": "Compact price symbol",
+      "default": "₹"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story",
+      "name": "Shoppable story",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Story title",
+          "default": "Behind the scenes in the atelier"
+        },
+        {
+          "type": "textarea",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "select",
+          "id": "source",
+          "label": "Video source",
+          "options": [
+            {
+              "value": "shopify",
+              "label": "Shopify video"
+            },
+            {
+              "value": "mp4",
+              "label": "MP4 URL"
+            },
+            {
+              "value": "instagram",
+              "label": "Instagram reel"
+            }
+          ],
+          "default": "shopify"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify video",
+          "info": "Select or upload a video. Portrait 9:16 clips work best."
+        },
+        {
+          "type": "url",
+          "id": "mp4_url",
+          "label": "MP4 video URL"
+        },
+        {
+          "type": "url",
+          "id": "instagram_url",
+          "label": "Instagram reel URL",
+          "info": "A public instagram.com/reel/… or /p/… link. Loads in the viewer when the visitor chooses to open it."
+        },
+        {
+          "type": "image_picker",
+          "id": "poster",
+          "label": "Cover image"
+        },
+        {
+          "type": "url",
+          "id": "poster_url",
+          "label": "Reference cover URL",
+          "info": "Optional fallback. A selected cover image takes priority."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Tagged product"
+        },
+        {
+          "type": "url",
+          "id": "captions_url",
+          "label": "Video captions (.vtt) URL"
+        },
+        {
+          "type": "text",
+          "id": "captions_language",
+          "label": "Caption language code",
+          "default": "en"
+        },
+        {
+          "type": "text",
+          "id": "captions_label",
+          "label": "Caption language label",
+          "default": "English"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_price",
+          "label": "Show tagged product price in caption",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stories in Motion",
+      "blocks": [
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        },
+        {
+          "type": "story"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

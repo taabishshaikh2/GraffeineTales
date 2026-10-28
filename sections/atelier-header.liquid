@@ -1,0 +1,497 @@
+{{ 'atelier-header.css' | asset_url | stylesheet_tag }}
+{{ 'component-search.css' | asset_url | stylesheet_tag }}
+{% if settings.predictive_search_enabled %}{{ 'component-price.css' | asset_url | stylesheet_tag }}{% endif %}
+<script src="{{ 'atelier-header.js' | asset_url }}" defer></script>
+<atelier-header data-mobile-sticky="up" data-sticky="{{ section.settings.sticky }}" data-currency="{{ cart.currency.iso_code | escape }}" style="--header-background:{{ section.settings.background }};--header-text:{{ section.settings.text }};--header-accent:{{ section.settings.accent }};--header-badge-text:{{ section.settings.badge_text }};--header-desktop-height:{{ section.settings.height }}px;--header-mobile-height:{{ section.settings.mobile_height }}px;--header-logo-height:{{ section.settings.logo_height }}px;--header-mobile-logo-height:{{ section.settings.mobile_logo_height }}px;--header-width:{{ section.settings.width }}px;--header-menu-gap:{{ section.settings.menu_gap }}px;--header-menu-size:{{ section.settings.menu_size }}px">
+<header class="atelier-header">
+  <div class="atelier-header__inner">
+    <button type="button" class="atelier-header__action atelier-header__hamburger" data-open-mobile aria-label="{{ section.settings.menu_label | escape }}" aria-haspopup="dialog">{% render 'header-icon', name: 'menu' %}</button>
+    <a class="atelier-header__brand" href="{{ routes.root_url }}" aria-label="{{ section.settings.brand_name | escape }}">
+      {% if section.settings.show_cup %}<span class="atelier-header__cup{% if section.settings.animate_steam %} atelier-header__cup--steam{% endif %}">
+        {% if section.settings.cup_image != blank %}{{ section.settings.cup_image | image_url: width: 120 | image_tag: alt: '', widths: '60,120' }}{% else %}<img src="{{ 'header-cup.png' | asset_url }}" width="30" height="44" alt="">{% endif %}
+        <span class="atelier-header__steam" aria-hidden="true"></span><span class="atelier-header__steam atelier-header__steam--second" aria-hidden="true"></span>
+      </span>{% endif %}
+      {% if section.settings.logo != blank %}{{ section.settings.logo | image_url: width: 440 | image_tag: class: 'atelier-header__wordmark', alt: '', widths: '150,220,440', loading: 'eager' }}{% else %}<img class="atelier-header__wordmark" src="{{ 'brand-wordmark.png' | asset_url }}" width="140" height="44" alt="">{% endif %}
+    </a>
+    <nav class="atelier-header__navigation" aria-label="{{ section.settings.menu_label | escape }}">
+      <ul class="atelier-header__menu" role="list">
+        {% for block in section.blocks %}{% assign menu_heading = block.settings.title | default:block.settings.menu.title %}{% if menu_heading == blank %}{% continue %}{% endif %}
+          <li {{ block.shopify_attributes }}>
+            <details class="atelier-header__dropdown" data-header-dropdown>
+              <summary>{{ menu_heading | escape }}{% render 'header-icon', name: 'chevron' %}</summary>
+              <div class="atelier-header__mega">
+                <div>{% render 'header-menu-links', block: block %}<a class="atelier-header__explore" href="{{ block.settings.link | default: routes.all_products_collection_url }}">{{ section.settings.explore_label | escape }}{% render 'header-icon', name: 'arrow' %}</a></div>
+                {% if block.settings.featured_image != blank or block.settings.reference_image != blank %}<a class="atelier-header__feature" href="{{ block.settings.featured_link | default: block.settings.link | default: routes.all_products_collection_url }}">
+                  {% if block.settings.featured_image != blank %}{{ block.settings.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300,600', sizes: '220px', alt: '' }}{% else %}<img src="{{ block.settings.reference_image | asset_url }}" width="220" height="140" loading="lazy" alt="">{% endif %}
+                  <span>{{ block.settings.featured_label | escape }}</span><strong>{{ block.settings.featured_title | escape }}</strong>
+                </a>{% endif %}
+              </div>
+            </details>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+    <div class="atelier-header__actions">
+      {% if section.settings.show_search %}<div class="atelier-header__search">{% render 'header-search', input_id: 'AtelierSearchInput' %}{% if section.settings.show_shortcut %}<span class="atelier-header__shortcut" aria-hidden="true">{{ section.settings.shortcut_hint | escape }}</span>{% endif %}</div>{% endif %}
+      {% if section.settings.show_wishlist %}<button type="button" class="atelier-header__action atelier-header__wishlist" data-open-wishlist aria-label="{{ section.settings.wishlist_label | escape }}" aria-haspopup="dialog">{% render 'header-icon', name: 'heart' %}<span class="atelier-header__badge" data-wishlist-count hidden>0</span></button>{% endif %}
+      {% if section.settings.show_cart %}<a class="atelier-header__action header__icon--cart" id="cart-icon-bubble" href="{{ routes.cart_url }}" aria-label="{{ 'templates.cart.cart' | t }}">
+        {% render 'header-icon', name: 'bag' %}
+        <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+        {% if cart.item_count > 0 %}<div class="cart-count-bubble atelier-header__badge"><span aria-hidden="true">{{ cart.item_count }}</span><span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span></div>{% endif %}
+      </a>{% endif %}
+    </div>
+  </div>
+</header>
+<dialog class="atelier-header__drawer atelier-header__mobile-drawer" data-mobile-dialog aria-labelledby="MobileMenuHeading-{{ section.id }}">
+  <div class="atelier-header__drawer-heading"><h2 id="MobileMenuHeading-{{ section.id }}">{{ section.settings.menu_label | escape }}</h2><button type="button" class="atelier-header__action" data-close-dialog aria-label="{{ section.settings.close_label | escape }}">{% render 'header-icon', name: 'close' %}</button></div>
+  <nav aria-label="{{ section.settings.menu_label | escape }}">{% for block in section.blocks %}{% assign menu_heading = block.settings.title | default:block.settings.menu.title %}{% if menu_heading == blank %}{% continue %}{% endif %}<details class="atelier-header__mobile-group"><summary>{{ menu_heading | escape }}{% render 'header-icon', name: 'chevron' %}</summary>{% render 'header-menu-links', block: block %}<a class="atelier-header__explore" href="{{ block.settings.link | default: routes.all_products_collection_url }}">{{ section.settings.explore_label | escape }}{% render 'header-icon', name: 'arrow' %}</a></details>{% endfor %}</nav>
+  {% if shop.customer_accounts_enabled %}<a class="atelier-header__account" href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a>{% endif %}
+</dialog>
+<dialog class="atelier-header__drawer" data-wishlist-dialog aria-labelledby="WishlistHeading-{{ section.id }}" data-remove-label="{{ section.settings.remove_label | escape }}">
+  <div class="atelier-header__drawer-heading"><h2 id="WishlistHeading-{{ section.id }}">{{ section.settings.wishlist_label | escape }}</h2><button type="button" class="atelier-header__action" data-close-dialog aria-label="{{ section.settings.close_label | escape }}">{% render 'header-icon', name: 'close' %}</button></div>
+  <div class="atelier-header__saved-items" data-saved-items></div>
+  <div class="atelier-header__empty" data-wishlist-empty><p>{{ section.settings.wishlist_empty | escape }}</p><a class="button" href="{{ section.settings.wishlist_shop_link | default: routes.all_products_collection_url }}">{{ section.settings.wishlist_shop_label | escape }}</a></div>
+</dialog>
+</atelier-header>
+{% schema %}
+{
+  "name": "Atelier header",
+  "tag": "section",
+  "class": "atelier-header-section",
+  "limit": 1,
+  "enabled_on": {
+    "groups": [
+      "header"
+    ]
+  },
+  "max_blocks": 7,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Wordmark",
+      "info": "Uses the supplied Graffeine Tales wordmark until an image is selected."
+    },
+    {
+      "type": "image_picker",
+      "id": "cup_image",
+      "label": "Cup illustration"
+    },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Accessible brand name",
+      "default": "Graffeine Tales"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cup",
+      "label": "Show cup beside wordmark",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "animate_steam",
+      "label": "Animate cup steam",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Desktop wordmark height",
+      "min": 28,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "mobile_logo_height",
+      "label": "Mobile wordmark height",
+      "min": 20,
+      "max": 44,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Layout and appearance"
+    },
+    {
+      "type": "select",
+      "id": "sticky",
+      "label": "Sticky behaviour",
+      "options": [
+        {
+          "value": "up",
+          "label": "Show on scroll up"
+        },
+        {
+          "value": "always",
+          "label": "Always visible"
+        },
+        {
+          "value": "none",
+          "label": "Not sticky"
+        }
+      ],
+      "default": "up"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Desktop height",
+      "min": 64,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "min": 56,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Content width",
+      "min": 1100,
+      "max": 1500,
+      "step": 20,
+      "unit": "px",
+      "default": 1340
+    },
+    {
+      "type": "range",
+      "id": "menu_gap",
+      "label": "Desktop menu spacing",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "menu_size",
+      "label": "Menu text size",
+      "min": 12,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#F8F5ED"
+    },
+    {
+      "type": "color",
+      "id": "text",
+      "label": "Text and icons",
+      "default": "#363638"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Badges and highlights",
+      "default": "#927B53"
+    },
+    {
+      "type": "color",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Actions and drawers"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show wishlist",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart",
+      "label": "Show bag",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shortcut",
+      "label": "Show search keyboard hint",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shortcut_hint",
+      "label": "Keyboard hint",
+      "default": "⌘K"
+    },
+    {
+      "type": "text",
+      "id": "menu_label",
+      "label": "Mobile menu label",
+      "default": "Explore the atelier"
+    },
+    {
+      "type": "text",
+      "id": "wishlist_label",
+      "label": "Wishlist label",
+      "default": "Your saved stories"
+    },
+    {
+      "type": "text",
+      "id": "wishlist_empty",
+      "label": "Empty wishlist message",
+      "default": "Save the pieces you love. Your favourites will appear here."
+    },
+    {
+      "type": "text",
+      "id": "wishlist_shop_label",
+      "label": "Empty wishlist button",
+      "default": "Explore the collection"
+    },
+    {
+      "type": "url",
+      "id": "wishlist_shop_link",
+      "label": "Empty wishlist destination"
+    },
+    {
+      "type": "text",
+      "id": "close_label",
+      "label": "Close button label",
+      "default": "Close"
+    },
+    {
+      "type": "text",
+      "id": "remove_label",
+      "label": "Remove saved item label",
+      "default": "Remove"
+    },
+    {
+      "type": "text",
+      "id": "explore_label",
+      "label": "Dropdown collection link label",
+      "default": "Explore the collection"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "navigation",
+      "name": "Navigation dropdown",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Menu title",
+          "default": "Stationaries"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Category destination"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Shopify submenu",
+          "info": "Choose an existing menu, or use the individual links below."
+        },
+        {
+          "type": "image_picker",
+          "id": "featured_image",
+          "label": "Featured image"
+        },
+        {
+          "type": "select",
+          "id": "reference_image",
+          "label": "Reference featured image",
+          "options": [
+            {
+              "value": "cat_stationaries.jpg",
+              "label": "Stationaries"
+            },
+            {
+              "value": "cat_journals.jpg",
+              "label": "Journals"
+            },
+            {
+              "value": "cat_decor.jpg",
+              "label": "Décor"
+            },
+            {
+              "value": "cat_events.jpg",
+              "label": "Events"
+            },
+            {
+              "value": "cat_bulk.jpg",
+              "label": "Bulk gifting"
+            }
+          ],
+          "default": "cat_stationaries.jpg"
+        },
+        {
+          "type": "text",
+          "id": "featured_label",
+          "label": "Featured caption",
+          "default": "Featured drop"
+        },
+        {
+          "type": "text",
+          "id": "featured_title",
+          "label": "Featured title",
+          "default": "Discover the studio collection"
+        },
+        {
+          "type": "url",
+          "id": "featured_link",
+          "label": "Featured destination"
+        },
+        {
+          "type": "header",
+          "content": "Submenu link 1"
+        },
+        {
+          "type": "text",
+          "id": "label_1",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "description_1",
+          "label": "Description"
+        },
+        {
+          "type": "url",
+          "id": "link_1",
+          "label": "Destination"
+        },
+        {
+          "type": "header",
+          "content": "Submenu link 2"
+        },
+        {
+          "type": "text",
+          "id": "label_2",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "description_2",
+          "label": "Description"
+        },
+        {
+          "type": "url",
+          "id": "link_2",
+          "label": "Destination"
+        },
+        {
+          "type": "header",
+          "content": "Submenu link 3"
+        },
+        {
+          "type": "text",
+          "id": "label_3",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "description_3",
+          "label": "Description"
+        },
+        {
+          "type": "url",
+          "id": "link_3",
+          "label": "Destination"
+        },
+        {
+          "type": "header",
+          "content": "Submenu link 4"
+        },
+        {
+          "type": "text",
+          "id": "label_4",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "description_4",
+          "label": "Description"
+        },
+        {
+          "type": "url",
+          "id": "link_4",
+          "label": "Destination"
+        },
+        {
+          "type": "header",
+          "content": "Submenu link 5"
+        },
+        {
+          "type": "text",
+          "id": "label_5",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "description_5",
+          "label": "Description"
+        },
+        {
+          "type": "url",
+          "id": "link_5",
+          "label": "Destination"
+        },
+        {
+          "type": "header",
+          "content": "Submenu link 6"
+        },
+        {
+          "type": "text",
+          "id": "label_6",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "description_6",
+          "label": "Description"
+        },
+        {
+          "type": "url",
+          "id": "link_6",
+          "label": "Destination"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier header"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+{% assign faqs = product.metafields.graffeine_journal.faqs.value %}
+{% liquid
+ assign faq_count = 0
+ for entry in faqs
+  if entry.heading.value != blank and entry.content.value != blank
+   assign faq_count = faq_count | plus:1
+  endif
+ endfor
+%}
+{% if faq_count > 0 %}
+{{ 'journal-faqs.css' | asset_url | stylesheet_tag }}
+<journal-faqs class="journal-faqs" style="--faq-background:{{ section.settings.background }};--faq-panel:{{ section.settings.panel_background }};--faq-text:{{ section.settings.text }};--faq-width:{{ section.settings.width }}px">
+ <div><h2>{{ section.settings.heading | escape }}</h2>{% for faq in faqs %}{% if faq.heading.value != blank and faq.content.value != blank %}<details{% if faq.open.value %} open{% endif %}><summary>{{ faq.heading.value | escape }}<span aria-hidden="true">+</span></summary><div class="journal-faqs__answer">{{ faq.content | metafield_tag }}</div></details>{% endif %}{% endfor %}</div>
+</journal-faqs>
+{% else %}{% style %}#shopify-section-{{ section.id }}{display:none}{% endstyle %}{% endif %}
+{% schema %}
+{
+  "name": "Journal FAQs",
+  "tag": "section",
+  "class": "journal-faq-section",
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Questions and answers come from Products → Metafields → Journal · FAQs. Add, edit and reorder the entries there."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Section background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "panel_background",
+      "label": "Question background",
+      "default": "#FAF8F2"
+    },
+    {
+      "type": "color",
+      "id": "text",
+      "label": "Text",
+      "default": "#363638"
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Content width",
+      "min": 640,
+      "max": 1040,
+      "step": 20,
+      "default": 900,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Journal FAQs"
+    }
+  ]
+}
+{% endschema %}

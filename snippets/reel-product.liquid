@@ -1,0 +1,24 @@
+{% doc %}
+  Renders the product tagged in a shoppable reel.
+  @param {product} product - Tagged product.
+  @param {object} section - Reels section.
+  @param {string} form_id - Unique form identifier.
+{% enddoc %}
+{% if product != blank %}
+  {% assign reel_variant = product.selected_or_first_available_variant %}
+  <div class="atelier-reel__product" data-reel-product>
+    <a class="atelier-reel__product-link" href="{{ product.url }}">
+      {% if product.featured_image != blank %}{{ product.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', widths: '60,120', sizes: '44px', alt: '' }}{% endif %}
+      <span class="atelier-reel__product-copy"><span class="atelier-reel__product-title">{{ product.title | escape }}</span><span class="atelier-reel__product-pricing"><strong>{{ reel_variant.price | money }}</strong>{% if section.settings.show_compare_price and reel_variant.compare_at_price > reel_variant.price %}<s>{{ reel_variant.compare_at_price | money }}</s>{% endif %}</span></span>
+    </a>
+    {% if product.available and product.has_only_default_variant and product.requires_selling_plan == false %}
+      {% form 'product', product, id: form_id, data-atelier-product-form: '' %}
+        <input type="hidden" name="id" value="{{ reel_variant.id }}"><input type="hidden" name="quantity" value="1">
+        <button type="submit" class="atelier-reel__buy" data-preserve-button-content aria-label="{{ section.settings.add_label | escape }}: {{ product.title | escape }}">{% render 'header-icon', name: 'bag' %}</button>
+      {% endform %}
+    {% else %}
+      <a class="atelier-reel__buy" href="{{ product.url }}" aria-label="{{ section.settings.product_label | escape }}: {{ product.title | escape }}">{% render 'header-icon', name: 'arrow' %}</a>
+    {% endif %}
+    <p class="atelier-reel__cart-error" data-cart-error role="alert" hidden></p>
+  </div>
+{% endif %}

@@ -1,0 +1,390 @@
+{% liquid
+ assign story_count = 0
+ for entry in section.blocks
+  if entry.settings.text != blank
+   assign story_count = story_count | plus: 1
+  endif
+ endfor
+%}
+{% if story_count > 0 %}
+{{ 'about-story.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'about-story.js' | asset_url }}" defer></script>
+<atelier-story id="about-us" aria-label="{{ section.settings.accessible_label | escape }}" data-highlight="{{ section.settings.enable_highlight }}" data-glow="{{ section.settings.enable_glow }}" data-start="{{ section.settings.start_point | divided_by: 100.0 }}" data-end="{{ section.settings.end_point | divided_by: 100.0 }}" style="--story-background:{{ section.settings.background }};--story-text:{{ section.settings.text_color }};--story-muted:{{ section.settings.muted_color }};--story-subheading:{{ section.settings.subheading_color }};--story-glow:{{ section.settings.glow_color }};--story-muted-opacity:{{ section.settings.muted_opacity | divided_by: 100.0 }};--story-width:{{ section.settings.width }}px;--story-heading-size:{{ section.settings.heading_size }}px;--story-text-size:{{ section.settings.text_size }}px;--story-mobile-text-size:{{ section.settings.mobile_text_size }}px;--story-gap:{{ section.settings.paragraph_gap }}px;--story-line-height:{{ section.settings.line_height | divided_by: 100.0 }};--story-top:{{ section.settings.padding_top }}px;--story-bottom:{{ section.settings.padding_bottom }}px;--story-mobile-alignment:{{ section.settings.mobile_alignment }}">
+  {% if section.settings.show_watermark %}
+    <div class="atelier-story__watermark" aria-hidden="true">
+      <svg viewBox="0 0 1000 700" fill="none" focusable="false"><path d="M120 480C220 320 340 520 500 360S780 440 920 280" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 8"/><path d="M180 180C260 280 420 160 520 290S760 310 860 420" stroke="currentColor" stroke-width="1.2"/><circle cx="500" cy="350" r="180" stroke="currentColor"/><circle cx="500" cy="350" r="260" stroke="currentColor" stroke-dasharray="6 12"/></svg>
+    </div>
+  {% endif %}
+  <div class="atelier-story__inner">
+    {% if section.settings.heading != blank %}<h2 class="atelier-story__heading">{{ section.settings.heading | escape }}</h2>{% endif %}
+    {% if section.settings.subheading != blank %}<p class="atelier-story__subheading">{{ section.settings.subheading | escape }}</p>{% endif %}
+    <div class="atelier-story__narrative" data-story-narrative>
+      {% for block in section.blocks %}{% if block.settings.text == blank %}{% continue %}{% endif %}
+        <div class="atelier-story__paragraph atelier-story__paragraph--{{ block.settings.style }}" data-story-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
+          <div data-story-text>{{ block.settings.text }}</div>
+        </div>
+      {% endfor %}
+    </div>
+    {% if section.settings.show_button and section.settings.button_label != blank %}
+      <div class="atelier-story__actions">
+        {% if section.settings.button_link != blank %}
+          <a class="atelier-story__button" href="{{ section.settings.button_link }}">{{ section.settings.button_label | escape }}{% render 'header-icon', name: 'arrow' %}</a>
+        {% else %}
+          <button class="atelier-story__button" type="button" data-story-open hidden aria-haspopup="dialog" aria-controls="StoryDialog-{{ section.id }}">{{ section.settings.button_label | escape }}{% render 'header-icon', name: 'arrow' %}</button>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+  {% if section.settings.button_link == blank %}
+    <dialog class="atelier-story__dialog" id="StoryDialog-{{ section.id }}" aria-labelledby="StoryDialogHeading-{{ section.id }}">
+      <button type="button" class="atelier-story__close" data-story-close aria-label="{{ section.settings.close_label | escape }}">{% render 'header-icon', name: 'close' %}</button>
+      {% if section.settings.founder_image != blank %}{{ section.settings.founder_image | image_url: width: 1200 | image_tag: class: 'atelier-story__founder-image', loading: 'lazy', widths: '400,800,1200', sizes: '(max-width: 749px) 90vw, 740px' }}{% endif %}
+      <h2 id="StoryDialogHeading-{{ section.id }}">{{ section.settings.dialog_heading | escape }}</h2>
+      {% if section.settings.dialog_intro != blank %}<div class="atelier-story__dialog-intro">{{ section.settings.dialog_intro }}</div>{% endif %}
+      {% for block in section.blocks %}{% if block.settings.text == blank %}{% continue %}{% endif %}<div class="atelier-story__reading-paragraph{% if block.settings.style == 'lead' %} atelier-story__reading-paragraph--lead{% endif %}">{{ block.settings.text }}</div>{% endfor %}
+    </dialog>
+  {% endif %}
+</atelier-story>
+
+{% else %}{% style %}#shopify-section-{{ section.id }}{display:none}{% endstyle %}{% endif %}
+{% schema %}
+{
+  "name": "Our story",
+  "tag": "section",
+  "class": "atelier-story-section",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Story content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Story Behind Graffeine Tales"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Born from events. Brewed with coffee. Made with art."
+    },
+    {
+      "type": "text",
+      "id": "accessible_label",
+      "label": "Accessible section label",
+      "default": "About Graffeine Tales"
+    },
+    {
+      "type": "header",
+      "content": "Scroll highlight"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_highlight",
+      "label": "Highlight words as visitors scroll",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_glow",
+      "label": "Glow on highlighted words",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "muted_opacity",
+      "label": "Unhighlighted word opacity",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "start_point",
+      "label": "Highlight starts at viewport position",
+      "min": 50,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 75
+    },
+    {
+      "type": "range",
+      "id": "end_point",
+      "label": "Highlight finishes at viewport position",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "%",
+      "default": 25
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Story content width",
+      "min": 600,
+      "max": 1100,
+      "step": 20,
+      "unit": "px",
+      "default": 880
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Desktop heading size",
+      "min": 32,
+      "max": 56,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Desktop story text size",
+      "min": 18,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "mobile_text_size",
+      "label": "Mobile story text size",
+      "min": 15,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "paragraph_gap",
+      "label": "Paragraph spacing",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "label": "Story line height",
+      "min": 140,
+      "max": 190,
+      "step": 5,
+      "unit": "%",
+      "default": 170
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 32,
+      "max": 144,
+      "step": 8,
+      "unit": "px",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 32,
+      "max": 144,
+      "step": 8,
+      "unit": "px",
+      "default": 88
+    },
+    {
+      "type": "select",
+      "id": "mobile_alignment",
+      "label": "Mobile text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_watermark",
+      "label": "Show subtle background line artwork",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#363638"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Highlighted text",
+      "default": "#E9DFC2"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Unhighlighted text",
+      "default": "#927B53"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading",
+      "default": "#C6B58E"
+    },
+    {
+      "type": "color",
+      "id": "glow_color",
+      "label": "Glow accent",
+      "default": "#E2BC7A"
+    },
+    {
+      "type": "header",
+      "content": "Read more"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Show story button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Read More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button destination",
+      "info": "Choose a page to navigate to. Leave blank to open the full story in a reading dialog."
+    },
+    {
+      "type": "text",
+      "id": "dialog_heading",
+      "label": "Reading dialog heading",
+      "default": "The Story Behind Graffeine Tales"
+    },
+    {
+      "type": "image_picker",
+      "id": "founder_image",
+      "label": "Optional image in reading dialog"
+    },
+    {
+      "type": "richtext",
+      "id": "dialog_intro",
+      "label": "Optional introduction in reading dialog"
+    },
+    {
+      "type": "text",
+      "id": "close_label",
+      "label": "Close button label",
+      "default": "Close story"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "name": "Story paragraph",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Paragraph",
+          "default": "<p>Every story begins with a little inspiration.</p>"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Paragraph style",
+          "options": [
+            {
+              "value": "lead",
+              "label": "Opening statement"
+            },
+            {
+              "value": "body",
+              "label": "Story paragraph"
+            }
+          ],
+          "default": "body"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our story",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "settings": {
+            "style": "lead",
+            "text": "<p><em>It started with events. Then came design. And eventually, design became something you could hold.</em></p>"
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "style": "body",
+            "text": "<p>My journey began in event planning, amidst tight deadlines, endless checklists, and the beautiful chaos of bringing ideas to life. Somewhere along the way, I found myself drawn to the art of designing experiences and creating moments worth remembering.</p>"
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "style": "body",
+            "text": "<p>The days were hectic, the coffee was endless, and creativity kept brewing. What began as event planning slowly evolved into event design, graphic design, and a desire to create something more personal.</p>"
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "style": "body",
+            "text": "<p>I wanted my designs to live beyond screens and event spaces — to become things people could hold, gift, use, and cherish.</p>"
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "style": "body",
+            "text": "<p>And so, <em>Graffeine Tales</em> was born: a blend of graphics and caffeine, fuelled by a love for art, handmade details, and the little things that bring joy.</p>"
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "style": "body",
+            "text": "<p>Today, from illustrated stationery and personalised gifts to thread art and handmade keepsakes, every creation is a mix of thoughtful design and a little creative magic.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
