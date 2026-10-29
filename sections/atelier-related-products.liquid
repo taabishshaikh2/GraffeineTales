@@ -262,7 +262,7 @@
     }
   {% endstyle %}
 
-  <atelier-related-carousel class="atelier-related" style="--related-width:{{ section.settings.width }}px;--related-gap:{{ section.settings.gap }}px;--related-radius:{{ section.settings.radius }}px;--related-heading:{{ section.settings.heading_size }}px;--related-top:{{ section.settings.padding_top }}px;--related-bottom:{{ section.settings.padding_bottom }}px;--related-background:{{ section.settings.background }};--related-card:{{ section.settings.card_background }};--related-text:{{ section.settings.text }};--related-accent:{{ section.settings.accent }};--related-border:{{ section.settings.border }};--related-button:{{ section.settings.button_background }};--related-fit:{{ section.settings.image_fit }}">
+  <atelier-related-carousel class="atelier-related" style="--related-width:{{ section.settings.width }}px;--related-gap:{{ section.settings.gap }}px;--related-mobile-gap:{{ section.settings.mobile_gap | default: 16 }}px;--related-radius:{{ section.settings.radius }}px;--related-heading:{{ section.settings.heading_size }}px;--related-mobile-heading:{{ section.settings.mobile_heading_size | default: 26 }}px;--related-top:{{ section.settings.padding_top }}px;--related-bottom:{{ section.settings.padding_bottom }}px;--related-mobile-top:{{ section.settings.mobile_padding_top | default: 28 }}px;--related-mobile-bottom:{{ section.settings.mobile_padding_bottom | default: 28 }}px;--related-background:{{ section.settings.background }};--related-card:{{ section.settings.card_background }};--related-text:{{ section.settings.text }};--related-accent:{{ section.settings.accent }};--related-border:{{ section.settings.border }};--related-button:{{ section.settings.button_background }};--related-fit:{{ section.settings.image_fit }}">
     <div class="atelier-related__inner{% if section.settings.show_divider %} atelier-related__inner--divider{% endif %}">
       <header class="atelier-related__header">
         <h2>{{ section.settings.heading | escape }}</h2>
@@ -286,6 +286,7 @@
           {% unless related_product.id == product.id %}
             {% assign variant = related_product.selected_or_first_available_variant %}
             <article class="atelier-related-card">
+              <div style="position:relative;width:100%;">
               <a class="atelier-related-card__image" href="{{ related_product.url }}" aria-label="{{ related_product.title | escape }}">
                 {% if related_product.featured_image %}
                   {{ related_product.featured_image | image_url: width: 720 | image_tag: widths: '240,360,540,720', sizes: '(min-width: 990px) 25vw, (min-width: 750px) 40vw, 75vw', loading: 'lazy' }}
@@ -293,6 +294,8 @@
                   {{ 'product-1' | placeholder_svg_tag }}
                 {% endif %}
               </a>
+                <button type="button" class="atelier-product-card__wishlist" data-wishlist-toggle="{{ related_product.handle | escape }}" aria-pressed="false" aria-label="Add to wishlist: {{ related_product.title | escape }}">{% render "header-icon", name: "heart" %}</button>
+              </div>
               <div class="atelier-related-card__body">
                 {% if section.settings.show_category and related_product.type != blank %}
                   <p class="atelier-related-card__category">{{ related_product.type | escape }}</p>
@@ -322,7 +325,7 @@
                   {% elsif related_product.has_only_default_variant and related_product.requires_selling_plan == false %}
                     <button class="atelier-related-card__button" type="button" data-quick-add="{{ variant.id }}">{{ section.settings.button_label | default: 'Add to Cart' | escape }}</button>
                   {% else %}
-                    <a class="atelier-related-card__button" href="{{ related_product.url }}">{{ section.settings.button_label | default: 'Add to Cart' | escape }}</a>
+                    <button class="atelier-related-card__button" type="button" data-quick-add="{{ variant.id }}">{{ section.settings.button_label | default: "Add to Cart" | escape }}</button>
                   {% endif %}
                 </div>
               </div>

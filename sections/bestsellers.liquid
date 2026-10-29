@@ -2,7 +2,7 @@
 {% if section.settings.collection.products.size > 0 %}
 {{ 'product-showcase.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-showcase.js' | asset_url }}" defer></script>
-<atelier-product-showcase id="bestsellers-section" data-showcase-columns="{{ section.settings.columns }}" data-currency="{{ cart.currency.iso_code | escape }}" data-add-label="{{ section.settings.add_label | escape }}" data-adding-label="{{ section.settings.adding_label | escape }}" data-added-label="{{ section.settings.added_label | escape }}" data-error-label="{{ section.settings.error_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}" style="--showcase-background:{{ section.settings.background }};--showcase-card:{{ section.settings.card_background }};--showcase-image:{{ section.settings.image_background }};--showcase-text:{{ section.settings.text_color }};--showcase-accent:{{ section.settings.accent }};--showcase-button:{{ section.settings.button_background }};--showcase-button-text:{{ section.settings.button_color }};--showcase-badge:{{ section.settings.badge_background }};--showcase-badge-text:{{ section.settings.badge_color }};--showcase-gold:{{ section.settings.gold_badge_background }};--showcase-gold-text:{{ section.settings.gold_badge_color }};--showcase-width:{{ section.settings.width }}px;--showcase-columns:{{ section.settings.columns }};--showcase-gap:{{ section.settings.gap }}px;--showcase-mobile-width:{{ section.settings.mobile_width }}px;--showcase-card-height:{{ section.settings.card_height }}px;--showcase-image-height:{{ section.settings.image_height }}px;--showcase-image-padding:{{ section.settings.image_padding }}px;--showcase-radius:{{ section.settings.radius }}px;--showcase-heading-size:{{ section.settings.heading_size }}px;--showcase-top:{{ section.settings.padding_top }}px;--showcase-bottom:{{ section.settings.padding_bottom }}px">
+<atelier-product-showcase id="bestsellers-section" data-showcase-columns="{{ section.settings.columns }}" data-currency="{{ cart.currency.iso_code | escape }}" data-add-label="{{ section.settings.add_label | escape }}" data-adding-label="{{ section.settings.adding_label | escape }}" data-added-label="{{ section.settings.added_label | escape }}" data-error-label="{{ section.settings.error_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}" style="--showcase-background:{{ section.settings.background }};--showcase-card:{{ section.settings.card_background }};--showcase-image:{{ section.settings.image_background }};--showcase-text:{{ section.settings.text_color }};--showcase-accent:{{ section.settings.accent }};--showcase-button:{{ section.settings.button_background }};--showcase-button-text:{{ section.settings.button_color }};--showcase-badge:{{ section.settings.badge_background }};--showcase-badge-text:{{ section.settings.badge_color }};--showcase-gold:{{ section.settings.gold_badge_background }};--showcase-gold-text:{{ section.settings.gold_badge_color }};--showcase-width:{{ section.settings.width }}px;--showcase-columns:{{ section.settings.columns }};--showcase-gap:{{ section.settings.gap }}px;--showcase-mobile-width:{{ section.settings.mobile_width }}px;--showcase-card-height:{{ section.settings.card_height }}px;--showcase-image-height:{{ section.settings.image_height }}px;--showcase-image-padding:{{ section.settings.image_padding }}px;--showcase-radius:{{ section.settings.radius }}px;--showcase-heading-size:{{ section.settings.heading_size }}px;--showcase-top:{{ section.settings.padding_top }}px;--showcase-bottom:{{ section.settings.padding_bottom }}px;--showcase-mobile-heading-size:{{ section.settings.mobile_heading_size | default: 30 }}px;--showcase-mobile-gap:{{ section.settings.mobile_gap | default: 14 }}px;--showcase-mobile-card-height:{{ section.settings.mobile_card_height | default: section.settings.card_height }}px;--showcase-mobile-image-height:{{ section.settings.mobile_image_height | default: section.settings.image_height }}px;--showcase-mobile-top:{{ section.settings.mobile_padding_top | default: 40 }}px;--showcase-mobile-bottom:{{ section.settings.mobile_padding_bottom | default: 40 }}px">
   <div class="atelier-showcase__inner">
     <header class="atelier-showcase__heading">
       {% if section.settings.eyebrow != blank %}<p>{{ section.settings.eyebrow | escape }}</p>{% endif %}
@@ -209,7 +209,7 @@
     {
       "type": "range",
       "id": "heading_size",
-      "label": "Heading size",
+      "label": "Desktop heading size",
       "min": 28,
       "max": 52,
       "step": 2,
@@ -235,6 +235,66 @@
       "step": 8,
       "unit": "px",
       "default": 64
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_size",
+      "label": "Mobile heading size",
+      "min": 20,
+      "max": 42,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "mobile_gap",
+      "label": "Mobile card spacing",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_height",
+      "label": "Mobile card height",
+      "min": 380,
+      "max": 560,
+      "step": 10,
+      "unit": "px",
+      "default": 480
+    },
+    {
+      "type": "range",
+      "id": "mobile_image_height",
+      "label": "Mobile image area height",
+      "min": 160,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 240
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Mobile top spacing",
+      "min": 16,
+      "max": 80,
+      "step": 8,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Mobile bottom spacing",
+      "min": 16,
+      "max": 80,
+      "step": 8,
+      "unit": "px",
+      "default": 40
     },
     {
       "type": "header",

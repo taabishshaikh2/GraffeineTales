@@ -38,7 +38,7 @@
 {{ 'journal-reels.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-showcase.js' | asset_url }}" defer></script>
 <script src="{{ 'stories-reels.js' | asset_url }}" defer></script>
-<atelier-product-showcase class="atelier-video-commerce journal-video-commerce" id="journal-in-action" data-currency="{{ cart.currency.iso_code | escape }}" data-add-label="{{ section.settings.add_label | escape }}" data-adding-label="{{ section.settings.adding_label | escape }}" data-added-label="{{ section.settings.added_label | escape }}" data-error-label="{{ section.settings.error_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}" style="--showcase-background:{{ section.settings.background }};--showcase-text:{{ section.settings.text_color }};--showcase-top:{{ section.settings.padding_top }}px;--showcase-bottom:{{ section.settings.padding_bottom }}px;--reels-caption:{{ section.settings.caption_color }};--reels-accent:{{ section.settings.accent }};--reels-button:{{ section.settings.button_background }};--reels-button-text:{{ section.settings.button_text }};--reels-width:{{ section.settings.width }}px;--reels-heading-size:{{ section.settings.heading_size }}px;--reels-card-width:{{ section.settings.card_width }}px;--reels-mobile-width:{{ section.settings.mobile_card_width }}px;--reels-gap:{{ section.settings.gap }}px;--reels-radius:{{ section.settings.radius }}px">
+<atelier-product-showcase class="atelier-video-commerce" id="journal-in-action" data-currency="{{ cart.currency.iso_code | escape }}" data-add-label="{{ section.settings.add_label | escape }}" data-adding-label="{{ section.settings.adding_label | escape }}" data-added-label="{{ section.settings.added_label | escape }}" data-error-label="{{ section.settings.error_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}" style="--showcase-background:{{ section.settings.background }};--showcase-text:{{ section.settings.text_color }};--showcase-top:{{ section.settings.padding_top }}px;--showcase-bottom:{{ section.settings.padding_bottom }}px;--reels-caption:{{ section.settings.caption_color }};--reels-accent:{{ section.settings.accent }};--reels-button:{{ section.settings.button_background }};--reels-button-text:{{ section.settings.button_text }};--reels-width:{{ section.settings.width }}px;--reels-heading-size:{{ section.settings.heading_size }}px;--reels-mobile-heading-size:{{ section.settings.mobile_heading_size | default: 28 }}px;--reels-mobile-top:{{ section.settings.mobile_padding_top | default: 40 }}px;--reels-mobile-bottom:{{ section.settings.mobile_padding_bottom | default: 40 }}px;--reels-card-width:{{ section.settings.card_width }}px;--reels-mobile-width:{{ section.settings.mobile_card_width }}px;--reels-gap:{{ section.settings.gap }}px;--reels-radius:{{ section.settings.radius }}px">
 <atelier-reels data-autoplay="{{ section.settings.autoplay }}" data-play-label="{{ section.settings.play_label | escape }}" data-pause-label="{{ section.settings.pause_label | escape }}" data-mute-label="{{ section.settings.mute_label | escape }}" data-unmute-label="{{ section.settings.unmute_label | escape }}" data-shared-label="{{ section.settings.shared_label | escape }}" data-error-label="{{ section.settings.video_error_label | escape }}">
   <div class="atelier-reels__inner">
     <div class="atelier-reels__heading">
@@ -91,28 +91,9 @@
                 {% if has_video %}<button type="button" class="atelier-reels__control" data-card-sound aria-label="{{ section.settings.unmute_label | escape }}" aria-pressed="false"><span data-icon-muted>{% render 'reel-icon', name: 'muted' %}</span><span data-icon-sound hidden>{% render 'reel-icon', name: 'sound' %}</span></button>{% endif %}
               </div>
               <div class="atelier-reel__bottom">
-                <div class="journal-reel-pill" data-reel-product>
-                  <div>
-                    {% if card_title != blank %}<h3>{{ card_title | escape }}</h3>{% endif %}
-                    <p>{% if reel_variant.price != blank %}{{ section.settings.currency_symbol | escape }}{{ reel_variant.price | money_without_currency | remove: '.00' }}{% if card_caption != blank %} • {% endif %}{% endif %}{{ card_caption | escape }}</p>
-                  </div>
-                  {% if reel_product.available and reel_product.requires_selling_plan == false %}
-                    {% if reel_product.has_only_default_variant or reel_product.id == product.id %}
-                      {% form 'product', reel_product, id: form_id, data-atelier-product-form: '' %}
-                        <input type="hidden" name="id" value="{{ reel_variant.id }}"{% if reel_product.id == product.id %} data-journal-product="{{ product.id }}"{% endif %}>
-                        <input type="hidden" name="quantity" value="1">
-                        <button type="submit" data-preserve-button-content aria-label="{{ section.settings.add_label | escape }}: {{ reel_product.title | escape }}">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-                        </button>
-                      {% endform %}
-                    {% else %}
-                      <a href="{{ reel_product.url }}" aria-label="{{ section.settings.product_label | escape }}: {{ reel_product.title | escape }}">+</a>
-                    {% endif %}
-                  {% else %}
-                    <button type="button" disabled aria-label="{{ section.settings.sold_out_label | escape }}">+</button>
-                  {% endif %}
-                  <p data-cart-error role="alert" hidden></p>
-                </div>
+                {% if card_title != blank %}<h3>{{ card_title | escape }}</h3>{% endif %}
+                {% if section.settings.show_captions and card_caption != blank %}<p class="atelier-reel__caption">{{ card_caption | escape }}</p>{% endif %}
+                {% render 'reel-product', product: reel_product, section: section, form_id: form_id %}
               </div>
             </article>
           {% endfor %}
@@ -247,6 +228,36 @@
       "step": 2,
       "unit": "px",
       "default": 44
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_size",
+      "label": "Mobile heading size",
+      "min": 20,
+      "max": 38,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Mobile top spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Mobile bottom spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
     },
     {
       "type": "range",

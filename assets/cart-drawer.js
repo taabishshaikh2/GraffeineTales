@@ -341,6 +341,13 @@ class CartConfetti {
       }
     }
     onClick(event) {
+      if (this.classList.contains('active')) {
+        if (event.target.id === 'CartDrawer-Overlay' || event.target.closest('#CartDrawer-Overlay') || !event.target.closest('#CartDrawer')) {
+          event.preventDefault();
+          this.close();
+          return;
+        }
+      }
       const button = event.target.closest('button,a,[data-cart-close]');
       if (!button || !this.contains(button)) return;
       if (button.hasAttribute('data-cart-close')) { event.preventDefault(); this.close(); }

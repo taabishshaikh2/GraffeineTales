@@ -12,7 +12,7 @@
 {{ 'stories-reels.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-showcase.js' | asset_url }}" defer></script>
 <script src="{{ 'stories-reels.js' | asset_url }}" defer></script>
-<atelier-product-showcase class="atelier-video-commerce" id="stories-in-motion" data-currency="{{ cart.currency.iso_code | escape }}" data-add-label="{{ section.settings.add_label | escape }}" data-adding-label="{{ section.settings.adding_label | escape }}" data-added-label="{{ section.settings.added_label | escape }}" data-error-label="{{ section.settings.error_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}" style="--showcase-background:{{ section.settings.background }};--showcase-text:{{ section.settings.text_color }};--showcase-top:{{ section.settings.padding_top }}px;--showcase-bottom:{{ section.settings.padding_bottom }}px;--reels-caption:{{ section.settings.caption_color }};--reels-accent:{{ section.settings.accent }};--reels-button:{{ section.settings.button_background }};--reels-button-text:{{ section.settings.button_text }};--reels-width:{{ section.settings.width }}px;--reels-heading-size:{{ section.settings.heading_size }}px;--reels-card-width:{{ section.settings.card_width }}px;--reels-mobile-width:{{ section.settings.mobile_card_width }}px;--reels-gap:{{ section.settings.gap }}px;--reels-radius:{{ section.settings.radius }}px">
+<atelier-product-showcase class="atelier-video-commerce" id="stories-in-motion" data-currency="{{ cart.currency.iso_code | escape }}" data-add-label="{{ section.settings.add_label | escape }}" data-adding-label="{{ section.settings.adding_label | escape }}" data-added-label="{{ section.settings.added_label | escape }}" data-error-label="{{ section.settings.error_label | escape }}" data-sold-out-label="{{ section.settings.sold_out_label | escape }}" style="--showcase-background:{{ section.settings.background }};--showcase-text:{{ section.settings.text_color }};--showcase-top:{{ section.settings.padding_top }}px;--showcase-bottom:{{ section.settings.padding_bottom }}px;--reels-caption:{{ section.settings.caption_color }};--reels-accent:{{ section.settings.accent }};--reels-button:{{ section.settings.button_background }};--reels-button-text:{{ section.settings.button_text }};--reels-width:{{ section.settings.width }}px;--reels-heading-size:{{ section.settings.heading_size }}px;--reels-mobile-heading-size:{{ section.settings.mobile_heading_size | default: 28 }}px;--reels-mobile-top:{{ section.settings.mobile_padding_top | default: 40 }}px;--reels-mobile-bottom:{{ section.settings.mobile_padding_bottom | default: 40 }}px;--reels-card-width:{{ section.settings.card_width }}px;--reels-mobile-width:{{ section.settings.mobile_card_width }}px;--reels-gap:{{ section.settings.gap }}px;--reels-radius:{{ section.settings.radius }}px">
 <atelier-reels data-autoplay="{{ section.settings.autoplay }}" data-play-label="{{ section.settings.play_label | escape }}" data-pause-label="{{ section.settings.pause_label | escape }}" data-mute-label="{{ section.settings.mute_label | escape }}" data-unmute-label="{{ section.settings.unmute_label | escape }}" data-shared-label="{{ section.settings.shared_label | escape }}" data-error-label="{{ section.settings.video_error_label | escape }}">
   <div class="atelier-reels__inner">
     <div class="atelier-reels__heading">
@@ -134,6 +134,36 @@
       "step": 2,
       "unit": "px",
       "default": 44
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_size",
+      "label": "Mobile heading size",
+      "min": 20,
+      "max": 38,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Mobile top spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Mobile bottom spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
     },
     {
       "type": "range",

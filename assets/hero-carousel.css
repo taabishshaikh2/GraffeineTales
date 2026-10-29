@@ -2,3 +2,132 @@ hero-banner-slider{display:block;position:relative;background:#363638;color:whit
 .atelier-hero__pagination{position:relative;padding:0 6px;isolation:isolate}.atelier-hero__dot{width:44px;flex:0 0 44px;padding:0}.atelier-hero__dot span{width:8px;height:8px;opacity:.65;transition:opacity 250ms ease}.atelier-hero__dot[aria-current=true] span{width:8px;opacity:0}.atelier-hero__indicator{position:absolute;left:15.5px;top:18px;width:25px;height:8px;border-radius:999px;background:#fff;pointer-events:none;transform:translateX(calc(var(--hero-active-slide,0)*44px));transition:transform 450ms cubic-bezier(.22,1,.36,1);z-index:1}@media(prefers-reduced-motion:reduce){.atelier-hero__indicator{transition:none}}
 
 .atelier-hero[data-content=false] .atelier-hero__slide:after{display:none}.atelier-hero[data-content=false] .atelier-hero__content{pointer-events:none}.atelier-hero[data-responsive-height=true] .atelier-hero__slide{min-height:clamp(480px,45vw,var(--hero-desktop-height))}.atelier-hero__arrow{position:absolute;top:50%;transform:translateY(-50%);width:50px;height:50px;display:grid;place-items:center;border-radius:50%;background:color-mix(in srgb,var(--hero-arrow-background) 88%,transparent);color:var(--hero-arrow-color);border:1px solid #ffffffb3;box-shadow:0 4px 16px #0000002e;cursor:pointer;z-index:2;transition:background 180ms ease,scale 180ms ease}.atelier-hero__arrow--previous{left:28px}.atelier-hero__arrow--next{right:28px}.atelier-hero__arrow:hover{scale:1.06;background:var(--hero-arrow-background)}@media(max-width:749px){.atelier-hero[data-responsive-height=true] .atelier-hero__slide{min-height:var(--hero-mobile-height)}.atelier-hero__arrow{width:44px;height:44px}.atelier-hero__arrow--previous{left:12px}.atelier-hero__arrow--next{right:12px}}@media(prefers-reduced-motion:reduce){.atelier-hero__arrow{transition:none}}
+
+
+/* Art in Action Styled Controls for Hero Banner */
+.atelier-hero__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(198, 181, 142, 0.45);
+  border-radius: 50%;
+  background: rgba(18, 16, 14, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #F8F5ED;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+  transition: background 200ms ease, color 200ms ease, transform 200ms ease, border-color 200ms ease;
+}
+.atelier-hero__arrow:hover {
+  background: #F8F5ED;
+  color: #181614;
+  border-color: #F8F5ED;
+  transform: translateY(-50%) scale(1.06);
+}
+.atelier-hero__arrow--previous {
+  left: 24px;
+}
+.atelier-hero__arrow--next {
+  right: 24px;
+}
+
+.atelier-hero__controls {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 3;
+}
+.atelier-hero__pagination {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  background: rgba(18, 16, 14, 0.55);
+  border: 1px solid rgba(198, 181, 142, 0.25);
+  border-radius: 999px;
+  padding: 6px 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.atelier-hero__indicator {
+  display: none !important;
+}
+.atelier-hero__dot {
+  border: 0 !important;
+  background: transparent !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 4px !important;
+  cursor: pointer;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+.atelier-hero__dot span {
+  display: block !important;
+  width: 6px !important;
+  height: 6px !important;
+  background: #C6B58E !important;
+  opacity: 0.45 !important;
+  border-radius: 50% !important;
+  transition: width 220ms ease, opacity 220ms ease, background 220ms ease, border-radius 220ms ease !important;
+}
+.atelier-hero__dot[aria-current="true"] span {
+  width: 22px !important;
+  height: 6px !important;
+  background: #E9DFC2 !important;
+  opacity: 1 !important;
+  border-radius: 999px !important;
+}
+
+/* Mobile Hero Buttons & Small Controls */
+@media (max-width: 749px) {
+  .atelier-hero__actions {
+    gap: 12px !important;
+    margin-top: 18px !important;
+  }
+  .atelier-hero__actions .button,
+  .atelier-hero .button {
+    min-height: 36px !important;
+    padding: 8px 18px !important;
+    font-size: 12px !important;
+    letter-spacing: 0.02em !important;
+    border-radius: 999px !important;
+  }
+  .atelier-hero__secondary {
+    font-size: 12px !important;
+    padding: 6px 0 !important;
+  }
+  .atelier-hero__arrow {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+  }
+  .atelier-hero__arrow--previous {
+    left: 8px !important;
+  }
+  .atelier-hero__arrow--next {
+    right: 8px !important;
+  }
+  .atelier-hero__arrow svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+  .atelier-hero h1, .atelier-hero h2 {
+    font-size: var(--hero-mobile-heading, clamp(2.4rem, 7vw, 3.8rem)) !important;
+  }
+}

@@ -16,7 +16,7 @@
 {{ 'reviews.css' | asset_url | stylesheet_tag }}
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
 <script src="{{ 'reviews.js' | asset_url }}" defer></script>
-<atelier-reviews id="reviews-section" data-autoplay="{{ section.settings.autoplay }}" data-fade="{{ section.settings.fade_edges }}" style="--reviews-background:{{ section.settings.background }};--reviews-card-background:{{ section.settings.card_background }};--reviews-text:{{ section.settings.text }};--reviews-muted:{{ section.settings.muted_text }};--reviews-accent:{{ section.settings.accent }};--reviews-avatar-background:{{ section.settings.avatar_background }};--reviews-avatar-text:{{ section.settings.avatar_text }};--reviews-width:{{ section.settings.width }}px;--reviews-heading-size:{{ section.settings.heading_size }}px;--reviews-card-width:{{ section.settings.card_width }}px;--reviews-mobile-width:{{ section.settings.mobile_width }}px;--reviews-gap:{{ section.settings.gap }}px;--reviews-radius:{{ section.settings.radius }}px;--reviews-quote-size:{{ section.settings.quote_size }}px;--reviews-top:{{ section.settings.padding_top }}px;--reviews-bottom:{{ section.settings.padding_bottom }}px;--reviews-duration:{{ section.settings.duration }}s">
+<atelier-reviews id="reviews-section" data-autoplay="{{ section.settings.autoplay }}" data-fade="{{ section.settings.fade_edges }}" style="--reviews-background:{{ section.settings.background }};--reviews-card-background:{{ section.settings.card_background }};--reviews-text:{{ section.settings.text }};--reviews-muted:{{ section.settings.muted_text }};--reviews-accent:{{ section.settings.accent }};--reviews-avatar-background:{{ section.settings.avatar_background }};--reviews-avatar-text:{{ section.settings.avatar_text }};--reviews-width:{{ section.settings.width }}px;--reviews-heading-size:{{ section.settings.heading_size }}px;--reviews-mobile-heading-size:{{ section.settings.mobile_heading_size | default: 28 }}px;--reviews-mobile-top:{{ section.settings.mobile_padding_top | default: 36 }}px;--reviews-mobile-bottom:{{ section.settings.mobile_padding_bottom | default: 36 }}px;--reviews-card-width:{{ section.settings.card_width }}px;--reviews-mobile-width:{{ section.settings.mobile_width }}px;--reviews-gap:{{ section.settings.gap }}px;--reviews-radius:{{ section.settings.radius }}px;--reviews-quote-size:{{ section.settings.quote_size }}px;--reviews-top:{{ section.settings.padding_top }}px;--reviews-bottom:{{ section.settings.padding_bottom }}px;--reviews-duration:{{ section.settings.duration }}s">
   <div class="atelier-reviews__inner">
     <header class="atelier-reviews__heading">{% if section.settings.eyebrow != blank %}<p>{{ section.settings.eyebrow | escape }}</p>{% endif %}{% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}{% if section.settings.description != blank %}<div>{{ section.settings.description | escape }}</div>{% endif %}</header>
     {% if request.design_mode and sample_reviews > 0 %}<p class="atelier-reviews__preview-note">{{ section.settings.preview_note | escape }}</p>{% endif %}
@@ -74,12 +74,42 @@
     {
       "type": "range",
       "id": "heading_size",
-      "label": "Heading size",
+      "label": "Desktop heading size",
       "min": 28,
       "max": 52,
       "step": 2,
       "unit": "px",
       "default": 42
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_size",
+      "label": "Mobile heading size",
+      "min": 20,
+      "max": 38,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Mobile top spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Mobile bottom spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 36
     },
     {
       "type": "range",

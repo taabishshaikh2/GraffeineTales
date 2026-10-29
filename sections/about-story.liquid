@@ -9,7 +9,7 @@
 {% if story_count > 0 %}
 {{ 'about-story.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'about-story.js' | asset_url }}" defer></script>
-<atelier-story id="about-us" aria-label="{{ section.settings.accessible_label | escape }}" data-highlight="{{ section.settings.enable_highlight }}" data-glow="{{ section.settings.enable_glow }}" data-start="{{ section.settings.start_point | divided_by: 100.0 }}" data-end="{{ section.settings.end_point | divided_by: 100.0 }}" style="--story-background:{{ section.settings.background }};--story-text:{{ section.settings.text_color }};--story-muted:{{ section.settings.muted_color }};--story-subheading:{{ section.settings.subheading_color }};--story-glow:{{ section.settings.glow_color }};--story-muted-opacity:{{ section.settings.muted_opacity | divided_by: 100.0 }};--story-width:{{ section.settings.width }}px;--story-heading-size:{{ section.settings.heading_size }}px;--story-text-size:{{ section.settings.text_size }}px;--story-mobile-text-size:{{ section.settings.mobile_text_size }}px;--story-gap:{{ section.settings.paragraph_gap }}px;--story-line-height:{{ section.settings.line_height | divided_by: 100.0 }};--story-top:{{ section.settings.padding_top }}px;--story-bottom:{{ section.settings.padding_bottom }}px;--story-mobile-alignment:{{ section.settings.mobile_alignment }}">
+<atelier-story id="about-us" aria-label="{{ section.settings.accessible_label | escape }}" data-highlight="{{ section.settings.enable_highlight }}" data-glow="{{ section.settings.enable_glow }}" data-start="{{ section.settings.start_point | divided_by: 100.0 }}" data-end="{{ section.settings.end_point | divided_by: 100.0 }}" style="--story-background:{{ section.settings.background }};--story-text:{{ section.settings.text_color }};--story-muted:{{ section.settings.muted_color }};--story-subheading:{{ section.settings.subheading_color }};--story-glow:{{ section.settings.glow_color }};--story-muted-opacity:{{ section.settings.muted_opacity | divided_by: 100.0 }};--story-width:{{ section.settings.width }}px;--story-heading-size:{{ section.settings.heading_size }}px;--story-mobile-heading-size:{{ section.settings.mobile_heading_size | default: 29 }}px;--story-mobile-top:{{ section.settings.mobile_padding_top | default: 36 }}px;--story-mobile-bottom:{{ section.settings.mobile_padding_bottom | default: 36 }}px;--story-text-size:{{ section.settings.text_size }}px;--story-mobile-text-size:{{ section.settings.mobile_text_size }}px;--story-gap:{{ section.settings.paragraph_gap }}px;--story-line-height:{{ section.settings.line_height | divided_by: 100.0 }};--story-top:{{ section.settings.padding_top }}px;--story-bottom:{{ section.settings.padding_bottom }}px;--story-mobile-alignment:{{ section.settings.mobile_alignment }}">
   {% if section.settings.show_watermark %}
     <div class="atelier-story__watermark" aria-hidden="true">
       <svg viewBox="0 0 1000 700" fill="none" focusable="false"><path d="M120 480C220 320 340 520 500 360S780 440 920 280" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 8"/><path d="M180 180C260 280 420 160 520 290S760 310 860 420" stroke="currentColor" stroke-width="1.2"/><circle cx="500" cy="350" r="180" stroke="currentColor"/><circle cx="500" cy="350" r="260" stroke="currentColor" stroke-dasharray="6 12"/></svg>
@@ -145,6 +145,36 @@
       "step": 2,
       "unit": "px",
       "default": 48
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_size",
+      "label": "Mobile heading size",
+      "min": 20,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 29
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Mobile top spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Mobile bottom spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 36
     },
     {
       "type": "range",

@@ -89,6 +89,55 @@ atelier-product-showcase{display:block;background:var(--showcase-background);col
   text-decoration: none !important;
 }
 
+
+.atelier-product-card__wishlist {
+  position: absolute !important;
+  right: 10px !important;
+  top: 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  background: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(14px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
+  color: #4D351D !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+  cursor: pointer !important;
+  transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease !important;
+  z-index: 2 !important;
+  padding: 0 !important;
+}
+
+.atelier-product-card__wishlist svg {
+  width: 17px !important;
+  height: 17px !important;
+  fill: transparent !important;
+  stroke: currentColor !important;
+  stroke-width: 1.8 !important;
+}
+
+.atelier-product-card__wishlist:hover {
+  background: rgba(255, 255, 255, 0.85) !important;
+  transform: scale(1.08) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
+}
+
+.atelier-product-card__wishlist[aria-pressed="true"] {
+  background: rgba(255, 241, 242, 0.85) !important;
+  color: #D94A60 !important;
+  border-color: rgba(255, 195, 204, 0.8) !important;
+}
+
+.atelier-product-card__wishlist[aria-pressed="true"] svg {
+  fill: #D94A60 !important;
+  stroke: #D94A60 !important;
+}
+
+
+
 .atelier-product-card__footer {
   display: flex !important;
   align-items: center !important;
@@ -99,15 +148,19 @@ atelier-product-showcase{display:block;background:var(--showcase-background);col
 }
 
 .atelier-product-card__pricing {
+  flex: 1 1 50% !important;
+  max-width: 50% !important;
   display: flex !important;
   align-items: baseline !important;
   gap: 6px !important;
   margin: 0 !important;
+  min-width: 0 !important;
 }
 
 .atelier-product-card__price {
   font: 600 16px/1 Inter, sans-serif !important;
   color: #1A1614 !important;
+  white-space: nowrap !important;
 }
 
 .atelier-product-card__compare {
@@ -115,6 +168,15 @@ atelier-product-showcase{display:block;background:var(--showcase-background);col
   font-weight: 400 !important;
   color: #8B8580 !important;
   text-decoration: line-through !important;
+  white-space: nowrap !important;
+}
+
+.atelier-product-card__form {
+  flex: 0 0 50% !important;
+  max-width: 50% !important;
+  width: 50% !important;
+  display: flex !important;
+  margin: 0 !important;
 }
 
 .atelier-product-card__add {
@@ -128,14 +190,23 @@ atelier-product-showcase{display:block;background:var(--showcase-background);col
   color: #FFFFFF !important;
   text-decoration: none !important;
   font: 600 11.5px/1 Inter, sans-serif !important;
-  padding: 7px 16px !important;
+  padding: 7px 8px !important;
   margin: 0 !important;
-  width: auto !important;
-  flex: 0 0 auto !important;
+  width: 50% !important;
+  max-width: 50% !important;
+  flex: 0 0 50% !important;
+  box-sizing: border-box !important;
   white-space: nowrap !important;
   cursor: pointer !important;
+  text-align: center !important;
   box-shadow: 0 2px 6px rgba(77, 53, 29, 0.15) !important;
   transition: filter 180ms ease, transform 150ms ease !important;
+}
+
+.atelier-product-card__form .atelier-product-card__add {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 1 1 100% !important;
 }
 
 .atelier-product-card__add:hover {
@@ -153,14 +224,27 @@ atelier-product-showcase{display:block;background:var(--showcase-background);col
 }
 
 @media (max-width: 749px) {
+  atelier-product-showcase {
+    padding-top: var(--showcase-mobile-top, calc(var(--showcase-top) * 0.7)) !important;
+    padding-bottom: var(--showcase-mobile-bottom, calc(var(--showcase-bottom) * 0.7)) !important;
+  }
+  .atelier-showcase__heading h2 {
+    font-size: var(--showcase-mobile-heading-size, 32px) !important;
+  }
+  .atelier-showcase__grid {
+    gap: var(--showcase-mobile-gap, 14px) !important;
+  }
   .atelier-product-card {
     padding: 10px !important;
-    height: auto !important;
+    height: var(--showcase-mobile-card-height, auto) !important;
     min-height: auto !important;
   }
+  .atelier-product-card__media {
+    height: var(--showcase-mobile-image-height, auto) !important;
+  }
   .atelier-product-card__add {
-    min-height: 30px !important;
-    padding: 6px 14px !important;
+    min-height: 32px !important;
+    padding: 6px 8px !important;
     font-size: 11px !important;
   }
   .atelier-product-card h3 {

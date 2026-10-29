@@ -11,7 +11,7 @@
 {% if hero_count > 0 %}
 {{ 'hero-carousel.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'hero-carousel.js' | asset_url }}" defer></script>
-<hero-banner-slider class="atelier-hero" data-autoplay="{{ section.settings.autoplay }}" data-interval="{{ section.settings.interval | times: 1000 }}" data-content="{{ section.settings.show_content }}" data-responsive-height="{{ section.settings.responsive_height }}" style="--hero-arrow-background:{{ section.settings.arrow_background }};--hero-arrow-color:{{ section.settings.arrow_color }};--hero-desktop-height:{{ section.settings.desktop_height }}px;--hero-mobile-height:{{ section.settings.mobile_height }}px;--hero-overlay:{{ section.settings.overlay | divided_by: 100.0 }}" role="region" aria-roledescription="carousel" aria-label="{{ 'atelier.hero.label' | t }}">
+<hero-banner-slider class="atelier-hero" data-autoplay="{{ section.settings.autoplay }}" data-interval="{{ section.settings.interval | times: 1000 }}" data-content="{{ section.settings.show_content }}" data-responsive-height="{{ section.settings.responsive_height }}" style="--hero-arrow-background:{{ section.settings.arrow_background }};--hero-arrow-color:{{ section.settings.arrow_color }};--hero-desktop-height:{{ section.settings.desktop_height }}px;--hero-mobile-height:{{ section.settings.mobile_height }}px;--hero-overlay:{{ section.settings.overlay | divided_by: 100.0 }};--hero-desktop-heading:{{ section.settings.desktop_heading_size | default: 56 }}px;--hero-mobile-heading:{{ section.settings.mobile_heading_size | default: 32 }}px" role="region" aria-roledescription="carousel" aria-label="{{ 'atelier.hero.label' | t }}">
   <div class="atelier-hero__viewport">
     <div class="atelier-hero__track" id="HeroTrack-{{ section.id }}">
       {% assign hero_position = 0 %}{% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless hero_entries contains entry_token %}{% continue %}{% endunless %}
@@ -56,7 +56,7 @@
       <button type="button" class="atelier-hero__arrow atelier-hero__arrow--previous" data-hero-previous aria-label="{{ section.settings.previous_label | escape }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg></button>
       <button type="button" class="atelier-hero__arrow atelier-hero__arrow--next" data-hero-next aria-label="{{ section.settings.next_label | escape }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></button>
     {% endif %}
-    <div class="atelier-hero__controls" hidden>
+    <div class="atelier-hero__controls">
       <div class="atelier-hero__pagination" aria-label="{{ 'atelier.hero.pagination' | t }}">
         <span class="atelier-hero__indicator" aria-hidden="true"></span>
         {% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless hero_entries contains entry_token %}{% continue %}{% endunless %}<button class="atelier-hero__dot" type="button" data-slide="{{ forloop.index0 }}" aria-label="{{ 'atelier.hero.slide' | t: number: forloop.index }}" aria-controls="HeroTrack-{{ section.id }}"{% if forloop.first %} aria-current="true"{% endif %}><span></span></button>{% endfor %}
@@ -86,6 +86,26 @@
       "step": 1,
       "unit": "s",
       "default": 5
+    },
+    {
+      "type": "range",
+      "id": "desktop_heading_size",
+      "label": "Desktop heading size",
+      "min": 32,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_size",
+      "label": "Mobile heading size",
+      "min": 22,
+      "max": 44,
+      "step": 2,
+      "unit": "px",
+      "default": 32
     },
     {
       "type": "range",

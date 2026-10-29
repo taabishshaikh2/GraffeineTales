@@ -196,7 +196,7 @@
         "collection": "bestsellers",
         "limit": 8,
         "link_label": "View All",
-        "button_label": "View Details",
+        "button_label": "Add to Cart",
         "show_category": true,
         "show_compare": true,
         "currency_symbol": "₹",
