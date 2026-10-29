@@ -1,3 +1,8 @@
+{%- if template.name == 'product' -%}
+{% style %}
+  .mobile-dock-section, .atelier-mobile-dock { display: none !important; }
+{% endstyle %}
+{%- else -%}
 {{ 'mobile-bottom-nav.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'mobile-bottom-nav.js' | asset_url }}" defer></script>
 {% style %}
@@ -15,6 +20,7 @@
     <a href="{{ section.settings.account_link | default: routes.account_url }}" class="atelier-mobile-dock__item"><span class="atelier-mobile-dock__icon">{% render 'mobile-nav-icon', name: 'account' %}</span><span>{{ section.settings.account_label | escape }}</span></a>
   </nav>
 </mobile-bottom-nav>
+{%- endif -%}
 {% schema %}
 {
   "name": "Mobile bottom navigation",

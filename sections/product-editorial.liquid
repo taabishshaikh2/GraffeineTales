@@ -212,6 +212,30 @@
  <script type="application/json" data-variant-images>{% assign image_separator = '' %}{% for option_variant in product.variants %}{% if option_variant.featured_media != blank %}{{ image_separator }}{{ option_variant.id | append:'' | json }}:{"id":{{ option_variant.featured_media.id | json }}}{% assign image_separator = ',' %}{% endif %}{% endfor %}</script>
  <script type="application/json" data-product-variants>{{ product.variants | json }}</script>
  <script type="application/json" data-delivery-config>{"invalid":{{ section.settings.invalid_pincode | json }},"fallback":{{ section.settings.delivery_fallback | json }},"save":{{ section.settings.save_label | json }},"zones":[{% assign first_zone = true %}{% for block in section.blocks %}{% if block.type == 'delivery_zone' and block.settings.enabled != false %}{% unless first_zone %},{% endunless %}{"prefixes":{{ block.settings.prefixes | json }},"message":{{ block.settings.message | json }}}{% assign first_zone = false %}{% endif %}{% endfor %}]}</script>
+  <div class="atelier-pdp__sticky-bar" data-pdp-sticky-bar aria-hidden="true">
+   <div class="atelier-pdp__sticky-container">
+    <div class="atelier-pdp__sticky-product">
+     {% assign sticky_media = current_variant.featured_media | default: product.featured_media %}
+     {% if sticky_media %}
+      <img class="atelier-pdp__sticky-thumb" src="{{ sticky_media | image_url: width: 120 }}" alt="{{ sticky_media.alt | default: product.title | escape }}" width="44" height="44" loading="lazy" data-sticky-image>
+     {% endif %}
+     <div class="atelier-pdp__sticky-info">
+      <span class="atelier-pdp__sticky-title">{{ product.title | escape }}</span>
+      <span class="atelier-pdp__sticky-variant" data-sticky-variant{% if product.has_only_default_variant %} hidden{% endif %}>{{ current_variant.title | escape }}</span>
+     </div>
+    </div>
+    <div class="atelier-pdp__sticky-actions">
+     <div class="atelier-pdp__sticky-pricing">
+      <span class="atelier-pdp__sticky-price" data-sticky-price>{{ current_variant.price | money }}</span>
+      <s class="atelier-pdp__sticky-compare" data-sticky-compare{% unless current_variant.compare_at_price > current_variant.price and section.settings.show_compare %} hidden{% endunless %}>{{ current_variant.compare_at_price | money }}</s>
+     </div>
+     <button type="button" class="atelier-pdp__sticky-btn{% if section.settings.shimmer %} atelier-pdp__add--shimmer{% endif %}" data-sticky-add{% unless current_variant.available %} disabled{% endunless %}>
+      {% render 'product-detail-icon', name: 'bag' %}
+      <span data-sticky-btn-text>{% if current_variant.available %}{{ section.settings.add_label | escape }}{% else %}{{ sold_label | escape }}{% endif %}</span>
+     </button>
+    </div>
+   </div>
+  </div>
 </product-hero>
 </atelier-product-showcase>
 <script type="application/ld+json">{{ product | structured_data }}</script>
@@ -340,6 +364,16 @@
       "default": "Add to Cart"
     },
     {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Add to cart border radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 12,
+      "unit": "px"
+    },
+    {
       "type": "checkbox",
       "id": "shimmer",
       "label": "Animate button light sweep",
@@ -465,16 +499,6 @@
       "max": 48,
       "step": 2,
       "default": 34,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "button_radius",
-      "label": "Button corner radius",
-      "min": 0,
-      "max": 28,
-      "step": 2,
-      "default": 12,
       "unit": "px"
     },
     {

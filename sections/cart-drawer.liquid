@@ -24,7 +24,7 @@
  assign addon_variant = addon.selected_or_first_available_variant
  assign addon_selected = false
  for item in cart.items
-  if item.variant_id == addon_variant.id and item.properties._atelier_addon == 'true'
+  if item.variant_id == addon_variant.id
    assign addon_selected = true
   endif
  endfor
@@ -77,7 +77,28 @@
        </article>
       {% endfor %}
       </div>
-      {% if addon != blank and addon_variant.available and addon.has_only_default_variant and addon.requires_selling_plan == false %}<div class="sheet-mask-addon-bump{% if addon_selected %} is-added{% endif %}"><label class="addon-checkbox-label"><input type="checkbox" class="addon-checkbox" data-cart-addon data-variant="{{ addon_variant.id }}"{% if addon_selected %} checked{% endif %}><span class="custom-checkbox-box">{% render 'cart-icon',name:'check' %}</span><span class="addon-copy-wrap"><span class="addon-copy-text" data-addon-copy data-product-title="{{ addon.title | escape }}" data-addon-price="{{ addon_variant.price }}"></span></span>{% if addon.featured_image %}{{ addon.featured_image | image_url:width:100 | image_tag:class:'addon-mini-thumb',loading:'lazy',alt:'' }}{% endif %}</label></div>{% endif %}
+      {% if addon != blank and addon_variant.available and addon.requires_selling_plan == false %}
+        {% assign has_primary_items = false %}
+        {% for item in cart.items %}
+          {% unless item.variant_id == addon_variant.id or item.properties._atelier_addon == 'true' %}
+            {% assign has_primary_items = true %}
+          {% endunless %}
+        {% endfor %}
+        {% if has_primary_items %}
+          <div class="sheet-mask-addon-bump{% if addon_selected %} is-added{% endif %}">
+            <label class="addon-checkbox-label">
+              <input type="checkbox" class="addon-checkbox" data-cart-addon data-variant="{{ addon_variant.id }}"{% if addon_selected %} checked{% endif %}>
+              <span class="custom-checkbox-box">{% render 'cart-icon',name:'check' %}</span>
+              <span class="addon-copy-wrap">
+                <span class="addon-copy-text" data-addon-copy data-product-title="{{ addon.title | escape }}" data-addon-price="{{ addon_variant.price }}">Add {{ addon.title | escape }} for {{ addon_variant.price | money }}</span>
+              </span>
+              {% if addon.featured_image %}
+                {{ addon.featured_image | image_url:width:100 | image_tag:class:'addon-mini-thumb',loading:'lazy',alt:'' }}
+              {% endif %}
+            </label>
+          </div>
+        {% endif %}
+      {% endif %}
       {% if section.settings.show_note %}<details class="atelier-cart__note"><summary>{{ section.settings.note_label | escape }}</summary><textarea data-cart-note aria-label="{{ section.settings.note_label | escape }}" placeholder="{{ section.settings.note_placeholder | escape }}">{{ cart.note | escape }}</textarea><button type="button" class="btn-apply-coupon" data-cart-note-save>{{ section.settings.save_note | escape }}</button></details>{% endif %}
      </section>
      {% if section.settings.show_coupons %}

@@ -49,6 +49,45 @@ if(!customElements.get('product-hero')){
    });
    this.filterVariantGallery(this.variants.find(variant=>String(variant.id)===this.form.querySelector('[name=id]').value));
    this.updateGallery();
+   this.stickyBar = this.querySelector('[data-pdp-sticky-bar]');
+   this.mainAddButton = this.querySelector('.atelier-pdp__add');
+   if (this.stickyBar && this.mainAddButton) {
+     if ('IntersectionObserver' in window) {
+       this.stickyObserver = new IntersectionObserver((entries) => {
+         entries.forEach(entry => {
+           const isPast = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+           if (isPast) {
+             this.stickyBar.classList.add('is-visible');
+             this.stickyBar.setAttribute('aria-hidden', 'false');
+           } else {
+             this.stickyBar.classList.remove('is-visible');
+             this.stickyBar.setAttribute('aria-hidden', 'true');
+           }
+         });
+       }, { threshold: 0 });
+       this.stickyObserver.observe(this.mainAddButton);
+     }
+     const stickyBtn = this.stickyBar.querySelector('[data-sticky-add]');
+     if (stickyBtn) {
+       on(stickyBtn, 'click', (e) => {
+         e.preventDefault();
+         if (this.mainAddButton && !this.mainAddButton.disabled) {
+           this.mainAddButton.click();
+         }
+       });
+     }
+     const syncStickyBtn = () => {
+       if (!stickyBtn) return;
+       stickyBtn.disabled = this.mainAddButton.disabled;
+       const isBusy = this.mainAddButton.getAttribute('aria-busy') === 'true';
+       const textSpan = stickyBtn.querySelector('[data-sticky-btn-text]');
+       if (textSpan && isBusy) {
+         textSpan.textContent = this.closest('atelier-product-showcase')?.dataset?.addingLabel || 'Adding…';
+       }
+     };
+     this.btnObserver = new MutationObserver(syncStickyBtn);
+     this.btnObserver.observe(this.mainAddButton, { attributes: true, attributeFilter: ['disabled', 'aria-busy'] });
+   }
   }
   go(index){index=Math.max(0,Math.min(this.slides.length-1,index));this.track.scrollTo({left:this.track.clientWidth*index,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}
   updateGallery(){
@@ -94,6 +133,31 @@ if(!customElements.get('product-hero')){
    const quantity=this.form.elements.quantity;const rules=variant.quantity_rule||{min:1,increment:1};quantity.min=rules.min||1;quantity.step=rules.increment||1;if(rules.max)quantity.max=rules.max;else quantity.removeAttribute('max');quantity.value=rules.min||1;
    const url=new URL(location.href);url.searchParams.set('variant',variant.id);history.replaceState({},'',url);
    this.filterVariantGallery(variant);
+   if (this.stickyBar && variant) {
+     const sPrice = this.stickyBar.querySelector('[data-sticky-price]');
+     if (sPrice) sPrice.textContent = this.money(variant.price);
+     const sCompare = this.stickyBar.querySelector('[data-sticky-compare]');
+     if (sCompare) {
+       const discounted = variant.compare_at_price > variant.price;
+       sCompare.hidden = !discounted || this.dataset.showCompare === 'false';
+       sCompare.textContent = discounted ? this.money(variant.compare_at_price) : '';
+     }
+     const sVariant = this.stickyBar.querySelector('[data-sticky-variant]');
+     if (sVariant) {
+       sVariant.textContent = variant.title && variant.title !== 'Default Title' ? variant.title : '';
+       sVariant.hidden = !variant.title || variant.title === 'Default Title';
+     }
+     const sImg = this.stickyBar.querySelector('[data-sticky-image]');
+     if (sImg && variant.featured_image?.src) {
+       sImg.src = variant.featured_image.src;
+     }
+     const sBtn = this.stickyBar.querySelector('[data-sticky-add]');
+     if (sBtn) {
+       sBtn.disabled = !variant.available;
+       const textSpan = sBtn.querySelector('[data-sticky-btn-text]');
+       if (textSpan) textSpan.textContent = variant.available ? this.dataset.addLabel : this.dataset.soldLabel;
+     }
+   }
    this.form.dispatchEvent(new Event('change',{bubbles:true}));
   }
   checkPincode(){
@@ -104,6 +168,6 @@ if(!customElements.get('product-hero')){
    const zone=this.delivery.zones.find(zone=>(zone.prefixes||'').split(',').map(value=>value.trim()).filter(value=>/^[1-9][0-9]{0,5}$/.test(value)).some(prefix=>pincode.startsWith(prefix)));
    result.textContent=zone?.message||this.delivery.fallback;
   }
-  disconnectedCallback(){this.abort?.abort();this.abort=null;cancelAnimationFrame(this.frame);this.animations?.forEach(animation=>animation.cancel());}
+  disconnectedCallback(){this.abort?.abort();this.stickyObserver?.disconnect();this.btnObserver?.disconnect();this.abort=null;cancelAnimationFrame(this.frame);this.animations?.forEach(animation=>animation.cancel());}
  });
 }

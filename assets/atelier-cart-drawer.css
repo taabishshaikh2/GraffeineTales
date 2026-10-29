@@ -1,5 +1,6 @@
 cart-drawer.atelier-cart{
-  --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-main: var(--font-body-family, 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  --font-display: var(--font-heading-family, 'DM Serif Display', Georgia, serif);
   --cart-primary: #5A3825;
   --cart-success: #2D6A4F;
   --cart-success-light: #EDF3EC;
@@ -2054,3 +2055,64 @@ cart-drawer.atelier-cart .m-title{width:110px;max-width:110px;white-space:normal
 cart-drawer.atelier-cart .m-threshold{font-family:var(--font-main)}
 cart-drawer.atelier-cart .m-node-col.unlocked .m-dot-circle{transform:none}
 @media(max-width:385px){cart-drawer.atelier-cart .m-title{width:92px;max-width:92px;font-size:10.5px}}
+/* Theme Font Matching */
+:root {
+  --font-main: var(--font-body-family, 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  --font-display: var(--font-heading-family, 'DM Serif Display', Georgia, serif);
+}
+
+cart-drawer.atelier-cart {
+  --font-main: var(--font-body-family, 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  --font-display: var(--font-heading-family, 'DM Serif Display', Georgia, serif);
+  font-family: var(--font-body-family, 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif) !important;
+}
+
+cart-drawer.atelier-cart,
+cart-drawer.atelier-cart * {
+  font-family: var(--font-body-family, 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+}
+
+cart-drawer.atelier-cart .header-cart-title,
+cart-drawer.atelier-cart .offers-sheet-title,
+cart-drawer.atelier-cart .atelier-cart__empty h3 {
+  font-family: var(--font-heading-family, 'DM Serif Display', Georgia, serif) !important;
+}
+
+cart-drawer.atelier-cart .section-title-bold {
+  font-family: var(--font-body-family, 'Inter', sans-serif) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+}
+
+cart-drawer.atelier-cart :is(
+  .item-name,
+  .cart-price,
+  .cart-mrp,
+  .bottom-grand-total,
+  .summary-row,
+  .grand-total-row,
+  .addon-copy-wrap,
+  .btn-checkout-primary,
+  .milestone-card,
+  .coupon-card,
+  .price-summary-section,
+  .summary-subtext,
+  .secured-shield,
+  button,
+  input,
+  select,
+  textarea
+) {
+  font-family: var(--font-body-family, 'Inter', sans-serif) !important;
+}
+
+/* Confetti Viewport Canvas */
+cart-drawer.atelier-cart .atelier-cart-confetti-canvas {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 999999 !important;
+  pointer-events: none !important;
+}

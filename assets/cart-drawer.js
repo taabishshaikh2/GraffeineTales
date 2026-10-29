@@ -31,31 +31,34 @@ class CartConfetti {
 
   burst(tier = 1) {
     if (!this.canvas) return;
-    if (!this.ctx) this.ctx = this.canvas.getContext('2d');
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+    this.ctx = this.canvas.getContext('2d');
     if (!this.ctx) return;
-    this.resize();
 
-    const count = tier === 3 ? 120 : tier === 2 ? 90 : 70;
-    const originX = window.innerWidth / 2;
-    const originY = Math.min(window.innerHeight * 0.28, 200);
+    const count = tier >= 3 ? 140 : tier === 2 ? 100 : 75;
+    const milestoneEl = document.querySelector('.milestone-card') || document.querySelector('#CartDrawer') || this.canvas;
+    const rect = milestoneEl ? milestoneEl.getBoundingClientRect() : null;
+    const originX = rect ? (rect.left + rect.width / 2) : (window.innerWidth - 200);
+    const originY = rect ? (rect.top + Math.min(rect.height * 0.45, 140)) : 120;
 
     for (let i = 0; i < count; i++) {
       const angle = (Math.PI / 2) + ((Math.random() - 0.5) * Math.PI * 1.5);
-      const speed = 6 + Math.random() * 10;
+      const speed = 7 + Math.random() * 11;
       const size = 6 + Math.random() * 6;
       const color = this.palette[Math.floor(Math.random() * this.palette.length)];
 
       this.particles.push({
-        x: originX + (Math.random() - 0.5) * 60,
+        x: originX + (Math.random() - 0.5) * 80,
         y: originY,
         vx: Math.cos(angle) * speed,
-        vy: -Math.abs(Math.sin(angle) * speed) - 2.5,
+        vy: -Math.abs(Math.sin(angle) * speed) - 3,
         size,
         color,
         rotation: Math.random() * 360,
-        rotationSpeed: (Math.random() - 0.5) * 14,
+        rotationSpeed: (Math.random() - 0.5) * 16,
         wobble: Math.random() * 10,
-        wobbleSpeed: 0.1 + Math.random() * 0.1,
+        wobbleSpeed: 0.12 + Math.random() * 0.1,
         gravity: 0.22 + Math.random() * 0.08,
         drag: 0.965,
         opacity: 1,
@@ -246,7 +249,7 @@ class CartConfetti {
       this.closeSheet(false);
       this.querySelector('#CartDrawer').innerHTML = next.innerHTML;
       this.readState();
-      if (this.confetti) this.confetti.canvas = this.querySelector('[data-cart-confetti]');
+      if (this.confetti) { this.confetti.canvas = this.querySelector('[data-cart-confetti]'); this.confetti.ctx = this.confetti.canvas ? this.confetti.canvas.getContext('2d') : null; }
       this.classList.toggle('is-empty', !this.cart.item_count);
       const scroller = this.querySelector('[data-cart-scroll]'); if (scroller) scroller.scrollTop = scroll;
       const bubble = result.sections?.['cart-icon-bubble'];
@@ -287,6 +290,16 @@ class CartConfetti {
       document.dispatchEvent(new CustomEvent('atelier:cart:update', { detail: { cart: this.cart } }));
       if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') publish(PUB_SUB_EVENTS.cartUpdate, { source: 'side-cart', cartData: this.cart });
     }
+    async add(id, quantity = 1, options = {}) {
+      const item = {
+        id: Number(id),
+        quantity: Number(quantity) || 1,
+        ...(options.properties ? { properties: options.properties } : {})
+      };
+      if (options.selling_plan) item.selling_plan = Number(options.selling_plan);
+      const result = await this.request('cart/add.js', this.sectionBody({ items: [item] }));
+      if (!this.replaceContents(result)) await this.reconcile();
+    }
     async change(key, quantity, lineIndex) {
       let targetLine = Number(lineIndex);
       if (!targetLine && key && this.cart.items) {
@@ -308,6 +321,22 @@ class CartConfetti {
         } else {
           await this.reconcile();
           throw err;
+        }
+      }
+
+      // Auto-remove add-on if no primary products remain in cart
+      if (this.cart && this.cart.items && this.cart.items.length > 0) {
+        const addonEl = this.querySelector('[data-cart-addon]');
+        const addonVariantId = addonEl ? Number(addonEl.dataset.variant) : 0;
+        const primaryItems = this.cart.items.filter(item => {
+          const isAddon = (addonVariantId && item.variant_id === addonVariantId) || item.properties?._atelier_addon === 'true';
+          return !isAddon;
+        });
+        if (primaryItems.length === 0) {
+          const addonLines = this.cart.items.filter(item => (addonVariantId && item.variant_id === addonVariantId) || item.properties?._atelier_addon === 'true');
+          for (const addonLine of addonLines) {
+            await this.change(addonLine.key, 0);
+          }
         }
       }
     }
@@ -362,9 +391,16 @@ class CartConfetti {
         this.mutate(() => this.switchVariant(input.dataset.lineKey, input.value, lineIndex));
       } else if (input.hasAttribute('data-cart-addon')) {
         const checked = input.checked;
+        const variantId = Number(input.dataset.variant);
         this.mutate(async () => {
-          if (checked) await this.add(input.dataset.variant, 1, { properties: { _atelier_addon: 'true' } });
-          else { const lines = this.cart.items.filter(line => line.properties?._atelier_addon === 'true' && line.variant_id === Number(input.dataset.variant)); for (const line of lines) await this.change(line.key, 0); }
+          if (checked) {
+            await this.add(variantId, 1, { properties: { _atelier_addon: 'true' } });
+          } else {
+            const lines = (this.cart.items || []).filter(line => line.variant_id === variantId || line.properties?._atelier_addon === 'true');
+            for (const line of lines) {
+              await this.change(line.key, 0);
+            }
+          }
         });
       } else if (input.hasAttribute('data-cart-option-select')) this.renderOption();
     }
@@ -377,6 +413,7 @@ class CartConfetti {
         const result = await this.request('cart/update.js', this.sectionBody({ discount: code }));
         this.replaceContents(result);
         this.currentAppliedCoupon = code;
+        this.celebrate(2);
         this.updateCheckoutUrl(code);
         const entry = result.discount_codes?.find(item => item.code.toLowerCase() === code.toLowerCase());
         const confirmed = this.config.discountApplications?.some(item => item.type === 'discount_code' && item.title.toLowerCase() === code.toLowerCase()) || entry?.applicable === true;
@@ -660,7 +697,7 @@ class CartConfetti {
       });
 
       const unlockedCount = nodes.filter(node => total >= Number(node.dataset.threshold)).length;
-      if (this.previousUnlocked !== undefined && unlockedCount > this.previousUnlocked && this.config.celebrate && !this.reducedMotion) {
+      if (this.previousUnlocked !== undefined && unlockedCount > this.previousUnlocked && !this.reducedMotion) {
         this.celebrate(unlockedCount);
       }
       this.previousUnlocked = unlockedCount;
@@ -726,10 +763,12 @@ class CartConfetti {
     }
     celebrate(tier = 1) {
       if (this.reducedMotion) return;
-      if (!this.confetti) {
-        this.confetti = new CartConfetti(this.querySelector('[data-cart-confetti]'));
+      const canvas = this.querySelector('[data-cart-confetti]');
+      if (!canvas) return;
+      if (!this.confetti || this.confetti.canvas !== canvas) {
+        this.confetti = new CartConfetti(canvas);
       }
-      this.confetti?.burst(tier);
+      this.confetti.burst(tier);
     }
   }
   customElements.define('cart-drawer', CartDrawer);
