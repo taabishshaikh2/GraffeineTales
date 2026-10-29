@@ -90,6 +90,8 @@
       "settings": {
         "autoplay": true,
         "interval": 5,
+        "desktop_heading_size": 56,
+        "mobile_heading_size": 32,
         "desktop_height": 640,
         "mobile_height": 600,
         "overlay": 0,
@@ -107,7 +109,7 @@
           "type": "category",
           "settings": {
             "title": "Stationaries",
-            "collection": "",
+            "collection": "stationary",
             "link": "",
             "reference_image": "cat_stationaries.jpg",
             "image_position": "center"
@@ -117,7 +119,7 @@
           "type": "category",
           "settings": {
             "title": "Journals",
-            "collection": "",
+            "collection": "journals",
             "link": "",
             "reference_image": "cat_journals.jpg",
             "image_position": "center"
@@ -127,7 +129,7 @@
           "type": "category",
           "settings": {
             "title": "Coasters",
-            "collection": "",
+            "collection": "coasters",
             "link": "",
             "reference_image": "lady_teatrip.jpg",
             "image_position": "center"
@@ -137,7 +139,7 @@
           "type": "category",
           "settings": {
             "title": "Bookmarks",
-            "collection": "",
+            "collection": "book-marks",
             "link": "",
             "reference_image": "wood_book_oclock.jpg",
             "image_position": "center"
@@ -147,14 +149,26 @@
           "type": "category",
           "settings": {
             "title": "Décor",
-            "collection": "",
+            "collection": "decor",
             "link": "",
             "reference_image": "cat_decor.jpg",
             "image_position": "center"
           }
         },
+        "bulk": {
+          "type": "category",
+          "settings": {
+            "title": "Personalised",
+            "image": "shopify://shop_images/photo_thread_art_portrait.png",
+            "collection": "personalised",
+            "link": "",
+            "reference_image": "cat_bulk.jpg",
+            "image_position": "center"
+          }
+        },
         "events": {
           "type": "category",
+          "disabled": true,
           "settings": {
             "title": "Gifting",
             "collection": "",
@@ -163,18 +177,9 @@
             "image_position": "center"
           }
         },
-        "bulk": {
-          "type": "category",
-          "settings": {
-            "title": "Bulk Orders",
-            "collection": "",
-            "link": "",
-            "reference_image": "cat_bulk.jpg",
-            "image_position": "center"
-          }
-        },
         "bestsellers": {
           "type": "category",
+          "disabled": true,
           "settings": {
             "title": "Bestsellers",
             "collection": "",
@@ -190,14 +195,17 @@
         "coasters",
         "bookmarks",
         "decor",
-        "events",
         "bulk",
+        "events",
         "bestsellers"
       ],
       "settings": {
-        "heading": "SHOP BY CATEGORY.",
+        "heading": "Shop By Category",
         "width": 1240,
         "heading_size": 42,
+        "mobile_heading_size": 24,
+        "mobile_padding_top": 18,
+        "mobile_padding_bottom": 14,
         "card_radius": 14,
         "card_gap": 12,
         "mobile_columns": "3",
@@ -207,7 +215,7 @@
         "button_text": "#ffffff",
         "show_button": true,
         "button_label": "View all products",
-        "button_link": "",
+        "button_link": "shopify://collections/all-products",
         "padding_top": 24,
         "padding_bottom": 16
       }
@@ -233,6 +241,12 @@
         "heading_size": 36,
         "padding_top": 24,
         "padding_bottom": 24,
+        "mobile_heading_size": 30,
+        "mobile_gap": 14,
+        "mobile_card_height": 480,
+        "mobile_image_height": 240,
+        "mobile_padding_top": 40,
+        "mobile_padding_bottom": 40,
         "background": "#fdfbf7",
         "card_background": "#ffffff",
         "image_background": "#f8f6f0",
@@ -274,6 +288,12 @@
         "heading_size": 42,
         "padding_top": 24,
         "padding_bottom": 24,
+        "mobile_heading_size": 30,
+        "mobile_gap": 14,
+        "mobile_card_height": 480,
+        "mobile_image_height": 240,
+        "mobile_padding_top": 40,
+        "mobile_padding_bottom": 40,
         "background": "#fdfbf7",
         "card_background": "#ffffff",
         "image_background": "#f8f6f0",
@@ -317,6 +337,12 @@
         "heading_size": 42,
         "padding_top": 24,
         "padding_bottom": 24,
+        "mobile_heading_size": 30,
+        "mobile_gap": 14,
+        "mobile_card_height": 480,
+        "mobile_image_height": 240,
+        "mobile_padding_top": 40,
+        "mobile_padding_bottom": 40,
         "background": "#fdfbf7",
         "card_background": "#ffffff",
         "image_background": "#f8f6f0",
@@ -403,6 +429,12 @@
         "heading_size": 30,
         "padding_top": 24,
         "padding_bottom": 24,
+        "mobile_heading_size": 30,
+        "mobile_gap": 14,
+        "mobile_card_height": 480,
+        "mobile_image_height": 240,
+        "mobile_padding_top": 40,
+        "mobile_padding_bottom": 40,
         "background": "#fdfbf7",
         "card_background": "#ffffff",
         "image_background": "#f8f6f0",
@@ -602,6 +634,9 @@
         "description": "",
         "width": 1360,
         "heading_size": 44,
+        "mobile_heading_size": 28,
+        "mobile_padding_top": 40,
+        "mobile_padding_bottom": 40,
         "card_width": 290,
         "mobile_card_width": 250,
         "gap": 22,
@@ -700,6 +735,9 @@
         "description": "",
         "width": 1320,
         "heading_size": 42,
+        "mobile_heading_size": 28,
+        "mobile_padding_top": 36,
+        "mobile_padding_bottom": 36,
         "card_width": 360,
         "mobile_width": 300,
         "gap": 24,
