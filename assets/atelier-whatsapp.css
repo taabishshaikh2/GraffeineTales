@@ -2,11 +2,42 @@
 /* WhatsApp Floating Widget */
 .atelier-whatsapp-wrapper {
   position: fixed;
-  left: 20px;
   bottom: calc(24px + var(--wa-bottom-offset, 0px));
   z-index: 52;
   transition: bottom 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
+}
+
+.atelier-whatsapp-wrapper--bottom-left,
+.atelier-whatsapp-wrapper--left {
+  left: 20px;
+  right: auto;
+}
+
+.atelier-whatsapp-wrapper--bottom-right,
+.atelier-whatsapp-wrapper--right {
+  right: 20px;
+  left: auto;
+}
+
+.atelier-whatsapp-wrapper--bottom-right .atelier-whatsapp-widget__tooltip,
+.atelier-whatsapp-wrapper--right .atelier-whatsapp-widget__tooltip {
+  left: auto;
+  right: calc(100% + 12px);
+  transform: translateY(-50%) translateX(6px);
+}
+
+.atelier-whatsapp-wrapper--bottom-right .atelier-whatsapp-widget__tooltip::before,
+.atelier-whatsapp-wrapper--right .atelier-whatsapp-widget__tooltip::before {
+  right: auto;
+  left: 100%;
+  border-right-color: transparent;
+  border-left-color: #2b2523;
+}
+
+.atelier-whatsapp-wrapper--bottom-right .atelier-whatsapp-widget:hover .atelier-whatsapp-widget__tooltip,
+.atelier-whatsapp-wrapper--right .atelier-whatsapp-widget:hover .atelier-whatsapp-widget__tooltip {
+  transform: translateY(-50%) translateX(0);
 }
 
 .atelier-whatsapp-widget {
@@ -113,7 +144,16 @@
 @media (max-width: 1023px) {
   body:not(.template-product) .atelier-whatsapp-wrapper {
     bottom: calc(var(--dock-height, 60px) + env(safe-area-inset-bottom, 0px) + 16px + var(--wa-bottom-offset, 0px));
+  }
+  body:not(.template-product) .atelier-whatsapp-wrapper--bottom-left,
+  body:not(.template-product) .atelier-whatsapp-wrapper--left {
     left: 16px;
+    right: auto;
+  }
+  body:not(.template-product) .atelier-whatsapp-wrapper--bottom-right,
+  body:not(.template-product) .atelier-whatsapp-wrapper--right {
+    right: 16px;
+    left: auto;
   }
   .atelier-whatsapp-widget {
     width: 48px;

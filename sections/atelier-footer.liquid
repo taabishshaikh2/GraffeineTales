@@ -6,7 +6,7 @@
   assign visible_art_fraction = 100 | minus: section.settings.art_crop_top | divided_by: 100.0
   assign visible_art_ratio = desk_ratio | divided_by: visible_art_fraction
 %}
-<div class="atelier-footer" id="main-footer" style="--footer-background:{{ section.settings.background }};--footer-text:{{ section.settings.text }};--footer-muted:{{ section.settings.muted_text }};--footer-social:{{ section.settings.social_background }};--footer-bottom:{{ section.settings.bottom_background }};--footer-bottom-text:{{ section.settings.bottom_text }};--footer-input:{{ section.settings.input_background }};--footer-logo-height:{{ section.settings.logo_height }}px;--footer-width:{{ section.settings.content_width }}px;--footer-top:{{ section.settings.padding_top }}px;--footer-mobile-top:{{ section.settings.mobile_padding_top | default: 36 }}px;--footer-art-ratio:{{ visible_art_ratio }}">
+<div class="atelier-footer" id="main-footer" style="--footer-background:{{ section.settings.background }};{% if section.settings.footer_background_image != blank %}--footer-bg-image:url('{{ section.settings.footer_background_image | image_url: width: 2400 }}');{% endif %}--footer-text:{{ section.settings.text }};--footer-muted:{{ section.settings.muted_text }};--footer-social:{{ section.settings.social_background }};--footer-bottom:{{ section.settings.bottom_background }};--footer-bottom-text:{{ section.settings.bottom_text }};--footer-input:{{ section.settings.input_background }};--footer-logo-height:{{ section.settings.logo_height }}px;--footer-width:{{ section.settings.content_width }}px;--footer-top:{{ section.settings.padding_top }}px;--footer-mobile-top:{{ section.settings.mobile_padding_top | default: 36 }}px;--footer-art-ratio:{{ visible_art_ratio }}">
   <div class="atelier-footer__stage">
     {% if section.settings.show_vines %}
       <div class="atelier-footer__vine atelier-footer__vine--left" aria-hidden="true">{% if section.settings.vine_left != blank %}{{ section.settings.vine_left | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,240', sizes: '95px', alt: '' }}{% else %}<img src="{{ 'footer_vine_left_clean.png' | asset_url }}" width="85" height="290" loading="lazy" alt="">{% endif %}</div>
@@ -70,6 +70,7 @@
       {% if section.settings.show_payment_icons %}<ul class="atelier-footer__payments" role="list">{% for payment_type in shop.enabled_payment_types %}<li>{{ payment_type | payment_type_svg_tag }}</li>{% endfor %}</ul>{% endif %}
     </div>
   </div>
+  {% render 'whatsapp-widget', section: section %}
 </div>
 {% schema %}
 {
@@ -228,7 +229,35 @@
     },
     {
       "type": "header",
-      "content": "Artwork"
+      "content": "Footer background & artwork"
+    },
+    {
+      "type": "image_picker",
+      "id": "footer_background_image",
+      "label": "Footer background image",
+      "info": "Upload an overall background image or texture for the entire footer."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_desk",
+      "label": "Show desk stationery illustration banner",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "desk_image",
+      "label": "Desk illustration / banner art image",
+      "info": "Upload custom artwork to replace the stationery desk illustration banner above the bottom bar."
+    },
+    {
+      "type": "range",
+      "id": "art_crop_top",
+      "label": "Trim illustration top",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "%",
+      "default": 17
     },
     {
       "type": "checkbox",
@@ -248,27 +277,6 @@
     },
     {
       "type": "checkbox",
-      "id": "show_desk",
-      "label": "Show illustrated desk border",
-      "default": true
-    },
-    {
-      "type": "image_picker",
-      "id": "desk_image",
-      "label": "Desk illustration"
-    },
-    {
-      "type": "range",
-      "id": "art_crop_top",
-      "label": "Trim illustration top",
-      "min": 0,
-      "max": 30,
-      "step": 1,
-      "unit": "%",
-      "default": 17
-    },
-    {
-      "type": "checkbox",
       "id": "show_flourishes",
       "label": "Show bottom floral artwork",
       "default": true
@@ -282,6 +290,47 @@
       "type": "image_picker",
       "id": "flourish_right",
       "label": "Bottom right artwork"
+    },
+    {
+      "type": "header",
+      "content": "WhatsApp chat widget"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_whatsapp",
+      "label": "Show WhatsApp floating button",
+      "default": true,
+      "info": "Displays the floating WhatsApp button across the storefront."
+    },
+    {
+      "type": "select",
+      "id": "whatsapp_position",
+      "label": "Widget position",
+      "options": [
+        {
+          "value": "bottom-left",
+          "label": "Bottom left (recommended)"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "bottom-left",
+      "info": "Choose whether the button floats at the bottom-left or bottom-right."
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp phone number",
+      "default": "919876543210",
+      "info": "Enter number with country code, without + or spaces (e.g. 919876543210)."
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_message",
+      "label": "Default WhatsApp message",
+      "default": "Hi Graffeine Tales! I have a question about your collection."
     },
     {
       "type": "header",

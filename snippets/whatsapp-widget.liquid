@@ -1,9 +1,30 @@
 {% liquid
-  assign wa_phone = settings.whatsapp_number | default: '919876543210' | remove: '+' | remove: ' ' | remove: '-'
-  assign wa_message = settings.whatsapp_message | default: 'Hi Graffeine Tales! I have a question about your collection.' | url_encode
+  assign wa_enabled = true
+  if section.settings.show_whatsapp != nil
+    assign wa_enabled = section.settings.show_whatsapp
+  elsif settings.enable_whatsapp != nil
+    assign wa_enabled = settings.enable_whatsapp
+  endif
+
+  assign raw_phone = section.settings.whatsapp_number
+  if raw_phone == blank
+    assign raw_phone = settings.whatsapp_number | default: '919876543210'
+  endif
+  assign wa_phone = raw_phone | remove: '+' | remove: ' ' | remove: '-'
+
+  assign raw_msg = section.settings.whatsapp_message
+  if raw_msg == blank
+    assign raw_msg = settings.whatsapp_message | default: 'Hi Graffeine Tales! I have a question about your collection.'
+  endif
+  assign wa_message = raw_msg | url_encode
+
+  assign wa_pos = section.settings.whatsapp_position
+  if wa_pos == blank
+    assign wa_pos = settings.whatsapp_position | default: 'bottom-left'
+  endif
 %}
-{% if settings.enable_whatsapp != false %}
-  <aside class="atelier-whatsapp-wrapper" aria-label="Customer support">
+{% if wa_enabled %}
+  <aside class="atelier-whatsapp-wrapper atelier-whatsapp-wrapper--{{ wa_pos }}" aria-label="Customer support" data-whatsapp-position="{{ wa_pos }}">
     <a
       href="https://wa.me/{{ wa_phone }}?text={{ wa_message }}"
       class="atelier-whatsapp-widget"

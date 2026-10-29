@@ -1477,6 +1477,22 @@
         "default": true
       },
       {
+        "type": "select",
+        "id": "whatsapp_position",
+        "label": "Widget position",
+        "options": [
+          {
+            "value": "bottom-left",
+            "label": "Bottom left (recommended)"
+          },
+          {
+            "value": "bottom-right",
+            "label": "Bottom right"
+          }
+        ],
+        "default": "bottom-left"
+      },
+      {
         "type": "text",
         "id": "whatsapp_number",
         "label": "WhatsApp phone number (with country code, e.g. 919876543210)",

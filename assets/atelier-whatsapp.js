@@ -35,6 +35,7 @@
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initWhatsApp);
+    document.addEventListener('shopify:section:load', initWhatsApp);
   } else {
     initWhatsApp();
   }
