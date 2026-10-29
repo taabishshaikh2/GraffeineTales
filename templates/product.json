@@ -14,15 +14,17 @@
       "blocks": {
         "accordion_bG7qH7": {
           "type": "accordion",
+          "name": "What's inside",
           "settings": {
             "heading": "What's inside",
             "content": "{{ product.metafields.graffeine_product.whats_inside | metafield_tag }}",
             "page": "",
-            "open": false
+            "open": true
           }
         },
         "accordion_F4UEh4": {
           "type": "accordion",
+          "name": "Product features",
           "settings": {
             "heading": "Product features",
             "content": "{{ product.metafields.graffeine_product.features | metafield_tag }}",
@@ -32,9 +34,10 @@
         },
         "accordion_36en6E": {
           "type": "accordion",
+          "name": "Shipping",
           "settings": {
             "heading": "Shipping",
-            "content": "<p><strong>7–10 days</strong> from order confirmation</p>",
+            "content": "<p><strong>7–10 days</strong> from order confirmation.</p>",
             "page": "",
             "open": false
           }
