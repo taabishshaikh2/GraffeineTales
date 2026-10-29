@@ -40,6 +40,7 @@ if (!customElements.get('atelier-header')) {
       on(this, 'keydown', event => {if (event.key === 'Escape') dropdowns.forEach(dropdown => {if (dropdown.open) {dropdown.open = false; dropdown.querySelector('summary').focus();}});});
       const openDialog = (dialog, trigger) => {
         if (!dialog || dialog.open) return;
+        if (dialog.hasAttribute('data-mobile-dialog') && window.innerWidth >= 1024) return;
         this.trigger = trigger;
         reveal();
         dropdowns.forEach(dropdown => dropdown.open = false);
@@ -66,13 +67,29 @@ if (!customElements.get('atelier-header')) {
         if (close) close.closest('dialog').close();
       });
       this.querySelectorAll('dialog').forEach(dialog => {
-        on(dialog, 'close', () => {document.body.classList.remove('atelier-dialog-open'); this.trigger?.focus();});
+        dialog.querySelectorAll('[data-close-dialog]').forEach(btn => {
+          on(btn, 'click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dialog.close();
+          });
+        });
+        on(dialog, 'close', () => {
+          document.body.classList.remove('atelier-dialog-open');
+          this.trigger?.focus();
+        });
         on(dialog, 'click', event => {
-          if (event.target !== dialog) return;
+          if (event.target === dialog) dialog.close();
           const rect = dialog.getBoundingClientRect();
           if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
         });
       });
+      on(window, 'resize', () => {
+        if (window.innerWidth >= 1024) {
+          const mobileDialog = this.querySelector('[data-mobile-dialog]');
+          if (mobileDialog?.open) mobileDialog.close();
+        }
+      }, { passive: true });
       on(document, 'keydown', event => {
         if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'k' || event.altKey) return;
         const summary = this.querySelector('.header__search summary');

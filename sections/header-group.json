@@ -30,7 +30,6 @@
     "header": {
       "type": "atelier-header",
       "settings": {
-        "brand_name": "Graffeine Tales",
         "show_cup": true,
         "animate_steam": true,
         "logo_height": 44,
@@ -39,109 +38,16 @@
         "height": 80,
         "mobile_height": 60,
         "width": 1340,
-        "menu_gap": 32,
-        "menu_size": 14,
         "background": "#F8F5ED",
         "text": "#363638",
         "accent": "#927B53",
-        "badge_text": "#FFFFFF",
         "show_search": true,
         "show_wishlist": true,
         "show_cart": true,
-        "show_shortcut": true,
-        "shortcut_hint": "⌘K",
-        "menu_label": "Explore the atelier",
-        "wishlist_label": "Your saved stories",
-        "wishlist_empty": "Save the pieces you love. Your favourites will appear here.",
-        "wishlist_shop_label": "Explore the collection",
-        "close_label": "Close",
-        "remove_label": "Remove",
-        "explore_label": "Explore the collection"
+        "menu": "main-menu"
       },
-      "blocks": {
-        "navigation_1": {
-          "type": "navigation",
-          "settings": {
-            "title": "Stationaries",
-            "reference_image": "cat_stationaries.jpg",
-            "featured_title": "2026 Artist Desk Calendar",
-            "featured_label": "Featured drop",
-            "label_1": "Desk Calendars & Planners",
-            "label_2": "Magnetic & Wooden Bookmarks",
-            "label_3": "Laptop & Phone Stickers",
-            "label_4": "Letterpress Notecards",
-            "label_5": "Botanical Sticky Notes",
-            "label_6": "Wax Seals & Stamps"
-          }
-        },
-        "navigation_2": {
-          "type": "navigation",
-          "settings": {
-            "title": "Journals",
-            "reference_image": "cat_journals.jpg",
-            "featured_title": "The Storyteller’s Linen Edition",
-            "featured_label": "Featured drop",
-            "label_1": "Hardcover Linen Journals",
-            "label_2": "Coffee Tasting Diaries",
-            "label_3": "Everyday Dotted Notebooks",
-            "label_4": "Leatherette Keepsakes",
-            "label_5": "Pocket Traveler’s Notebooks",
-            "label_6": "Journal Accessories & Clips"
-          }
-        },
-        "navigation_3": {
-          "type": "navigation",
-          "settings": {
-            "title": "Handcrafted Décor",
-            "reference_image": "cat_decor.jpg",
-            "featured_title": "Handmade for your favourite spaces",
-            "featured_label": "Featured drop",
-            "label_1": "Illustrated Acrylic Coasters",
-            "label_2": "Handcrafted Wooden Décor",
-            "label_3": "Botanical Embroidery Hoops",
-            "label_4": "Photo Thread Art",
-            "label_5": "Teak Coaster Stands",
-            "label_6": "Wall Art & Keepsakes"
-          }
-        },
-        "navigation_4": {
-          "type": "navigation",
-          "settings": {
-            "title": "Events & Gifting",
-            "reference_image": "cat_events.jpg",
-            "featured_title": "A little story for every celebration",
-            "featured_label": "Featured drop",
-            "label_1": "Personalised Door Tags",
-            "label_2": "Wedding Stationery",
-            "label_3": "Celebration Favours",
-            "label_4": "Custom Embroidery",
-            "label_5": "Personalised Keepsakes",
-            "label_6": "Bespoke Gift Sets"
-          }
-        },
-        "navigation_5": {
-          "type": "navigation",
-          "settings": {
-            "title": "Bulk Orders",
-            "reference_image": "cat_bulk.jpg",
-            "featured_title": "Executive Welcome Curation",
-            "featured_label": "B2B Atelier",
-            "label_1": "Corporate Welcome Kits",
-            "label_2": "Employee Appreciation",
-            "label_3": "Event Favours",
-            "label_4": "Custom Brand Merchandise",
-            "label_5": "Bespoke Packaging",
-            "label_6": "Bulk Catalogue & Quotes"
-          }
-        }
-      },
-      "block_order": [
-        "navigation_1",
-        "navigation_2",
-        "navigation_3",
-        "navigation_4",
-        "navigation_5"
-      ]
+      "blocks": {},
+      "block_order": []
     },
     "mobile_bottom_nav": {
       "type": "mobile-bottom-nav",
