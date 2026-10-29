@@ -179,9 +179,8 @@
       "settings": {
         "heading": "You May Also Like",
         "collection": "bestsellers",
-        "limit": 5,
+        "limit": 8,
         "link_label": "View All",
-        "link": "shopify://collections/atelier-collection",
         "button_label": "View Details",
         "show_category": true,
         "show_compare": true,
