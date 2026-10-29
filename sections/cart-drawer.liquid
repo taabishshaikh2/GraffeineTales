@@ -30,9 +30,9 @@
  endfor
 %}
 <cart-drawer class="atelier-cart{% if cart.item_count == 0 %} is-empty{% endif %}" data-section-id="{{ section.id }}" style="--cart-width:{{ section.settings.width }}px;--cart-primary:{{ section.settings.primary }};--cart-accent:{{ section.settings.accent }};--cart-success:{{ section.settings.success }};--cart-canvas:{{ section.settings.canvas }};--cart-surface:{{ section.settings.surface }};--cart-border:{{ section.settings.border }};--cart-text:{{ section.settings.text }};--cart-muted:{{ section.settings.muted }}">
- <div id="CartDrawer-Overlay" class="atelier-cart__overlay" data-cart-close></div>
- <div id="CartDrawer" class="app-viewport atelier-cart__panel" role="dialog" aria-modal="true" aria-labelledby="SideCartTitle" tabindex="-1">
   <canvas class="atelier-cart-confetti-canvas" data-cart-confetti aria-hidden="true"></canvas>
+  <div id="CartDrawer-Overlay" class="atelier-cart__overlay" data-cart-close></div>
+ <div id="CartDrawer" class="app-viewport atelier-cart__panel" role="dialog" aria-modal="true" aria-labelledby="SideCartTitle" tabindex="-1">
   <div class="atelier-cart__shell" data-cart-shell>
    <header class="atelier-cart-header"><div style="display:inline-flex;align-items:center;gap:10px;"><h2 class="header-cart-title" id="SideCartTitle">{{ section.settings.title | escape }}</h2>{% if cart.item_count > 0 %}<span class="header-cart-count-badge">{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}</span>{% endif %}</div><button type="button" class="btn-header-close" data-cart-close aria-label="{{ section.settings.close_label | escape }}">{% render 'cart-icon',name:'close' %}</button></header>
    <p class="atelier-cart__notice" data-cart-error role="alert" hidden></p>

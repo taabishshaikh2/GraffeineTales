@@ -2128,3 +2128,18 @@ cart-drawer .atelier-cart-confetti-canvas,
   z-index: 9999999 !important;
   pointer-events: none !important;
 }
+
+/* Global Fullscreen Cart Confetti Canvas */
+.atelier-cart-confetti-canvas,
+canvas[data-cart-confetti] {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 99999999 !important;
+  pointer-events: none !important;
+  display: block !important;
+  visibility: visible !important;
+}

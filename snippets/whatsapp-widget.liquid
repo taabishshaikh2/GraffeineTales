@@ -18,6 +18,11 @@
   endif
   assign wa_message = raw_msg | url_encode
 
+  assign wa_tooltip = section.settings.whatsapp_tooltip
+  if wa_tooltip == blank
+    assign wa_tooltip = settings.whatsapp_tooltip | default: 'Chat with us'
+  endif
+
   assign wa_pos = section.settings.whatsapp_position
   if wa_pos == blank
     assign wa_pos = settings.whatsapp_position | default: 'bottom-left'
@@ -39,7 +44,7 @@
           <path fill-rule="evenodd" clip-rule="evenodd" d="M16 2C8.268 2 2 8.268 2 16c0 2.656.738 5.143 2.022 7.27L2.24 29.232a1 1 0 0 0 1.22 1.22l6.09-1.74A13.93 13.93 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2Zm-3.14 7.64c-.31-.69-.64-.7-.94-.71-.24-.01-.52-.01-.8-.01s-.73.1-1.11.52c-.38.41-1.46 1.43-1.46 3.49s1.49 4.05 1.7 4.33c.2.27 2.87 4.59 7.08 6.26 3.5 1.39 4.22 1.11 4.98 1.04.76-.07 2.45-1 2.8-1.97.35-.96.35-1.79.24-1.97-.1-.17-.38-.27-.8-.48s-2.45-1.21-2.83-1.35c-.38-.14-.66-.21-.94.21-.28.41-1.07 1.35-1.31 1.63-.24.27-.48.31-.9.1-.41-.21-1.75-.64-3.33-2.05-1.23-1.1-2.06-2.46-2.3-2.88-.24-.41-.03-.64.18-.84.19-.19.41-.48.62-.73.21-.24.28-.41.41-.69.14-.28.07-.52-.03-.73-.11-.2-1.01-2.49-1.41-3.41Z"/>
         </svg>
       </span>
-      <span class="atelier-whatsapp-widget__tooltip" role="tooltip">Chat with us</span>
+      <span class="atelier-whatsapp-widget__tooltip" role="tooltip">{{ wa_tooltip | escape }}</span>
     </a>
   </aside>
 {% endif %}
