@@ -114,6 +114,51 @@ class CartConfetti {
 }
 
   class CartDrawer extends HTMLElement {
+    getRawSubtotal() {
+      if (this.cart.original_total_price && this.cart.original_total_price > 0) {
+        return this.cart.original_total_price;
+      }
+      if (this.cart.items_subtotal_price && this.cart.items_subtotal_price > 0) {
+        return this.cart.items_subtotal_price;
+      }
+      if (this.cart.items && this.cart.items.length) {
+        return this.cart.items.reduce((sum, item) => {
+          const unit = item.original_price || item.price || 0;
+          return sum + (unit * item.quantity);
+        }, 0);
+      }
+      return this.cart.total_price || 0;
+    }
+    enableDragScroll(container) {
+      if (!container || container.dataset.dragScrollInit) return;
+      container.dataset.dragScrollInit = 'true';
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+
+      container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        container.classList.add('is-dragging');
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+      });
+      window.addEventListener('mouseup', () => {
+        isDown = false;
+        container.classList.remove('is-dragging');
+      });
+      container.addEventListener('mouseleave', () => {
+        isDown = false;
+        container.classList.remove('is-dragging');
+      });
+      container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        container.scrollLeft = scrollLeft - walk;
+      });
+    }
+
     connectedCallback() {
       this.abort?.abort();
       this.abort = new AbortController();
@@ -285,8 +330,25 @@ class CartConfetti {
       else if (button.hasAttribute('data-cart-quantity')) this.mutate(() => this.change(button.dataset.lineKey, Number(button.dataset.cartQuantity)));
       else if (button.dataset.cartAdd) this.mutate(() => this.add(button.dataset.cartAdd));
       else if (button.dataset.cartChoose) this.chooseProduct(button.dataset.cartChoose, button);
-      else if (button.dataset.cartCoupon) this.applyCoupon(button.dataset.cartCoupon);
-      else if (button.hasAttribute('data-coupon-remove')) this.applyCoupon('');
+      else if (button.dataset.cartCoupon) {
+        const card = button.closest('[data-coupon-card]');
+        const minimum = Number(card?.dataset.minimum || 0);
+        const rawSubtotal = this.getRawSubtotal();
+        if (rawSubtotal < minimum) return;
+        this.userDismissedCode = '';
+        this.userDismissedSubtotal = 0;
+        this.applyCoupon(button.dataset.cartCoupon);
+      }
+      else if (button.hasAttribute('data-coupon-remove')) {
+        const actual = [...new Set((this.config.discountApplications || []).filter(item => item.type === 'discount_code').map(item => item.title))];
+        const current = this.currentAppliedCoupon || actual[0] || '';
+        this.userDismissedCode = (current || '').toLowerCase();
+        this.userDismissedSubtotal = this.getRawSubtotal();
+        this.currentAppliedCoupon = '';
+        const feedback = this.querySelector('[data-coupon-feedback]');
+        if (feedback) feedback.hidden = true;
+        this.applyCoupon('');
+      }
       else if (button.hasAttribute('data-cart-note-save')) this.mutate(async () => { const result = await this.request('cart/update.js', this.sectionBody({ note: this.querySelector('[data-cart-note]').value })); this.replaceContents(result); });
       else if (button.hasAttribute('data-cross-sell')) this.scrollRecommendations(Number(button.dataset.crossSell));
       else if (button.hasAttribute('data-cart-summary-scroll')) this.querySelector('[data-cart-summary]')?.scrollIntoView({ behavior: this.reducedMotion ? 'auto' : 'smooth', block: 'start' });
@@ -347,7 +409,7 @@ class CartConfetti {
     }
     async autoApplyMilestoneCoupon() {
       if (this.isApplyingCoupon || this.busy) return;
-      const total = this.cart.total_price || 0;
+      const rawSubtotal = this.getRawSubtotal();
 
       const couponCards = [...this.querySelectorAll('[data-coupon-card]')].map(card => ({
         code: card.dataset.code?.trim(),
@@ -356,9 +418,10 @@ class CartConfetti {
 
       if (couponCards.length === 0) return;
 
+      // Determine highest eligible milestone coupon based on pre-discount subtotal
       let targetCode = '';
       for (const c of couponCards) {
-        if (total >= c.minimum) {
+        if (rawSubtotal >= c.minimum) {
           targetCode = c.code;
           break;
         }
@@ -371,7 +434,13 @@ class CartConfetti {
       const currentCode = (this.currentAppliedCoupon || actualApplied[0] || '').trim();
       const milestoneCodes = couponCards.map(c => c.code.toLowerCase());
 
+      // If user entered an unrelated manual promo code, preserve it
       if (currentCode && !milestoneCodes.includes(currentCode.toLowerCase())) return;
+
+      // If user explicitly removed this coupon for this subtotal, do not auto-reapply
+      if (targetCode && this.userDismissedCode === targetCode.toLowerCase() && this.userDismissedSubtotal === rawSubtotal) {
+        return;
+      }
 
       if (targetCode) {
         if (currentCode.toLowerCase() !== targetCode.toLowerCase()) {
@@ -384,14 +453,17 @@ class CartConfetti {
             this.isApplyingCoupon = false;
           }
         }
-      } else if (currentCode && milestoneCodes.includes(currentCode.toLowerCase())) {
-        this.isApplyingCoupon = true;
-        try {
-          await this.applyCoupon('', true);
-        } catch (e) {
-          console.warn('Auto coupon remove error:', e);
-        } finally {
-          this.isApplyingCoupon = false;
+      } else {
+        // Subtotal dropped below all milestone minimums: remove any milestone coupon
+        if (currentCode && milestoneCodes.includes(currentCode.toLowerCase())) {
+          this.isApplyingCoupon = true;
+          try {
+            await this.applyCoupon('', true);
+          } catch (e) {
+            console.warn('Auto coupon remove error:', e);
+          } finally {
+            this.isApplyingCoupon = false;
+          }
         }
       }
     }
@@ -453,7 +525,7 @@ class CartConfetti {
       this.querySelectorAll('[data-cart-sheet]').forEach(sheet => { sheet.onclick = e => { if (e.target === sheet) this.closeSheet(); }; });
     }
     decorateMilestones() {
-      const total = this.cart.total_price || 0;
+      const total = this.getRawSubtotal();
       const nodes = [...this.querySelectorAll('[data-reward-node]')].sort((a, b) => Number(a.dataset.threshold) - Number(b.dataset.threshold));
       const container = this.querySelector('[data-reward-nodes]');
       nodes.forEach(node => container?.append(node));
@@ -549,22 +621,48 @@ class CartConfetti {
       this.previousUnlocked = unlockedCount;
     }
     decorateCoupons() {
-      const total = this.cart.total_price || 0;
+      const rawSubtotal = this.getRawSubtotal();
       const actual = [...new Set((this.config.discountApplications || []).filter(item => item.type === 'discount_code').map(item => item.title))];
+      const activeCode = (this.currentAppliedCoupon || actual[0] || '').toLowerCase();
+
       const feedback = this.querySelector('[data-coupon-feedback]');
-      if (feedback && actual.length) { feedback.hidden = false; feedback.querySelector('span').textContent = this.labels.coupon_success.replace('[code]', actual.join(', ')); }
-      else if (feedback && this.pendingCode) { feedback.hidden = false; feedback.querySelector('span').textContent = this.labels.coupon_pending; }
-      const cards = [...this.querySelectorAll('[data-coupon-carousel] [data-coupon-card]')];
-      cards.sort((a, b) => (Number(a.dataset.minimum) > total) - (Number(b.dataset.minimum) > total) || Number(b.dataset.priority) - Number(a.dataset.priority)).forEach(card => card.parentNode.append(card));
+      if (feedback) {
+        if (activeCode) {
+          feedback.hidden = false;
+          feedback.querySelector('span').textContent = (this.labels.coupon_success || '[code] applied').replace('[code]', activeCode);
+        } else {
+          feedback.hidden = true;
+        }
+      }
+
+      const carousel = this.querySelector('[data-coupon-carousel]');
+      if (carousel) this.enableDragScroll(carousel);
+
       this.querySelectorAll('[data-coupon-card]').forEach(card => {
-        const confirmed = this.config.discountApplications?.some(item => item.type === 'discount_code' && item.title.toLowerCase() === card.dataset.code.toLowerCase());
-        card.classList.toggle('applied', !!confirmed); card.classList.toggle('locked', Number(card.dataset.minimum) > total);
+        const cardCode = (card.dataset.code || '').toLowerCase();
+        const minimum = Number(card.dataset.minimum || 0);
+        const isLocked = rawSubtotal < minimum;
+        const isConfirmed = !isLocked && (activeCode === cardCode);
+
+        card.classList.toggle('applied', isConfirmed);
+        card.classList.toggle('locked', isLocked);
+
         const button = card.querySelector('[data-cart-coupon]');
         if (button) {
-          const gap = Math.max(0, Number(card.dataset.minimum) - total);
-          button.textContent = confirmed ? this.labels.applied_label : gap ? this.labels.locked_label.replace('[amount]', this.money(gap)) : this.labels.apply_label;
-          button.classList.toggle('btn-coupon-gap-pill', gap > 0 && !confirmed);
-          button.disabled = !!confirmed || gap > 0;
+          const gap = Math.max(0, minimum - rawSubtotal);
+          if (isConfirmed) {
+            button.textContent = this.labels.applied_label || 'Applied';
+            button.disabled = true;
+            button.classList.remove('btn-coupon-gap-pill');
+          } else if (isLocked) {
+            button.textContent = (this.labels.locked_label || 'Add [amount]').replace('[amount]', this.money(gap));
+            button.disabled = true;
+            button.classList.add('btn-coupon-gap-pill');
+          } else {
+            button.textContent = this.labels.apply_label || 'Apply';
+            button.disabled = false;
+            button.classList.remove('btn-coupon-gap-pill');
+          }
         }
       });
     }

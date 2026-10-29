@@ -737,17 +737,35 @@ cart-drawer.atelier-cart .coupon-applied-feedback{
 }
 cart-drawer.atelier-cart .coupon-cards-scroll{
   display: flex;
-  gap: 10px;
+  flex-wrap: nowrap;
+  gap: 12px;
   overflow-x: auto;
-  padding: 4px 0;
-  scrollbar-width: none;
+  overflow-y: hidden;
+  padding: 6px 4px 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #D9D2C5 transparent;
   -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  cursor: grab;
+}
+cart-drawer.atelier-cart .coupon-cards-scroll.is-dragging{
+  cursor: grabbing;
+  user-select: none;
 }
 cart-drawer.atelier-cart .coupon-cards-scroll::-webkit-scrollbar{
-  display: none;
+  height: 5px;
+}
+cart-drawer.atelier-cart .coupon-cards-scroll::-webkit-scrollbar-track{
+  background: transparent;
+}
+cart-drawer.atelier-cart .coupon-cards-scroll::-webkit-scrollbar-thumb{
+  background: #D9D2C5;
+  border-radius: 99px;
 }
 cart-drawer.atelier-cart .coupon-card{
-  flex: 0 0 240px;
+  flex: 0 0 250px;
+  min-width: 250px;
+  max-width: 260px;
   border: 1px solid var(--cart-border);
   border-radius: 12px;
   padding: 10px 12px;
@@ -756,6 +774,15 @@ cart-drawer.atelier-cart .coupon-card{
   justify-content: space-between;
   gap: 8px;
   background: var(--cart-surface);
+  scroll-snap-align: start;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+cart-drawer.atelier-cart .coupon-card.locked{
+  opacity: 0.7;
+}
+cart-drawer.atelier-cart .coupon-card.locked .btn-coupon-card-apply{
+  pointer-events: none;
+  cursor: not-allowed;
 }
 cart-drawer.atelier-cart .coupon-card-left{
   display: flex;

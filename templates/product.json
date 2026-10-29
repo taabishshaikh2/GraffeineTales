@@ -152,11 +152,30 @@
         "border": "#e6d9c1",
         "button_background": "#f8f5ed"
       }
+    },
+    "video-gallery": {
+      "type": "journal-reels",
+      "settings": {
+        "heading": "See the Journal in Action",
+        "description": "",
+        "use_current_product": true,
+        "width": 1360,
+        "heading_size": 38,
+        "card_width": 290,
+        "mobile_card_width": 250,
+        "gap": 22,
+        "radius": 20,
+        "show_arrows": true,
+        "show_dots": false,
+        "background": "#1A1918",
+        "text_color": "#E9DFC2"
+      }
     }
   },
   "order": [
     "main",
     "preview",
+    "video-gallery",
     "disclosures",
     "faqs",
     "related-products"

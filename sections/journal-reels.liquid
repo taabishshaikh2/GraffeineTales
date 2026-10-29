@@ -1,14 +1,39 @@
 {% liquid
- assign reel_entries = '|'
- assign reel_count = 0
- for entry in section.blocks
-  if entry.settings.poster != blank or entry.settings.poster_url != blank or entry.settings.video != blank or entry.settings.mp4_url != blank or entry.settings.instagram_url != blank or entry.settings.product != blank
-   assign reel_entries = reel_entries | append: entry.id | append:'|'
-   assign reel_count = reel_count | plus: 1
+  assign meta_gallery = product.metafields.graffeine.product_video_gallery.value
+  if meta_gallery == blank
+    assign meta_gallery = product.metafields.custom.product_video_gallery.value
   endif
- endfor
+  if meta_gallery == blank
+    assign meta_gallery = product.metafields.graffeine_journal.reels.value
+  endif
+
+  assign has_meta_reels = false
+  assign meta_count = 0
+  if meta_gallery != blank
+    assign has_meta_reels = true
+    assign meta_count = meta_gallery.count | default: meta_gallery.size
+    if meta_count == blank or meta_count == 0
+      assign meta_count = 1
+    endif
+  endif
+
+  assign block_count = 0
+  assign reel_entries = '|'
+  for entry in section.blocks
+    if entry.settings.poster != blank or entry.settings.poster_url != blank or entry.settings.video != blank or entry.settings.mp4_url != blank or entry.settings.instagram_url != blank or entry.settings.product != blank
+      assign reel_entries = reel_entries | append: entry.id | append:'|'
+      assign block_count = block_count | plus: 1
+    endif
+  endfor
+
+  assign total_reel_count = 0
+  if has_meta_reels
+    assign total_reel_count = meta_count
+  else
+    assign total_reel_count = block_count
+  endif
 %}
-{% if reel_count > 0 %}
+{% if total_reel_count > 0 %}
 {{ 'stories-reels.css' | asset_url | stylesheet_tag }}
 {{ 'journal-reels.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-showcase.js' | asset_url }}" defer></script>
@@ -22,58 +47,129 @@
     </div>
     <div class="atelier-reels__viewport" data-reels-viewport>
       <div class="atelier-reels__track">
-        {% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless reel_entries contains entry_token %}{% continue %}{% endunless %}
-          {% liquid
-            assign reel_product = block.settings.product
-            if section.settings.use_current_product
-              assign reel_product = product
-            endif
-            assign cover = block.settings.poster | default: block.settings.video.preview_image | default: reel_product.featured_image
-            assign cover_url = ''
-            if block.settings.poster != blank
-              assign cover_url = block.settings.poster | image_url: width: 900
-            elsif block.settings.poster_url != blank
-              assign cover_url = block.settings.poster_url
-            elsif cover != blank
-              assign cover_url = cover | image_url: width: 900
-            endif
-            assign has_video = false
-            if block.settings.source == 'shopify' and block.settings.video != blank
-              assign has_video = true
-            elsif block.settings.source == 'mp4' and block.settings.mp4_url != blank
-              assign has_video = true
-            endif
-            assign form_id = 'ReelProduct-' | append: section.id | append: '-' | append: block.id
-          %}
-          <article class="atelier-reel" id="Reel-{{ section.id }}-{{ block.id }}" data-reel-card data-reel-id="{{ block.id }}" data-title="{{ block.settings.title | escape }}" data-caption="{{ block.settings.caption | escape }}" data-instagram="{% if block.settings.source == 'instagram' %}{{ block.settings.instagram_url | escape }}{% endif %}" {{ block.shopify_attributes }}>
-            <div class="atelier-reel__media">
-              {% if cover_url != blank %}<img class="atelier-reel__poster" src="{{ cover_url }}" alt="" width="580" height="1032" loading="lazy">{% else %}{{ 'product-1' | placeholder_svg_tag: 'atelier-reel__poster' }}{% endif %}
-              {% if has_video %}
-                <video class="atelier-reel__video" data-card-video muted playsinline loop preload="none"{% if block.settings.captions_url != blank %} crossorigin="anonymous"{% endif %}{% if cover_url != blank %} poster="{{ cover_url }}"{% endif %} aria-hidden="true" tabindex="-1" disablepictureinpicture>
-                  {% if block.settings.source == 'shopify' %}{% for video_source in block.settings.video.sources %}<source src="{{ video_source.url | escape }}" type="{{ video_source.mime_type | escape }}">{% endfor %}{% else %}<source src="{{ block.settings.mp4_url | escape }}" type="video/mp4">{% endif %}
-                  {% if block.settings.captions_url != blank %}<track kind="captions" src="{{ block.settings.captions_url | escape }}" srclang="{{ block.settings.captions_language | escape }}" label="{{ block.settings.captions_label | escape }}" default>{% endif %}
-                </video>
-              {% endif %}
-            </div>
-            <button type="button" class="atelier-reel__open" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ block.settings.title | escape }}"><span class="atelier-reel__play-mark" aria-hidden="true">{% render 'reel-icon', name: 'play' %}</span></button>
-            <div class="atelier-reel__top">
-              <span class="atelier-reel__duration" data-card-duration hidden></span>
-              {% if has_video %}<button type="button" class="atelier-reels__control" data-card-sound aria-label="{{ section.settings.unmute_label | escape }}" aria-pressed="false"><span data-icon-muted>{% render 'reel-icon', name: 'muted' %}</span><span data-icon-sound hidden>{% render 'reel-icon', name: 'sound' %}</span></button>{% endif %}
-            </div>
-            <div class="atelier-reel__bottom">
-             {% assign reel_variant = reel_product.selected_or_first_available_variant %}<div class="journal-reel-pill" data-reel-product>
-              <div>{% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}{% if block.settings.caption != blank %}<p>{% if block.settings.show_price %}{{ section.settings.currency_symbol | escape }}{{ reel_variant.price | money_without_currency | remove: '.00' }} • {% endif %}{{ block.settings.caption | escape }}</p>{% endif %}</div>
-              {% assign reel_variant = reel_product.selected_or_first_available_variant %}
-              {% if reel_product.available and reel_product.requires_selling_plan == false %}
-               {% if reel_product.has_only_default_variant or reel_product.id == product.id %}
-                {% form 'product', reel_product, id: form_id, data-atelier-product-form: '' %}<input type="hidden" name="id" value="{{ reel_variant.id }}"{% if reel_product.id == product.id %} data-journal-product="{{ product.id }}"{% endif %}><input type="hidden" name="quantity" value="1"><button type="submit" data-preserve-button-content aria-label="{{ section.settings.add_label | escape }}: {{ reel_product.title | escape }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>{% endform %}
-               {% else %}<a href="{{ reel_product.url }}" aria-label="{{ section.settings.product_label | escape }}: {{ reel_product.title | escape }}">+</a>{% endif %}
-              {% else %}<button type="button" disabled aria-label="{{ section.settings.sold_out_label | escape }}">+</button>{% endif %}
-              <p data-cart-error role="alert" hidden></p>
-             </div>
-            </div>
-          </article>
-        {% endfor %}
+        {% if has_meta_reels %}
+          {% for item in meta_gallery %}
+            {% liquid
+              assign card = item.value | default: item
+              assign card_title = card.title.value | default: card.title | default: card.heading.value | default: card.heading | default: card.name
+              assign card_caption = card.caption.value | default: card.caption | default: card.subtitle.value | default: card.subtitle
+              assign card_video = card.video.value | default: card.video
+              assign card_video_url = card.video_url.value | default: card.video_url | default: card.mp4_url.value | default: card.mp4_url
+              assign card_poster = card.poster.value | default: card.poster | default: card.image.value | default: card.image
+              assign reel_product = card.product.value | default: card.product | default: product
+              assign reel_variant = reel_product.selected_or_first_available_variant
+
+              assign cover_url = ''
+              if card_poster != blank
+                assign cover_url = card_poster | image_url: width: 900
+              elsif card_video.preview_image != blank
+                assign cover_url = card_video.preview_image | image_url: width: 900
+              elsif reel_product.featured_image != blank
+                assign cover_url = reel_product.featured_image | image_url: width: 900
+              endif
+
+              assign has_video = false
+              if card_video != blank or card_video_url != blank
+                assign has_video = true
+              endif
+
+              assign card_id = 'Card-' | append: forloop.index
+              assign form_id = 'ReelProduct-' | append: section.id | append: '-' | append: card_id
+            %}
+            <article class="atelier-reel" id="Reel-{{ section.id }}-{{ card_id }}" data-reel-card data-reel-id="{{ card_id }}" data-title="{{ card_title | escape }}" data-caption="{{ card_caption | escape }}">
+              <div class="atelier-reel__media">
+                {% if cover_url != blank %}<img class="atelier-reel__poster" src="{{ cover_url }}" alt="{{ card_title | escape }}" width="580" height="1032" loading="lazy">{% else %}{{ 'product-1' | placeholder_svg_tag: 'atelier-reel__poster' }}{% endif %}
+                {% if has_video %}
+                  <video class="atelier-reel__video" data-card-video muted playsinline loop preload="none"{% if cover_url != blank %} poster="{{ cover_url }}"{% endif %} aria-hidden="true" tabindex="-1" disablepictureinpicture>
+                    {% if card_video.sources.size > 0 %}{% for video_source in card_video.sources %}<source src="{{ video_source.url | escape }}" type="{{ video_source.mime_type | escape }}">{% endfor %}{% elsif card_video_url != blank %}<source src="{{ card_video_url | escape }}" type="video/mp4">{% endif %}
+                  </video>
+                {% endif %}
+              </div>
+              <button type="button" class="atelier-reel__open" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ card_title | escape }}"><span class="atelier-reel__play-mark" aria-hidden="true">{% render 'reel-icon', name: 'play' %}</span></button>
+              <div class="atelier-reel__top">
+                <span class="atelier-reel__duration" data-card-duration hidden></span>
+                {% if has_video %}<button type="button" class="atelier-reels__control" data-card-sound aria-label="{{ section.settings.unmute_label | escape }}" aria-pressed="false"><span data-icon-muted>{% render 'reel-icon', name: 'muted' %}</span><span data-icon-sound hidden>{% render 'reel-icon', name: 'sound' %}</span></button>{% endif %}
+              </div>
+              <div class="atelier-reel__bottom">
+                <div class="journal-reel-pill" data-reel-product>
+                  <div>
+                    {% if card_title != blank %}<h3>{{ card_title | escape }}</h3>{% endif %}
+                    <p>{% if reel_variant.price != blank %}{{ section.settings.currency_symbol | escape }}{{ reel_variant.price | money_without_currency | remove: '.00' }}{% if card_caption != blank %} • {% endif %}{% endif %}{{ card_caption | escape }}</p>
+                  </div>
+                  {% if reel_product.available and reel_product.requires_selling_plan == false %}
+                    {% if reel_product.has_only_default_variant or reel_product.id == product.id %}
+                      {% form 'product', reel_product, id: form_id, data-atelier-product-form: '' %}
+                        <input type="hidden" name="id" value="{{ reel_variant.id }}"{% if reel_product.id == product.id %} data-journal-product="{{ product.id }}"{% endif %}>
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" data-preserve-button-content aria-label="{{ section.settings.add_label | escape }}: {{ reel_product.title | escape }}">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                        </button>
+                      {% endform %}
+                    {% else %}
+                      <a href="{{ reel_product.url }}" aria-label="{{ section.settings.product_label | escape }}: {{ reel_product.title | escape }}">+</a>
+                    {% endif %}
+                  {% else %}
+                    <button type="button" disabled aria-label="{{ section.settings.sold_out_label | escape }}">+</button>
+                  {% endif %}
+                  <p data-cart-error role="alert" hidden></p>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        {% else %}
+          {% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless reel_entries contains entry_token %}{% continue %}{% endunless %}
+            {% liquid
+              assign reel_product = block.settings.product
+              if section.settings.use_current_product
+                assign reel_product = product
+              endif
+              assign cover = block.settings.poster | default: block.settings.video.preview_image | default: reel_product.featured_image
+              assign cover_url = ''
+              if block.settings.poster != blank
+                assign cover_url = block.settings.poster | image_url: width: 900
+              elsif block.settings.poster_url != blank
+                assign cover_url = block.settings.poster_url
+              elsif cover != blank
+                assign cover_url = cover | image_url: width: 900
+              endif
+              assign has_video = false
+              if block.settings.source == 'shopify' and block.settings.video != blank
+                assign has_video = true
+              elsif block.settings.source == 'mp4' and block.settings.mp4_url != blank
+                assign has_video = true
+              endif
+              assign form_id = 'ReelProduct-' | append: section.id | append: '-' | append: block.id
+            %}
+            <article class="atelier-reel" id="Reel-{{ section.id }}-{{ block.id }}" data-reel-card data-reel-id="{{ block.id }}" data-title="{{ block.settings.title | escape }}" data-caption="{{ block.settings.caption | escape }}" data-instagram="{% if block.settings.source == 'instagram' %}{{ block.settings.instagram_url | escape }}{% endif %}" {{ block.shopify_attributes }}>
+              <div class="atelier-reel__media">
+                {% if cover_url != blank %}<img class="atelier-reel__poster" src="{{ cover_url }}" alt="" width="580" height="1032" loading="lazy">{% else %}{{ 'product-1' | placeholder_svg_tag: 'atelier-reel__poster' }}{% endif %}
+                {% if has_video %}
+                  <video class="atelier-reel__video" data-card-video muted playsinline loop preload="none"{% if block.settings.captions_url != blank %} crossorigin="anonymous"{% endif %}{% if cover_url != blank %} poster="{{ cover_url }}"{% endif %} aria-hidden="true" tabindex="-1" disablepictureinpicture>
+                    {% if block.settings.source == 'shopify' %}{% for video_source in block.settings.video.sources %}<source src="{{ video_source.url | escape }}" type="{{ video_source.mime_type | escape }}">{% endfor %}{% else %}<source src="{{ block.settings.mp4_url | escape }}" type="video/mp4">{% endif %}
+                    {% if block.settings.captions_url != blank %}<track kind="captions" src="{{ block.settings.captions_url | escape }}" srclang="{{ block.settings.captions_language | escape }}" label="{{ block.settings.captions_label | escape }}" default>{% endif %}
+                  </video>
+                {% endif %}
+              </div>
+              <button type="button" class="atelier-reel__open" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ block.settings.title | escape }}"><span class="atelier-reel__play-mark" aria-hidden="true">{% render 'reel-icon', name: 'play' %}</span></button>
+              <div class="atelier-reel__top">
+                <span class="atelier-reel__duration" data-card-duration hidden></span>
+                {% if has_video %}<button type="button" class="atelier-reels__control" data-card-sound aria-label="{{ section.settings.unmute_label | escape }}" aria-pressed="false"><span data-icon-muted>{% render 'reel-icon', name: 'muted' %}</span><span data-icon-sound hidden>{% render 'reel-icon', name: 'sound' %}</span></button>{% endif %}
+              </div>
+              <div class="atelier-reel__bottom">
+               {% assign reel_variant = reel_product.selected_or_first_available_variant %}<div class="journal-reel-pill" data-reel-product>
+                <div>{% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}{% if block.settings.caption != blank %}<p>{% if block.settings.show_price %}{{ section.settings.currency_symbol | escape }}{{ reel_variant.price | money_without_currency | remove: '.00' }} • {% endif %}{{ block.settings.caption | escape }}</p>{% endif %}</div>
+                {% assign reel_variant = reel_product.selected_or_first_available_variant %}
+                {% if reel_product.available and reel_product.requires_selling_plan == false %}
+                 {% if reel_product.has_only_default_variant or reel_product.id == product.id %}
+                  {% form 'product', reel_product, id: form_id, data-atelier-product-form: '' %}<input type="hidden" name="id" value="{{ reel_variant.id }}"{% if reel_product.id == product.id %} data-journal-product="{{ product.id }}"{% endif %}><input type="hidden" name="quantity" value="1"><button type="submit" data-preserve-button-content aria-label="{{ section.settings.add_label | escape }}: {{ reel_product.title | escape }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>{% endform %}
+                 {% else %}<a href="{{ reel_product.url }}" aria-label="{{ section.settings.product_label | escape }}: {{ reel_product.title | escape }}">+</a>{% endif %}
+                {% else %}<button type="button" disabled aria-label="{{ section.settings.sold_out_label | escape }}">+</button>{% endif %}
+                <p data-cart-error role="alert" hidden></p>
+               </div>
+              </div>
+            </article>
+          {% endfor %}
+        {% endif %}
       </div>
     </div>
     {% if section.settings.show_dots %}<div class="atelier-reels__dots">{% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless reel_entries contains entry_token %}{% continue %}{% endunless %}<button type="button" data-reel-dot="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ block.settings.title | escape }}"{% if forloop.first %} aria-current="true"{% endif %}><span></span></button>{% endfor %}</div>{% endif %}
