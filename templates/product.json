@@ -1,110 +1,164 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "sections":  {
-                     "main":  {
-                                  "type":  "product-editorial",
-                                  "settings":  {
-                                                   "swatch_option_name":  "Cover Tone",
-                                                   "shimmer":  true,
-                                                   "dynamic_checkout":  false,
-                                                   "show_delivery":  false,
-                                                   "width":  1320,
-                                                   "column_gap":  52,
-                                                   "title_size":  32,
-                                                   "mobile_title_size":  28,
-                                                   "image_fit":  "cover",
-                                                   "background":  "#F8F5ED",
-                                                   "purchase_background":  "#FFFFFF",
-                                                   "purchase_border":  "#E6D9C1",
-                                                   "purchase_radius":  26,
-                                                   "purchase_padding":  36,
-                                                   "purchase_shadow":  true,
-                                                   "button_radius":  28,
-                                                   "compact_money":  true,
-                                                   "currency_symbol":  "₹",
-                                                   "delivery_heading":  "Estimated Delivery Date"
-                                               },
-                                  "blocks":  {
-
-                                             },
-                                  "block_order":  [
-
-                                                  ]
-                              },
-                     "disclosures":  {
-                                         "type":  "disclosures",
-                                         "settings":  {
-                                                          "padding_top":  36,
-                                                          "padding_bottom":  0
-                                                      }
-                                     },
-                     "related-products":  {
-                                              "type":  "atelier-related-products",
-                                              "settings":  {
-                                                               "heading":  "You May Also Like",
-                                                               "collection":  "bestsellers",
-                                                               "limit":  4,
-                                                               "link_label":  "EXPLORE FULL CATALOG →",
-                                                               "link":  "shopify://collections/atelier-collection",
-                                                               "button_label":  "View Details",
-                                                               "show_category":  true,
-                                                               "show_compare":  true,
-                                                               "currency_symbol":  "₹",
-                                                               "store_money_format":  false,
-                                                               "width":  1400,
-                                                               "gap":  28,
-                                                               "radius":  18,
-                                                               "heading_size":  34,
-                                                               "padding_top":  44,
-                                                               "padding_bottom":  44,
-                                                               "show_divider":  true,
-                                                               "image_fit":  "cover",
-                                                               "background":  "#F8F5ED",
-                                                               "card_background":  "#FFFFFF",
-                                                               "text":  "#242424",
-                                                               "accent":  "#8A6B40",
-                                                               "border":  "#E6D9C1",
-                                                               "button_background":  "#F8F5ED"
-                                                           }
-                                          },
-                     "preview":  {
-                                     "type":  "journal-flipbook",
-                                     "settings":  {
-                                                      "heading":  "Flip through a few inner pages!",
-                                                      "back_label":  "â€¹ Back",
-                                                      "next_label":  "Next â€º",
-                                                      "peel_label":  "Flip page â€º",
-                                                      "counter_label":  "Page",
-                                                      "error_label":  "Use Back and Next to browse the page images.",
-                                                      "page_width":  380,
-                                                      "turn_time":  700,
-                                                      "background":  "#f8f5ed",
-                                                      "coffee":  "#4d351d",
-                                                      "peel_hint":  true,
-                                                      "card_background":  "#fdfcfa",
-                                                      "card_border":  "#e6d9c1",
-                                                      "card_radius":  24,
-                                                      "card_width":  840,
-                                                      "drag_back":  "â† Drag corner or tap to turn back",
-                                                      "drag_next":  "Drag corner or tap to turn next →",
-                                                      "show_counter":  false
-                                                  }
-                                 },
-                     "faqs":  {
-                                  "type":  "product-faqs",
-                                  "settings":  {
-                                                   "heading":  "Frequently Asked Questions",
-                                                   "background":  "#ffffff",
-                                                   "panel_background":  "#faf8f2",
-                                                   "text":  "#363638",
-                                                   "width":  900
-                                               }
-                              }
-                 },
-    "order":  [
-                  "main",
-                  "preview",
-                  "disclosures",
-                  "faqs",
-                  "related-products"
-              ]
+  "sections": {
+    "main": {
+      "type": "product-editorial",
+      "settings": {
+        "show_arrows": true,
+        "show_dots": true,
+        "show_thumbnails": true,
+        "sticky_gallery": true,
+        "image_fit": "cover",
+        "gallery_radius": 18,
+        "swatch_option_name": "Cover Tone",
+        "show_compare": true,
+        "show_saving": true,
+        "save_label": "SAVE",
+        "show_quantity": true,
+        "add_label": "Add to Cart",
+        "shimmer": true,
+        "dynamic_checkout": false,
+        "show_delivery": false,
+        "delivery_heading": "Estimated Delivery Date",
+        "pincode_placeholder": "Enter your pincode",
+        "check_label": "Check",
+        "delivery_note": "Enter your 6-digit Indian pincode for an estimate.",
+        "invalid_pincode": "Please enter a valid 6-digit Indian pincode.",
+        "delivery_fallback": "Delivery availability and timing will be confirmed at checkout.",
+        "width": 1320,
+        "column_gap": 52,
+        "padding_top": 24,
+        "padding_bottom": 72,
+        "title_size": 32,
+        "mobile_title_size": 28,
+        "button_radius": 28,
+        "purchase_background": "#ffffff",
+        "purchase_border": "#e6d9c1",
+        "purchase_radius": 26,
+        "purchase_padding": 36,
+        "purchase_shadow": true,
+        "show_product_rating": true,
+        "compact_money": true,
+        "currency_symbol": "₹",
+        "specs_heading": "KEY SPECIFICATIONS",
+        "delivery_extra": "",
+        "review_label": "reviews",
+        "background": "#f8f5ed",
+        "sand": "#f8f5f0",
+        "coffee": "#4d351d",
+        "clay": "#a34325",
+        "text_color": "#363638",
+        "button_background": "#4d351d",
+        "button_text": "#ffffff",
+        "show_breadcrumb": true,
+        "home_label": "Home",
+        "shop_label": "Shop",
+        "adding_label": "Adding…",
+        "added_label": "Added to your bag",
+        "sold_label": "Sold out",
+        "unavailable_label": "Unavailable",
+        "error_label": "Could not add this item. Please try again.",
+        "gallery_label": "Product gallery",
+        "image_label": "View image",
+        "previous_label": "Previous image",
+        "next_label": "Next image",
+        "quantity_label": "Quantity",
+        "decrease_label": "Decrease quantity",
+        "increase_label": "Increase quantity",
+        "plan_label": "Purchase option",
+        "one_time_label": "One-time purchase",
+        "inside_heading": "What’s Inside?",
+        "features_heading": "Product Features",
+        "shipping_heading": "Shipping"
+      }
+    },
+    "preview": {
+      "type": "journal-flipbook",
+      "settings": {
+        "heading": "Flip through a few inner pages!",
+        "back_label": "â€¹ Back",
+        "next_label": "Next â€º",
+        "peel_label": "Flip page â€º",
+        "counter_label": "Page",
+        "error_label": "Use Back and Next to browse the page images.",
+        "page_width": 380,
+        "turn_time": 700,
+        "background": "#f8f5ed",
+        "coffee": "#4d351d",
+        "peel_hint": true,
+        "card_background": "#fdfcfa",
+        "card_border": "#e6d9c1",
+        "card_radius": 24,
+        "card_width": 840,
+        "drag_back": "â† Drag corner or tap to turn back",
+        "drag_next": "Drag corner or tap to turn next →",
+        "show_counter": false
+      }
+    },
+    "disclosures": {
+      "type": "disclosures",
+      "settings": {
+        "heading": "Disclosures",
+        "heading_size": "h2",
+        "open_by_default": false,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "faqs": {
+      "type": "product-faqs",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "background": "#ffffff",
+        "panel_background": "#faf8f2",
+        "text": "#363638",
+        "width": 900
+      }
+    },
+    "related-products": {
+      "type": "atelier-related-products",
+      "settings": {
+        "heading": "You May Also Like",
+        "collection": "bestsellers",
+        "limit": 4,
+        "link_label": "EXPLORE FULL CATALOG →",
+        "link": "shopify://collections/atelier-collection",
+        "button_label": "View Details",
+        "show_category": true,
+        "show_compare": true,
+        "currency_symbol": "₹",
+        "store_money_format": false,
+        "width": 1400,
+        "gap": 28,
+        "radius": 18,
+        "heading_size": 34,
+        "padding_top": 44,
+        "padding_bottom": 44,
+        "show_divider": true,
+        "image_fit": "cover",
+        "background": "#f8f5ed",
+        "card_background": "#ffffff",
+        "text": "#242424",
+        "accent": "#8a6b40",
+        "border": "#e6d9c1",
+        "button_background": "#f8f5ed"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "preview",
+    "disclosures",
+    "faqs",
+    "related-products"
+  ]
 }
