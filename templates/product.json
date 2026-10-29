@@ -38,12 +38,23 @@
             "page": "",
             "open": false
           }
+        },
+        "accordion_xKf4Dh": {
+          "type": "accordion",
+          "name": "Cancellations & Returns Policy",
+          "settings": {
+            "heading": "Cancellations & Returns Policy",
+            "content": "<p>Cancellations are accepted anytime <strong>before order fulfillment</strong>, and returns are applicable exclusively in the case of a <strong>damaged </strong>or <strong>incorrect </strong>product.</p>",
+            "page": "",
+            "open": false
+          }
         }
       },
       "block_order": [
         "accordion_bG7qH7",
         "accordion_F4UEh4",
-        "accordion_36en6E"
+        "accordion_36en6E",
+        "accordion_xKf4Dh"
       ],
       "settings": {
         "show_arrows": false,
@@ -126,6 +137,9 @@
         "description": "",
         "width": 1360,
         "heading_size": 38,
+        "mobile_heading_size": 28,
+        "mobile_padding_top": 40,
+        "mobile_padding_bottom": 40,
         "card_width": 290,
         "mobile_card_width": 250,
         "gap": 22,
@@ -144,28 +158,7 @@
         "show_captions": true,
         "show_compare_price": true,
         "show_like": true,
-        "show_share": true,
-        "previous_label": "Previous story",
-        "next_label": "Next story",
-        "watch_label": "Open story",
-        "play_label": "Play video",
-        "pause_label": "Pause video",
-        "mute_label": "Mute video",
-        "unmute_label": "Unmute video",
-        "close_label": "Close story",
-        "save_label": "Save this story",
-        "share_label": "Share this story",
-        "shared_label": "Story link copied",
-        "instagram_label": "Load Instagram reel",
-        "seek_label": "Video timeline",
-        "product_label": "View product",
-        "add_label": "Add to Cart",
-        "adding_label": "Adding…",
-        "added_label": "Added to your bag",
-        "sold_out_label": "Sold out",
-        "error_label": "Something went wrong. Please try again.",
-        "video_error_label": "This video is unavailable. You can still explore the featured product.",
-        "currency_symbol": "₹"
+        "show_share": true
       }
     },
     "disclosures": {
@@ -214,7 +207,7 @@
         "text": "#242424",
         "accent": "#8a6b40",
         "border": "#e6d9c1",
-        "button_background": "#4A3525"
+        "button_background": "#4a3525"
       }
     }
   },
