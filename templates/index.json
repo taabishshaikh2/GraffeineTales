@@ -197,7 +197,7 @@
         "bestsellers"
       ],
       "settings": {
-        "heading": "SHOP BY CATEGORY.",
+        "heading": "Shop By Category",
         "width": 1240,
         "heading_size": 42,
         "card_radius": 14,
@@ -205,7 +205,7 @@
         "mobile_columns": "3",
         "background": "#ffffff",
         "heading_color": "#363638",
-        "button_background": "#0d0c0b",
+        "button_background": "#4A3525",
         "button_text": "#ffffff",
         "show_button": true,
         "button_label": "View all products",
