@@ -323,6 +323,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=Patrick+Hand&family=Quicksand:wght@600&display=swap" rel="stylesheet">
 {{ 'atelier-foundation.css' | asset_url | stylesheet_tag }}
+  {{ 'atelier-whatsapp.css' | asset_url | stylesheet_tag }}
 </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
@@ -405,5 +406,7 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+      {% render 'whatsapp-widget' %}
+    <script src="{{ 'atelier-whatsapp.js' | asset_url }}" defer="defer"></script>
   </body>
 </html>

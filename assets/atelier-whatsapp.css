@@ -1,0 +1,146 @@
+
+/* WhatsApp Floating Widget */
+.atelier-whatsapp-wrapper {
+  position: fixed;
+  left: 20px;
+  bottom: calc(24px + var(--wa-bottom-offset, 0px));
+  z-index: 52;
+  transition: bottom 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.atelier-whatsapp-widget {
+  pointer-events: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(37, 211, 102, 0.42), 0 2px 8px rgba(0, 0, 0, 0.12);
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+.atelier-whatsapp-widget:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 8px 26px rgba(37, 211, 102, 0.55), 0 3px 10px rgba(0, 0, 0, 0.18);
+  color: #ffffff !important;
+}
+
+.atelier-whatsapp-widget__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.atelier-whatsapp-widget__icon svg {
+  width: 28px;
+  height: 28px;
+  fill: #ffffff;
+}
+
+/* Subtle breathing pulse ring */
+.atelier-whatsapp-widget__pulse {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid #25D366;
+  opacity: 0.65;
+  animation: atelier-wa-pulse 2.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  z-index: 1;
+}
+
+@keyframes atelier-wa-pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+/* Tooltip on desktop */
+.atelier-whatsapp-widget__tooltip {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px);
+  background: #2b2523;
+  color: #ffffff;
+  font: 500 12px/1 'Inter', sans-serif;
+  letter-spacing: 0.02em;
+  padding: 6px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+.atelier-whatsapp-widget__tooltip::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: #2b2523;
+}
+
+.atelier-whatsapp-widget:hover .atelier-whatsapp-widget__tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Mobile dock offset on non-PDP pages */
+@media (max-width: 1023px) {
+  body:not(.template-product) .atelier-whatsapp-wrapper {
+    bottom: calc(var(--dock-height, 60px) + env(safe-area-inset-bottom, 0px) + 16px + var(--wa-bottom-offset, 0px));
+    left: 16px;
+  }
+  .atelier-whatsapp-widget {
+    width: 48px;
+    height: 48px;
+  }
+  .atelier-whatsapp-widget__icon svg {
+    width: 25px;
+    height: 25px;
+  }
+  .atelier-whatsapp-widget__tooltip {
+    display: none !important;
+  }
+}
+
+/* When PDP sticky bar is visible, push WhatsApp above it */
+body.has-sticky-bar-visible .atelier-whatsapp-wrapper,
+body:has(.atelier-pdp__sticky-bar.is-visible) .atelier-whatsapp-wrapper {
+  bottom: calc(var(--wa-sticky-offset, 76px) + env(safe-area-inset-bottom, 0px) + 16px) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atelier-whatsapp-widget__pulse {
+    animation: none !important;
+    display: none !important;
+  }
+  .atelier-whatsapp-wrapper,
+  .atelier-whatsapp-widget {
+    transition: none !important;
+  }
+}

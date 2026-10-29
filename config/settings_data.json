@@ -347,7 +347,10 @@
           "shadow": "#121212"
         }
       }
-    }
+    },
+    "enable_whatsapp": true,
+    "whatsapp_number": "919876543210",
+    "whatsapp_message": "Hi Graffeine Tales! I have a question about your collection."
   },
   "presets": {
     "Dawn": {

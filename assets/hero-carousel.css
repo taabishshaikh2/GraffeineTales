@@ -131,3 +131,79 @@ hero-banner-slider{display:block;position:relative;background:#363638;color:whit
     font-size: var(--hero-mobile-heading, clamp(2.4rem, 7vw, 3.8rem)) !important;
   }
 }
+
+
+/* Compact Frosted Carousel Dots Matching Image 5 */
+.atelier-hero__controls {
+  position: absolute !important;
+  bottom: 22px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 4 !important;
+}
+
+.atelier-hero__pagination {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(200, 200, 200, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: 999px !important;
+  padding: 4px 8px !important;
+  gap: 7px !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16) !important;
+  width: auto !important;
+  min-height: 20px !important;
+}
+
+.atelier-hero__indicator {
+  display: none !important;
+}
+
+.atelier-hero__dot {
+  border: 0 !important;
+  background: transparent !important;
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+  min-height: 12px !important;
+  flex: 0 0 12px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.atelier-hero__dot span {
+  display: block !important;
+  width: 6.5px !important;
+  height: 6.5px !important;
+  background: #1c1c1e !important;
+  opacity: 0.75 !important;
+  border-radius: 50% !important;
+  margin: 0 !important;
+  transition: all 200ms ease !important;
+}
+
+.atelier-hero__dot[aria-current="true"] span {
+  width: 8px !important;
+  height: 8px !important;
+  background: #ffffff !important;
+  opacity: 1 !important;
+  border-radius: 50% !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) !important;
+}
+
+.atelier-hero__dot:hover span {
+  opacity: 0.95 !important;
+  transform: scale(1.15) !important;
+}
