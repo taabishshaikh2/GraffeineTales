@@ -11,13 +11,11 @@
   html { scroll-padding-bottom: calc({{ section.settings.height }}px + env(safe-area-inset-bottom, 0px) + 16px); }
 }
 {% endstyle %}
-<mobile-bottom-nav class="atelier-mobile-dock" style="--dock-height:{{ section.settings.height }}px;--dock-background:{{ section.settings.background }};--dock-text:{{ section.settings.text }};--dock-active:{{ section.settings.active }};--dock-badge:{{ section.settings.badge_background }};--dock-badge-text:{{ section.settings.badge_text }}">
-  <nav aria-label="{{ section.settings.navigation_label | escape }}">
-    <a href="{{ routes.root_url }}" class="atelier-mobile-dock__item"{% if request.page_type == 'index' %} aria-current="page"{% endif %}><span class="atelier-mobile-dock__icon">{% render 'mobile-nav-icon', name: 'home' %}</span><span>{{ section.settings.home_label | escape }}</span></a>
-    <button type="button" class="atelier-mobile-dock__item" data-dock-panel="categories" aria-haspopup="dialog"><span class="atelier-mobile-dock__icon">{% render 'mobile-nav-icon', name: 'categories' %}</span><span>{{ section.settings.categories_label | escape }}</span></button>
-    <button type="button" class="atelier-mobile-dock__item" data-dock-panel="wishlist" aria-haspopup="dialog"><span class="atelier-mobile-dock__icon">{% render 'mobile-nav-icon', name: 'wishlist' %}<span class="atelier-mobile-dock__badge" data-dock-wishlist-count hidden>0</span></span><span>{{ section.settings.wishlist_label | escape }}</span></button>
-    <a href="{{ routes.cart_url }}" class="atelier-mobile-dock__item" data-dock-cart aria-label="{{ section.settings.cart_label | escape }}{% if cart.item_count > 0 %}: {{ cart.item_count }}{% endif %}" data-cart-label="{{ section.settings.cart_label | escape }}"><span class="atelier-mobile-dock__icon">{% render 'mobile-nav-icon', name: 'cart' %}<span class="atelier-mobile-dock__badge" data-dock-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span></span><span>{{ section.settings.cart_label | escape }}</span></a>
-    <a href="{{ section.settings.account_link | default: routes.account_url }}" class="atelier-mobile-dock__item"><span class="atelier-mobile-dock__icon">{% render 'mobile-nav-icon', name: 'account' %}</span><span>{{ section.settings.account_label | escape }}</span></a>
+<mobile-bottom-nav class="atelier-mobile-dock" style="--dock-height:{{ section.settings.height }}px;--dock-background:{{ section.settings.background }};--dock-text:{{ section.settings.text }};--dock-active:{{ section.settings.active }};">
+  <nav aria-label="{{ section.settings.navigation_label | default: 'Mobile navigation' | escape }}">
+    <a href="{{ routes.root_url }}" class="atelier-mobile-dock__item"{% if request.page_type == 'index' %} aria-current="page"{% endif %}><span class="atelier-mobile-dock__icon">{% render 'mobile-nav-icon', name: 'home' %}</span><span>{{ section.settings.home_label | default: 'Home' | escape }}</span></a>
+    <button type="button" class="atelier-mobile-dock__item" data-dock-panel="categories" aria-haspopup="dialog"><span class="atelier-mobile-dock__icon">{% render 'mobile-nav-icon', name: 'categories' %}</span><span>{{ section.settings.categories_label | default: 'Categories' | escape }}</span></button>
+    <a href="{{ section.settings.account_link | default: routes.account_url }}" class="atelier-mobile-dock__item"{% if request.path contains '/account' %} aria-current="page"{% endif %}><span class="atelier-mobile-dock__icon">{% render 'mobile-nav-icon', name: 'account' %}</span><span>{{ section.settings.account_label | default: 'Account' | escape }}</span></a>
   </nav>
 </mobile-bottom-nav>
 {%- endif -%}
@@ -50,18 +48,6 @@
       "id": "categories_label",
       "label": "Categories label",
       "default": "Categories"
-    },
-    {
-      "type": "text",
-      "id": "wishlist_label",
-      "label": "Wishlist label",
-      "default": "Wishlist"
-    },
-    {
-      "type": "text",
-      "id": "cart_label",
-      "label": "Cart label",
-      "default": "Cart"
     },
     {
       "type": "text",
@@ -102,23 +88,6 @@
       "id": "active",
       "label": "Active Home colour",
       "default": "#927B53"
-    },
-    {
-      "type": "color",
-      "id": "badge_background",
-      "label": "Count badges",
-      "default": "#927B53"
-    },
-    {
-      "type": "color",
-      "id": "badge_text",
-      "label": "Count badge text",
-      "default": "#FFFFFF"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Mobile bottom navigation"
     }
   ]
 }

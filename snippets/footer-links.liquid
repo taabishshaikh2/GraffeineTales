@@ -1,11 +1,14 @@
 {% doc %}
-  Renders editable footer navigation.
+  Renders editable footer navigation from Shopify Admin menus.
   @param {object} block - Footer link-column block.
   @param {object} section - Footer section.
 {% enddoc %}
 <ul class="atelier-footer__links" role="list">
-{% if block.settings.menu != blank %}
-  {% for link in block.settings.menu.links %}<li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>{% endfor %}
+{% assign selected_menu = block.settings.menu %}
+{% if selected_menu != blank and selected_menu.links.size > 0 %}
+  {% for link in selected_menu.links %}
+    <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+  {% endfor %}
 {% else %}
   {% for number in (1..8) %}
     {% liquid
@@ -28,5 +31,5 @@
   {% endfor %}
 {% endif %}
 {% if block.settings.include_policies %}{% for policy in shop.policies %}{% if policy.url != blank and policy.body != blank %}<li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>{% endif %}{% endfor %}{% endif %}
-{% if block.settings.include_account and shop.customer_accounts_enabled %}<li><a href="{{ routes.account_url }}">{{ section.settings.account_label | escape }}</a></li>{% endif %}
+{% if block.settings.include_account and shop.customer_accounts_enabled %}<li><a href="{{ routes.account_url }}">{{ section.settings.account_label | default: 'Track Your Order' | escape }}</a></li>{% endif %}
 </ul>

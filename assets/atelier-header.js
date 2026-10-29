@@ -54,9 +54,15 @@ if (!customElements.get('atelier-header')) {
       on(this, 'click', event => {
         const mobile = event.target.closest('[data-open-mobile]');
         const wishlist = event.target.closest('[data-open-wishlist]');
+        const wishlistFromMenu = event.target.closest('[data-open-wishlist-from-menu]');
         const close = event.target.closest('[data-close-dialog]');
         if (mobile) openDialog(this.querySelector('[data-mobile-dialog]'), mobile);
         if (wishlist) {openDialog(this.querySelector('[data-wishlist-dialog]'), wishlist); this.renderWishlist();}
+        if (wishlistFromMenu) {
+          this.querySelector('[data-mobile-dialog]')?.close();
+          openDialog(this.querySelector('[data-wishlist-dialog]'), wishlistFromMenu);
+          this.renderWishlist();
+        }
         if (close) close.closest('dialog').close();
       });
       this.querySelectorAll('dialog').forEach(dialog => {

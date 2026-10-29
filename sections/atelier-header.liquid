@@ -45,7 +45,29 @@
 <dialog class="atelier-header__drawer atelier-header__mobile-drawer" data-mobile-dialog aria-labelledby="MobileMenuHeading-{{ section.id }}">
   <div class="atelier-header__drawer-heading"><h2 id="MobileMenuHeading-{{ section.id }}">{{ section.settings.menu_label | escape }}</h2><button type="button" class="atelier-header__action" data-close-dialog aria-label="{{ section.settings.close_label | escape }}">{% render 'header-icon', name: 'close' %}</button></div>
   <nav aria-label="{{ section.settings.menu_label | escape }}">{% for block in section.blocks %}{% assign menu_heading = block.settings.title | default:block.settings.menu.title %}{% if menu_heading == blank %}{% continue %}{% endif %}<details class="atelier-header__mobile-group"><summary>{{ menu_heading | escape }}{% render 'header-icon', name: 'chevron' %}</summary>{% render 'header-menu-links', block: block %}<a class="atelier-header__explore" href="{{ block.settings.link | default: routes.all_products_collection_url }}">{{ section.settings.explore_label | escape }}{% render 'header-icon', name: 'arrow' %}</a></details>{% endfor %}</nav>
-  {% if shop.customer_accounts_enabled %}<a class="atelier-header__account" href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a>{% endif %}
+  <div class="atelier-header__mobile-footer">
+    {% if shop.customer_accounts_enabled %}
+      <a class="atelier-header__mobile-footer-link" href="{{ routes.account_url }}">
+        <span class="atelier-header__mobile-footer-icon">{% render 'header-icon', name: 'account' %}</span>
+        <span>
+          {%- if customer -%}
+            {{ customer.first_name | default: 'Account' }}
+          {%- else -%}
+            {{ 'customer.log_in' | t | default: 'Account' }}
+          {%- endif -%}
+        </span>
+      </a>
+    {% endif %}
+    {% if section.settings.show_wishlist %}
+      <button type="button" class="atelier-header__mobile-footer-link" data-open-wishlist-from-menu aria-label="{{ section.settings.wishlist_label | default: 'Wishlist' | escape }}">
+        <span class="atelier-header__mobile-footer-icon">
+          {% render 'header-icon', name: 'heart' %}
+          <span class="atelier-header__badge" data-wishlist-count hidden>0</span>
+        </span>
+        <span>{{ section.settings.wishlist_label | default: 'Wishlist' | escape }}</span>
+      </button>
+    {% endif %}
+  </div>
 </dialog>
 <dialog class="atelier-header__drawer" data-wishlist-dialog aria-labelledby="WishlistHeading-{{ section.id }}" data-remove-label="{{ section.settings.remove_label | escape }}">
   <div class="atelier-header__drawer-heading"><h2 id="WishlistHeading-{{ section.id }}">{{ section.settings.wishlist_label | escape }}</h2><button type="button" class="atelier-header__action" data-close-dialog aria-label="{{ section.settings.close_label | escape }}">{% render 'header-icon', name: 'close' %}</button></div>
