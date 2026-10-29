@@ -11,6 +11,40 @@
   "sections": {
     "main": {
       "type": "product-editorial",
+      "blocks": {
+        "accordion_bG7qH7": {
+          "type": "accordion",
+          "settings": {
+            "heading": "What's inside",
+            "content": "{{ product.metafields.graffeine_product.whats_inside | metafield_tag }}",
+            "page": "",
+            "open": false
+          }
+        },
+        "accordion_F4UEh4": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Product features",
+            "content": "{{ product.metafields.graffeine_product.features | metafield_tag }}",
+            "page": "",
+            "open": false
+          }
+        },
+        "accordion_36en6E": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Shipping",
+            "content": "<p><strong>7–10 days</strong> from order confirmation</p>",
+            "page": "",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "accordion_bG7qH7",
+        "accordion_F4UEh4",
+        "accordion_36en6E"
+      ],
       "settings": {
         "show_arrows": false,
         "show_dots": false,
@@ -24,6 +58,7 @@
         "save_label": "SAVE",
         "show_quantity": true,
         "add_label": "Add to Cart",
+        "button_radius": 28,
         "shimmer": true,
         "dynamic_checkout": false,
         "show_delivery": false,
@@ -39,7 +74,6 @@
         "padding_bottom": 24,
         "title_size": 32,
         "mobile_title_size": 28,
-        "button_radius": 28,
         "purchase_background": "#ffffff",
         "purchase_border": "#e6d9c1",
         "purchase_radius": 26,
