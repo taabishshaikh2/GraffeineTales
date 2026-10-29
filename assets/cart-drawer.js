@@ -340,13 +340,10 @@ class CartConfetti {
         this.applyCoupon(button.dataset.cartCoupon);
       }
       else if (button.hasAttribute('data-coupon-remove')) {
-        const actual = [...new Set((this.config.discountApplications || []).filter(item => item.type === 'discount_code').map(item => item.title))];
-        const current = this.currentAppliedCoupon || actual[0] || '';
-        this.userDismissedCode = (current || '').toLowerCase();
+        this.userDismissedCode = this.activeCouponCode || 'dismissed';
         this.userDismissedSubtotal = this.getRawSubtotal();
-        this.currentAppliedCoupon = '';
-        const feedback = this.querySelector('[data-coupon-feedback]');
-        if (feedback) feedback.hidden = true;
+        this.activeCouponCode = '';
+        this.updateDiscountState();
         this.applyCoupon('');
       }
       else if (button.hasAttribute('data-cart-note-save')) this.mutate(async () => { const result = await this.request('cart/update.js', this.sectionBody({ note: this.querySelector('[data-cart-note]').value })); this.replaceContents(result); });
@@ -407,64 +404,119 @@ class CartConfetti {
         checkoutBtn.href = `${root}checkout`;
       }
     }
-    async autoApplyMilestoneCoupon() {
-      if (this.isApplyingCoupon || this.busy) return;
+    updateDiscountState() {
       const rawSubtotal = this.getRawSubtotal();
-
-      const couponCards = [...this.querySelectorAll('[data-coupon-card]')].map(card => ({
-        code: card.dataset.code?.trim(),
-        minimum: Number(card.dataset.minimum || 0)
-      })).filter(c => c.code && c.minimum > 0).sort((a, b) => b.minimum - a.minimum);
-
-      if (couponCards.length === 0) return;
-
-      // Determine highest eligible milestone coupon based on pre-discount subtotal
       let targetCode = '';
-      for (const c of couponCards) {
-        if (rawSubtotal >= c.minimum) {
-          targetCode = c.code;
-          break;
+      let discountPercent = 0;
+
+      if (rawSubtotal >= 189900) {
+        targetCode = '10';
+        discountPercent = 10;
+      } else if (rawSubtotal >= 149900) {
+        targetCode = '5';
+        discountPercent = 5;
+      }
+
+      // If user explicitly clicked Remove on this subtotal, respect user choice
+      if (this.userDismissedCode && this.userDismissedSubtotal === rawSubtotal) {
+        targetCode = '';
+        discountPercent = 0;
+      }
+
+      this.activeCouponCode = targetCode;
+      const discountAmount = discountPercent > 0 ? Math.round(rawSubtotal * (discountPercent / 100)) : 0;
+      const finalTotal = Math.max(0, rawSubtotal - discountAmount);
+
+      // 1. Update checkout button href
+      const checkoutBtn = this.querySelector('[data-cart-checkout]');
+      if (checkoutBtn) {
+        const root = this.root || window.Shopify?.routes?.root || '/';
+        if (targetCode) {
+          checkoutBtn.href = `${root}discount/${encodeURIComponent(targetCode)}?redirect=/checkout`;
+        } else {
+          checkoutBtn.href = `${root}checkout`;
         }
       }
 
-      const actualApplied = [...new Set((this.config.discountApplications || [])
-        .filter(item => item.type === 'discount_code')
-        .map(item => item.title.toLowerCase()))];
-
-      const currentCode = (this.currentAppliedCoupon || actualApplied[0] || '').trim();
-      const milestoneCodes = couponCards.map(c => c.code.toLowerCase());
-
-      // If user entered an unrelated manual promo code, preserve it
-      if (currentCode && !milestoneCodes.includes(currentCode.toLowerCase())) return;
-
-      // If user explicitly removed this coupon for this subtotal, do not auto-reapply
-      if (targetCode && this.userDismissedCode === targetCode.toLowerCase() && this.userDismissedSubtotal === rawSubtotal) {
-        return;
+      // 2. Update feedback banner
+      const feedback = this.querySelector('[data-coupon-feedback]');
+      if (feedback) {
+        if (targetCode) {
+          feedback.hidden = false;
+          const span = feedback.querySelector('span');
+          if (span) span.textContent = `${targetCode} applied (${discountPercent}% OFF)`;
+        } else {
+          feedback.hidden = true;
+        }
       }
 
-      if (targetCode) {
-        if (currentCode.toLowerCase() !== targetCode.toLowerCase()) {
-          this.isApplyingCoupon = true;
-          try {
-            await this.applyCoupon(targetCode, true);
-          } catch (e) {
-            console.warn('Auto coupon apply error:', e);
-          } finally {
-            this.isApplyingCoupon = false;
+      // 3. Update coupon cards
+      this.querySelectorAll('[data-coupon-card]').forEach(card => {
+        const cardCode = (card.dataset.code || '').trim();
+        const minimum = Number(card.dataset.minimum || 0);
+        const isLocked = rawSubtotal < minimum;
+        const isApplied = (targetCode === cardCode) && !isLocked;
+
+        card.classList.toggle('applied', isApplied);
+        card.classList.toggle('locked', isLocked);
+
+        const button = card.querySelector('[data-cart-coupon]');
+        if (button) {
+          const gap = Math.max(0, minimum - rawSubtotal);
+          if (isApplied) {
+            button.textContent = this.labels.applied_label || 'Applied';
+            button.disabled = true;
+            button.classList.remove('btn-coupon-gap-pill');
+          } else if (isLocked) {
+            button.textContent = (this.labels.locked_label || 'Add [amount]').replace('[amount]', this.money(gap));
+            button.disabled = true;
+            button.classList.add('btn-coupon-gap-pill');
+          } else {
+            button.textContent = this.labels.apply_label || 'Apply';
+            button.disabled = false;
+            button.classList.remove('btn-coupon-gap-pill');
           }
         }
-      } else {
-        // Subtotal dropped below all milestone minimums: remove any milestone coupon
-        if (currentCode && milestoneCodes.includes(currentCode.toLowerCase())) {
-          this.isApplyingCoupon = true;
-          try {
-            await this.applyCoupon('', true);
-          } catch (e) {
-            console.warn('Auto coupon remove error:', e);
-          } finally {
-            this.isApplyingCoupon = false;
+      });
+
+      // 4. Update Summary Rows and Totals
+      const summary = this.querySelector('[data-cart-summary]');
+      if (summary) {
+        let discountRow = summary.querySelector('.summary-row.milestone-discount-row');
+        if (discountAmount > 0) {
+          if (!discountRow) {
+            discountRow = document.createElement('div');
+            discountRow.className = 'summary-row savings milestone-discount-row';
+            const grandTotalRow = summary.querySelector('.grand-total-row');
+            if (grandTotalRow) summary.insertBefore(discountRow, grandTotalRow);
+            else summary.append(discountRow);
           }
+          discountRow.innerHTML = `<span>Discount (${discountPercent}% OFF)</span><span>−${this.money(discountAmount)}</span>`;
+          discountRow.hidden = false;
+        } else if (discountRow) {
+          discountRow.hidden = true;
         }
+
+        const grandTotalSpan = summary.querySelector('.grand-total-row span:last-child');
+        if (grandTotalSpan) {
+          grandTotalSpan.textContent = this.money(finalTotal);
+        }
+      }
+
+      // 5. Update bottom sticky checkout bar total
+      const bottomTotal = this.querySelector('.bottom-grand-total');
+      if (bottomTotal) {
+        bottomTotal.textContent = this.money(finalTotal);
+      }
+
+      // 6. Sync with Shopify Cart API in background quietly
+      if (this.lastSyncedDiscountCode !== targetCode) {
+        this.lastSyncedDiscountCode = targetCode;
+        fetch((this.root || '/') + 'cart/update.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ discount: targetCode || '' })
+        }).catch(() => {});
       }
     }
     openSheet(name, trigger) {
@@ -509,7 +561,7 @@ class CartConfetti {
       this.decorateMilestones();
       this.decorateCoupons();
       this.updateCheckoutUrl(this.currentAppliedCoupon || (this.config.discountApplications?.find(d => d.type === 'discount_code')?.title) || '');
-      this.autoApplyMilestoneCoupon();
+      this.updateDiscountState();
       const addon = this.querySelector('[data-addon-copy]');
       if (addon) addon.textContent = (this.labels.addon_copy || '').replace('[product]', addon.dataset.productTitle).replace('[price]', this.money(Number(addon.dataset.addonPrice)));
       clearInterval(this.timer); this.updateDeadline();
