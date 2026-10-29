@@ -2026,15 +2026,29 @@ cart-drawer.atelier-cart .m-node-col{width:75px}
 /* Keep reward nodes and their monetary progress on the same rail. */
 cart-drawer.atelier-cart .milestone-caret-down{display:none!important}
 cart-drawer.atelier-cart .milestone-track-section{padding:42px 14px 48px}
-cart-drawer.atelier-cart .milestone-track-line{height:6px;margin-inline:25px;overflow:hidden;isolation:isolate}
-cart-drawer.atelier-cart .milestone-track-progress{
-  height: 6px;
-  background: #653f29 !important;
-  border-radius: 99px;
-  width: 0%;
-  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+cart-drawer.atelier-cart .milestone-track-line{
+  position: relative !important;
+  height: 6px !important;
+  background: #E8E4DA !important;
+  border-radius: 99px !important;
+  margin-inline: 25px !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
 }
-cart-drawer.atelier-cart .milestone-nodes-row{top:45px;left:39px;right:39px;transform:none;height:0}
+cart-drawer.atelier-cart .milestone-track-progress{
+  position: absolute !important;
+  inset: 0 auto 0 0 !important;
+  display: block !important;
+  height: 100% !important;
+  background: #653f29 !important;
+  background-color: #653f29 !important;
+  border-radius: 99px !important;
+  width: var(--milestone-progress, 0%) !important;
+  min-width: 0 !important;
+  z-index: 2 !important;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+cart-drawer.atelier-cart .milestone-nodes-row{top:45px;left:39px;right:39px;transform:none;height:0;z-index:3}
 cart-drawer.atelier-cart .m-node-col{top:0;width:100px;transform:translate(-50%,-50%)}
 cart-drawer.atelier-cart .m-title{width:110px;max-width:110px;white-space:normal;line-height:1.3;top:calc(100% + 9px);font-family:var(--font-main);font-size:11.2px}
 cart-drawer.atelier-cart .m-threshold{font-family:var(--font-main)}

@@ -294,6 +294,10 @@ class CartConfetti {
       if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') publish(PUB_SUB_EVENTS.cartUpdate, { source: 'side-cart', cartData: this.cart });
     }
     async change(key, quantity) {
+      if (!key) {
+        await this.reconcile();
+        return;
+      }
       const result = await this.request('cart/change.js', this.sectionBody({ id: key, quantity }));
       if (!this.replaceContents(result)) await this.reconcile();
     }
@@ -307,19 +311,14 @@ class CartConfetti {
       }
     }
     async switchVariant(key, variantId) {
+      if (!key || !variantId) return;
       const item = this.cart.items?.find(line => line.key === key);
       if (!item || Number(variantId) === item.variant_id) return;
       const extra = { properties: item.properties || {} };
       if (item.selling_plan_allocation) extra.selling_plan = item.selling_plan_allocation.selling_plan.id;
-      await this.request('cart/add.js', { items: [{ id: Number(variantId), quantity: item.quantity, ...extra }] });
-      try {
-        // Automatic discounts can change line keys after an add. Resolve the original line again.
-        const fresh = await this.request('cart.js');
-        const properties = value => JSON.stringify(Object.entries(value || {}).sort(([a], [b]) => a.localeCompare(b)));
-        const previous = fresh.items.find(line => line.variant_id === item.variant_id && properties(line.properties) === properties(item.properties) && line.selling_plan_allocation?.selling_plan.id === item.selling_plan_allocation?.selling_plan.id);
-        if (previous) await this.change(previous.key, 0); else await this.reconcile();
-      }
-      catch { throw new Error(this.labels.variant_partial_error); }
+      await this.request('cart/change.js', { id: key, quantity: 0 });
+      const result = await this.request('cart/add.js', this.sectionBody({ items: [{ id: Number(variantId), quantity: item.quantity, ...extra }] }));
+      if (!this.replaceContents(result)) await this.reconcile();
     }
     onClick(event) {
       const button = event.target.closest('button,a,[data-cart-close]');

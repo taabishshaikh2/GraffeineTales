@@ -190,7 +190,7 @@
    {% if section.settings.show_delivery %}
     <div class="atelier-pdp__delivery">{% render 'product-detail-icon', name: 'truck' %}<div><label for="Pincode-{{ section.id }}">{{ section.settings.delivery_heading | escape }}{% if section.settings.delivery_extra != blank %}<span>{{ section.settings.delivery_extra | escape }}</span>{% endif %}</label><div class="atelier-pdp__pincode"><input id="Pincode-{{ section.id }}" data-pincode inputmode="numeric" autocomplete="postal-code" maxlength="6" pattern="[1-9][0-9]{5}" placeholder="{{ section.settings.pincode_placeholder | escape }}"><button type="button" data-check-pincode>{{ section.settings.check_label | escape }}</button></div><p data-delivery-result role="status">{{ section.settings.delivery_note | escape }}</p></div></div>
    {% endif %}
-   {% render 'product-information', product: product, inside_heading: section.settings.inside_heading, features_heading: section.settings.features_heading, shipping_heading: section.settings.shipping_heading %}
+   {% render 'product-information', product: product, section: section, inside_heading: section.settings.inside_heading, features_heading: section.settings.features_heading, shipping_heading: section.settings.shipping_heading %}
   </div>
  </div>
  <p class="visually-hidden" data-showcase-status role="status" aria-live="polite"></p>
@@ -724,6 +724,36 @@
     }
   ],
   "blocks": [
+    {
+      "type": "accordion",
+      "name": "Accordion / Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Details",
+          "info": "Enter heading or connect a dynamic source."
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content (connect metafield)",
+          "info": "Click the dynamic source icon to connect any product metafield."
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Or page content"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
     {
       "type": "option_detail",
       "name": "Option appearance",

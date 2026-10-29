@@ -8,8 +8,230 @@
   endfor
 %}
 {% if related_count > 0 %}
-  {{ 'product-recommendations.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'atelier-related-products.js' | asset_url }}" defer></script>
+  {% style %}
+    .atelier-related {
+      display: block;
+      background: var(--related-background, #F8F5ED);
+      color: var(--related-text, #242424);
+      padding: 0 24px var(--related-bottom, 44px);
+      font-family: Inter, sans-serif;
+    }
+    .atelier-related__inner {
+      max-width: var(--related-width, 1400px);
+      margin: auto;
+      padding: var(--related-top, 44px) 36px 0;
+    }
+    .atelier-related__inner--divider {
+      border-top: 1px solid var(--related-border, #E6D9C1);
+    }
+    .atelier-related__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    .atelier-related__header h2 {
+      margin: 0;
+      font: 400 var(--related-heading, 34px)/1.2 'DM Serif Display', Georgia, serif;
+      letter-spacing: -0.02em;
+    }
+    .atelier-related__header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .atelier-related__view-all {
+      font: 500 12px/1.6 Inter, sans-serif;
+      letter-spacing: 0.04em;
+      color: #4D351D;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .atelier-related__view-all:hover {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    .atelier-related__arrows {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .atelier-related__arrow {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--related-border, #E6D9C1);
+      border-radius: 50%;
+      background: #FFFFFF;
+      color: #363638;
+      cursor: pointer;
+      padding: 0;
+      transition: all 180ms ease;
+    }
+    .atelier-related__arrow:hover:not(:disabled) {
+      background: #F8F5ED;
+      border-color: #653f29;
+      color: #653f29;
+      transform: scale(1.05);
+    }
+    .atelier-related__arrow svg {
+      width: 15px;
+      height: 15px;
+    }
+    .atelier-related__arrow:disabled {
+      opacity: 0.3;
+      cursor: default;
+      pointer-events: none;
+    }
+    .atelier-related__grid {
+      display: flex;
+      gap: var(--related-gap, 28px);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 4px 2px 14px;
+      cursor: grab;
+    }
+    .atelier-related__grid.is-dragging {
+      cursor: grabbing;
+      scroll-snap-type: none;
+      scroll-behavior: auto;
+      user-select: none;
+    }
+    .atelier-related__grid::-webkit-scrollbar {
+      display: none;
+    }
+    .atelier-related-card {
+      box-sizing: border-box;
+      min-width: 0;
+      flex: 0 0 calc((100% - 3 * var(--related-gap, 28px)) / 4);
+      display: flex;
+      flex-direction: column;
+      background: var(--related-card, #FFFFFF);
+      border: 1px solid var(--related-border, #E6D9C1);
+      border-radius: var(--related-radius, 18px);
+      overflow: hidden;
+      box-shadow: 0 1px 2px #4d351d08;
+      scroll-snap-align: start;
+    }
+    .atelier-related-card__image {
+      display: block;
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: var(--related-background, #F8F5ED);
+    }
+    .atelier-related-card__image img,
+    .atelier-related-card__image svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: var(--related-fit, cover);
+      transition: transform 250ms cubic-bezier(0.2, 0.6, 0.3, 1);
+    }
+    .atelier-related-card__image:hover img {
+      transform: scale(1.025);
+    }
+    .atelier-related-card__body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 18px 18px 17px;
+    }
+    .atelier-related-card__category {
+      color: var(--related-accent, #8A6B40);
+      font: 500 10px/1.4 Inter, sans-serif;
+      letter-spacing: 0.065em;
+      text-transform: uppercase;
+      margin: 0 0 6px;
+    }
+    .atelier-related-card h3 {
+      font: 500 12px/1.4 Inter, sans-serif;
+      letter-spacing: 0.01em;
+      margin: 0 0 8px;
+      min-height: 2.8em;
+    }
+    .atelier-related-card h3 a {
+      color: var(--related-text, #242424);
+      text-decoration: none;
+    }
+    .atelier-related-card__prices {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+      font: 500 12px/1.5 Inter, sans-serif;
+      margin-bottom: 18px;
+    }
+    .atelier-related-card__prices s {
+      font-size: 9px;
+      font-weight: 400;
+      color: #8B8580;
+    }
+    .atelier-related-card__button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      border: 1px solid var(--related-border, #E6D9C1);
+      border-radius: 13px;
+      background: var(--related-button, #F8F5ED);
+      color: var(--related-text, #242424);
+      text-decoration: none;
+      font: 500 12px/1.4 Inter, sans-serif;
+      padding: 8px 12px;
+      margin-top: auto;
+      transition: background 180ms ease, border-color 180ms ease;
+    }
+    .atelier-related-card__button:hover {
+      background: var(--related-border, #E6D9C1);
+      border-color: #b9a383;
+    }
+    @media (min-width: 750px) and (max-width: 989px) {
+      .atelier-related__inner {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .atelier-related-card {
+        flex: 0 0 calc((100% - 2 * var(--related-gap, 28px)) / 2.5);
+      }
+    }
+    @media (max-width: 749px) {
+      .atelier-related {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .atelier-related__inner {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .atelier-related__header {
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .atelier-related__header h2 {
+        font-size: 26px;
+      }
+      .atelier-related__view-all {
+        font-size: 11px;
+      }
+      .atelier-related__grid {
+        margin: 0 -16px;
+        padding: 0 16px 8px;
+      }
+      .atelier-related-card {
+        flex: 0 0 76%;
+        max-width: 290px;
+      }
+      .atelier-related-card__button {
+        min-height: 44px;
+      }
+    }
+  {% endstyle %}
+
   <atelier-related-carousel class="atelier-related" style="--related-width:{{ section.settings.width }}px;--related-gap:{{ section.settings.gap }}px;--related-radius:{{ section.settings.radius }}px;--related-heading:{{ section.settings.heading_size }}px;--related-top:{{ section.settings.padding_top }}px;--related-bottom:{{ section.settings.padding_bottom }}px;--related-background:{{ section.settings.background }};--related-card:{{ section.settings.card_background }};--related-text:{{ section.settings.text }};--related-accent:{{ section.settings.accent }};--related-border:{{ section.settings.border }};--related-button:{{ section.settings.button_background }};--related-fit:{{ section.settings.image_fit }}">
     <div class="atelier-related__inner{% if section.settings.show_divider %} atelier-related__inner--divider{% endif %}">
       <header class="atelier-related__header">
@@ -36,7 +258,7 @@
             <article class="atelier-related-card">
               <a class="atelier-related-card__image" href="{{ related_product.url }}" aria-label="{{ related_product.title | escape }}">
                 {% if related_product.featured_image %}
-                  {{ related_product.featured_image | image_url: width: 900 | image_tag: widths: '240,360,540,720,900', sizes: '(min-width: 990px) 25vw, (min-width: 750px) 45vw, 80vw', loading: 'lazy' }}
+                  {{ related_product.featured_image | image_url: width: 720 | image_tag: widths: '240,360,540,720', sizes: '(min-width: 990px) 25vw, (min-width: 750px) 40vw, 75vw', loading: 'lazy' }}
                 {% else %}
                   {{ 'product-1' | placeholder_svg_tag }}
                 {% endif %}
@@ -74,6 +296,72 @@
       </div>
     </div>
   </atelier-related-carousel>
+
+  <script>
+    if (!customElements.get('atelier-related-carousel')) {
+      customElements.define('atelier-related-carousel', class extends HTMLElement {
+        connectedCallback() {
+          this.track = this.querySelector('[data-related-track]');
+          if (!this.track) return;
+          this.prevBtn = this.querySelector('[data-related-direction="-1"]');
+          this.nextBtn = this.querySelector('[data-related-direction="1"]');
+
+          const update = () => {
+            const max = Math.max(0, this.track.scrollWidth - this.track.clientWidth);
+            if (max <= 5) {
+              if (this.prevBtn) this.prevBtn.style.visibility = 'hidden';
+              if (this.nextBtn) this.nextBtn.style.visibility = 'hidden';
+              return;
+            }
+            if (this.prevBtn) {
+              this.prevBtn.style.visibility = 'visible';
+              this.prevBtn.disabled = this.track.scrollLeft <= 4;
+            }
+            if (this.nextBtn) {
+              this.nextBtn.style.visibility = 'visible';
+              this.nextBtn.disabled = this.track.scrollLeft >= max - 4;
+            }
+          };
+
+          this.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-related-direction]');
+            if (!btn) return;
+            const dir = Number(btn.dataset.relatedDirection);
+            const first = this.track.querySelector('.atelier-related-card');
+            const w = first ? first.getBoundingClientRect().width + 28 : 280;
+            this.track.scrollBy({ left: dir * w, behavior: 'smooth' });
+          });
+
+          let down = false, sx = 0, sl = 0;
+          this.track.addEventListener('mousedown', (e) => {
+            if (e.target.closest('a, button')) return;
+            down = true;
+            sx = e.pageX - this.track.offsetLeft;
+            sl = this.track.scrollLeft;
+          });
+          window.addEventListener('mousemove', (e) => {
+            if (!down) return;
+            const x = e.pageX - this.track.offsetLeft;
+            const walk = (x - sx);
+            if (Math.abs(walk) > 4) {
+              this.track.classList.add('is-dragging');
+              e.preventDefault();
+              this.track.scrollLeft = sl - walk;
+            }
+          });
+          window.addEventListener('mouseup', () => {
+            down = false;
+            this.track.classList.remove('is-dragging');
+          });
+
+          this.track.addEventListener('scroll', update, { passive: true });
+          new ResizeObserver(update).observe(this.track);
+          setTimeout(update, 100);
+          update();
+        }
+      });
+    }
+  </script>
 {% else %}
   {% style %}#shopify-section-{{ section.id }}{display:none}{% endstyle %}
 {% endif %}
