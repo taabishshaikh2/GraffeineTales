@@ -115,19 +115,13 @@ class CartConfetti {
 
   class CartDrawer extends HTMLElement {
     getRawSubtotal() {
-      if (this.cart.original_total_price && this.cart.original_total_price > 0) {
-        return this.cart.original_total_price;
-      }
-      if (this.cart.items_subtotal_price && this.cart.items_subtotal_price > 0) {
-        return this.cart.items_subtotal_price;
-      }
       if (this.cart.items && this.cart.items.length) {
         return this.cart.items.reduce((sum, item) => {
           const unit = item.original_price || item.price || 0;
           return sum + (unit * item.quantity);
         }, 0);
       }
-      return this.cart.total_price || 0;
+      return this.cart.original_total_price || this.cart.total_price || 0;
     }
     enableDragScroll(container) {
       if (!container || container.dataset.dragScrollInit) return;
@@ -293,32 +287,29 @@ class CartConfetti {
       document.dispatchEvent(new CustomEvent('atelier:cart:update', { detail: { cart: this.cart } }));
       if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') publish(PUB_SUB_EVENTS.cartUpdate, { source: 'side-cart', cartData: this.cart });
     }
-    async change(key, quantity) {
-      if (!key) {
-        await this.reconcile();
-        return;
+    async change(key, quantity, lineIndex) {
+      let targetLine = Number(lineIndex);
+      if (!targetLine && key && this.cart.items) {
+        const idx = this.cart.items.findIndex(item => item.key === key);
+        if (idx !== -1) targetLine = idx + 1;
       }
-      const result = await this.request('cart/change.js', this.sectionBody({ id: key, quantity }));
-      if (!this.replaceContents(result)) await this.reconcile();
-    }
-    async add(id, quantity = 1, extra = {}) {
-      const result = await this.request('cart/add.js', this.sectionBody({ items: [{ id: Number(id), quantity, ...extra }] }));
-      if (!this.replaceContents(result)) await this.reconcile();
-      const added = [...this.querySelectorAll('[data-cart-add]')].find(button => Number(button.dataset.cartAdd) === Number(id));
-      if (added) {
-        added.classList.add('rapid-added'); added.textContent = this.labels.added_label;
-        setTimeout(() => { if (added.isConnected) { added.classList.remove('rapid-added'); added.textContent = this.labels.add_label; } }, 1400);
+
+      const body = targetLine ? { line: targetLine, quantity } : { id: key, quantity };
+      try {
+        const result = await this.request('cart/change.js', this.sectionBody(body));
+        if (!this.replaceContents(result)) await this.reconcile();
+      } catch (err) {
+        if (body.line && key) {
+          const result = await this.request('cart/change.js', this.sectionBody({ id: key, quantity }));
+          if (!this.replaceContents(result)) await this.reconcile();
+        } else if (body.id && targetLine) {
+          const result = await this.request('cart/change.js', this.sectionBody({ line: targetLine, quantity }));
+          if (!this.replaceContents(result)) await this.reconcile();
+        } else {
+          await this.reconcile();
+          throw err;
+        }
       }
-    }
-    async switchVariant(key, variantId) {
-      if (!key || !variantId) return;
-      const item = this.cart.items?.find(line => line.key === key);
-      if (!item || Number(variantId) === item.variant_id) return;
-      const extra = { properties: item.properties || {} };
-      if (item.selling_plan_allocation) extra.selling_plan = item.selling_plan_allocation.selling_plan.id;
-      await this.request('cart/change.js', { id: key, quantity: 0 });
-      const result = await this.request('cart/add.js', this.sectionBody({ items: [{ id: Number(variantId), quantity: item.quantity, ...extra }] }));
-      if (!this.replaceContents(result)) await this.reconcile();
     }
     onClick(event) {
       const button = event.target.closest('button,a,[data-cart-close]');
@@ -326,7 +317,7 @@ class CartConfetti {
       if (button.hasAttribute('data-cart-close')) { event.preventDefault(); this.close(); }
       else if (button.hasAttribute('data-cart-sheet-close')) this.closeSheet();
       else if (button.dataset.cartSheetOpen) this.openSheet(button.dataset.cartSheetOpen, button);
-      else if (button.hasAttribute('data-cart-quantity')) this.mutate(() => this.change(button.dataset.lineKey, Number(button.dataset.cartQuantity)));
+      else if (button.hasAttribute('data-cart-quantity')) { const card = button.closest('.cart-item-card'); const lineIndex = button.dataset.lineIndex || card?.dataset.lineIndex; this.mutate(() => this.change(button.dataset.lineKey, Number(button.dataset.cartQuantity), lineIndex)); }
       else if (button.dataset.cartAdd) this.mutate(() => this.add(button.dataset.cartAdd));
       else if (button.dataset.cartChoose) this.chooseProduct(button.dataset.cartChoose, button);
       else if (button.dataset.cartCoupon) {
@@ -364,9 +355,12 @@ class CartConfetti {
       if (input.hasAttribute('data-cart-quantity-input')) {
         const quantity = Number(input.value), min = Number(input.min || 1), step = Number(input.step || 1), max = Number(input.max || Infinity);
         if (!Number.isInteger(quantity) || quantity < min || quantity > max || (quantity - min) % step) { input.reportValidity(); return; }
-        this.mutate(() => this.change(input.dataset.lineKey, quantity));
-      } else if (input.hasAttribute('data-cart-variant')) this.mutate(() => this.switchVariant(input.dataset.lineKey, input.value));
-      else if (input.hasAttribute('data-cart-addon')) {
+        const card = input.closest('.cart-item-card'); const lineIndex = input.dataset.lineIndex || card?.dataset.lineIndex;
+        this.mutate(() => this.change(input.dataset.lineKey, quantity, lineIndex));
+      } else if (input.hasAttribute('data-cart-variant')) {
+        const card = input.closest('.cart-item-card'); const lineIndex = input.dataset.lineIndex || card?.dataset.lineIndex;
+        this.mutate(() => this.switchVariant(input.dataset.lineKey, input.value, lineIndex));
+      } else if (input.hasAttribute('data-cart-addon')) {
         const checked = input.checked;
         this.mutate(async () => {
           if (checked) await this.add(input.dataset.variant, 1, { properties: { _atelier_addon: 'true' } });
