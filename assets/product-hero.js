@@ -90,7 +90,7 @@ if(!customElements.get('product-hero')){
    const compare=this.querySelector('[data-pdp-compare]');const save=this.querySelector('[data-pdp-saving]');
    const discounted=variant.compare_at_price>variant.price;compare.hidden=!discounted||this.dataset.showCompare==='false';save.hidden=!discounted||this.dataset.showSaving==='false';
    compare.textContent=discounted?this.money(variant.compare_at_price):'';
-   save.textContent=discounted?this.delivery.save+' '+Math.round((variant.compare_at_price-variant.price)*100/variant.compare_at_price)+'%':'';
+   save.textContent=discounted?(this.delivery.save||'SAVE')+' '+Math.round((variant.compare_at_price-variant.price)*100/variant.compare_at_price)+'%':'';
    const quantity=this.form.elements.quantity;const rules=variant.quantity_rule||{min:1,increment:1};quantity.min=rules.min||1;quantity.step=rules.increment||1;if(rules.max)quantity.max=rules.max;else quantity.removeAttribute('max');quantity.value=rules.min||1;
    const url=new URL(location.href);url.searchParams.set('variant',variant.id);history.replaceState({},'',url);
    this.filterVariantGallery(variant);

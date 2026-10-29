@@ -38,51 +38,141 @@
 
   </div>
   <div class="atelier-pdp__purchase{% if section.settings.purchase_shadow %} atelier-pdp__purchase--shadow{% endif %}">
-   {% if product_content.category_label.value != blank %}<p class="atelier-pdp__eyebrow">{{ product_content.category_label.value | escape }}</p>{% endif %}
+   {% assign category_text = product_content.category_label.value | default: product.type %}{% if category_text != blank %}<p class="atelier-pdp__eyebrow">{{ category_text | escape }}</p>{% endif %}
    <h1>{{ display_title | escape }}</h1>
    {% assign review_rating = product.metafields.reviews.rating.value %}{% assign review_count = product.metafields.reviews.rating_count.value %}
    {% if section.settings.show_product_rating and review_rating != blank %}<div class="atelier-pdp__rating"><span role="img" aria-label="{{ review_rating.rating }} / {{ review_rating.scale_max }}"><svg width="76" height="14" viewBox="0 0 100 18" aria-hidden="true"><defs><linearGradient id="RatingFill-{{ section.id }}"><stop offset="{{ review_rating.rating | times: 100.0 | divided_by: review_rating.scale_max }}%" stop-color="#A17D36"/><stop offset="{{ review_rating.rating | times: 100.0 | divided_by: review_rating.scale_max }}%" stop-color="#D8D0C5"/></linearGradient></defs><path fill="url(#RatingFill-{{ section.id }})" d="m9 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L9 14.3l-5.6 2.9 1.1-6.2L0 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L20 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L40 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L60 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L80 6.6l6.2-.9Z"/></svg></span>{% if review_count != blank %}<span>({{ review_count }} {{ section.settings.review_label | escape }})</span>{% endif %}</div>{% endif %}
    <div class="atelier-pdp__price-block"><div class="atelier-pdp__prices" aria-live="polite"><strong data-pdp-price>{% if section.settings.compact_money %}{{ section.settings.currency_symbol | escape }}{{ current_variant.price | money_without_currency | remove: '.00' }}{% else %}{{ current_variant.price | money }}{% endif %}</strong><s data-pdp-compare{% unless current_variant.compare_at_price > current_variant.price and section.settings.show_compare %} hidden{% endunless %}>{% if section.settings.compact_money %}{{ section.settings.currency_symbol | escape }}{{ current_variant.compare_at_price | money_without_currency | remove: '.00' }}{% else %}{{ current_variant.compare_at_price | money }}{% endif %}</s><span data-pdp-saving{% unless current_variant.compare_at_price > current_variant.price and section.settings.show_saving %} hidden{% endunless %}>{% if current_variant.compare_at_price > current_variant.price %}{{ section.settings.save_label | escape }} {{ current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round }}%{% endif %}</span></div>
-   {% if product_content.price_note.value != blank %}<p class="atelier-pdp__price-note">{{ product_content.price_note.value | escape }}</p>{% endif %}
+   {% assign price_note_text = product_content.price_note.value | default: "Inclusive of all domestic taxes • Custom studio box included" %}<p class="atelier-pdp__price-note">{{ price_note_text | escape }}</p>
    </div>
-   {% if product_content.short_description.value != blank %}<div class="atelier-pdp__description">{{ product_content.short_description | metafield_tag }}</div>{% endif %}
+   {% if product_content.short_description.value != blank %}<div class="atelier-pdp__description">{{ product_content.short_description | metafield_tag }}</div>{% elsif product.description != blank %}<div class="atelier-pdp__description">{{ product.description }}</div>{% endif %}
    {% if product_content.key_specifications.value != blank %}<div class="atelier-pdp__key-specs"><h2>{{ section.settings.specs_heading | escape }}</h2><ul>{% for specification in product_content.key_specifications.value %}<li>{{ specification | escape }}</li>{% endfor %}</ul></div>{% endif %}
    {% form 'product', product, id: product_form_id, data-atelier-product-form: '' %}
     <input type="hidden" name="id" value="{{ current_variant.id }}">
     {% unless product.has_only_default_variant %}
      {% for option in product.options_with_values %}
       {% liquid
- assign option_index = forloop.index0
- assign use_swatches = false
- if option.name == section.settings.swatch_option_name
-  assign use_swatches = true
- endif
-%}
+        assign option_index = forloop.index0
+        assign opt_name_down = option.name | downcase
+        assign use_swatches = false
+        if option.name == section.settings.swatch_option_name or opt_name_down contains 'color' or opt_name_down contains 'colour' or opt_name_down contains 'tone' or opt_name_down contains 'cover' or opt_name_down contains 'shade' or opt_name_down contains 'swatch' or opt_name_down contains 'material'
+          assign use_swatches = true
+        endif
+      %}
       <fieldset class="atelier-pdp__option{% if use_swatches %} atelier-pdp__option--tones{% endif %}" data-option-index="{{ option_index }}">
-       <legend>{{ option.name | escape }} <span data-selected-option>{{ current_variant.options[option_index] | escape }}</span></legend>
+       <legend class="atelier-pdp__legend">
+         <span class="atelier-pdp__legend-label">{{ option.name | escape }}:</span>
+         <span class="atelier-pdp__legend-value" data-selected-option>{{ current_variant.options[option_index] | escape }}</span>
+       </legend>
        <div class="atelier-pdp__option-values">
        {% for value in option.values %}
         {% liquid
          assign option_text = value.name | default: value
-         assign swatch_color = section.settings.coffee
+         assign val_down = option_text | downcase
+         assign swatch_color = ''
          assign swatch_image = blank
          assign option_note = ''
          assign option_badge = ''
          assign option_icon = 'book'
+
+         # 1. Native Shopify Swatches
+         if value.swatch.color
+           assign swatch_color = value.swatch.color
+         endif
+         if value.swatch.image
+           assign swatch_image = value.swatch.image
+         endif
+
+         # 2. Dynamic Color Mapping based on name
+         if swatch_color == blank and swatch_image == blank
+           if val_down contains 'sage' or val_down contains 'herbarium' or val_down contains 'olive' or val_down contains 'forest'
+             assign swatch_color = '#2D6A4F'
+           elsif val_down contains 'terracotta' or val_down contains 'clay' or val_down contains 'rust' or val_down contains 'bloom'
+             assign swatch_color = '#C85A32'
+           elsif val_down contains 'espresso' or val_down contains 'midnight' or val_down contains 'charcoal' or val_down contains 'roast' or val_down contains 'black'
+             assign swatch_color = '#363638'
+           elsif val_down contains 'sand' or val_down contains 'cream' or val_down contains 'oat' or val_down contains 'linen' or val_down contains 'natural'
+             assign swatch_color = '#C6B58E'
+           elsif val_down contains 'indigo' or val_down contains 'celestial' or val_down contains 'navy' or val_down contains 'blue'
+             assign swatch_color = '#303D67'
+           elsif val_down contains 'gold' or val_down contains 'mustard' or val_down contains 'amber'
+             assign swatch_color = '#D4AF37'
+           elsif val_down contains 'blush' or val_down contains 'rose' or val_down contains 'pink'
+             assign swatch_color = '#DDA7A5'
+           elsif val_down contains 'white' or val_down contains 'ivory'
+             assign swatch_color = '#F8F5ED'
+           elsif val_down contains 'brown' or val_down contains 'coffee'
+             assign swatch_color = '#4D351D'
+           elsif val_down contains 'teal' or val_down contains 'emerald'
+             assign swatch_color = '#008080'
+           elsif val_down contains 'grey' or val_down contains 'gray' or val_down contains 'silver'
+             assign swatch_color = '#8C8580'
+           endif
+         endif
+
+         # 3. Dynamic subtext & icon for layout / format options
+         if val_down contains 'calendar' or val_down contains 'dated' or val_down contains 'year' or val_down contains '2026' or val_down contains '2027' or val_down contains 'month'
+           assign option_icon = 'calendar'
+           assign option_note = 'Jan – Dec Calendar'
+         elsif val_down contains 'undated' or val_down contains 'journal' or val_down contains 'book' or val_down contains 'page' or val_down contains 'note'
+           assign option_icon = 'book'
+           assign option_note = 'Start Anytime • 0 Waste'
+         endif
+
+         # 4. Parse title and subtext if separated by dash or bullet
+         assign display_main = option_text
+         if option_text contains ' - '
+           assign split_parts = option_text | split: ' - '
+           assign display_main = split_parts[0]
+           assign option_note = split_parts[1]
+         elsif option_text contains ' • '
+           assign split_parts = option_text | split: ' • '
+           assign display_main = split_parts[0]
+           assign option_note = split_parts[1]
+         endif
+
+         # 5. Optional block overrides
          for option_block in section.blocks
-          if option_block.type == 'option_detail' and option_block.settings.value == option_text and option_block.settings.enabled != false
-           assign swatch_color = option_block.settings.color
-           assign swatch_image = option_block.settings.image
-           assign option_note = option_block.settings.note
-           assign option_badge = option_block.settings.badge
-           assign option_icon = option_block.settings.icon
-          endif
+           if option_block.type == 'option_detail' and option_block.settings.value == option_text and option_block.settings.enabled != false
+             if option_block.settings.color != blank
+               assign swatch_color = option_block.settings.color
+             endif
+             if option_block.settings.image != blank
+               assign swatch_image = option_block.settings.image
+             endif
+             if option_block.settings.note != blank
+               assign option_note = option_block.settings.note
+             endif
+             if option_block.settings.badge != blank
+               assign option_badge = option_block.settings.badge
+             endif
+             if option_block.settings.icon != blank
+               assign option_icon = option_block.settings.icon
+             endif
+           endif
          endfor
+
+         # 6. Fallback swatch color
+         if swatch_color == blank
+           assign swatch_color = section.settings.coffee | default: '#4D351D'
+         endif
         %}
         <label class="atelier-pdp__choice" style="--swatch:{{ swatch_color }}"{% if value.swatch.color %} data-native-swatch{% endif %}>
          <input type="radio" name="option-{{ option.position }}" value="{{ option_text | escape }}"{% if current_variant.options[option_index] == option_text %} checked{% endif %}>
-         {% if use_swatches %}<span class="atelier-pdp__swatch" style="{% if swatch_image != blank %}background-image:url({{ swatch_image | image_url: width: 120 }});{% endif %}{% if value.swatch.color %}--swatch:{{ value.swatch.color }};{% endif %}{% if value.swatch.image %}background-image:url({{ value.swatch.image | image_url: width: 120 }});{% endif %}">{% render 'product-detail-icon', name: 'check' %}</span><span class="visually-hidden">{{ option_text | escape }}</span>
-         {% else %}<span class="atelier-pdp__layout-icon">{% render 'product-detail-icon', name: option_icon %}</span><span class="atelier-pdp__choice-copy"><strong>{{ option_text | escape }}</strong>{% if option_note != blank %}<small>{{ option_note | escape }}</small>{% endif %}{% if option_badge != blank %}<em>{{ option_badge | escape }}</em>{% endif %}</span><span class="atelier-pdp__selected-check">{% render 'product-detail-icon', name: 'check' %}</span>{% endif %}
+         {% if use_swatches %}
+           <span class="atelier-pdp__swatch" style="{% if swatch_image != blank %}background-image:url({{ swatch_image | image_url: width: 120 }});{% endif %}{% if value.swatch.color %}--swatch:{{ value.swatch.color }};{% endif %}{% if value.swatch.image %}background-image:url({{ value.swatch.image | image_url: width: 120 }});{% endif %}">
+             {% render 'product-detail-icon', name: 'check' %}
+           </span>
+           <span class="visually-hidden">{{ option_text | escape }}</span>
+         {% else %}
+           <span class="atelier-pdp__layout-icon">{% render 'product-detail-icon', name: option_icon %}</span>
+           <span class="atelier-pdp__choice-copy">
+             <strong>{{ display_main | escape }}</strong>
+             {% if option_note != blank %}<small>{{ option_note | escape }}</small>{% endif %}
+             {% if option_badge != blank %}<em>{{ option_badge | escape }}</em>{% endif %}
+           </span>
+           <span class="atelier-pdp__selected-check">{% render 'product-detail-icon', name: 'check' %}</span>
+         {% endif %}
         </label>
        {% endfor %}
        </div>
