@@ -1512,5 +1512,29 @@
         "default": "Chat with us"
       }
     ]
+  },
+  {
+    "name": "Cart Payment Icons",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_show_payment_icons",
+        "label": "Show payment icons in cart",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_payment_icons",
+        "label": "Payment icons list (comma-separated)",
+        "default": "visa,master,upi,rupay",
+        "info": "Enter comma-separated icon codes: visa, master, upi, rupay, paytm, gpay, phonepe, apple_pay"
+      },
+      {
+        "type": "text",
+        "id": "cart_secure_label",
+        "label": "Security badge label",
+        "default": "100% Secured Payments"
+      }
+    ]
   }
 ]

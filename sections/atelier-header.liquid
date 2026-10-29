@@ -1,6 +1,6 @@
 {{ 'atelier-header.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'atelier-header.js' | asset_url }}" defer></script>
-<atelier-header class="atelier-header" data-sticky="{{ section.settings.sticky }}" style="--header-background:{{ section.settings.background }};--header-text:{{ section.settings.text }};--header-accent:{{ section.settings.accent }};--header-logo-height:{{ section.settings.logo_height }}px;--header-mobile-logo-height:{{ section.settings.mobile_logo_height }}px;--header-desktop-height:{{ section.settings.height }}px;--header-mobile-height:{{ section.settings.mobile_height }}px;--header-width:{{ section.settings.width }}px">
+<atelier-header class="atelier-header" data-sticky="{{ section.settings.sticky }}" style="--header-background:{{ section.settings.background }};--header-text:{{ section.settings.text }};--header-accent:{{ section.settings.accent }};--header-logo-height:{{ section.settings.logo_height }}px;--header-mobile-logo-height:{{ section.settings.mobile_logo_height }}px;--header-desktop-height:{{ section.settings.height }}px;--header-mobile-height:{{ section.settings.mobile_height }}px;--header-width:{{ section.settings.width }}px;--header-menu-size:{{ section.settings.menu_font_size | default: 14 }}px;--header-menu-weight:{{ section.settings.menu_font_weight | default: 500 }};--header-menu-transform:{{ section.settings.menu_text_transform | default: 'none' }}">
 <header class="atelier-header__bar" role="banner">
   <div class="atelier-header__inner">
     <button type="button" class="atelier-header__action atelier-header__hamburger" data-open-mobile aria-label="Open navigation menu" aria-haspopup="dialog">{% render 'header-icon', name: 'menu' %}</button>
@@ -192,6 +192,39 @@
     {
       "type": "header",
       "content": "Layout and appearance"
+    },
+    {
+      "type": "range",
+      "id": "menu_font_size",
+      "label": "Menu font size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "menu_font_weight",
+      "label": "Menu font weight",
+      "options": [
+        { "value": "400", "label": "Normal (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semi-bold (600)" },
+        { "value": "700", "label": "Bold (700)" }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "select",
+      "id": "menu_text_transform",
+      "label": "Menu text casing",
+      "options": [
+        { "value": "none", "label": "Default (Normal)" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "capitalize", "label": "Capitalize" }
+      ],
+      "default": "none"
     },
     {
       "type": "select",

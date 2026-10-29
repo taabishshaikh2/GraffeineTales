@@ -112,7 +112,18 @@
        {% for recommendation in section.settings.recommendation_collection.products limit:section.settings.recommendation_limit %}{% assign recommendation_variant = recommendation.selected_or_first_available_variant %}<article class="rec-card"><a href="{{ recommendation.url }}" class="rec-img-wrap">{% if recommendation.featured_image %}{{ recommendation.featured_image | image_url:width:360 | image_tag:loading:'lazy',widths:'180,360',sizes:'144px',alt:recommendation.title }}{% endif %}</a><a class="rec-title" href="{{ recommendation.url }}">{{ recommendation.title | escape }}</a><div class="rec-price-row">{% if recommendation_variant.compare_at_price > recommendation_variant.price %}<s class="rec-mrp">{{ section.settings.currency_symbol | escape }}{{ recommendation_variant.compare_at_price | money_without_currency | remove:'.00' }}</s>{% endif %}<span class="rec-price">{{ section.settings.currency_symbol | escape }}{{ recommendation_variant.price | money_without_currency | remove:'.00' }}</span></div>{% if recommendation.available == false %}<button type="button" class="btn-rec-add" disabled>{{ section.settings.sold_label | escape }}</button>{% elsif recommendation.requires_selling_plan %}<a class="btn-rec-add" href="{{ recommendation.url }}">{{ section.settings.choose_label | escape }}</a>{% elsif recommendation.has_only_default_variant %}<button type="button" class="btn-rec-add" data-cart-add="{{ recommendation_variant.id }}">{{ section.settings.add_label | escape }}</button>{% else %}<button type="button" class="btn-rec-add" data-cart-choose="{{ recommendation.handle | escape }}">{{ section.settings.add_label | escape }}</button>{% endif %}</article>{% endfor %}
       </div></section>
      {% endif %}
-     <div class="section-divider"></div><section class="price-summary-section" data-cart-summary><h2 class="section-title-bold">{{ section.settings.summary_title | escape }}</h2><div class="summary-row"><span>{{ section.settings.mrp_label | escape }}</span><span>{{ section.settings.currency_symbol | escape }}{{ mrp_total | money_without_currency | remove:'.00' }}</span></div>{% if product_savings > 0 %}<div class="summary-row savings"><span>{{ section.settings.savings_label | escape }}</span><span>−{{ section.settings.currency_symbol | escape }}{{ product_savings | money_without_currency | remove:'.00' }}</span></div>{% endif %}{% if cart.total_discount > 0 %}<div class="summary-row savings"><span>{{ section.settings.discount_label | escape }}</span><span>−{{ section.settings.currency_symbol | escape }}{{ cart.total_discount | money_without_currency | remove:'.00' }}</span></div>{% endif %}{% if cart.requires_shipping %}<div class="summary-row"><span>{{ section.settings.shipping_label | escape }}</span><span>{% if shipping_threshold > 0 and cart.total_price >= shipping_threshold %}{{ section.settings.free_label | escape }}{% else %}{{ section.settings.shipping_pending | escape }}{% endif %}</span></div>{% endif %}<div class="summary-dotted-line"></div><div class="summary-row grand-total-row"><span>{{ section.settings.total_label | escape }}</span><span>{{ section.settings.currency_symbol | escape }}{{ cart.total_price | money_without_currency | remove:'.00' }}</span></div><div class="summary-subtext">{% if cart.taxes_included %}{{ section.settings.tax_included | escape }}{% else %}{{ section.settings.tax_pending | escape }}{% endif %}</div><div class="payment-trust-row">{% if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 %}<div class="payment-logos-list">{% for payment_type in shop.enabled_payment_types %}<span class="pay-logo-badge">{{ payment_type | payment_type_svg_tag }}</span>{% endfor %}</div>{% endif %}<div class="secured-shield">{% render 'cart-icon',name:'shield' %}<span>{{ section.settings.secure_label | escape }}</span></div></div></section>
+     <div class="section-divider"></div><section class="price-summary-section" data-cart-summary><h2 class="section-title-bold">{{ section.settings.summary_title | escape }}</h2><div class="summary-row"><span>{{ section.settings.mrp_label | escape }}</span><span>{{ section.settings.currency_symbol | escape }}{{ mrp_total | money_without_currency | remove:'.00' }}</span></div>{% if product_savings > 0 %}<div class="summary-row savings"><span>{{ section.settings.savings_label | escape }}</span><span>−{{ section.settings.currency_symbol | escape }}{{ product_savings | money_without_currency | remove:'.00' }}</span></div>{% endif %}{% if cart.total_discount > 0 %}<div class="summary-row savings"><span>{{ section.settings.discount_label | escape }}</span><span>−{{ section.settings.currency_symbol | escape }}{{ cart.total_discount | money_without_currency | remove:'.00' }}</span></div>{% endif %}{% if cart.requires_shipping %}<div class="summary-row"><span>{{ section.settings.shipping_label | escape }}</span><span>{% if shipping_threshold > 0 and cart.total_price >= shipping_threshold %}{{ section.settings.free_label | escape }}{% else %}{{ section.settings.shipping_pending | escape }}{% endif %}</span></div>{% endif %}<div class="summary-dotted-line"></div><div class="summary-row grand-total-row"><span>{{ section.settings.total_label | escape }}</span><span>{{ section.settings.currency_symbol | escape }}{{ cart.total_price | money_without_currency | remove:'.00' }}</span></div><div class="summary-subtext">{% if cart.taxes_included %}{{ section.settings.tax_included | escape }}{% else %}{{ section.settings.tax_pending | escape }}{% endif %}</div>{% liquid
+        assign show_pay = true
+        if section.settings.show_payment_icons != nil
+          assign show_pay = section.settings.show_payment_icons
+        elsif settings.cart_show_payment_icons != nil
+          assign show_pay = settings.cart_show_payment_icons
+        endif
+      %}
+      {% if show_pay %}
+        {% render 'cart-payment-icons', section: section %}
+      {% endif %}
+    </section>
      {% if section.settings.prepaid_heading != blank and section.settings.prepaid_details != blank %}<section class="prepaid-rewards-banner"><div class="prepaid-left"><span class="prepaid-icon">{% render 'cart-icon',name:'tag' %}</span><span class="prepaid-text">{{ section.settings.prepaid_heading | escape }}</span></div><button type="button" class="btn-prepaid-view" data-cart-sheet-open="prepaid">{{ section.settings.view_label | escape }}</button></section>{% endif %}
     {% else %}
      <section class="atelier-cart__empty"><div>{% render 'cart-icon',name:'bag' %}</div><h3>{{ section.settings.empty_heading | escape }}</h3><p>{{ section.settings.empty_text | escape }}</p><a href="{{ section.settings.continue_url | default:routes.all_products_collection_url }}">{{ section.settings.continue_label | escape }}</a></section>
@@ -562,14 +573,27 @@
     {
       "type": "checkbox",
       "id": "show_payment_icons",
-      "label": "Show active payment methods",
+      "label": "Show payment icons & security badge",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "payment_icons_list",
+      "label": "Payment icons list (comma-separated)",
+      "default": "visa,master,upi,rupay",
+      "info": "Supported: visa, master, upi, rupay, paytm, gpay, phonepe, apple_pay. Or leave empty for Shopify gateway icons."
     },
     {
       "type": "text",
       "id": "secure_label",
       "label": "Payment security label",
-      "default": "Secure Shopify checkout"
+      "default": "100% Secured Payments"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secure_badge",
+      "label": "Show security badge on right",
+      "default": true
     },
     {
       "type": "checkbox",

@@ -53,7 +53,10 @@
         "accent": "#927b53",
         "show_search": true,
         "show_wishlist": true,
-        "show_cart": true
+        "show_cart": true,
+        "menu_font_size": 14,
+        "menu_font_weight": "500",
+        "menu_text_transform": "none"
       }
     },
     "mobile_bottom_nav": {

@@ -2143,3 +2143,62 @@ canvas[data-cart-confetti] {
   display: block !important;
   visibility: visible !important;
 }
+
+/* Payment trust row matching reference (Image 2) */
+cart-drawer.atelier-cart .payment-trust-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  margin-top: 14px !important;
+  padding-top: 14px !important;
+  border-top: 1px solid #ECE4D8 !important;
+  flex-wrap: wrap !important;
+}
+
+cart-drawer.atelier-cart .payment-logos-list {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+cart-drawer.atelier-cart .pay-logo-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 22px !important;
+}
+
+cart-drawer.atelier-cart .pay-logo-badge svg {
+  height: 18px !important;
+  width: auto !important;
+  max-width: 54px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+cart-drawer.atelier-cart .secured-shield {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 12.8px !important;
+  font-weight: 600 !important;
+  color: #1A5276 !important;
+  letter-spacing: -0.01em !important;
+  white-space: nowrap !important;
+}
+
+cart-drawer.atelier-cart .secured-shield svg {
+  width: 17px !important;
+  height: 19px !important;
+  flex-shrink: 0 !important;
+}
+
+@media (max-width: 420px) {
+  cart-drawer.atelier-cart .payment-trust-row {
+    justify-content: center !important;
+    gap: 10px !important;
+  }
+}

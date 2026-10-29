@@ -271,7 +271,7 @@
           "tax_included": "Inclusive of all taxes",
           "tax_pending": "Taxes and shipping calculated at checkout",
           "show_payment_icons": true,
-          "secure_label": "Secure Shopify checkout",
+          "secure_label": "100% Secured Payments",
           "show_note": false,
           "note_label": "Add a gift or order note",
           "note_placeholder": "A little note from you…",
@@ -286,7 +286,9 @@
           "decrease_label": "Decrease quantity",
           "increase_label": "Increase quantity",
           "previous_label": "Previous product",
-          "next_label": "Next product"
+          "next_label": "Next product",
+          "payment_icons_list": "visa,master,upi,rupay",
+          "show_secure_badge": true
         }
       }
     },
@@ -352,7 +354,10 @@
     "whatsapp_number": "919876543210",
     "whatsapp_message": "Hi Graffeine Tales! I have a question about your collection.",
     "whatsapp_position": "bottom-left",
-    "whatsapp_tooltip": "Chat with us"
+    "whatsapp_tooltip": "Chat with us",
+    "cart_show_payment_icons": true,
+    "cart_payment_icons": "visa,master,upi,rupay",
+    "cart_secure_label": "100% Secured Payments"
   },
   "presets": {
     "Dawn": {
