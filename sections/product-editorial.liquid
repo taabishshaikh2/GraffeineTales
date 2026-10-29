@@ -10,13 +10,13 @@
  assign product_content = product.metafields.graffeine_product
  assign journal_content = product.metafields.graffeine_journal
 %}
-<atelier-product-showcase class="atelier-pdp-cart" data-currency="{{ cart.currency.iso_code | escape }}" data-adding-label="{{ section.settings.adding_label | escape }}" data-added-label="{{ section.settings.added_label | escape }}" data-error-label="{{ section.settings.error_label | escape }}">
-<product-hero class="atelier-pdp" data-compact-money="{{ section.settings.compact_money }}" data-currency-symbol="{{ section.settings.currency_symbol | escape }}" data-show-compare="{{ section.settings.show_compare }}" data-show-saving="{{ section.settings.show_saving }}" data-section-id="{{ section.id }}" data-currency="{{ cart.currency.iso_code | escape }}" data-add-label="{{ section.settings.add_label | escape }}" data-sold-label="{{ section.settings.sold_label | escape }}" data-unavailable-label="{{ section.settings.unavailable_label | escape }}" style="--pdp-coffee:{{ section.settings.coffee }};--pdp-background:{{ section.settings.background }};--pdp-sand:{{ section.settings.sand }};--pdp-clay:{{ section.settings.clay }};--pdp-width:{{ section.settings.width }}px;--pdp-text:{{ section.settings.text_color }};--pdp-button:{{ section.settings.button_background }};--pdp-button-text:{{ section.settings.button_text }};--pdp-gallery-radius:{{ section.settings.gallery_radius }}px;--pdp-button-radius:{{ section.settings.button_radius }}px;--pdp-gap:{{ section.settings.column_gap }}px;--pdp-top:{{ section.settings.padding_top }}px;--pdp-bottom:{{ section.settings.padding_bottom }}px;--pdp-title:{{ section.settings.title_size }}px;--pdp-mobile-title:{{ section.settings.mobile_title_size }}px;--pdp-fit:{{ section.settings.image_fit }};--pdp-purchase-background:{{ section.settings.purchase_background }};--pdp-purchase-border:{{ section.settings.purchase_border }};--pdp-purchase-radius:{{ section.settings.purchase_radius }}px;--pdp-purchase-padding:{{ section.settings.purchase_padding }}px">
- {% if section.settings.show_breadcrumb %}<nav class="atelier-pdp__breadcrumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">{{ section.settings.home_label | escape }}</a><span aria-hidden="true">/</span><a href="{{ routes.all_products_collection_url }}">{{ section.settings.shop_label | escape }}</a><span aria-hidden="true">/</span><span>{{ product.title | escape }}</span></nav>{% endif %}
+<atelier-product-showcase class="atelier-pdp-cart" data-currency="{{ cart.currency.iso_code | escape }}" data-adding-label="{{ adding_label | escape }}" data-added-label="{{ added_label | escape }}" data-error-label="{{ error_label | escape }}">
+<product-hero class="atelier-pdp" data-compact-money="{{ section.settings.compact_money }}" data-currency-symbol="{{ section.settings.currency_symbol | escape }}" data-show-compare="{{ section.settings.show_compare }}" data-show-saving="{{ section.settings.show_saving }}" data-section-id="{{ section.id }}" data-currency="{{ cart.currency.iso_code | escape }}" data-add-label="{{ section.settings.add_label | escape }}" data-sold-label="{{ sold_label | escape }}" data-unavailable-label="{{ unavailable_label | escape }}" style="--pdp-coffee:{{ section.settings.coffee }};--pdp-background:{{ section.settings.background }};--pdp-sand:{{ section.settings.sand }};--pdp-clay:{{ section.settings.clay }};--pdp-width:{{ section.settings.width }}px;--pdp-text:{{ section.settings.text_color }};--pdp-button:{{ section.settings.button_background }};--pdp-button-text:{{ section.settings.button_text }};--pdp-gallery-radius:{{ section.settings.gallery_radius }}px;--pdp-button-radius:{{ section.settings.button_radius }}px;--pdp-gap:{{ section.settings.column_gap }}px;--pdp-top:{{ section.settings.padding_top }}px;--pdp-bottom:{{ section.settings.padding_bottom }}px;--pdp-title:{{ section.settings.title_size }}px;--pdp-mobile-title:{{ section.settings.mobile_title_size }}px;--pdp-fit:{{ section.settings.image_fit }};--pdp-purchase-background:{{ section.settings.purchase_background }};--pdp-purchase-border:{{ section.settings.purchase_border }};--pdp-purchase-radius:{{ section.settings.purchase_radius }}px;--pdp-purchase-padding:{{ section.settings.purchase_padding }}px">
+ {% if section.settings.show_breadcrumb %}<nav class="atelier-pdp__breadcrumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">{{ home_label | escape }}</a><span aria-hidden="true">/</span><a href="{{ routes.all_products_collection_url }}">{{ shop_label | escape }}</a><span aria-hidden="true">/</span><span>{{ product.title | escape }}</span></nav>{% endif %}
  <div class="atelier-pdp__columns">
   <div class="atelier-pdp__visual{% unless section.settings.sticky_gallery %} atelier-pdp__visual--static{% endunless %}"{% if gallery.size == 0 %} hidden{% endif %}>
    <div class="atelier-pdp__stage">
-    <div class="atelier-pdp__track" data-gallery-track tabindex="0" aria-label="{{ section.settings.gallery_label | escape }}">
+    <div class="atelier-pdp__track" data-gallery-track tabindex="0" aria-label="{{ gallery_label | escape }}">
      {% for media in gallery %}
       <div class="atelier-pdp__slide" data-media-id="{{ media.id }}" role="group" aria-label="{{ forloop.index }} / {{ gallery.size }}">
        {% case media.media_type %}
@@ -34,7 +34,7 @@
      {% if section.settings.show_dots %}<div class="atelier-pdp__dots">{% for media in gallery %}<button type="button" data-gallery-index="{{ forloop.index0 }}" aria-label="{{ section.settings.image_label | escape }} {{ forloop.index }}"{% if forloop.first %} aria-current="true"{% endif %}></button>{% endfor %}</div>{% endif %}
     {% endif %}
    </div>
-   {% if gallery.size > 1 and section.settings.show_thumbnails %}<div class="atelier-pdp__thumbnails" aria-label="{{ section.settings.gallery_label | escape }}">{% for media in gallery %}<button type="button" data-gallery-index="{{ forloop.index0 }}"{% if forloop.first %} aria-current="true"{% endif %} aria-label="{{ section.settings.image_label | escape }} {{ forloop.index }}">{{ media.preview_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: media.alt }}</button>{% endfor %}</div>{% endif %}
+   {% if gallery.size > 1 and section.settings.show_thumbnails %}<div class="atelier-pdp__thumbnails" aria-label="{{ gallery_label | escape }}">{% for media in gallery %}<button type="button" data-gallery-index="{{ forloop.index0 }}"{% if forloop.first %} aria-current="true"{% endif %} aria-label="{{ section.settings.image_label | escape }} {{ forloop.index }}">{{ media.preview_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: media.alt }}</button>{% endfor %}</div>{% endif %}
 
   </div>
   <div class="atelier-pdp__purchase{% if section.settings.purchase_shadow %} atelier-pdp__purchase--shadow{% endif %}">
@@ -43,7 +43,22 @@
    {% assign review_rating = product.metafields.reviews.rating.value %}{% assign review_count = product.metafields.reviews.rating_count.value %}
    {% if section.settings.show_product_rating and review_rating != blank %}<div class="atelier-pdp__rating"><span role="img" aria-label="{{ review_rating.rating }} / {{ review_rating.scale_max }}"><svg width="76" height="14" viewBox="0 0 100 18" aria-hidden="true"><defs><linearGradient id="RatingFill-{{ section.id }}"><stop offset="{{ review_rating.rating | times: 100.0 | divided_by: review_rating.scale_max }}%" stop-color="#A17D36"/><stop offset="{{ review_rating.rating | times: 100.0 | divided_by: review_rating.scale_max }}%" stop-color="#D8D0C5"/></linearGradient></defs><path fill="url(#RatingFill-{{ section.id }})" d="m9 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L9 14.3l-5.6 2.9 1.1-6.2L0 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L20 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L40 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L60 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L80 6.6l6.2-.9Z"/></svg></span>{% if review_count != blank %}<span>({{ review_count }} {{ section.settings.review_label | escape }})</span>{% endif %}</div>{% endif %}
    <div class="atelier-pdp__price-block"><div class="atelier-pdp__prices" aria-live="polite"><strong data-pdp-price>{% if section.settings.compact_money %}{{ section.settings.currency_symbol | escape }}{{ current_variant.price | money_without_currency | remove: '.00' }}{% else %}{{ current_variant.price | money }}{% endif %}</strong><s data-pdp-compare{% unless current_variant.compare_at_price > current_variant.price and section.settings.show_compare %} hidden{% endunless %}>{% if section.settings.compact_money %}{{ section.settings.currency_symbol | escape }}{{ current_variant.compare_at_price | money_without_currency | remove: '.00' }}{% else %}{{ current_variant.compare_at_price | money }}{% endif %}</s><span data-pdp-saving{% unless current_variant.compare_at_price > current_variant.price and section.settings.show_saving %} hidden{% endunless %}>{% if current_variant.compare_at_price > current_variant.price %}{{ section.settings.save_label | escape }} {{ current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round }}%{% endif %}</span></div>
-   {% assign price_note_text = product_content.price_note.value | default: "Inclusive of all domestic taxes • Custom studio box included" %}<p class="atelier-pdp__price-note">{{ price_note_text | escape }}</p>
+    {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
+      <p class="atelier-pdp__price-note">
+        {%- if cart.duties_included and cart.taxes_included -%}
+          {{ 'products.product.duties_and_taxes_included' | t }}
+        {%- elsif cart.taxes_included -%}
+          {{ 'products.product.taxes_included' | t }}
+        {%- elsif cart.duties_included -%}
+          {{ 'products.product.duties_included' | t }}
+        {%- endif -%}
+        {%- if shop.shipping_policy.body != blank -%}
+          {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+        {%- endif -%}
+      </p>
+    {%- else -%}
+      <p class="atelier-pdp__price-note">{{ 'products.product.taxes_included' | t }}</p>
+    {%- endif -%}
    </div>
    {% if product_content.short_description.value != blank %}<div class="atelier-pdp__description">{{ product_content.short_description | metafield_tag }}</div>{% elsif product.description != blank %}<div class="atelier-pdp__description">{{ product.description }}</div>{% endif %}
   
@@ -182,7 +197,7 @@
     {% if product.selling_plan_groups.size > 0 %}<label class="atelier-pdp__plan">{{ section.settings.plan_label | escape }}<select name="selling_plan">{% unless product.requires_selling_plan %}<option value="">{{ section.settings.one_time_label | escape }}</option>{% endunless %}{% for group in product.selling_plan_groups %}{% for plan in group.selling_plans %}<option value="{{ plan.id }}">{{ plan.name | escape }}</option>{% endfor %}{% endfor %}</select></label>{% endif %}
     <div class="atelier-pdp__buy-row">
      <div class="atelier-pdp__quantity"{% unless section.settings.show_quantity %} hidden{% endunless %}><button type="button" data-pdp-step="-1" aria-label="{{ section.settings.decrease_label | escape }}">−</button><input type="number" name="quantity" min="{{ current_variant.quantity_rule.min }}" step="{{ current_variant.quantity_rule.increment }}" value="{{ current_variant.quantity_rule.min }}"{% if current_variant.quantity_rule.max %} max="{{ current_variant.quantity_rule.max }}"{% endif %} aria-label="{{ section.settings.quantity_label | escape }}"><button type="button" data-pdp-step="1" aria-label="{{ section.settings.increase_label | escape }}">+</button></div>
-     <button type="submit" class="atelier-pdp__add{% if section.settings.shimmer %} atelier-pdp__add--shimmer{% endif %}" data-pdp-add data-preserve-button-content{% unless current_variant.available %} disabled{% endunless %}>{% render 'product-detail-icon', name: 'bag' %}<span>{% if current_variant.available %}{{ section.settings.add_label | escape }}{% else %}{{ section.settings.sold_label | escape }}{% endif %}</span></button>
+     <button type="submit" class="atelier-pdp__add{% if section.settings.shimmer %} atelier-pdp__add--shimmer{% endif %}" data-pdp-add data-preserve-button-content{% unless current_variant.available %} disabled{% endunless %}>{% render 'product-detail-icon', name: 'bag' %}<span>{% if current_variant.available %}{{ section.settings.add_label | escape }}{% else %}{{ sold_label | escape }}{% endif %}</span></button>
     </div>
     {% if section.settings.dynamic_checkout %}<div class="atelier-pdp__express">{{ form | payment_button }}</div>{% endif %}
    {% endform %}
@@ -190,7 +205,7 @@
    {% if section.settings.show_delivery %}
     <div class="atelier-pdp__delivery">{% render 'product-detail-icon', name: 'truck' %}<div><label for="Pincode-{{ section.id }}">{{ section.settings.delivery_heading | escape }}{% if section.settings.delivery_extra != blank %}<span>{{ section.settings.delivery_extra | escape }}</span>{% endif %}</label><div class="atelier-pdp__pincode"><input id="Pincode-{{ section.id }}" data-pincode inputmode="numeric" autocomplete="postal-code" maxlength="6" pattern="[1-9][0-9]{5}" placeholder="{{ section.settings.pincode_placeholder | escape }}"><button type="button" data-check-pincode>{{ section.settings.check_label | escape }}</button></div><p data-delivery-result role="status">{{ section.settings.delivery_note | escape }}</p></div></div>
    {% endif %}
-   {% render 'product-information', product: product, section: section, inside_heading: section.settings.inside_heading, features_heading: section.settings.features_heading, shipping_heading: section.settings.shipping_heading %}
+   {% render 'product-information', product: product, section: section %}
   </div>
  </div>
  <p class="visually-hidden" data-showcase-status role="status" aria-live="polite"></p>
@@ -595,132 +610,6 @@
       "id": "show_breadcrumb",
       "label": "Show breadcrumbs",
       "default": true
-    },
-    {
-      "type": "text",
-      "id": "home_label",
-      "label": "Home breadcrumb",
-      "default": "Home"
-    },
-    {
-      "type": "text",
-      "id": "shop_label",
-      "label": "Shop breadcrumb",
-      "default": "Shop"
-    },
-    {
-      "type": "header",
-      "content": "Messages and accessibility"
-    },
-    {
-      "type": "paragraph",
-      "content": "Optional wording for screen readers, loading and stock states."
-    },
-    {
-      "type": "text",
-      "id": "adding_label",
-      "label": "Adding label",
-      "default": "Adding…"
-    },
-    {
-      "type": "text",
-      "id": "added_label",
-      "label": "Added announcement",
-      "default": "Added to your bag"
-    },
-    {
-      "type": "text",
-      "id": "sold_label",
-      "label": "Sold out label",
-      "default": "Sold out"
-    },
-    {
-      "type": "text",
-      "id": "unavailable_label",
-      "label": "Unavailable combination label",
-      "default": "Unavailable"
-    },
-    {
-      "type": "text",
-      "id": "error_label",
-      "label": "Cart error message",
-      "default": "Could not add this item. Please try again."
-    },
-    {
-      "type": "text",
-      "id": "gallery_label",
-      "label": "Gallery accessible label",
-      "default": "Product gallery"
-    },
-    {
-      "type": "text",
-      "id": "image_label",
-      "label": "Image accessible label",
-      "default": "View image"
-    },
-    {
-      "type": "text",
-      "id": "previous_label",
-      "label": "Previous image",
-      "default": "Previous image"
-    },
-    {
-      "type": "text",
-      "id": "next_label",
-      "label": "Next image",
-      "default": "Next image"
-    },
-    {
-      "type": "text",
-      "id": "quantity_label",
-      "label": "Quantity label",
-      "default": "Quantity"
-    },
-    {
-      "type": "text",
-      "id": "decrease_label",
-      "label": "Decrease quantity",
-      "default": "Decrease quantity"
-    },
-    {
-      "type": "text",
-      "id": "increase_label",
-      "label": "Increase quantity",
-      "default": "Increase quantity"
-    },
-    {
-      "type": "text",
-      "id": "plan_label",
-      "label": "Purchase plan label",
-      "default": "Purchase option"
-    },
-    {
-      "type": "text",
-      "id": "one_time_label",
-      "label": "One-time purchase",
-      "default": "One-time purchase"
-    },
-    {
-      "type": "header",
-      "content": "Product information labels"
-    },
-    {
-      "type": "text",
-      "id": "inside_heading",
-      "label": "What’s inside heading",
-      "default": "What’s Inside?"
-    },
-    {
-      "type": "text",
-      "id": "features_heading",
-      "label": "Product features heading",
-      "default": "Product Features"
-    },
-    {
-      "type": "text",
-      "id": "shipping_heading",
-      "label": "Shipping heading",
-      "default": "Shipping"
     }
   ],
   "blocks": [

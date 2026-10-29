@@ -46,7 +46,22 @@
 
    <h1>{{ display_title | escape }}</h1>
    <div class="atelier-pdp__price-block"><div class="atelier-pdp__prices" aria-live="polite"><strong data-pdp-price>{% if section.settings.compact_money %}{{ section.settings.currency_symbol | escape }}{{ current_variant.price | money_without_currency | remove: '.00' }}{% else %}{{ current_variant.price | money }}{% endif %}</strong><s data-pdp-compare{% unless current_variant.compare_at_price > current_variant.price and section.settings.show_compare %} hidden{% endunless %}>{% if section.settings.compact_money %}{{ section.settings.currency_symbol | escape }}{{ current_variant.compare_at_price | money_without_currency | remove: '.00' }}{% else %}{{ current_variant.compare_at_price | money }}{% endif %}</s><span data-pdp-saving{% unless current_variant.compare_at_price > current_variant.price and section.settings.show_saving %} hidden{% endunless %}>{% if current_variant.compare_at_price > current_variant.price %}{{ section.settings.save_label | escape }} {{ current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round }}%{% endif %}</span></div>
-   {% if product_content.price_note.value != blank %}<p class="atelier-pdp__price-note">{{ product_content.price_note.value | escape }}</p>{% endif %}
+    {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
+      <p class="atelier-pdp__price-note">
+        {%- if cart.duties_included and cart.taxes_included -%}
+          {{ 'products.product.duties_and_taxes_included' | t }}
+        {%- elsif cart.taxes_included -%}
+          {{ 'products.product.taxes_included' | t }}
+        {%- elsif cart.duties_included -%}
+          {{ 'products.product.duties_included' | t }}
+        {%- endif -%}
+        {%- if shop.shipping_policy.body != blank -%}
+          {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+        {%- endif -%}
+      </p>
+    {%- else -%}
+      <p class="atelier-pdp__price-note">{{ 'products.product.taxes_included' | t }}</p>
+    {%- endif -%}
    </div>
    {% form 'product', product, id: product_form_id, data-atelier-product-form: '' %}
     <input type="hidden" name="id" value="{{ current_variant.id }}">
