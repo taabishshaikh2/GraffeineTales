@@ -60,7 +60,6 @@
       <p class="atelier-pdp__price-note">{{ 'products.product.taxes_included' | t }}</p>
     {%- endif -%}
    </div>
-   {% if product_content.short_description.value != blank %}<div class="atelier-pdp__description">{{ product_content.short_description | metafield_tag }}</div>{% elsif product.description != blank %}<div class="atelier-pdp__description">{{ product.description }}</div>{% endif %}
   
    {% form 'product', product, id: product_form_id, data-atelier-product-form: '' %}
     <input type="hidden" name="id" value="{{ current_variant.id }}">
@@ -202,6 +201,7 @@
     {% if section.settings.dynamic_checkout %}<div class="atelier-pdp__express">{{ form | payment_button }}</div>{% endif %}
    {% endform %}
    <p data-cart-error role="alert" hidden></p>
+   {% if product.description != blank %}<div class="atelier-pdp__description">{{ product.description }}</div>{% endif %}
    {% if section.settings.show_delivery %}
     <div class="atelier-pdp__delivery">{% render 'product-detail-icon', name: 'truck' %}<div><label for="Pincode-{{ section.id }}">{{ section.settings.delivery_heading | escape }}{% if section.settings.delivery_extra != blank %}<span>{{ section.settings.delivery_extra | escape }}</span>{% endif %}</label><div class="atelier-pdp__pincode"><input id="Pincode-{{ section.id }}" data-pincode inputmode="numeric" autocomplete="postal-code" maxlength="6" pattern="[1-9][0-9]{5}" placeholder="{{ section.settings.pincode_placeholder | escape }}"><button type="button" data-check-pincode>{{ section.settings.check_label | escape }}</button></div><p data-delivery-result role="status">{{ section.settings.delivery_note | escape }}</p></div></div>
    {% endif %}

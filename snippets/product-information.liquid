@@ -1,76 +1,38 @@
 {% doc %}
-  Shared product information accordions.
-  Supports customizer accordion blocks (with connected dynamic source metafields)
-  as well as automatic product.metafields.graffeine_product metafields.
+  Product information accordions controlled by customizer accordion blocks.
+  Supports dynamic source metafields connected in the customizer.
 {% enddoc %}
 {% liquid
-  assign information = product.metafields.graffeine_product
-  assign information_keys = 'whats_inside,features,shipping' | split: ','
-  assign has_information = false
-
-  for key in information_keys
-    if information[key].value != blank
-      assign has_information = true
-    endif
-  endfor
-
-  for entry in information.accordions.value
-    if entry.heading.value != blank and entry.content.value != blank
-      assign has_information = true
-    endif
-  endfor
-
-  if section.blocks.size > 0
-    for block in section.blocks
-      if block.type == 'accordion'
-        assign block_content = block.settings.content | default: block.settings.page.content
-        if block_content != blank
-          assign has_information = true
-        endif
+  assign has_accordions = false
+  for block in section.blocks
+    if block.type == 'accordion'
+      assign block_content = block.settings.content | default: block.settings.page.content
+      if block.settings.heading != blank or block_content != blank
+        assign has_accordions = true
+        break
       endif
-    endfor
-  endif
+    endif
+  endfor
 %}
-{% if has_information %}
+
+{% if has_accordions %}
   <div class="atelier-pdp__accordions">
-    {% comment %} Customizer Accordion Blocks with dynamic source metafields {% endcomment %}
     {% for block in section.blocks %}
       {% if block.type == 'accordion' %}
         {% assign block_content = block.settings.content | default: block.settings.page.content %}
-        {% if block_content != blank %}
+        {% if block.settings.heading != blank or block_content != blank %}
           <details{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
-            <summary>{{ block.settings.heading | default: 'Details' | escape }}<span class="atelier-pdp__accordion-chevron" aria-hidden="true">{% render 'header-icon', name: 'chevron' %}</span></summary>
-            <div class="atelier-pdp__accordion-content">{{ block_content }}</div>
+            <summary>
+              {{ block.settings.heading | default: 'Details' | escape }}
+              <span class="atelier-pdp__accordion-chevron" aria-hidden="true">{% render 'header-icon', name: 'chevron' %}</span>
+            </summary>
+            <div class="atelier-pdp__accordion-content">
+              {% if block_content != blank %}
+                {{ block_content }}
+              {% endif %}
+            </div>
           </details>
         {% endif %}
-      {% endif %}
-    {% endfor %}
-
-    {% comment %} Default Product Information Metafields {% endcomment %}
-    {% for key in information_keys %}
-      {% if information[key].value != blank %}
-        {% case key %}
-          {% when 'whats_inside' %}
-            {% assign heading = inside_heading | default: "What's Inside?" %}
-          {% when 'features' %}
-            {% assign heading = features_heading | default: 'Product Features' %}
-          {% when 'shipping' %}
-            {% assign heading = shipping_heading | default: 'Shipping' %}
-        {% endcase %}
-        <details>
-          <summary>{{ heading | escape }}<span class="atelier-pdp__accordion-chevron" aria-hidden="true">{% render 'header-icon', name: 'chevron' %}</span></summary>
-          <div class="atelier-pdp__accordion-content">{{ information[key] | metafield_tag }}</div>
-        </details>
-      {% endif %}
-    {% endfor %}
-
-    {% comment %} Additional Accordions from graffeine_product.accordions metaobjects {% endcomment %}
-    {% for entry in information.accordions.value %}
-      {% if entry.heading.value != blank and entry.content.value != blank %}
-        <details{% if entry.open.value %} open{% endif %}>
-          <summary>{{ entry.heading.value | escape }}<span class="atelier-pdp__accordion-chevron" aria-hidden="true">{% render 'header-icon', name: 'chevron' %}</span></summary>
-          <div class="atelier-pdp__accordion-content">{{ entry.content | metafield_tag }}</div>
-        </details>
       {% endif %}
     {% endfor %}
   </div>

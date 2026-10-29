@@ -593,3 +593,38 @@
     clip-path: polygon(var(--shape--blob-5));
   }
 }
+
+/* Dawn Catalog & Grid Cards Styled to Image-3 Spec */
+.card-wrapper .card {
+  background: #FAF7F2 !important;
+  border: 1px solid #E6D9C1 !important;
+  border-radius: 18px !important;
+  padding: 12px !important;
+  box-shadow: 0 2px 8px rgba(77, 53, 29, 0.04) !important;
+  transition: transform 220ms ease, box-shadow 220ms ease !important;
+}
+
+.card-wrapper .card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 24px rgba(77, 53, 29, 0.09) !important;
+}
+
+.card-wrapper .card__inner {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+.card-wrapper .card__heading,
+.card-wrapper .card__heading a {
+  font-family: 'DM Serif Display', Georgia, serif !important;
+  font-size: 15.5px !important;
+  color: #1A1614 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.card-wrapper .price {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: #1A1614 !important;
+}
