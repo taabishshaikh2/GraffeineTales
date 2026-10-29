@@ -2116,3 +2116,15 @@ cart-drawer.atelier-cart .atelier-cart-confetti-canvas {
   z-index: 999999 !important;
   pointer-events: none !important;
 }
+
+/* Fixed Fullscreen Confetti Canvas for Drawer */
+.atelier-cart-confetti-canvas,
+cart-drawer .atelier-cart-confetti-canvas,
+#CartDrawer .atelier-cart-confetti-canvas {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999999 !important;
+  pointer-events: none !important;
+}

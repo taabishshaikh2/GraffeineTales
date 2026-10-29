@@ -22,9 +22,11 @@ if (!customElements.get('atelier-product-showcase')) {
         }
       });
       on(this, 'submit', event => {
-        if (!event.target.matches('[data-atelier-product-form]')) return;
+        const form = event.target.matches('form') ? event.target : event.target.closest('form');
+        if (!form) return;
         event.preventDefault();
-        this.addToCart(event.target);
+        event.stopPropagation();
+        this.addToCart(form);
       });
       on(document, 'atelier:wishlist:update', () => this.updateWishlist());
       on(window, 'storage', event => {if (event.key === 'graffeine-wishlist') this.updateWishlist();});
@@ -66,50 +68,78 @@ if (!customElements.get('atelier-product-showcase')) {
     async addToCart(form) {
       if (!form.reportValidity()) return;
       const input = new FormData(form);
-      const quantity = Number(input.get('quantity'));
+      const quantity = Math.max(1, Number(input.get('quantity')) || 1);
       const variantId = Number(input.get('id'));
       const sellingPlan = input.get('selling_plan');
-      if (!Number.isInteger(quantity) || quantity < 1 || !Number.isSafeInteger(variantId) || variantId < 1) return;
-      const button = form.querySelector('[type=submit]');
-      if (button.disabled) return;
-      const label = button.textContent;
-      const preservedContents = button.hasAttribute?.('data-preserve-button-content') ? [...button.childNodes].map(node => node.cloneNode(true)) : null;
+      if (!Number.isSafeInteger(variantId) || variantId < 1) return;
+
+      const button = form.querySelector('[type=submit]') || form.querySelector('button[data-pdp-add]');
+      if (button?.disabled) return;
+      const label = button?.textContent;
+      const preservedContents = button?.hasAttribute?.('data-preserve-button-content') ? [...button.childNodes].map(node => node.cloneNode(true)) : null;
       const error = form.closest('.atelier-product-card')?.querySelector('.atelier-product-card__error') || form.parentElement?.querySelector('[data-cart-error]') || this.querySelector('[data-quick-view-error]');
       if (error) error.hidden = true;
-      button.disabled = true;
-      button.setAttribute('aria-busy', 'true');
-      if (!preservedContents) button.textContent = this.dataset.addingLabel;
+      if (button) {
+        button.disabled = true;
+        button.setAttribute('aria-busy', 'true');
+        if (!preservedContents) button.textContent = this.dataset.addingLabel || 'Adding…';
+      }
       const operation = async () => {
         try {
           const drawer = document.querySelector('cart-drawer');
-          const sections = drawer?.getSectionsToRender?.().map(section => section.id) || ['cart-icon-bubble'];
+          const sections = drawer?.getSectionsToRender?.().map(section => section.id) || ['cart-drawer', 'cart-icon-bubble'];
+
+          const postData = new FormData();
+          postData.append('id', String(variantId));
+          postData.append('quantity', String(quantity));
+          if (sellingPlan) postData.append('selling_plan', String(sellingPlan));
+          sections.forEach(s => postData.append('sections[]', s));
+          postData.append('sections', sections.join(','));
+          postData.append('sections_url', window.location.pathname);
+
           const response = await fetch(this.root + 'cart/add.js', {
-            method:'POST',
-            headers:{'Content-Type':'application/json','Accept':'application/json'},
-            body:JSON.stringify({items:[{id:variantId,quantity,...(sellingPlan ? {selling_plan:Number(sellingPlan)} : {})}],sections,sections_url:window.location.pathname})
+            method: 'POST',
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Accept': 'application/json'
+            },
+            body: postData
           });
           const result = await response.json();
-          if (!response.ok || result.status) throw new Error(typeof result.description === 'string' ? result.description : this.dataset.errorLabel);
-          this.announce(this.dataset.addedLabel);
+          if (!response.ok || result.status) {
+            throw new Error(typeof result.description === 'string' ? result.description : (this.dataset.errorLabel || 'Could not add to bag'));
+          }
+
+          this.announce(this.dataset.addedLabel || 'Added to bag');
           const trigger = this.dialog?.open ? this.quickViewTrigger : button;
           if (this.dialog?.open) this.dialog.close();
-          document.dispatchEvent(new CustomEvent('atelier:cart:update', {detail:result}));
-          if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') publish(PUB_SUB_EVENTS.cartUpdate, {source:'product-showcase',cartData:result});
-          if (drawer && result.sections?.['cart-drawer']) {
-            drawer.setActiveElement?.(trigger?.closest?.('dialog:not([open])') ? document.querySelector('#cart-icon-bubble') : trigger);
+
+          document.dispatchEvent(new CustomEvent('atelier:cart:update', { detail: result }));
+          if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+            publish(PUB_SUB_EVENTS.cartUpdate, { source: 'product-showcase', cartData: result });
+          }
+
+          // Open side cart drawer directly
+          if (drawer) {
             drawer.classList.remove('is-empty');
-            try {drawer.renderContents(result);}
-            catch {window.location.assign(window.routes?.cart_url || this.root + 'cart');}
-          } else window.location.assign(window.routes?.cart_url || this.root + 'cart');
+            if (result.sections && result.sections['cart-drawer']) {
+              drawer.renderContents(result);
+            } else {
+              await drawer.refresh();
+              drawer.open(trigger || document.querySelector('#cart-icon-bubble'), false);
+            }
+          }
         } catch (failure) {
-          const message = failure.message || this.dataset.errorLabel;
-          if (error) {error.textContent = message; error.hidden = false;}
+          const message = failure.message || this.dataset.errorLabel || 'Could not add to bag';
+          if (error) { error.textContent = message; error.hidden = false; }
           this.announce(message);
         } finally {
-          button.disabled = false;
-          button.removeAttribute('aria-busy');
-          if (preservedContents) button.replaceChildren(...preservedContents);
-          else button.textContent = label;
+          if (button) {
+            button.disabled = false;
+            button.removeAttribute('aria-busy');
+            if (preservedContents) button.replaceChildren(...preservedContents);
+            else button.textContent = label;
+          }
         }
       };
       cartQueue = cartQueue.catch(() => {}).then(operation);

@@ -30,29 +30,32 @@ class CartConfetti {
   }
 
   burst(tier = 1) {
-    if (!this.canvas) return;
+    if (!this.canvas) {
+      this.canvas = document.querySelector('[data-cart-confetti]');
+      if (!this.canvas) return;
+    }
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
     this.ctx = this.canvas.getContext('2d');
     if (!this.ctx) return;
 
-    const count = tier >= 3 ? 140 : tier === 2 ? 100 : 75;
-    const milestoneEl = document.querySelector('.milestone-card') || document.querySelector('#CartDrawer') || this.canvas;
+    const count = tier >= 3 ? 160 : tier === 2 ? 120 : 90;
+    const milestoneEl = document.querySelector('.milestone-track-section') || document.querySelector('.milestone-card') || document.querySelector('.cart-drawer-card-box') || document.querySelector('#CartDrawer');
     const rect = milestoneEl ? milestoneEl.getBoundingClientRect() : null;
-    const originX = rect ? (rect.left + rect.width / 2) : (window.innerWidth - 200);
-    const originY = rect ? (rect.top + Math.min(rect.height * 0.45, 140)) : 120;
+    const originX = rect ? (rect.left + rect.width / 2) : (window.innerWidth - 220);
+    const originY = rect ? (rect.top + 70) : 130;
 
     for (let i = 0; i < count; i++) {
-      const angle = (Math.PI / 2) + ((Math.random() - 0.5) * Math.PI * 1.5);
-      const speed = 7 + Math.random() * 11;
-      const size = 6 + Math.random() * 6;
+      const angle = (Math.PI / 2) + ((Math.random() - 0.5) * Math.PI * 1.6);
+      const speed = 6 + Math.random() * 12;
+      const size = 6 + Math.random() * 7;
       const color = this.palette[Math.floor(Math.random() * this.palette.length)];
 
       this.particles.push({
-        x: originX + (Math.random() - 0.5) * 80,
+        x: originX + (Math.random() - 0.5) * (rect ? rect.width * 0.7 : 120),
         y: originY,
         vx: Math.cos(angle) * speed,
-        vy: -Math.abs(Math.sin(angle) * speed) - 3,
+        vy: -Math.abs(Math.sin(angle) * speed) - 4,
         size,
         color,
         rotation: Math.random() * 360,
@@ -62,8 +65,8 @@ class CartConfetti {
         gravity: 0.22 + Math.random() * 0.08,
         drag: 0.965,
         opacity: 1,
-        fadeSpeed: 0.007 + Math.random() * 0.006,
-        shape: Math.random() > 0.35 ? 'rect' : 'circle'
+        fadeSpeed: 0.006 + Math.random() * 0.005,
+        shape: Math.random() > 0.4 ? 'rect' : 'circle'
       });
     }
 
