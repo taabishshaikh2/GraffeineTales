@@ -199,6 +199,7 @@
         "events",
         "bestsellers"
       ],
+      "custom_css": [],
       "settings": {
         "heading": "Shop By Category",
         "width": 1240,
@@ -211,7 +212,7 @@
         "mobile_columns": "3",
         "background": "#ffffff",
         "heading_color": "#363638",
-        "button_background": "#0d0c0b",
+        "button_background": "#4A3525",
         "button_text": "#ffffff",
         "show_button": true,
         "button_label": "View all products",
@@ -274,14 +275,14 @@
         "heading": "Bestsellers",
         "description": "",
         "collection": "bestsellers",
-        "product_limit": 8,
+        "product_limit": 5,
         "default_badge": "Bestseller",
         "default_badge_style": "gold",
         "width": 1340,
         "columns": "4",
         "gap": 28,
         "mobile_width": 275,
-        "card_height": 490,
+        "card_height": 480,
         "image_height": 250,
         "image_padding": 14,
         "radius": 14,
@@ -290,10 +291,10 @@
         "padding_bottom": 24,
         "mobile_heading_size": 30,
         "mobile_gap": 14,
-        "mobile_card_height": 480,
+        "mobile_card_height": 380,
         "mobile_image_height": 240,
-        "mobile_padding_top": 40,
-        "mobile_padding_bottom": 40,
+        "mobile_padding_top": 16,
+        "mobile_padding_bottom": 16,
         "background": "#fdfbf7",
         "card_background": "#ffffff",
         "image_background": "#f8f6f0",
@@ -305,10 +306,10 @@
         "badge_color": "#263320",
         "gold_badge_background": "#927b53",
         "gold_badge_color": "#ffffff",
-        "show_badges": true,
+        "show_badges": false,
         "show_category": false,
         "show_wishlist": true,
-        "show_quick_view": true,
+        "show_quick_view": false,
         "show_ratings": true,
         "show_compare_price": true,
         "show_discount": true
@@ -339,10 +340,10 @@
         "padding_bottom": 24,
         "mobile_heading_size": 30,
         "mobile_gap": 14,
-        "mobile_card_height": 480,
+        "mobile_card_height": 380,
         "mobile_image_height": 240,
-        "mobile_padding_top": 40,
-        "mobile_padding_bottom": 40,
+        "mobile_padding_top": 16,
+        "mobile_padding_bottom": 16,
         "background": "#fdfbf7",
         "card_background": "#ffffff",
         "image_background": "#f8f6f0",
@@ -369,51 +370,36 @@
         "stationaries": {
           "type": "filter",
           "settings": {
-            "label": "Stationaries & Calendars",
-            "collection": "stationaries-calendars"
+            "label": "Stationary",
+            "collection": "stationary"
           }
         },
         "journals": {
           "type": "filter",
           "settings": {
-            "label": "Journals & Planners",
-            "collection": "journals-planners"
-          }
-        },
-        "decor": {
-          "type": "filter",
-          "settings": {
-            "label": "Handcrafted Décor",
-            "collection": "handcrafted-decor"
-          }
-        },
-        "events": {
-          "type": "filter",
-          "settings": {
-            "label": "Events & Gifting",
-            "collection": "events-gifting"
+            "label": "Decor",
+            "collection": "decor"
           }
         },
         "bulk": {
           "type": "filter",
           "settings": {
-            "label": "Bulk Orders",
-            "collection": "bulk-orders"
+            "label": "Personalised",
+            "collection": "personalised"
           }
         }
       },
       "block_order": [
         "stationaries",
         "journals",
-        "decor",
-        "events",
         "bulk"
       ],
+      "name": "Featured collections",
       "settings": {
         "eyebrow": "Full Studio Archive",
         "heading": "The Complete Atelier Collection",
         "description": "",
-        "collection": "atelier-collection",
+        "collection": "all-products",
         "product_limit": 20,
         "default_badge": "Studio Edit",
         "use_product_badges": true,
@@ -431,10 +417,10 @@
         "padding_bottom": 24,
         "mobile_heading_size": 30,
         "mobile_gap": 14,
-        "mobile_card_height": 480,
+        "mobile_card_height": 380,
         "mobile_image_height": 240,
-        "mobile_padding_top": 40,
-        "mobile_padding_bottom": 40,
+        "mobile_padding_top": 16,
+        "mobile_padding_bottom": 16,
         "background": "#fdfbf7",
         "card_background": "#ffffff",
         "image_background": "#f8f6f0",
@@ -481,6 +467,7 @@
         },
         "paragraph_4": {
           "type": "paragraph",
+          "disabled": true,
           "settings": {
             "text": "<p>I wanted my designs to live beyond screens and event spaces — to become things people could hold, gift, use, and cherish.</p>",
             "style": "body"
@@ -634,15 +621,15 @@
         "description": "",
         "width": 1360,
         "heading_size": 44,
-        "mobile_heading_size": 28,
+        "mobile_heading_size": 20,
         "mobile_padding_top": 40,
         "mobile_padding_bottom": 40,
         "card_width": 290,
         "mobile_card_width": 250,
         "gap": 22,
         "radius": 20,
-        "padding_top": 72,
-        "padding_bottom": 68,
+        "padding_top": 24,
+        "padding_bottom": 24,
         "background": "#363638",
         "text_color": "#e9dfc2",
         "caption_color": "#c6b58e",
@@ -652,10 +639,10 @@
         "autoplay": true,
         "show_arrows": true,
         "show_dots": true,
-        "show_captions": true,
+        "show_captions": false,
         "show_compare_price": true,
-        "show_like": true,
-        "show_share": true
+        "show_like": false,
+        "show_share": false
       }
     },
     "reviews": {
