@@ -1,106 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
     "footer": {
       "type": "atelier-footer",
-      "settings": {
-        "brand_name": "Graffeine Tales",
-        "logo_height": 44,
-        "show_cup": true,
-        "animate_steam": true,
-        "tagline": "ARTFUL THINGS.\nTHOUGHTFUL LIVING.",
-        "bio": "Creative stationery, handmade art and quirky gifts for everyday moments and special people.",
-        "show_newsletter": true,
-        "newsletter_heading": "Stay in the Loop",
-        "newsletter_text": "Sign up for new launches, creative finds, exclusive offers and a little inspiration.",
-        "email_label": "Your email address",
-        "subscribe_label": "Subscribe to newsletter",
-        "show_consent": true,
-        "consent_label": "Yes, send me the good stuff!",
-        "success_message": "Thank you for joining our circle.",
-        "show_vines": true,
-        "show_desk": true,
-        "art_crop_top": 17,
-        "show_flourishes": true,
-        "content_width": 1920,
-        "padding_top": 38,
-        "background": "#F4ECE1",
-        "text": "#362339",
-        "muted_text": "#554136",
-        "social_background": "#EFA19C",
-        "bottom_background": "#382239",
-        "bottom_text": "#FFFFFF",
-        "input_background": "#FAF7F2",
-        "show_policies": true,
-        "show_payment_icons": false,
-        "copyright_text": "All rights reserved.",
-        "account_label": "Track Your Order"
-      },
       "blocks": {
         "shop": {
           "type": "links",
           "settings": {
             "heading": "Shop",
-            "contact_link": 0,
+            "menu": "footer-shop",
             "include_policies": false,
-            "include_account": false,
-            "label_1": "All Products",
-            "link_1": "shopify://collections/atelier-collection",
-            "label_2": "Journals & Notebooks",
-            "link_2": "shopify://collections/journals-planners",
-            "label_3": "Bookmarks",
-            "link_3": "/search?type=product&q=bookmark",
-            "label_4": "Stickers",
-            "link_4": "/search?type=product&q=sticker",
-            "label_5": "Coasters",
-            "link_5": "/search?type=product&q=coaster",
-            "label_6": "Handmade Art & Décor",
-            "link_6": "shopify://collections/handcrafted-decor",
-            "label_7": "Personalised Gifts",
-            "link_7": "shopify://collections/events-gifting",
-            "label_8": "Gift Sets",
-            "link_8": "/search?type=product&q=gift"
+            "include_account": false
           }
         },
         "about": {
           "type": "links",
           "settings": {
             "heading": "About",
-            "contact_link": 6,
+            "menu": "footer-about",
             "include_policies": false,
-            "include_account": false,
-            "label_1": "Our Story",
-            "link_1": "/#about-us",
-            "label_2": "The Handmade Edit",
-            "link_2": "/#built-with-heart-section",
-            "label_3": "Our Process",
-            "link_3": "/#stories-in-motion",
-            "label_4": "Custom Orders",
-            "link_4": "shopify://collections/events-gifting",
-            "label_5": "Corporate Gifting",
-            "link_5": "shopify://collections/bulk-orders",
-            "label_6": "Events & Collaborations",
-            "link_6": ""
+            "include_account": false
           }
         },
         "help": {
           "type": "links",
           "settings": {
             "heading": "Help",
-            "contact_link": 1,
+            "menu": "footer-help",
             "include_policies": true,
-            "include_account": true,
-            "label_1": "Contact Us",
-            "link_1": "",
-            "label_2": "FAQs",
-            "link_2": "",
-            "label_3": "Shipping & Delivery",
-            "link_3": "",
-            "label_4": "Returns & Refunds",
-            "link_4": "",
-            "label_5": "Bulk Orders",
-            "link_5": "shopify://collections/bulk-orders"
+            "include_account": true
           }
         },
         "shipping": {
@@ -140,7 +78,47 @@
         "payments",
         "packaging",
         "small_business"
-      ]
+      ],
+      "settings": {
+        "brand_name": "Graffeine Tales",
+        "logo_height": 44,
+        "show_cup": true,
+        "animate_steam": true,
+        "tagline": "ARTFUL THINGS.\nTHOUGHTFUL LIVING.",
+        "bio": "Creative stationery, handmade art and quirky gifts for everyday moments and special people.",
+        "contact_email": "",
+        "instagram": "",
+        "pinterest": "",
+        "facebook": "",
+        "youtube": "",
+        "social_label": "Social media profiles",
+        "show_newsletter": true,
+        "newsletter_heading": "Stay in the Loop",
+        "newsletter_text": "Sign up for new launches, creative finds, exclusive offers and a little inspiration.",
+        "email_label": "Your email address",
+        "subscribe_label": "Subscribe to newsletter",
+        "show_consent": true,
+        "consent_label": "Yes, send me the good stuff!",
+        "success_message": "Thank you for joining our circle.",
+        "show_vines": true,
+        "show_desk": true,
+        "art_crop_top": 17,
+        "show_flourishes": true,
+        "content_width": 1920,
+        "padding_top": 38,
+        "background": "#f4ece1",
+        "text": "#362339",
+        "muted_text": "#554136",
+        "social_background": "#efa19c",
+        "bottom_background": "#382239",
+        "bottom_text": "#ffffff",
+        "input_background": "#faf7f2",
+        "show_policies": true,
+        "legal_menu": "",
+        "show_payment_icons": false,
+        "copyright_text": "All rights reserved.",
+        "account_label": "Track Your Order"
+      }
     }
   },
   "order": [

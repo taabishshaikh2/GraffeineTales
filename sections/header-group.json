@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.header.name",
   "type": "header",
@@ -16,6 +25,7 @@
       "block_order": [
         "announcement-bar-0"
       ],
+      "disabled": true,
       "settings": {
         "auto_rotate": false,
         "change_slides_speed": 5,
@@ -24,16 +34,16 @@
         "show_social": false,
         "enable_country_selector": false,
         "enable_language_selector": false
-      },
-      "disabled": true
+      }
     },
     "header": {
       "type": "atelier-header",
       "settings": {
-        "show_cup": true,
-        "animate_steam": true,
+        "menu": "main-menu",
         "logo_height": 44,
         "mobile_logo_height": 32,
+        "show_cup": true,
+        "animate_steam": true,
         "sticky": "up",
         "height": 80,
         "mobile_height": 60,
@@ -43,11 +53,8 @@
         "accent": "#927B53",
         "show_search": true,
         "show_wishlist": true,
-        "show_cart": true,
-        "menu": "main-menu"
-      },
-      "blocks": {},
-      "block_order": []
+        "show_cart": true
+      }
     },
     "mobile_bottom_nav": {
       "type": "mobile-bottom-nav",
@@ -55,15 +62,11 @@
         "navigation_label": "Mobile navigation",
         "home_label": "Home",
         "categories_label": "Categories",
-        "wishlist_label": "Wishlist",
-        "cart_label": "Cart",
         "account_label": "Account",
         "height": 64,
         "background": "#FFFFFF",
         "text": "#363638",
-        "active": "#927B53",
-        "badge_background": "#927B53",
-        "badge_text": "#FFFFFF"
+        "active": "#927B53"
       }
     }
   },
