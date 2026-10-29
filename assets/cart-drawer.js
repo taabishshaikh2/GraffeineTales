@@ -1,6 +1,118 @@
 /* Graffeine Tales side cart. Shopify remains the source of prices and eligibility. */
 (() => {
   if (customElements.get('cart-drawer')) return;
+  // High-Performance Festive Confetti Engine matching Vercel reference
+class CartConfetti {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas ? canvas.getContext('2d') : null;
+    this.particles = [];
+    this.animationFrame = null;
+    this.palette = [
+      '#5A3825', // Atelier Warm Brown
+      '#D4AF37', // Wax Seal Gold
+      '#C85A32', // Terracotta Clay
+      '#2D6A4F', // Botanical Sage
+      '#FACC15', // Radiant Yellow
+      '#E6DCCB', // Parchment Bone
+      '#FFFFFF'  // White
+    ];
+    if (this.canvas) {
+      this.resize();
+      window.addEventListener('resize', () => this.resize());
+    }
+  }
+
+  resize() {
+    if (!this.canvas) return;
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  }
+
+  burst(tier = 1) {
+    if (!this.canvas) return;
+    if (!this.ctx) this.ctx = this.canvas.getContext('2d');
+    if (!this.ctx) return;
+    this.resize();
+
+    const count = tier === 3 ? 120 : tier === 2 ? 90 : 70;
+    const originX = window.innerWidth / 2;
+    const originY = Math.min(window.innerHeight * 0.28, 200);
+
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI / 2) + ((Math.random() - 0.5) * Math.PI * 1.5);
+      const speed = 6 + Math.random() * 10;
+      const size = 6 + Math.random() * 6;
+      const color = this.palette[Math.floor(Math.random() * this.palette.length)];
+
+      this.particles.push({
+        x: originX + (Math.random() - 0.5) * 60,
+        y: originY,
+        vx: Math.cos(angle) * speed,
+        vy: -Math.abs(Math.sin(angle) * speed) - 2.5,
+        size,
+        color,
+        rotation: Math.random() * 360,
+        rotationSpeed: (Math.random() - 0.5) * 14,
+        wobble: Math.random() * 10,
+        wobbleSpeed: 0.1 + Math.random() * 0.1,
+        gravity: 0.22 + Math.random() * 0.08,
+        drag: 0.965,
+        opacity: 1,
+        fadeSpeed: 0.007 + Math.random() * 0.006,
+        shape: Math.random() > 0.35 ? 'rect' : 'circle'
+      });
+    }
+
+    if (!this.animationFrame) {
+      this.animate();
+    }
+  }
+
+  animate() {
+    if (!this.ctx) return;
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.gravity;
+      p.vx *= p.drag;
+      p.rotation += p.rotationSpeed;
+      p.wobble += p.wobbleSpeed;
+      p.opacity -= p.fadeSpeed;
+
+      if (p.opacity <= 0 || p.y > this.canvas.height + 30) {
+        this.particles.splice(i, 1);
+        continue;
+      }
+
+      this.ctx.save();
+      this.ctx.globalAlpha = Math.max(0, p.opacity);
+      this.ctx.translate(p.x + Math.sin(p.wobble) * 2, p.y);
+      this.ctx.rotate((p.rotation * Math.PI) / 180);
+      this.ctx.fillStyle = p.color;
+
+      if (p.shape === 'rect') {
+        this.ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      } else {
+        this.ctx.beginPath();
+        this.ctx.arc(0, 0, p.size / 2.2, 0, Math.PI * 2);
+        this.ctx.fill();
+      }
+      this.ctx.restore();
+    }
+
+    if (this.particles.length > 0) {
+      this.animationFrame = requestAnimationFrame(() => this.animate());
+    } else {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.animationFrame = null;
+    }
+  }
+}
+
   class CartDrawer extends HTMLElement {
     connectedCallback() {
       this.abort?.abort();
@@ -8,6 +120,7 @@
       this.queue = Promise.resolve();
       this.root = window.Shopify?.routes?.root || '/';
       this.readState();
+      this.confetti = new CartConfetti(this.querySelector('[data-cart-confetti]'));
       this.addEventListener('click', e => this.onClick(e), { signal: this.abort.signal });
       this.addEventListener('change', e => this.onChange(e), { signal: this.abort.signal });
       this.addEventListener('submit', e => this.onSubmit(e), { signal: this.abort.signal });
@@ -94,6 +207,7 @@
       this.closeSheet(false);
       this.querySelector('#CartDrawer').innerHTML = next.innerHTML;
       this.readState();
+      if (this.confetti) this.confetti.canvas = this.querySelector('[data-cart-confetti]');
       this.classList.toggle('is-empty', !this.cart.item_count);
       const scroller = this.querySelector('[data-cart-scroll]'); if (scroller) scroller.scrollTop = scroll;
       const bubble = result.sections?.['cart-icon-bubble'];
@@ -206,10 +320,12 @@
       if (event.target.hasAttribute('data-cart-coupon-form')) { event.preventDefault(); this.applyCoupon(new FormData(event.target).get('discount').trim()); }
       if (event.target.hasAttribute('data-cart-variant-form')) { event.preventDefault(); const id = this.querySelector('[data-cart-option-select]').value; this.mutate(() => this.add(id)); }
     }
-    applyCoupon(code) {
+    applyCoupon(code, isAuto = false) {
       return this.mutate(async () => {
         const result = await this.request('cart/update.js', this.sectionBody({ discount: code }));
         this.replaceContents(result);
+        this.currentAppliedCoupon = code;
+        this.updateCheckoutUrl(code);
         const entry = result.discount_codes?.find(item => item.code.toLowerCase() === code.toLowerCase());
         const confirmed = this.config.discountApplications?.some(item => item.type === 'discount_code' && item.title.toLowerCase() === code.toLowerCase()) || entry?.applicable === true;
         this.pendingCode = entry?.applicable === false ? '' : code;
@@ -218,6 +334,66 @@
         if (feedback) { feedback.hidden = !code; feedback.querySelector('span').textContent = text; }
         this.decorateCoupons();
       });
+    }
+    updateCheckoutUrl(code) {
+      const checkoutBtn = this.querySelector('[data-cart-checkout]');
+      if (!checkoutBtn) return;
+      const root = this.root || window.Shopify?.routes?.root || '/';
+      if (code) {
+        checkoutBtn.href = `${root}discount/${encodeURIComponent(code)}?redirect=/checkout`;
+      } else {
+        checkoutBtn.href = `${root}checkout`;
+      }
+    }
+    async autoApplyMilestoneCoupon() {
+      if (this.isApplyingCoupon || this.busy) return;
+      const total = this.cart.total_price || 0;
+
+      const couponCards = [...this.querySelectorAll('[data-coupon-card]')].map(card => ({
+        code: card.dataset.code?.trim(),
+        minimum: Number(card.dataset.minimum || 0)
+      })).filter(c => c.code && c.minimum > 0).sort((a, b) => b.minimum - a.minimum);
+
+      if (couponCards.length === 0) return;
+
+      let targetCode = '';
+      for (const c of couponCards) {
+        if (total >= c.minimum) {
+          targetCode = c.code;
+          break;
+        }
+      }
+
+      const actualApplied = [...new Set((this.config.discountApplications || [])
+        .filter(item => item.type === 'discount_code')
+        .map(item => item.title.toLowerCase()))];
+
+      const currentCode = (this.currentAppliedCoupon || actualApplied[0] || '').trim();
+      const milestoneCodes = couponCards.map(c => c.code.toLowerCase());
+
+      if (currentCode && !milestoneCodes.includes(currentCode.toLowerCase())) return;
+
+      if (targetCode) {
+        if (currentCode.toLowerCase() !== targetCode.toLowerCase()) {
+          this.isApplyingCoupon = true;
+          try {
+            await this.applyCoupon(targetCode, true);
+          } catch (e) {
+            console.warn('Auto coupon apply error:', e);
+          } finally {
+            this.isApplyingCoupon = false;
+          }
+        }
+      } else if (currentCode && milestoneCodes.includes(currentCode.toLowerCase())) {
+        this.isApplyingCoupon = true;
+        try {
+          await this.applyCoupon('', true);
+        } catch (e) {
+          console.warn('Auto coupon remove error:', e);
+        } finally {
+          this.isApplyingCoupon = false;
+        }
+      }
     }
     openSheet(name, trigger) {
       const sheet = this.querySelector('[data-cart-sheet="' + name + '"]');
@@ -258,7 +434,10 @@
     decorate() {
       this.reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (!this.classList.contains('active')) this.setAttribute('inert', '');
-      this.decorateMilestones(); this.decorateCoupons();
+      this.decorateMilestones();
+      this.decorateCoupons();
+      this.updateCheckoutUrl(this.currentAppliedCoupon || (this.config.discountApplications?.find(d => d.type === 'discount_code')?.title) || '');
+      this.autoApplyMilestoneCoupon();
       const addon = this.querySelector('[data-addon-copy]');
       if (addon) addon.textContent = (this.labels.addon_copy || '').replace('[product]', addon.dataset.productTitle).replace('[price]', this.money(Number(addon.dataset.addonPrice)));
       clearInterval(this.timer); this.updateDeadline();
@@ -276,20 +455,97 @@
     decorateMilestones() {
       const total = this.cart.total_price || 0;
       const nodes = [...this.querySelectorAll('[data-reward-node]')].sort((a, b) => Number(a.dataset.threshold) - Number(b.dataset.threshold));
-      const container = this.querySelector('[data-reward-nodes]'); nodes.forEach(node => container?.append(node));
-      const max = Number(nodes.at(-1)?.dataset.threshold || 0);
-      const positions = nodes.map(node => max ? Number(node.dataset.threshold) / max * 100 : 0);
-      nodes.forEach((node, index) => { node.style.left = positions[index] + '%'; const unlocked = total >= Number(node.dataset.threshold); node.classList.toggle('unlocked', unlocked); const lock = node.querySelector('[data-reward-locked]'), check = node.querySelector('[data-reward-unlocked]'); if (lock) lock.hidden = unlocked; if (check) check.hidden = !unlocked; });
-      const progress = max ? Math.max(0, Math.min(100, total / max * 100)) : 0;
+      const container = this.querySelector('[data-reward-nodes]');
+      nodes.forEach(node => container?.append(node));
+      const count = nodes.length;
+      if (count === 0) return;
+
+      // Evenly spaced milestone node positions across the bar (matching Vercel reference)
+      let positions = [];
+      if (count === 1) positions = [50];
+      else if (count === 2) positions = [35, 75];
+      else if (count === 3) positions = [25, 58, 88];
+      else positions = nodes.map((_, i) => Math.round(20 + (i / (count - 1)) * 68));
+
+      const thresholds = nodes.map(node => Number(node.dataset.threshold));
+
+      nodes.forEach((node, index) => {
+        node.style.left = positions[index] + '%';
+        const unlocked = total >= thresholds[index];
+        node.classList.toggle('unlocked', unlocked);
+        const lock = node.querySelector('[data-reward-locked]');
+        const check = node.querySelector('[data-reward-unlocked]');
+        if (lock) lock.hidden = unlocked;
+        if (check) check.hidden = !unlocked;
+      });
+
+      // Segmented visual progress bar
+      let progressPct = 0;
+      if (total <= 0) {
+        progressPct = 0;
+      } else if (total < thresholds[0]) {
+        progressPct = Math.min(positions[0], Math.round((total / thresholds[0]) * positions[0]));
+      } else {
+        let inSegment = false;
+        for (let i = 0; i < count - 1; i++) {
+          if (total >= thresholds[i] && total < thresholds[i + 1]) {
+            const inRange = total - thresholds[i];
+            const span = thresholds[i + 1] - thresholds[i];
+            const posSpan = positions[i + 1] - positions[i];
+            progressPct = positions[i] + Math.min(posSpan, Math.round((inRange / span) * posSpan));
+            inSegment = true;
+            break;
+          }
+        }
+        if (!inSegment) {
+          progressPct = 100;
+        }
+      }
+
       const fill = this.querySelector('[data-reward-fill]');
-      if (fill) { fill.style.width = progress + '%'; fill.style.setProperty('--milestone-progress', progress + '%'); }
-      this.querySelector('[data-reward-progress]')?.setAttribute('aria-valuenow', Math.round(progress));
-      const next = nodes.find(node => total < Number(node.dataset.threshold)) || nodes.at(-1);
+      if (fill) {
+        fill.style.width = progressPct + '%';
+        fill.style.setProperty('--milestone-progress', progressPct + '%');
+      }
+      this.querySelector('[data-reward-progress]')?.setAttribute('aria-valuenow', Math.round(progressPct));
+
+      // Caret pointer and Active Headline
+      const caret = this.querySelector('[data-reward-caret]');
       const headline = this.querySelector('[data-reward-headline]');
-      if (next && headline) headline.textContent = (total >= max ? this.labels.milestone_unlocked : this.labels.milestone_more).replace('[amount]', this.money(Math.max(0, Number(next.dataset.threshold) - total))).replace('[reward]', next.dataset.rewardTitle);
-      this.querySelectorAll('[data-offer-threshold]').forEach(card => { const difference = Number(card.dataset.offerThreshold) - total; card.classList.toggle('unlocked', difference <= 0); const badge = card.querySelector('[data-milestone-badge]'); if (badge) badge.textContent = difference <= 0 ? this.labels.unlocked_label : this.labels.locked_label.replace('[amount]', this.money(difference)); });
+
+      let nextIndex = 0;
+      while (nextIndex < count && total >= thresholds[nextIndex]) {
+        nextIndex++;
+      }
+
+      if (nextIndex < count) {
+        const nextNode = nodes[nextIndex];
+        const gap = Math.max(0, thresholds[nextIndex] - total);
+        if (caret) caret.style.left = positions[nextIndex] + '%';
+        if (headline) {
+          headline.textContent = (this.labels.milestone_more || 'Add [amount] more for [reward]!')
+            .replace('[amount]', this.money(gap))
+            .replace('[reward]', nextNode.dataset.rewardTitle);
+        }
+      } else {
+        if (caret) caret.style.left = positions[count - 1] + '%';
+        if (headline) {
+          headline.textContent = (this.labels.milestone_unlocked || '🎉 All rewards unlocked!')
+            .replace('[reward]', nodes[count - 1].dataset.rewardTitle);
+        }
+      }
+
+      this.querySelectorAll('[data-offer-threshold]').forEach(card => {
+        const diff = Number(card.dataset.offerThreshold) - total;
+        card.classList.toggle('unlocked', diff <= 0);
+        const badge = card.querySelector('[data-milestone-badge]');
+        if (badge) badge.textContent = diff <= 0 ? this.labels.unlocked_label : this.labels.locked_label.replace('[amount]', this.money(diff));
+      });
+
       const unlockedCount = nodes.filter(node => total >= Number(node.dataset.threshold)).length;
-      if (this.previousUnlocked !== undefined && unlockedCount > this.previousUnlocked && this.config.celebrate && !this.reducedMotion) this.celebrate();
+      if (this.previousUnlocked !== undefined && unlockedCount > this.previousUnlocked && this.config.celebrate && !this.reducedMotion) {
+        this.celebrate(unlockedCount);
+      }
       this.previousUnlocked = unlockedCount;
     }
     decorateCoupons() {
@@ -325,14 +581,12 @@
       const track = this.querySelector('[data-cross-sell-track]'); if (!track) return;
       if (direction === -100) track.scrollTo({ left: 0, behavior: 'smooth' }); else track.scrollBy({ left: direction * (track.firstElementChild?.getBoundingClientRect().width + 12 || 230), behavior: this.reducedMotion ? 'auto' : 'smooth' });
     }
-    celebrate() {
-      const canvas = this.querySelector('[data-cart-confetti]'); if (!canvas) return;
-      const context = canvas.getContext('2d'); if (!context) return;
-      canvas.width = this.clientWidth; canvas.height = this.clientHeight;
-      const colors = [getComputedStyle(this).getPropertyValue('--cart-primary'), '#D4AF37', getComputedStyle(this).getPropertyValue('--cart-success')];
-      const pieces = Array.from({ length: 32 }, () => ({ x: canvas.width / 2, y: 130, vx: (Math.random() - .5) * 8, vy: -Math.random() * 7, color: colors[Math.floor(Math.random() * colors.length)] }));
-      let frame = 0;
-      const draw = () => { context.clearRect(0, 0, canvas.width, canvas.height); pieces.forEach(piece => { piece.x += piece.vx; piece.y += piece.vy; piece.vy += .15; context.fillStyle = piece.color; context.fillRect(piece.x, piece.y, 5, 7); }); if (++frame < 100 && this.isConnected) requestAnimationFrame(draw); else context.clearRect(0, 0, canvas.width, canvas.height); }; draw();
+    celebrate(tier = 1) {
+      if (this.reducedMotion) return;
+      if (!this.confetti) {
+        this.confetti = new CartConfetti(this.querySelector('[data-cart-confetti]'));
+      }
+      this.confetti?.burst(tier);
     }
   }
   customElements.define('cart-drawer', CartDrawer);

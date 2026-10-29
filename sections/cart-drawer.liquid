@@ -34,7 +34,7 @@
  <div id="CartDrawer" class="app-viewport atelier-cart__panel" role="dialog" aria-modal="true" aria-labelledby="SideCartTitle" tabindex="-1">
   <canvas class="atelier-cart-confetti-canvas" data-cart-confetti aria-hidden="true"></canvas>
   <div class="atelier-cart__shell" data-cart-shell>
-   <header class="atelier-cart-header"><h2 class="header-cart-title" id="SideCartTitle">{{ section.settings.title | escape }}</h2><button type="button" class="btn-header-close" data-cart-close aria-label="{{ section.settings.close_label | escape }}">{% render 'cart-icon',name:'close' %}</button></header>
+   <header class="atelier-cart-header"><div style="display:inline-flex;align-items:center;gap:10px;"><h2 class="header-cart-title" id="SideCartTitle">{{ section.settings.title | escape }}</h2>{% if cart.item_count > 0 %}<span class="header-cart-count-badge">{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}</span>{% endif %}</div><button type="button" class="btn-header-close" data-cart-close aria-label="{{ section.settings.close_label | escape }}">{% render 'cart-icon',name:'close' %}</button></header>
    <p class="atelier-cart__notice" data-cart-error role="alert" hidden></p>
    <main class="cart-scroll-content" data-cart-scroll>
     {% if cart.item_count > 0 %}
