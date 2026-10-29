@@ -38,7 +38,7 @@
 
   </div>
   <div class="atelier-pdp__purchase{% if section.settings.purchase_shadow %} atelier-pdp__purchase--shadow{% endif %}">
-   {% assign category_text = product_content.category_label.value | default: product.type %}{% if category_text != blank %}<p class="atelier-pdp__eyebrow">{{ category_text | escape }}</p>{% endif %}
+   
    <h1>{{ display_title | escape }}</h1>
    {% assign review_rating = product.metafields.reviews.rating.value %}{% assign review_count = product.metafields.reviews.rating_count.value %}
    {% if section.settings.show_product_rating and review_rating != blank %}<div class="atelier-pdp__rating"><span role="img" aria-label="{{ review_rating.rating }} / {{ review_rating.scale_max }}"><svg width="76" height="14" viewBox="0 0 100 18" aria-hidden="true"><defs><linearGradient id="RatingFill-{{ section.id }}"><stop offset="{{ review_rating.rating | times: 100.0 | divided_by: review_rating.scale_max }}%" stop-color="#A17D36"/><stop offset="{{ review_rating.rating | times: 100.0 | divided_by: review_rating.scale_max }}%" stop-color="#D8D0C5"/></linearGradient></defs><path fill="url(#RatingFill-{{ section.id }})" d="m9 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L9 14.3l-5.6 2.9 1.1-6.2L0 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L20 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L40 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L60 6.6l6.2-.9Zm20 0 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L80 6.6l6.2-.9Z"/></svg></span>{% if review_count != blank %}<span>({{ review_count }} {{ section.settings.review_label | escape }})</span>{% endif %}</div>{% endif %}
@@ -46,7 +46,7 @@
    {% assign price_note_text = product_content.price_note.value | default: "Inclusive of all domestic taxes • Custom studio box included" %}<p class="atelier-pdp__price-note">{{ price_note_text | escape }}</p>
    </div>
    {% if product_content.short_description.value != blank %}<div class="atelier-pdp__description">{{ product_content.short_description | metafield_tag }}</div>{% elsif product.description != blank %}<div class="atelier-pdp__description">{{ product.description }}</div>{% endif %}
-   {% if product_content.key_specifications.value != blank %}<div class="atelier-pdp__key-specs"><h2>{{ section.settings.specs_heading | escape }}</h2><ul>{% for specification in product_content.key_specifications.value %}<li>{{ specification | escape }}</li>{% endfor %}</ul></div>{% endif %}
+  
    {% form 'product', product, id: product_form_id, data-atelier-product-form: '' %}
     <input type="hidden" name="id" value="{{ current_variant.id }}">
     {% unless product.has_only_default_variant %}
