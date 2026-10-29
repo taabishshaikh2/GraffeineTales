@@ -97,9 +97,7 @@
         "show_arrows": true,
         "responsive_height": true,
         "arrow_background": "#7d6a6a",
-        "arrow_color": "#ffffff",
-        "previous_label": "",
-        "next_label": ""
+        "arrow_color": "#ffffff"
       }
     },
     "categories_grid": {
@@ -197,7 +195,7 @@
         "bestsellers"
       ],
       "settings": {
-        "heading": "Shop By Category",
+        "heading": "SHOP BY CATEGORY.",
         "width": 1240,
         "heading_size": 42,
         "card_radius": 14,
@@ -205,7 +203,7 @@
         "mobile_columns": "3",
         "background": "#ffffff",
         "heading_color": "#363638",
-        "button_background": "#4A3525",
+        "button_background": "#0d0c0b",
         "button_text": "#ffffff",
         "show_button": true,
         "button_label": "View all products",
@@ -252,22 +250,7 @@
         "show_quick_view": true,
         "show_ratings": true,
         "show_compare_price": true,
-        "show_discount": true,
-        "add_label": "Add to Cart",
-        "choose_label": "Choose options",
-        "sold_out_label": "Sold out",
-        "quick_view_label": "View Details",
-        "wishlist_label": "Save to wishlist",
-        "discount_label": "OFF",
-        "loading_label": "Loading…",
-        "adding_label": "Adding…",
-        "added_label": "Added to your bag",
-        "error_label": "Something went wrong. Please try again.",
-        "close_label": "Close",
-        "variant_label": "Edition",
-        "quantity_label": "Quantity",
-        "details_label": "View full details",
-        "empty_label": "Choose a collection containing products."
+        "show_discount": true
       }
     },
     "bestsellers": {
@@ -308,22 +291,7 @@
         "show_quick_view": true,
         "show_ratings": true,
         "show_compare_price": true,
-        "show_discount": true,
-        "add_label": "Add to Cart",
-        "choose_label": "Choose options",
-        "sold_out_label": "Sold out",
-        "quick_view_label": "View Details",
-        "wishlist_label": "Save to wishlist",
-        "discount_label": "OFF",
-        "loading_label": "Loading…",
-        "adding_label": "Adding…",
-        "added_label": "Added to your bag",
-        "error_label": "Something went wrong. Please try again.",
-        "close_label": "Close",
-        "variant_label": "Edition",
-        "quantity_label": "Quantity",
-        "details_label": "View full details",
-        "empty_label": "Choose a collection containing products."
+        "show_discount": true
       }
     },
     "built_with_heart": {
@@ -366,22 +334,7 @@
         "show_quick_view": true,
         "show_ratings": true,
         "show_compare_price": true,
-        "show_discount": true,
-        "add_label": "Add to Cart",
-        "choose_label": "Choose options",
-        "sold_out_label": "Sold out",
-        "quick_view_label": "View Details",
-        "wishlist_label": "Save to wishlist",
-        "discount_label": "OFF",
-        "loading_label": "Loading…",
-        "adding_label": "Adding…",
-        "added_label": "Added to your bag",
-        "error_label": "Something went wrong. Please try again.",
-        "close_label": "Close",
-        "variant_label": "Edition",
-        "quantity_label": "Quantity",
-        "details_label": "View full details",
-        "empty_label": "Choose a collection containing products."
+        "show_discount": true
       }
     },
     "catalogue": {
@@ -467,32 +420,7 @@
         "show_quick_view": true,
         "show_ratings": true,
         "show_compare_price": true,
-        "show_discount": true,
-        "add_label": "Add to Cart",
-        "choose_label": "Choose options",
-        "sold_out_label": "Sold out",
-        "quick_view_label": "View Details",
-        "wishlist_label": "Save to wishlist",
-        "discount_label": "OFF",
-        "loading_label": "Loading…",
-        "adding_label": "Adding…",
-        "added_label": "Added to your bag",
-        "error_label": "Something went wrong. Please try again.",
-        "close_label": "Close",
-        "variant_label": "Edition",
-        "quantity_label": "Quantity",
-        "details_label": "View full details",
-        "empty_label": "Choose a collection containing products.",
-        "all_label": "All Editions",
-        "filter_label": "Filter the atelier collection",
-        "results_label": "Products shown",
-        "no_results": "New stories are on their way. Check back soon.",
-        "filter_background": "#ffffff",
-        "filter_text": "#5a5149",
-        "active_filter_background": "#363638",
-        "active_filter_text": "#e9dfc2",
-        "show_collection_link": false,
-        "collection_link_label": "Explore the full collection"
+        "show_discount": true
       }
     },
     "about_story": {
@@ -595,7 +523,7 @@
             "mp4_url": "",
             "instagram_url": "",
             "poster_url": "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/lady_teatrip.jpg?v=1792924261",
-            "product": "lady-teatrip-acrylic-coaster-teak-stand",
+            "product": "its-book-oclock-laser-engraved-bookmark",
             "captions_url": "",
             "captions_language": "en",
             "captions_label": "English"
@@ -692,27 +620,7 @@
         "show_captions": true,
         "show_compare_price": true,
         "show_like": true,
-        "show_share": true,
-        "previous_label": "Previous story",
-        "next_label": "Next story",
-        "watch_label": "Open story",
-        "play_label": "Play video",
-        "pause_label": "Pause video",
-        "mute_label": "Mute video",
-        "unmute_label": "Unmute video",
-        "close_label": "Close story",
-        "save_label": "Save this story",
-        "share_label": "Share this story",
-        "shared_label": "Story link copied",
-        "instagram_label": "Load Instagram reel",
-        "seek_label": "Video timeline",
-        "product_label": "View product",
-        "add_label": "Add to Cart",
-        "adding_label": "Adding…",
-        "added_label": "Added to your bag",
-        "sold_out_label": "Sold out",
-        "error_label": "Something went wrong. Please try again.",
-        "video_error_label": "This video is unavailable. You can still explore the featured product."
+        "show_share": true
       }
     },
     "reviews": {
@@ -809,16 +717,7 @@
         "muted_text": "#6b6966",
         "accent": "#927b53",
         "avatar_background": "#e9dfc2",
-        "avatar_text": "#4d351d",
-        "region_label": "Customer reviews",
-        "rating_label": "Rating",
-        "verified_label": "Verified buyer",
-        "sample_label": "Reference sample",
-        "preview_note": "Sample reviews are shown here for layout preview. Add genuine reviews and enable Display on storefront for each one.",
-        "keyboard_hint": "Focus or hover over the reviews to pause scrolling. Use the arrow keys to browse.",
-        "pause_label": "Pause reviews",
-        "resume_label": "Resume reviews",
-        "empty_label": "Add customer reviews to display this section."
+        "avatar_text": "#4d351d"
       }
     }
   },
