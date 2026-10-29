@@ -223,7 +223,7 @@
         "turn_time": 700,
         "background": "#f8f5ed",
         "coffee": "#4d351d",
-        "peel_hint": false,
+        "peel_hint": true,
         "card_background": "#fdfcfa",
         "card_border": "#e6d9c1",
         "card_radius": 24,
