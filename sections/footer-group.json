@@ -43,6 +43,7 @@
         },
         "shipping": {
           "type": "benefit",
+          "name": "Pan India Shipping",
           "settings": {
             "label": "Pan India Shipping",
             "icon": "truck"
@@ -50,6 +51,7 @@
         },
         "payments": {
           "type": "benefit",
+          "name": "Secure Payments",
           "settings": {
             "label": "Secure Payments",
             "icon": "shield"
@@ -57,6 +59,7 @@
         },
         "packaging": {
           "type": "benefit",
+          "disabled": true,
           "settings": {
             "label": "Thoughtful Packaging",
             "icon": "gift"
@@ -64,6 +67,7 @@
         },
         "small_business": {
           "type": "benefit",
+          "disabled": true,
           "settings": {
             "label": "Supporting Small Business",
             "icon": "leaf"
@@ -87,7 +91,7 @@
         "tagline": "ARTFUL THINGS.\nTHOUGHTFUL LIVING.",
         "bio": "Creative stationery, handmade art and quirky gifts for everyday moments and special people.",
         "contact_email": "",
-        "instagram": "",
+        "instagram": "https://www.instagram.com/graffeine_tales?xtok=MThpNzdvbXl0aHgyNw==",
         "pinterest": "",
         "facebook": "",
         "youtube": "",
@@ -100,10 +104,15 @@
         "show_consent": true,
         "consent_label": "Yes, send me the good stuff!",
         "success_message": "Thank you for joining our circle.",
-        "show_vines": true,
         "show_desk": true,
         "art_crop_top": 17,
+        "show_vines": true,
         "show_flourishes": true,
+        "show_whatsapp": true,
+        "whatsapp_position": "bottom-right",
+        "whatsapp_number": "919876543210",
+        "whatsapp_message": "Hi Graffeine Tales! I am interested in purchasing a product",
+        "whatsapp_tooltip": "Chat with us",
         "content_width": 1920,
         "padding_top": 38,
         "background": "#f4ece1",
@@ -113,17 +122,11 @@
         "bottom_background": "#382239",
         "bottom_text": "#ffffff",
         "input_background": "#faf7f2",
-        "show_policies": true,
+        "show_policies": false,
         "legal_menu": "",
         "show_payment_icons": false,
         "copyright_text": "All rights reserved.",
-        "account_label": "Track Your Order",
-        "footer_background_image": "",
-        "show_whatsapp": true,
-        "whatsapp_position": "bottom-left",
-        "whatsapp_number": "919876543210",
-        "whatsapp_message": "Hi Graffeine Tales! I have a question about your collection.",
-        "whatsapp_tooltip": "Chat with us"
+        "account_label": "Track Your Order"
       }
     }
   },
