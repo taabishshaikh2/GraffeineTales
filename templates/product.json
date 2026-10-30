@@ -51,9 +51,39 @@
             "page": "",
             "open": false
           }
+        },
+        "trust_badge_1": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "bag",
+            "text": "7-10 days from order confirmation / Dispatches in 2-3 business days",
+            "icon_bg": "#FDF0ED",
+            "icon_color": "#9E3B2B"
+          }
+        },
+        "trust_badge_2": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "shield",
+            "text": "Secure Packaging",
+            "icon_bg": "#FDF0ED",
+            "icon_color": "#9E3B2B"
+          }
+        },
+        "trust_badge_3": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "truck",
+            "text": "Flat shipping ₹99 per order",
+            "icon_bg": "#FDF0ED",
+            "icon_color": "#9E3B2B"
+          }
         }
       },
       "block_order": [
+        "trust_badge_1",
+        "trust_badge_2",
+        "trust_badge_3",
         "accordion_bG7qH7",
         "accordion_F4UEh4",
         "accordion_36en6E",
@@ -212,10 +242,75 @@
         "border": "#e6d9c1",
         "button_background": "#4a3525"
       }
+    },
+    "pdp-features": {
+      "type": "pdp-features-banner",
+      "blocks": {
+        "feature_1": {
+          "type": "feature",
+          "settings": {
+            "icon": "heart",
+            "text": "Quirky, feel-good design",
+            "icon_bg": "#FDECE8",
+            "icon_color": "#C0392B"
+          }
+        },
+        "feature_2": {
+          "type": "feature",
+          "settings": {
+            "icon": "sparkles",
+            "text": "Premium print quality",
+            "icon_bg": "#FEF7E6",
+            "icon_color": "#D4A017"
+          }
+        },
+        "feature_3": {
+          "type": "feature",
+          "settings": {
+            "icon": "gift",
+            "text": "Perfect for gifting",
+            "icon_bg": "#FDF0ED",
+            "icon_color": "#9E3B2B"
+          }
+        },
+        "feature_4": {
+          "type": "feature",
+          "settings": {
+            "icon": "leaf",
+            "text": "Designed with love",
+            "icon_bg": "#EDF7EE",
+            "icon_color": "#2D7A3E"
+          }
+        }
+      },
+      "block_order": [
+        "feature_1",
+        "feature_2",
+        "feature_3",
+        "feature_4"
+      ],
+      "settings": {
+        "heading": "",
+        "heading_size": 26,
+        "mobile_heading_size": 22,
+        "background": "#FFFFFF",
+        "border_color": "#EFECE6",
+        "border_radius": 20,
+        "padding_y": 24,
+        "padding_x": 26,
+        "columns_desktop": "4",
+        "columns_mobile": "2",
+        "max_width": 1320,
+        "padding_top": 24,
+        "padding_bottom": 24,
+        "mobile_padding_top": 16,
+        "mobile_padding_bottom": 16
+      }
     }
   },
   "order": [
     "main",
+    "pdp-features",
     "preview",
     "video-gallery",
     "disclosures",

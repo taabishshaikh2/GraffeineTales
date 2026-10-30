@@ -1,0 +1,327 @@
+{{ 'atelier-pdp-icons.css' | asset_url | stylesheet_tag }}
+
+<div
+  class="atelier-perks-section"
+  style="
+    --perks-max-width: {{ section.settings.max_width }}px;
+    --perks-top: {{ section.settings.padding_top }}px;
+    --perks-bottom: {{ section.settings.padding_bottom }}px;
+    --perks-mobile-top: {{ section.settings.mobile_padding_top }}px;
+    --perks-mobile-bottom: {{ section.settings.mobile_padding_bottom }}px;
+    --perks-heading-size: {{ section.settings.heading_size }}px;
+    --perks-mobile-heading-size: {{ section.settings.mobile_heading_size }}px;
+    --perks-heading-color: {{ section.settings.heading_color }};
+  "
+>
+  {% if section.settings.heading != blank %}
+    <h2 class="atelier-perks-section__heading">{{ section.settings.heading | escape }}</h2>
+  {% endif %}
+
+  <div
+    class="atelier-perks-card"
+    style="
+      --perks-bg: {{ section.settings.background }};
+      --perks-border: {{ section.settings.border_color }};
+      --perks-radius: {{ section.settings.border_radius }}px;
+      --perks-padding-y: {{ section.settings.padding_y }}px;
+      --perks-padding-x: {{ section.settings.padding_x }}px;
+      --perks-cols-desktop: {{ section.settings.columns_desktop }};
+      --perks-cols-mobile: {{ section.settings.columns_mobile }};
+      --perks-text: {{ section.settings.text_color }};
+    "
+  >
+    {% for block in section.blocks %}
+      {% if block.settings.text != blank %}
+        <div
+          class="atelier-perks-card__item"
+          {{ block.shopify_attributes }}
+          style="
+            --icon-bg: {{ block.settings.icon_bg }};
+            --icon-color: {{ block.settings.icon_color }};
+          "
+        >
+          <div class="atelier-perks-card__icon-bubble">
+            {% render 'atelier-icon-render', icon: block.settings.icon, custom_icon: block.settings.custom_icon %}
+          </div>
+          <div class="atelier-perks-card__text">
+            {{ block.settings.text }}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "PDP Features (Image 3)",
+  "tag": "section",
+  "class": "section-pdp-features",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section heading (optional)"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#363638"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Desktop heading size",
+      "min": 18,
+      "max": 42,
+      "step": 2,
+      "default": 26,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_size",
+      "label": "Mobile heading size",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "default": 22,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Card styling"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Card background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Card border",
+      "default": "#EFECE6"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#363638"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 36,
+      "step": 2,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_y",
+      "label": "Vertical padding",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_x",
+      "label": "Horizontal padding",
+      "min": 12,
+      "max": 48,
+      "step": 2,
+      "default": 26,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Columns"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Desktop columns",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Mobile columns",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum container width",
+      "min": 600,
+      "max": 1600,
+      "step": 40,
+      "default": 1320,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing (desktop)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing (desktop)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Top spacing (mobile)",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Bottom spacing (mobile)",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 16,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature / Perk",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "heart", "label": "Heart" },
+            { "value": "sparkles", "label": "Sparkles / Quality" },
+            { "value": "gift", "label": "Gift box" },
+            { "value": "leaf", "label": "Leaf / Eco" },
+            { "value": "bag", "label": "Shopping bag / Package" },
+            { "value": "shield", "label": "Security shield" },
+            { "value": "truck", "label": "Delivery truck" },
+            { "value": "clock", "label": "Clock / Fast dispatch" },
+            { "value": "check", "label": "Checkmark" },
+            { "value": "lock", "label": "Secure lock" },
+            { "value": "return", "label": "Easy return" },
+            { "value": "award", "label": "Award / Guarantee" },
+            { "value": "smile", "label": "Smile / Friendly" }
+          ],
+          "default": "heart"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon image (optional)"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "Quirky, feel-good design"
+        },
+        {
+          "type": "color",
+          "id": "icon_bg",
+          "label": "Icon circle background",
+          "default": "#FDECE8"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon symbol color",
+          "default": "#C0392B"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Features (Image 3)",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "heart",
+            "text": "Quirky, feel-good design",
+            "icon_bg": "#FDECE8",
+            "icon_color": "#C0392B"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "sparkles",
+            "text": "Premium print quality",
+            "icon_bg": "#FEF7E6",
+            "icon_color": "#D4A017"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "gift",
+            "text": "Perfect for gifting",
+            "icon_bg": "#FDF0ED",
+            "icon_color": "#9E3B2B"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "leaf",
+            "text": "Designed with love",
+            "icon_bg": "#EDF7EE",
+            "icon_color": "#2D7A3E"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

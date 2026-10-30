@@ -1,0 +1,257 @@
+{{ 'atelier-pdp-icons.css' | asset_url | stylesheet_tag }}
+
+<div
+  class="atelier-trust-bar__standalone-wrap"
+  style="
+    --trust-bar-max-width: {{ section.settings.max_width }}px;
+    --trust-bar-top: {{ section.settings.padding_top }}px;
+    --trust-bar-bottom: {{ section.settings.padding_bottom }}px;
+    --trust-bar-mobile-top: {{ section.settings.mobile_padding_top }}px;
+    --trust-bar-mobile-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  "
+>
+  <div
+    class="atelier-trust-bar"
+    style="
+      --trust-bar-bg: {{ section.settings.background }};
+      --trust-bar-border: {{ section.settings.border_color }};
+      --trust-bar-radius: {{ section.settings.border_radius }}px;
+      --trust-bar-text: {{ section.settings.text_color }};
+      --trust-bar-divider: {{ section.settings.divider_color }};
+      --trust-bar-padding-y: {{ section.settings.padding_y }}px;
+      --trust-bar-padding-x: {{ section.settings.padding_x }}px;
+    "
+  >
+    {% for block in section.blocks %}
+      {% if block.settings.text != blank %}
+        <div
+          class="atelier-trust-bar__item"
+          {{ block.shopify_attributes }}
+          style="
+            --icon-bg: {{ block.settings.icon_bg }};
+            --icon-color: {{ block.settings.icon_color }};
+          "
+        >
+          <div class="atelier-trust-bar__icon-bubble">
+            {% render 'atelier-icon-render', icon: block.settings.icon, custom_icon: block.settings.custom_icon %}
+          </div>
+          <div class="atelier-trust-bar__text">
+            {{ block.settings.text }}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "PDP Trust Bar (Image 2)",
+  "tag": "section",
+  "class": "section-pdp-trust-bar",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Card background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Card border",
+      "default": "#F0ECE4"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Item divider line",
+      "default": "#F0ECE4"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#363638"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_y",
+      "label": "Card vertical padding",
+      "min": 8,
+      "max": 28,
+      "step": 2,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_x",
+      "label": "Card horizontal padding",
+      "min": 10,
+      "max": 36,
+      "step": 2,
+      "default": 18,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Layout Spacing"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum container width",
+      "min": 600,
+      "max": 1600,
+      "step": 40,
+      "default": 1320,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing (desktop)",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing (desktop)",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Top spacing (mobile)",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Bottom spacing (mobile)",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 14,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon_text",
+      "name": "Icon with text",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "bag", "label": "Shopping bag / Package" },
+            { "value": "shield", "label": "Security shield" },
+            { "value": "truck", "label": "Delivery truck" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "sparkles", "label": "Sparkles / Quality" },
+            { "value": "gift", "label": "Gift box" },
+            { "value": "leaf", "label": "Leaf / Eco" },
+            { "value": "clock", "label": "Clock / Fast dispatch" },
+            { "value": "check", "label": "Checkmark" },
+            { "value": "lock", "label": "Secure lock" },
+            { "value": "return", "label": "Easy return" },
+            { "value": "award", "label": "Award / Guarantee" },
+            { "value": "smile", "label": "Smile / Friendly" }
+          ],
+          "default": "bag"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon image (optional)",
+          "info": "Upload a custom PNG/SVG icon to replace the selected icon."
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "7-10 days from order confirmation / Dispatches in 2-3 business days"
+        },
+        {
+          "type": "color",
+          "id": "icon_bg",
+          "label": "Icon circle background",
+          "default": "#FDF0ED"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon symbol color",
+          "default": "#9E3B2B"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Trust Bar (Image 2)",
+      "blocks": [
+        {
+          "type": "icon_text",
+          "settings": {
+            "icon": "bag",
+            "text": "7-10 days from order confirmation / Dispatches in 2-3 business days",
+            "icon_bg": "#FDF0ED",
+            "icon_color": "#9E3B2B"
+          }
+        },
+        {
+          "type": "icon_text",
+          "settings": {
+            "icon": "shield",
+            "text": "Secure Packaging",
+            "icon_bg": "#FDF0ED",
+            "icon_color": "#9E3B2B"
+          }
+        },
+        {
+          "type": "icon_text",
+          "settings": {
+            "icon": "truck",
+            "text": "Flat shipping ₹99 per order",
+            "icon_bg": "#FDF0ED",
+            "icon_color": "#9E3B2B"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

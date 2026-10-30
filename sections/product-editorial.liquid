@@ -1,3 +1,4 @@
+{{ 'atelier-pdp-icons.css' | asset_url | stylesheet_tag }}
 {{ 'product-hero.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-showcase.js' | asset_url }}" defer></script>
 <script src="{{ 'product-hero.js' | asset_url }}" defer></script>
@@ -204,6 +205,23 @@
     {% if section.settings.dynamic_checkout %}<div class="atelier-pdp__express">{{ form | payment_button }}</div>{% endif %}
    {% endform %}
    <p data-cart-error role="alert" hidden></p>
+   {% assign trust_badge_blocks = section.blocks | where: 'type', 'trust_badge' %}
+   {% if trust_badge_blocks.size > 0 %}
+     <div class="atelier-trust-bar" style="margin-top: 18px; margin-bottom: 18px;">
+       {% for block in trust_badge_blocks %}
+         {% if block.settings.text != blank %}
+           <div class="atelier-trust-bar__item" {{ block.shopify_attributes }} style="--icon-bg: {{ block.settings.icon_bg }}; --icon-color: {{ block.settings.icon_color }};">
+             <div class="atelier-trust-bar__icon-bubble">
+               {% render 'atelier-icon-render', icon: block.settings.icon, custom_icon: block.settings.custom_icon %}
+             </div>
+             <div class="atelier-trust-bar__text">
+               {{ block.settings.text }}
+             </div>
+           </div>
+         {% endif %}
+       {% endfor %}
+     </div>
+   {% endif %}
    {% if product.description != blank %}<div class="atelier-pdp__description">{{ product.description }}</div>{% endif %}
    {% if section.settings.show_delivery %}
     <div class="atelier-pdp__delivery">{% render 'product-detail-icon', name: 'truck' %}<div><label for="Pincode-{{ section.id }}">{{ section.settings.delivery_heading | escape }}{% if section.settings.delivery_extra != blank %}<span>{{ section.settings.delivery_extra | escape }}</span>{% endif %}</label><div class="atelier-pdp__pincode"><input id="Pincode-{{ section.id }}" data-pincode inputmode="numeric" autocomplete="postal-code" maxlength="6" pattern="[1-9][0-9]{5}" placeholder="{{ section.settings.pincode_placeholder | escape }}"><button type="button" data-check-pincode>{{ section.settings.check_label | escape }}</button></div><p data-delivery-result role="status">{{ section.settings.delivery_note | escape }}</p></div></div>
@@ -660,6 +678,56 @@
     }
   ],
   "blocks": [
+    {
+      "type": "trust_badge",
+      "name": "Trust badge (Image 2)",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "bag", "label": "Shopping bag / Package" },
+            { "value": "shield", "label": "Security shield" },
+            { "value": "truck", "label": "Delivery truck" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "sparkles", "label": "Sparkles / Quality" },
+            { "value": "gift", "label": "Gift box" },
+            { "value": "leaf", "label": "Leaf / Eco" },
+            { "value": "clock", "label": "Clock / Fast dispatch" },
+            { "value": "check", "label": "Checkmark" },
+            { "value": "lock", "label": "Secure lock" },
+            { "value": "return", "label": "Easy return" },
+            { "value": "award", "label": "Award / Guarantee" },
+            { "value": "smile", "label": "Smile / Friendly" }
+          ],
+          "default": "bag"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon image (optional)"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "7-10 days from order confirmation / Dispatches in 2-3 business days"
+        },
+        {
+          "type": "color",
+          "id": "icon_bg",
+          "label": "Icon circle background",
+          "default": "#FDF0ED"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon symbol color",
+          "default": "#9E3B2B"
+        }
+      ]
+    },
     {
       "type": "accordion",
       "name": "Accordion / Tab",
