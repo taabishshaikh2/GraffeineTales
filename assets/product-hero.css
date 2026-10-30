@@ -180,3 +180,14 @@
     font-size: 12px;
   }
 }
+
+/* PDP Description Spacing */
+.atelier-pdp__description {
+  margin-top: var(--pdp-desc-top, 24px) !important;
+  margin-bottom: 24px !important;
+}
+@media (max-width: 749px) {
+  .atelier-pdp__description {
+    margin-top: var(--pdp-mobile-desc-top, 20px) !important;
+  }
+}
