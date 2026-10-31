@@ -57,7 +57,7 @@
             "heading": "Product Details",
             "content": "{{ product.metafields.graffeine_product.features | metafield_tag }}",
             "page": "",
-            "open": true
+            "open": false
           }
         },
         "accordion_36en6E": {
