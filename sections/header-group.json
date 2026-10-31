@@ -44,19 +44,19 @@
         "mobile_logo_height": 30,
         "show_cup": true,
         "animate_steam": true,
+        "menu_font_size": 14,
+        "menu_font_weight": "500",
+        "menu_text_transform": "none",
         "sticky": "always",
         "height": 64,
         "mobile_height": 56,
         "width": 1340,
         "background": "#f8f5ed",
         "text": "#363638",
-        "accent": "#927b53",
+        "accent": "#FDF0ED",
         "show_search": true,
         "show_wishlist": true,
-        "show_cart": true,
-        "menu_font_size": 14,
-        "menu_font_weight": "500",
-        "menu_text_transform": "none"
+        "show_cart": true
       }
     },
     "mobile_bottom_nav": {
