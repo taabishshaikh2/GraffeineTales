@@ -127,6 +127,14 @@
     "cart_drawer_collection": "",
     "cart_color_scheme": "scheme-1",
     "customer_account_menu": "customer-account-main-menu",
+    "enable_whatsapp": true,
+    "whatsapp_position": "bottom-left",
+    "whatsapp_number": "919876543210",
+    "whatsapp_message": "Hi Graffeine Tales! I have a question about your collection.",
+    "whatsapp_tooltip": "Chat with us",
+    "cart_show_payment_icons": true,
+    "cart_payment_icons": "visa,master,upi,rupay",
+    "cart_secure_label": "100% Secured Payments",
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
@@ -147,7 +155,7 @@
             "type": "milestone",
             "settings": {
               "title": "Free Shipping",
-              "threshold": 999,
+              "threshold": 99,
               "kind": "shipping",
               "details": "",
               "link": ""
@@ -271,7 +279,9 @@
           "tax_included": "Inclusive of all taxes",
           "tax_pending": "Taxes and shipping calculated at checkout",
           "show_payment_icons": true,
+          "payment_icons_list": "visa,master,upi,rupay",
           "secure_label": "100% Secured Payments",
+          "show_secure_badge": true,
           "show_note": false,
           "note_label": "Add a gift or order note",
           "note_placeholder": "A little note from you…",
@@ -286,9 +296,7 @@
           "decrease_label": "Decrease quantity",
           "increase_label": "Increase quantity",
           "previous_label": "Previous product",
-          "next_label": "Next product",
-          "payment_icons_list": "visa,master,upi,rupay",
-          "show_secure_badge": true
+          "next_label": "Next product"
         }
       }
     },
@@ -349,15 +357,7 @@
           "shadow": "#121212"
         }
       }
-    },
-    "enable_whatsapp": true,
-    "whatsapp_number": "919876543210",
-    "whatsapp_message": "Hi Graffeine Tales! I have a question about your collection.",
-    "whatsapp_position": "bottom-left",
-    "whatsapp_tooltip": "Chat with us",
-    "cart_show_payment_icons": true,
-    "cart_payment_icons": "visa,master,upi,rupay",
-    "cart_secure_label": "100% Secured Payments"
+    }
   },
   "presets": {
     "Dawn": {
