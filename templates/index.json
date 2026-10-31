@@ -149,7 +149,7 @@
           "type": "category",
           "settings": {
             "title": "Décor",
-            "collection": "decor",
+            "collection": "home-decor",
             "link": "",
             "reference_image": "cat_decor.jpg",
             "image_position": "center"
@@ -378,7 +378,7 @@
           "type": "filter",
           "settings": {
             "label": "Decor",
-            "collection": "decor"
+            "collection": "home-decor"
           }
         },
         "bulk": {
