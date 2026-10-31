@@ -63,6 +63,7 @@
         "accordion_36en6E": {
           "type": "accordion",
           "name": "Shipping",
+          "disabled": true,
           "settings": {
             "heading": "Shipping",
             "content": "<p><strong>7–10 days</strong> from order confirmation.</p>",
