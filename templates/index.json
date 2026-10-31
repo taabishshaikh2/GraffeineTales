@@ -344,32 +344,48 @@
     "catalogue": {
       "type": "catalogue",
       "blocks": {
-        "stationaries": {
+        "filter_M7wDMC": {
           "type": "filter",
           "settings": {
-            "label": "Stationary",
-            "collection": "stationary"
+            "label": "Notebooks",
+            "collection": "notebooks"
           }
         },
-        "journals": {
+        "filter_bqb8xd": {
           "type": "filter",
           "settings": {
-            "label": "Decor",
+            "label": "Coasters",
+            "collection": "coasters"
+          }
+        },
+        "filter_4dkaMR": {
+          "type": "filter",
+          "settings": {
+            "label": "Home decor",
             "collection": "home-decor"
           }
         },
-        "bulk": {
+        "filter_3y3UHD": {
           "type": "filter",
           "settings": {
-            "label": "Personalised",
-            "collection": "personalised"
+            "label": "Bottles",
+            "collection": "bottles"
+          }
+        },
+        "filter_wdKNDL": {
+          "type": "filter",
+          "settings": {
+            "label": "Journals",
+            "collection": "journals"
           }
         }
       },
       "block_order": [
-        "stationaries",
-        "journals",
-        "bulk"
+        "filter_M7wDMC",
+        "filter_bqb8xd",
+        "filter_4dkaMR",
+        "filter_3y3UHD",
+        "filter_wdKNDL"
       ],
       "name": "Featured collections",
       "settings": {
