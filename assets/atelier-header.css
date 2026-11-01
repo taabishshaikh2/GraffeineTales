@@ -1,3 +1,141 @@
+
+/* ==========================================================================
+   Graffeine Tales - Universal Header Core Styles
+   Guarantees zero FOUC, no bullet points, correct flex/grid layout and floating pill
+   ========================================================================== */
+.atelier-header-section {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 40 !important;
+  pointer-events: none !important;
+  margin-bottom: calc(-1 * var(--header-pill-height, 108px)) !important;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+atelier-header {
+  display: block !important;
+  width: 100% !important;
+  pointer-events: none !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  color: var(--header-text, #363638) !important;
+}
+
+atelier-header, atelier-header * {
+  box-sizing: border-box !important;
+}
+
+atelier-header a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+atelier-header button {
+  font: inherit !important;
+  color: inherit !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+atelier-header ul,
+atelier-header li,
+.atelier-header__nav-list,
+.atelier-header__nav-list li {
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.atelier-header__bar {
+  pointer-events: none !important;
+  position: relative !important;
+  max-width: calc(1400px + var(--gap-side, 24px) * 2) !important;
+  margin-inline: auto !important;
+  padding: var(--gap-top, 14px) var(--gap-side, 24px) 0 !important;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.atelier-header__pill {
+  pointer-events: auto !important;
+  position: relative !important;
+  isolation: isolate !important;
+  border-radius: var(--header-radius, 18px) !important;
+  padding: 8px 24px !important;
+  min-height: 60px !important;
+  background: var(--header-glass, rgba(248, 245, 237, 0.78)) !important;
+  -webkit-backdrop-filter: blur(var(--header-blur, 20px)) saturate(160%) !important;
+  backdrop-filter: blur(var(--header-blur, 20px)) saturate(160%) !important;
+  border: 1px solid var(--header-border, rgba(198, 181, 142, 0.35)) !important;
+  box-shadow: 0 12px 36px -12px rgba(54, 54, 56, 0.12), 0 2px 8px -2px rgba(54, 54, 56, 0.04) !important;
+  transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease !important;
+}
+
+/* Two-rows layout explicit rules */
+.layout--two-rows .atelier-header__pill,
+.layout--two_rows .atelier-header__pill {
+  display: grid !important;
+  grid-template-columns: 1fr auto 1fr !important;
+  grid-template-areas: "left center right" "nav nav nav" !important;
+  align-items: center !important;
+  padding-top: 10px !important;
+  padding-bottom: 8px !important;
+}
+
+.layout--two-rows .atelier-header__left,
+.layout--two_rows .atelier-header__left {
+  grid-area: left !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  min-width: 0 !important;
+}
+
+.layout--two-rows .atelier-header__center,
+.layout--two_rows .atelier-header__center {
+  grid-area: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.layout--two-rows .atelier-header__right,
+.layout--two_rows .atelier-header__right {
+  grid-area: right !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+.layout--two-rows .atelier-header__nav,
+.layout--two_rows .atelier-header__nav {
+  grid-area: nav !important;
+  display: flex !important;
+  justify-content: center !important;
+  margin-top: 8px !important;
+  padding-top: 8px !important;
+  border-top: 1px solid var(--header-line, rgba(54, 54, 56, 0.08)) !important;
+  width: 100% !important;
+}
+
+.layout--two-rows .atelier-header__nav-list,
+.layout--two_rows .atelier-header__nav-list {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: 4px 16px !important;
+  list-style: none !important;
+  width: 100% !important;
+}
+
+/* Fallback padding for pages that don't have a hero banner */
+body:not(.template-index):not(.template-collection) #MainContent > .shopify-section:first-child:not(:has(.atelier-col-hero)):not(:has(.atelier-hero)):not(:has(.image-banner)):not(:has(.slideshow)) {
+  padding-top: calc(var(--header-height, 120px) + 24px) !important;
+}
+
 /* ==========================================================================
    Graffeine Tales — Premium Glass Header
    Adapted from UrbanDeco Reference Architecture for Graffeine Tales Editorial Brand
@@ -202,13 +340,13 @@ atelier-header button {
 
 /* ==========================================================================
    Header Layout Options:
-   1. Two lines: logo on top, menu below (.layout--two-rows)
-   2. Menu left, logo centre (.layout--logo-center)
-   3. Logo left, menu centre (.layout--logo-left)
+   1. Two lines: logo on top, menu below (.layout--two-rows, .layout--two_rows)
+   2. Menu left, logo centre (.layout--logo-center, .layout--logo_center)
+   3. Logo left, menu centre (.layout--logo-left, .layout--logo_left)
    ========================================================================== */
 
 /* Layout 1: Two rows (UrbanDeco reference) */
-.layout--two-rows .atelier-header__pill {
+.layout--two-rows, .layout--two_rows .atelier-header__pill {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   grid-template-areas: "left center right" "nav nav nav";
@@ -217,7 +355,7 @@ atelier-header button {
   padding-bottom: 6px;
 }
 
-.layout--two-rows .atelier-header__left {
+.layout--two-rows, .layout--two_rows .atelier-header__left {
   grid-area: left;
   display: flex;
   align-items: center;
@@ -225,14 +363,14 @@ atelier-header button {
   min-width: 0;
 }
 
-.layout--two-rows .atelier-header__center {
+.layout--two-rows, .layout--two_rows .atelier-header__center {
   grid-area: center;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.layout--two-rows .atelier-header__right {
+.layout--two-rows, .layout--two_rows .atelier-header__right {
   grid-area: right;
   display: flex;
   align-items: center;
@@ -240,7 +378,7 @@ atelier-header button {
   gap: 6px;
 }
 
-.layout--two-rows .atelier-header__nav {
+.layout--two-rows, .layout--two_rows .atelier-header__nav {
   grid-area: nav;
   display: flex;
   justify-content: center;
@@ -249,7 +387,7 @@ atelier-header button {
   border-top: 1px solid var(--header-line, rgba(54, 54, 56, 0.08));
 }
 
-.layout--two-rows .atelier-header__nav-list {
+.layout--two-rows, .layout--two_rows .atelier-header__nav-list {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -260,32 +398,32 @@ atelier-header button {
 }
 
 /* Layout 2: Logo Centre, Menu Left */
-.layout--logo-center .atelier-header__pill {
+.layout--logo-center, .layout--logo_center .atelier-header__pill {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   min-height: 72px;
 }
 
-.layout--logo-center .atelier-header__left {
+.layout--logo-center, .layout--logo_center .atelier-header__left {
   display: flex;
   align-items: center;
 }
 
-.layout--logo-center .atelier-header__center {
+.layout--logo-center, .layout--logo_center .atelier-header__center {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.layout--logo-center .atelier-header__right {
+.layout--logo-center, .layout--logo_center .atelier-header__right {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 6px;
 }
 
-.layout--logo-center .atelier-header__nav-list {
+.layout--logo-center, .layout--logo_center .atelier-header__nav-list {
   display: flex;
   align-items: center;
   list-style: none;
@@ -294,32 +432,32 @@ atelier-header button {
 }
 
 /* Layout 3: Logo Left, Menu Centre */
-.layout--logo-left .atelier-header__pill {
+.layout--logo-left, .layout--logo_left .atelier-header__pill {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   min-height: 72px;
 }
 
-.layout--logo-left .atelier-header__center {
+.layout--logo-left, .layout--logo_left .atelier-header__center {
   order: -1;
   padding-right: 24px;
 }
 
-.layout--logo-left .atelier-header__left {
+.layout--logo-left, .layout--logo_left .atelier-header__left {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.layout--logo-left .atelier-header__right {
+.layout--logo-left, .layout--logo_left .atelier-header__right {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 6px;
 }
 
-.layout--logo-left .atelier-header__nav-list {
+.layout--logo-left, .layout--logo_left .atelier-header__nav-list {
   display: flex;
   align-items: center;
   justify-content: center;

@@ -182,13 +182,33 @@ if (!customElements.get('atelier-header')) {
     }
 
     measure() {
-      const h = this.offsetHeight;
-      document.documentElement.style.setProperty('--header-height', `${h}px`);
-      if (this.dataset.overlayHome === 'true' && document.body.classList.contains('template-index')) {
-        this.section.style.marginBottom = `-${h}px`;
-      } else {
-        this.section.style.marginBottom = '';
+      const bar = this.querySelector('.atelier-header__bar');
+      const pill = this.querySelector('.atelier-header__pill');
+      const ann = this.section.querySelector('.atelier-announcement');
+      
+      const pillH = bar ? bar.offsetHeight : (pill ? pill.offsetHeight + 14 : this.offsetHeight);
+      const annH = (ann && ann.offsetParent !== null) ? ann.offsetHeight : 0;
+      const totalH = pillH + annH;
+
+      document.documentElement.style.setProperty('--header-height', totalH + 'px');
+      document.documentElement.style.setProperty('--header-pill-height', pillH + 'px');
+
+      // Check if the first section is a hero banner (collections, homepage hero, image-banner)
+      const mainFirst = document.querySelector('#MainContent > .shopify-section:first-child');
+      const isBanner = mainFirst && (
+        mainFirst.querySelector('.atelier-col-hero, .atelier-hero, .image-banner, .slideshow, .hero-carousel, [data-hero-banner]')
+        || document.body.classList.contains('template-index')
+        || document.body.classList.contains('template-collection')
+      );
+
+      // Float header over banners
+      this.section.style.marginBottom = '-' + pillH + 'px';
+      if (!isBanner && mainFirst) {
+        mainFirst.style.paddingTop = (totalH + 24) + 'px';
+      } else if (mainFirst) {
+        mainFirst.style.paddingTop = '';
       }
+    }
     }
 
     handleScroll() {

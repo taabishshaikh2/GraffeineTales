@@ -95,7 +95,7 @@
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 56px 24px 64px;
+  padding: calc(var(--header-height, 120px) + 24px) 24px 64px !important;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
@@ -103,7 +103,7 @@
 
 @media screen and (max-width: 767px) {
   .atelier-col-hero__inner {
-    padding: 40px 20px 44px;
+    padding: calc(var(--header-height, 120px) + 16px) 20px 44px !important;
   }
 }
 
