@@ -2,6 +2,44 @@
  * Graffeine Tales — Premium Glass Header & UrbanDeco Mobile Drawer
  * Unified Architecture with responsive layout switching and real frosted glassmorphism
  */
+window.gtCloseMobileDrawer = function() {
+  const hdr = document.querySelector('atelier-header');
+  if (hdr && typeof hdr.closeMobileDrawer === 'function') {
+    hdr.closeMobileDrawer();
+  } else {
+    const drawer = document.getElementById('atelier-mobile-drawer');
+    const scrim = document.querySelector('.atelier-scrim, [data-scrim]');
+    if (drawer) {
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+    if (scrim) {
+      scrim.classList.remove('is-visible');
+    }
+    document.body.style.overflow = '';
+    document.documentElement.classList.remove('atelier-drawer-open');
+    document.body.classList.remove('atelier-drawer-open');
+  }
+};
+window.gtOpenMobileDrawer = function() {
+  const hdr = document.querySelector('atelier-header');
+  if (hdr && typeof hdr.openMobileDrawer === 'function') {
+    hdr.openMobileDrawer();
+  } else {
+    const drawer = document.getElementById('atelier-mobile-drawer');
+    const scrim = document.querySelector('.atelier-scrim, [data-scrim]');
+    if (drawer) {
+      drawer.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    if (scrim) {
+      scrim.classList.add('is-visible');
+    }
+    document.body.style.overflow = 'hidden';
+    document.documentElement.classList.add('atelier-drawer-open');
+    document.body.classList.add('atelier-drawer-open');
+  }
+};
 if (!customElements.get('atelier-header')) {
   class AtelierHeader extends HTMLElement {
     connectedCallback() {
@@ -148,9 +186,25 @@ if (!customElements.get('atelier-header')) {
       // 7. Drawer Accordion Sub-Menus — Expanding NEVER Closes Drawer!
       this.setupDrawerAccordions();
 
-      // 8. CRITICAL: Stop clicks inside drawer from closing the drawer
-      if (this.drawer) {
-        this.drawer.addEventListener('click', (e) => {
+      // 8. Smart drawer listener: handle close buttons and stop other bubbling
+      const drawerEl = this.drawer || document.getElementById('atelier-mobile-drawer');
+      if (drawerEl) {
+        drawerEl.querySelectorAll('[data-close-drawer], .atelier-drawer__close').forEach((btn) => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.gtCloseMobileDrawer();
+          });
+        });
+        drawerEl.addEventListener('click', (e) => {
+          const closeBtn = e.target.closest('[data-close-drawer], .atelier-drawer__close');
+          if (closeBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.gtCloseMobileDrawer();
+            return;
+          }
+          // Do not close drawer on internal clicks
           e.stopPropagation();
         });
       }
@@ -343,6 +397,16 @@ if (!customElements.get('atelier-header')) {
         this.drawer.classList.add('is-open');
         this.drawer.setAttribute('aria-hidden', 'false');
         this.setupDrawerAccordions();
+        this.drawer.querySelectorAll('[data-close-drawer], .atelier-drawer__close').forEach((btn) => {
+          if (!btn.__boundClose) {
+            btn.__boundClose = true;
+            btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              window.gtCloseMobileDrawer();
+            });
+          }
+        });
       }
       if (this.scrim) {
         this.scrim.classList.add('is-visible');

@@ -1809,8 +1809,9 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
       </div>
       <button
         type="button"
-        class="atelier-icon-btn"
+        class="atelier-icon-btn atelier-drawer__close"
         data-close-drawer
+        onclick="window.gtCloseMobileDrawer && window.gtCloseMobileDrawer();"
         aria-label="Close mobile menu"
       >
         {{ icon_close }}
