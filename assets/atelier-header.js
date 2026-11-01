@@ -16,17 +16,17 @@ if (!customElements.get('atelier-header')) {
       this.searchInput = this.querySelector('[data-search-input]');
       this.searchResults = this.querySelector('[data-search-results]');
       this.searchIdle = this.querySelector('[data-search-idle]');
-      this.drawer = this.querySelector('[data-mobile-drawer]');
-      this.scrim = this.querySelector('[data-scrim]');
+      this.drawer = document.getElementById('atelier-mobile-drawer') || this.querySelector('[data-mobile-drawer]');
+      this.scrim = this.querySelector('[data-scrim]') || document.querySelector('.atelier-scrim');
       this.lastScrollY = window.scrollY;
       this.openMega = null;
       this.hideOnScroll = this.dataset.hideOnScroll === 'true';
+      this._drawerOpen = false;
 
       // 1. Measure and set CSS variables & negative margin
       this.measure();
       window.addEventListener('resize', () => this.measure(), { passive: true });
 
-      // Shopify Editor Section Listeners
       document.addEventListener('shopify:section:load', (e) => {
         if (e.target.contains(this) || e.target === this.section) this.measure();
       });
@@ -61,7 +61,7 @@ if (!customElements.get('atelier-header')) {
           if (window.innerWidth < 990) return;
           clearTimeout(this.enterTimer);
           this.leaveTimer = setTimeout(() => {
-            if (this.openMega === btn) this.closeAll();
+            if (this.openMega === btn) this.closeMega();
           }, 180);
         };
 
@@ -78,7 +78,7 @@ if (!customElements.get('atelier-header')) {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
           if (this.openMega === btn) {
-            this.closeAll();
+            this.closeMega();
           } else {
             this.showMega(btn, panel);
           }
@@ -89,6 +89,7 @@ if (!customElements.get('atelier-header')) {
       this.querySelectorAll('[data-open-search]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
+          e.stopPropagation();
           this.toggleSearch();
         });
       });
@@ -96,7 +97,7 @@ if (!customElements.get('atelier-header')) {
       this.querySelectorAll('[data-close-search]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
-          this.closeAll();
+          this.closeSearch();
         });
       });
 
@@ -116,7 +117,7 @@ if (!customElements.get('atelier-header')) {
         });
       });
 
-      // 5. Mobile Drawer
+      // 5. Mobile Drawer — Open
       this.querySelectorAll('[data-open-drawer]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -125,25 +126,58 @@ if (!customElements.get('atelier-header')) {
         });
       });
 
-      this.querySelectorAll('[data-close-drawer], [data-scrim]').forEach((el) => {
+      // 5b. Mobile Drawer — Close (ONLY the dedicated close button and scrim)
+      this.querySelectorAll('[data-close-drawer]').forEach((el) => {
         el.addEventListener('click', (e) => {
           e.preventDefault();
-          this.closeAll();
+          e.stopPropagation();
+          this.closeMobileDrawer();
         });
       });
 
-      // 6. Global Escape key & outside clicks
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') this.closeAll();
-      });
+      // Scrim click closes drawer
+      if (this.scrim) {
+        this.scrim.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.closeMobileDrawer();
+          this.closeMega();
+          this.closeSearch();
+        });
+      }
 
-      document.addEventListener('click', (e) => {
-        if (!this.contains(e.target)) {
-          this.closeAll();
+      // 6. Escape key closes everything
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (this._drawerOpen) {
+            this.closeMobileDrawer();
+          } else {
+            this.closeMega();
+            this.closeSearch();
+          }
         }
       });
 
-      // 7. Wishlist Integration
+      // 7. Outside click closes mega menus (but NOT the drawer)
+      document.addEventListener('click', (e) => {
+        // Never close drawer from outside clicks — drawer has its own close button
+        if (this._drawerOpen) return;
+        if (!this.contains(e.target)) {
+          this.closeMega();
+          this.closeSearch();
+        }
+      });
+
+      // 8. CRITICAL: Stop clicks inside drawer from bubbling to document
+      if (this.drawer) {
+        this.drawer.addEventListener('click', (e) => {
+          // Allow default behavior (details/summary toggle, link navigation)
+          // but stop propagation so document click handler doesn't fire
+          e.stopPropagation();
+        });
+      }
+
+      // 9. Wishlist Integration
       this.updateWishlistCount();
       window.addEventListener('storage', (e) => {
         if (e.key === 'graffeine-wishlist') this.updateWishlistCount();
@@ -160,7 +194,7 @@ if (!customElements.get('atelier-header')) {
         });
       });
 
-      // 8. Cart Drawer Integration
+      // 10. Cart Drawer Integration
       this.querySelectorAll('#cart-icon-bubble, [data-cart-btn]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           const cartDrawer = document.querySelector('cart-drawer');
@@ -186,7 +220,6 @@ if (!customElements.get('atelier-header')) {
       document.documentElement.style.setProperty('--header-height', totalH + 'px');
       document.documentElement.style.setProperty('--header-pill-height', pillH + 'px');
 
-      // Check if current page begins with a banner
       const mainFirst = document.querySelector('#MainContent > .shopify-section:first-child');
       const isBanner = mainFirst && (
         mainFirst.querySelector('.atelier-col-hero, .atelier-hero, .image-banner, .slideshow, .hero-carousel, [data-hero-banner]')
@@ -194,7 +227,6 @@ if (!customElements.get('atelier-header')) {
         || document.body.classList.contains('template-collection')
       );
 
-      // Negative margin pulls subsequent banner directly behind the header!
       this.section.style.marginBottom = '-' + pillH + 'px';
 
       if (!isBanner && mainFirst) {
@@ -221,25 +253,72 @@ if (!customElements.get('atelier-header')) {
 
     showMega(btn, panel) {
       if (!panel) return;
-      this.closeAll();
+      this.closeMega();
       panel.classList.add('is-open');
       btn.setAttribute('aria-expanded', 'true');
       this.openMega = btn;
       if (this.scrim) this.scrim.classList.add('is-visible');
     }
 
+    closeMega() {
+      this.querySelectorAll('[data-mega-panel].is-open').forEach((p) => p.classList.remove('is-open'));
+      this.querySelectorAll('[data-mega-trigger][aria-expanded="true"]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
+      this.openMega = null;
+      // Only hide scrim if drawer isn't open
+      if (!this._drawerOpen && this.scrim) {
+        this.scrim.classList.remove('is-visible');
+      }
+    }
+
     toggleSearch() {
       if (!this.searchPanel) return;
       if (this.searchPanel.classList.contains('is-open')) {
-        this.closeAll();
+        this.closeSearch();
       } else {
-        this.closeAll();
+        this.closeMega();
         this.searchPanel.classList.add('is-open');
-        if (this.scrim) this.scrim.classList.add('is-visible');
+        if (this.scrim && !this._drawerOpen) this.scrim.classList.add('is-visible');
         if (this.searchInput) {
           setTimeout(() => this.searchInput.focus(), 60);
         }
       }
+    }
+
+    closeSearch() {
+      if (this.searchPanel) this.searchPanel.classList.remove('is-open');
+      if (!this._drawerOpen && this.scrim) {
+        this.scrim.classList.remove('is-visible');
+      }
+    }
+
+    openMobileDrawer() {
+      const drawer = this.drawer || document.getElementById('atelier-mobile-drawer');
+      const scrim = this.scrim || document.querySelector('.atelier-scrim');
+      if (drawer) {
+        drawer.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+      }
+      if (scrim) {
+        scrim.classList.add('is-visible');
+      }
+      document.body.style.overflow = 'hidden';
+      document.documentElement.classList.add('atelier-drawer-open');
+      this._drawerOpen = true;
+    }
+
+    closeMobileDrawer() {
+      const drawer = this.drawer || document.getElementById('atelier-mobile-drawer');
+      const scrim = this.scrim || document.querySelector('.atelier-scrim');
+      if (drawer) {
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+      }
+      if (scrim) {
+        scrim.classList.remove('is-visible');
+      }
+      document.body.style.overflow = '';
+      document.documentElement.classList.remove('atelier-drawer-open');
+      this._drawerOpen = false;
     }
 
     suggest(query) {
@@ -286,39 +365,6 @@ if (!customElements.get('atelier-header')) {
         .catch(() => {});
     }
 
-        openMobileDrawer() {
-      this.closeAll();
-      const drawer = document.getElementById('atelier-mobile-drawer') || this.querySelector('[data-mobile-drawer]');
-      const scrim = document.querySelector('[data-scrim], .atelier-scrim') || this.querySelector('[data-scrim]');
-      if (drawer) {
-        drawer.classList.add('is-open');
-        drawer.setAttribute('aria-hidden', 'false');
-      }
-      if (scrim) {
-        scrim.classList.add('is-visible');
-      }
-      document.body.style.overflow = 'hidden';
-      document.documentElement.classList.add('atelier-drawer-open');
-    }
-
-    closeAll() {
-      this.querySelectorAll('[data-mega-panel].is-open').forEach((p) => p.classList.remove('is-open'));
-      this.querySelectorAll('[data-mega-trigger][aria-expanded="true"]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
-      if (this.searchPanel) this.searchPanel.classList.remove('is-open');
-      const drawer = document.getElementById('atelier-mobile-drawer') || this.querySelector('[data-mobile-drawer]');
-      const scrim = document.querySelector('[data-scrim], .atelier-scrim') || this.querySelector('[data-scrim]');
-      if (drawer) {
-        drawer.classList.remove('is-open');
-        drawer.setAttribute('aria-hidden', 'true');
-      }
-      if (scrim) {
-        scrim.classList.remove('is-visible');
-      }
-      document.body.style.overflow = '';
-      document.documentElement.classList.remove('atelier-drawer-open');
-      this.openMega = null;
-    }
-
     updateWishlistCount() {
       try {
         const items = JSON.parse(localStorage.getItem('graffeine-wishlist') || '[]');
@@ -346,13 +392,14 @@ if (!customElements.get('atelier-header')) {
     }
   }
 
-  // Global fallback listener for hamburger buttons
+  // Global fallback listener for hamburger buttons (in case custom element hasn't initialized)
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-open-drawer]');
     if (btn) {
-      e.preventDefault();
       const hdr = document.querySelector('atelier-header');
       if (hdr && typeof hdr.openMobileDrawer === 'function') {
+        e.preventDefault();
+        e.stopPropagation();
         hdr.openMobileDrawer();
       }
     }

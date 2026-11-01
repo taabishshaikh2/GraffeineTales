@@ -1166,7 +1166,6 @@ atelier-header button {
             data-open-drawer
             aria-label="Open mobile menu"
             aria-expanded="false"
-            onclick="const d=document.getElementById('atelier-mobile-drawer');const s=document.querySelector('.atelier-scrim');if(d)d.classList.add('is-open');if(s)s.classList.add('is-visible');document.body.style.overflow='hidden';"
           >
             {{ icon_burger }}
           </button>
@@ -1408,7 +1407,7 @@ atelier-header button {
 
     </div>
   {%- comment -%} ==================== E. MOBILE SLIDE-OUT DRAWER (Image 3 reference) ==================== {%- endcomment -%}
-  <div class="atelier-scrim" data-scrim aria-hidden="true" onclick="const d=document.getElementById('atelier-mobile-drawer');const s=document.querySelector('.atelier-scrim');if(d)d.classList.remove('is-open');if(s)s.classList.remove('is-visible');document.body.style.overflow='';"></div>
+  <div class="atelier-scrim" data-scrim aria-hidden="true"></div>
 
   <aside
     class="atelier-drawer"
@@ -1429,7 +1428,6 @@ atelier-header button {
         class="atelier-drawer__close"
         data-close-drawer
         aria-label="Close mobile menu"
-        onclick="const d=document.getElementById('atelier-mobile-drawer');const s=document.querySelector('.atelier-scrim');if(d)d.classList.remove('is-open');if(s)s.classList.remove('is-visible');document.body.style.overflow='';"
       >
         {{ icon_close }}
       </button>
