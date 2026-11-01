@@ -1,179 +1,354 @@
+/**
+ * Graffeine Tales — Premium Glass Header Web Component
+ * Handles layout sizing, sticky scroll, mega menu hover/click, live search, wishlist, cart drawer & mobile drawer.
+ */
 if (!customElements.get('atelier-header')) {
-  customElements.define('atelier-header', class extends HTMLElement {
+  class AtelierHeader extends HTMLElement {
     connectedCallback() {
-      if (this.abort) return;
-      this.abort = new AbortController();
-      const signal = this.abort.signal;
-      const on = (target, event, callback, options = {}) => target.addEventListener(event, callback, {...options, signal});
-      this.wrapper = this.closest('.shopify-section');
-      this.lastScroll = Math.max(0, window.scrollY);
-      const reveal = () => this.wrapper.classList.remove('is-hidden');
-      this.resize = new ResizeObserver(() => document.documentElement.style.setProperty('--header-height', this.offsetHeight + 'px'));
-      this.resize.observe(this);
-      const mobileViewport = matchMedia('(max-width: 1023px)');
-      const updateSticky = () => {this.dataset.activeSticky=mobileViewport.matches?'up':this.dataset.sticky;reveal();};
-      on(mobileViewport,'change',updateSticky);
-      updateSticky();
-      let pending = false;
-      on(window, 'scroll', () => {
-        if (pending) return;
-        pending = true;
-        requestAnimationFrame(() => {
-          const y = Math.max(0, window.scrollY);
-          const keyboardFocus=this.contains(document.activeElement)&&document.activeElement?.matches(':focus-visible');
-          const expanded=this.querySelector('details[open],dialog[open]')||keyboardFocus||document.querySelector('cart-drawer.active');
-          if(this.dataset.activeSticky!=='up'||expanded||y<this.offsetHeight){reveal();this.lastScroll=y;}
-          else if(Math.abs(y-this.lastScroll)>=5){this.wrapper.classList.toggle('is-hidden',y>this.lastScroll);this.lastScroll=y;}
-          pending = false;
+      if (this.__initialized) return;
+      this.__initialized = true;
+
+      this.section = this.closest('.shopify-section') || this.parentElement;
+      this.pill = this.querySelector('.atelier-header__pill');
+      this.megaPanels = this.querySelectorAll('[data-mega-panel]');
+      this.searchPanel = this.querySelector('[data-search-panel]');
+      this.searchInput = this.querySelector('[data-search-input]');
+      this.searchResults = this.querySelector('[data-search-results]');
+      this.searchIdle = this.querySelector('[data-search-idle]');
+      this.drawer = this.querySelector('[data-mobile-drawer]');
+      this.scrim = this.querySelector('[data-scrim]');
+      this.moneyFormat = this.dataset.moneyFormat || '₹';
+      this.lastScrollY = window.scrollY;
+      this.openMega = null;
+      this.hideOnScroll = this.dataset.hideOnScroll === 'true';
+
+      // 1. Measure and set CSS variables
+      this.measure();
+      window.addEventListener('resize', () => this.measure(), { passive: true });
+
+      // 2. Scroll listener for sticky header
+      this.onScroll = () => {
+        if (this.raf) return;
+        this.raf = requestAnimationFrame(() => {
+          this.raf = null;
+          this.handleScroll();
         });
-      }, {passive:true});
-      on(this, 'focusin', reveal);
-      const dropdowns = [...this.querySelectorAll('[data-header-dropdown]')];
-      const hover = matchMedia('(hover: hover)');
-      dropdowns.forEach(dropdown => {
-        on(dropdown, 'pointerenter', () => {if (!hover.matches) return; dropdowns.forEach(other => {other.open = other === dropdown;});});
-        on(dropdown, 'pointerleave', () => {if (hover.matches && !dropdown.contains(document.activeElement)) dropdown.open = false;});
-        on(dropdown, 'toggle', () => {if (dropdown.open) dropdowns.forEach(other => {if (other !== dropdown) other.open = false;});});
-        on(dropdown, 'focusout', () => queueMicrotask(() => {if (!dropdown.contains(document.activeElement)) dropdown.open = false;}));
-      });
-      on(document, 'click', event => {if (!this.contains(event.target)) dropdowns.forEach(dropdown => dropdown.open = false);});
-      on(this, 'keydown', event => {if (event.key === 'Escape') dropdowns.forEach(dropdown => {if (dropdown.open) {dropdown.open = false; dropdown.querySelector('summary').focus();}});});
-      const openDialog = (dialog, trigger) => {
-        if (!dialog || dialog.open) return;
-        if (dialog.hasAttribute('data-mobile-dialog') && window.innerWidth >= 1024) return;
-        this.trigger = trigger;
-        reveal();
-        dropdowns.forEach(dropdown => dropdown.open = false);
-        dialog.showModal();
-        document.body.classList.add('atelier-dialog-open');
       };
-      on(document,'atelier:navigation:open',event=>{
-        const {panel,trigger}=event.detail||{};
-        if(panel==='categories')openDialog(this.querySelector('[data-mobile-dialog]'),trigger);
-        if(panel==='wishlist'){openDialog(this.querySelector('[data-wishlist-dialog]'),trigger);this.renderWishlist();}
-      });
-      on(this, 'click', event => {
-        const mobile = event.target.closest('[data-open-mobile]');
-        const wishlist = event.target.closest('[data-open-wishlist]');
-        const wishlistFromMenu = event.target.closest('[data-open-wishlist-from-menu]');
-        const close = event.target.closest('[data-close-dialog]');
-        if (mobile) openDialog(this.querySelector('[data-mobile-dialog]'), mobile);
-        if (wishlist) {openDialog(this.querySelector('[data-wishlist-dialog]'), wishlist); this.renderWishlist();}
-        if (wishlistFromMenu) {
-          this.querySelector('[data-mobile-dialog]')?.close();
-          openDialog(this.querySelector('[data-wishlist-dialog]'), wishlistFromMenu);
-          this.renderWishlist();
+      window.addEventListener('scroll', this.onScroll, { passive: true });
+
+      // 3. Desktop Mega Menu (Hover & Click)
+      this.querySelectorAll('[data-mega-trigger]').forEach((btn) => {
+        const index = btn.dataset.megaTrigger;
+        const panel = this.querySelector(`[data-mega-panel="${index}"]`);
+        const parentLi = btn.closest('li');
+
+        const open = () => {
+          if (window.innerWidth < 990) return;
+          clearTimeout(this.leaveTimer);
+          clearTimeout(this.enterTimer);
+          this.enterTimer = setTimeout(() => this.showMega(btn, panel), this.openMega ? 0 : 100);
+        };
+
+        const close = () => {
+          if (window.innerWidth < 990) return;
+          clearTimeout(this.enterTimer);
+          this.leaveTimer = setTimeout(() => {
+            if (this.openMega === btn) this.closeAll();
+          }, 200);
+        };
+
+        if (parentLi) {
+          parentLi.addEventListener('mouseenter', open);
+          parentLi.addEventListener('mouseleave', close);
         }
-        if (close) close.closest('dialog').close();
-      });
-      this.querySelectorAll('dialog').forEach(dialog => {
-        dialog.querySelectorAll('[data-close-dialog]').forEach(btn => {
-          on(btn, 'click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            dialog.close();
-          });
-        });
-        on(dialog, 'close', () => {
-          document.body.classList.remove('atelier-dialog-open');
-          this.trigger?.focus();
-        });
-        on(dialog, 'click', event => {
-          if (event.target === dialog) dialog.close();
-          const rect = dialog.getBoundingClientRect();
-          if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
-        });
-      });
-      on(window, 'resize', () => {
-        if (window.innerWidth >= 1024) {
-          const mobileDialog = this.querySelector('[data-mobile-dialog]');
-          if (mobileDialog?.open) mobileDialog.close();
+
+        if (panel) {
+          panel.addEventListener('mouseenter', () => clearTimeout(this.leaveTimer));
+          panel.addEventListener('mouseleave', close);
         }
-      }, { passive: true });
-      on(document, 'keydown', event => {
-        if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'k' || event.altKey) return;
-        const summary = this.querySelector('.header__search summary');
-        if (!summary) return;
-        event.preventDefault();
-        reveal();
-        if (!summary.closest('details').open) summary.click();
-        this.querySelector('input[type=search]')?.focus();
+
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (this.openMega === btn) {
+            this.closeAll();
+          } else {
+            this.showMega(btn, panel);
+          }
+        });
       });
-      on(document, 'atelier:wishlist:update', () => {this.updateWishlistCount(); if (this.querySelector('[data-wishlist-dialog]')?.open) this.renderWishlist();});
-      on(window, 'storage', event => {if (event.key === 'graffeine-wishlist') {this.updateWishlistCount(); if (this.querySelector('[data-wishlist-dialog]')?.open) this.renderWishlist();}});
-      on(document, 'shopify:block:select', event => {const block = this.querySelector('[data-shopify-editor-block*="' + event.detail.blockId + '"]'); if (block) {reveal(); const dropdown = block.querySelector('details'); if (dropdown) dropdown.open = true;}});
+
+      // 4. Search Interactions
+      this.querySelectorAll('[data-open-search]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.toggleSearch();
+        });
+      });
+
+      if (this.searchInput) {
+        this.searchInput.addEventListener('input', () => {
+          clearTimeout(this.searchTimer);
+          this.searchTimer = setTimeout(() => this.suggest(this.searchInput.value.trim()), 240);
+        });
+      }
+
+      // 5. Mobile Drawer
+      this.querySelectorAll('[data-open-drawer]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.openMobileDrawer();
+        });
+      });
+
+      this.querySelectorAll('[data-close-drawer], [data-scrim]').forEach((el) => {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.closeAll();
+        });
+      });
+
+      // Swipe Left to close drawer on mobile
+      if (this.drawer) {
+        let startX = 0, currentX = 0, isDragging = false;
+        this.drawer.addEventListener('touchstart', (e) => {
+          if (!this.drawer.classList.contains('is-open') || e.touches.length !== 1) return;
+          startX = e.touches[0].clientX;
+          isDragging = false;
+        }, { passive: true });
+
+        this.drawer.addEventListener('touchmove', (e) => {
+          if (!startX) return;
+          const diff = e.touches[0].clientX - startX;
+          if (diff < -10) {
+            isDragging = true;
+            this.drawer.style.transform = `translateX(${Math.min(0, diff)}px)`;
+          }
+        }, { passive: true });
+
+        const onTouchEnd = () => {
+          if (isDragging) {
+            this.drawer.style.transform = '';
+            if (currentX < -60) this.closeAll();
+          }
+          startX = 0;
+          isDragging = false;
+        };
+
+        this.drawer.addEventListener('touchend', onTouchEnd);
+        this.drawer.addEventListener('touchcancel', onTouchEnd);
+      }
+
+      // 6. Global Escape key & outside clicks
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') this.closeAll();
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!this.contains(e.target)) {
+          this.closeAll();
+        }
+      });
+
+      // 7. Wishlist Integration
       this.updateWishlistCount();
-    }
-    savedHandles() {
-      try {
-        const values = JSON.parse(localStorage.getItem('graffeine-wishlist') || '[]');
-        return Array.isArray(values) ? [...new Set(values.filter(handle => typeof handle === 'string' && /^[a-z0-9-]+$/.test(handle)))] : [];
-      } catch {return [];}
-    }
-    updateWishlistCount() {
-      const count = this.savedHandles().length;
-      this.querySelectorAll('[data-wishlist-count]').forEach(badge => {badge.textContent = String(count); badge.hidden = count === 0;});
-    }
-    async renderWishlist() {
-      const dialog = this.querySelector('[data-wishlist-dialog]');
-      if (!dialog) return;
-      this.wishlistRequest?.abort();
-      const request = new AbortController();
-      this.wishlistRequest = request;
-      const handles = this.savedHandles();
-      const list = dialog.querySelector('[data-saved-items]');
-      const empty = dialog.querySelector('[data-wishlist-empty]');
-      list.replaceChildren();
-      empty.hidden = handles.length !== 0;
-      list.setAttribute('aria-busy', 'true');
-      const root = window.Shopify?.routes?.root || '/';
-      const results = await Promise.allSettled(handles.map(async handle => {
-        const response = await fetch(root + 'products/' + encodeURIComponent(handle) + '.js', {signal:request.signal});
-        if (!response.ok) throw new Error('Product unavailable');
-        return response.json();
-      }));
-      if (request.signal.aborted) return;
-      results.forEach((result, index) => {
-        const row = document.createElement('div');
-        row.className = 'atelier-header__saved-item';
-        const info = document.createElement('div');
-        if (result.status === 'fulfilled') {
-          const product = result.value;
-          const image = document.createElement('img');
-          image.src = product.featured_image || '';
-          image.alt = '';
-          image.loading = 'lazy';
-          row.append(image);
-          const link = document.createElement('a');
-          link.href = root + 'products/' + handles[index];
-          link.textContent = product.title;
-          const price = document.createElement('p');
-          price.textContent = new Intl.NumberFormat(document.documentElement.lang, {style:'currency',currency:this.dataset.currency || 'INR'}).format(product.price / 100);
-          info.append(link, price);
-        } else {
-          const label = document.createElement('p');
-          label.textContent = handles[index].replaceAll('-', ' ');
-          info.append(label);
-        }
-        const remove = document.createElement('button');
-        remove.type = 'button';
-        remove.textContent = dialog.dataset.removeLabel;
-        remove.addEventListener('click', () => {
-          try {localStorage.setItem('graffeine-wishlist', JSON.stringify(this.savedHandles().filter(handle => handle !== handles[index])));} catch {}
-          document.dispatchEvent(new CustomEvent('atelier:wishlist:update'));
-        });
-        info.append(remove);
-        row.append(info);
-        list.append(row);
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'graffeine-wishlist') this.updateWishlistCount();
       });
-      list.removeAttribute('aria-busy');
+      document.addEventListener('atelier:wishlist:update', () => this.updateWishlistCount());
+
+      this.querySelectorAll('[data-open-wishlist]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const dialog = document.querySelector('[data-wishlist-dialog]');
+          if (dialog) {
+            e.preventDefault();
+            dialog.showModal();
+          }
+        });
+      });
+
+      // 8. Cart Drawer Integration
+      this.querySelectorAll('#cart-icon-bubble, [data-cart-btn]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const cartDrawer = document.querySelector('cart-drawer');
+          if (cartDrawer && typeof cartDrawer.open === 'function') {
+            e.preventDefault();
+            cartDrawer.open();
+          }
+        });
+      });
+
+      // Render recent searches
+      this.renderRecentSearches();
     }
-    disconnectedCallback() {
-      this.abort?.abort();
-      this.abort = null;
-      this.resize?.disconnect();
-      this.wishlistRequest?.abort();
-      document.body.classList.remove('atelier-dialog-open');
+
+    measure() {
+      const h = this.offsetHeight;
+      document.documentElement.style.setProperty('--header-height', `${h}px`);
+      if (this.dataset.overlayHome === 'true' && document.body.classList.contains('template-index')) {
+        this.section.style.marginBottom = `-${h}px`;
+      } else {
+        this.section.style.marginBottom = '';
+      }
     }
-  });
+
+    handleScroll() {
+      const y = window.scrollY;
+      const bar = this.querySelector('.atelier-header__bar');
+      if (bar) bar.classList.toggle('is-scrolled', y > 15);
+
+      if (this.hideOnScroll) {
+        if (y > this.lastScrollY + 6 && y > 250) {
+          this.section.classList.add('is-hidden');
+        } else if (y < this.lastScrollY - 6 || y < 100) {
+          this.section.classList.remove('is-hidden');
+        }
+      }
+      this.lastScrollY = y;
+    }
+
+    showMega(btn, panel) {
+      if (!panel) return;
+      this.closeAll();
+      panel.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      this.openMega = btn;
+      if (this.scrim) this.scrim.classList.add('is-visible');
+    }
+
+    toggleSearch() {
+      if (!this.searchPanel) return;
+      if (this.searchPanel.classList.contains('is-open')) {
+        this.closeAll();
+      } else {
+        this.closeAll();
+        this.searchPanel.classList.add('is-open');
+        if (this.scrim) this.scrim.classList.add('is-visible');
+        if (this.searchInput) {
+          setTimeout(() => this.searchInput.focus(), 60);
+        }
+      }
+    }
+
+    openMobileDrawer() {
+      if (!this.drawer) return;
+      this.closeAll();
+      this.drawer.classList.add('is-open');
+      if (this.scrim) this.scrim.classList.add('is-visible');
+      document.body.style.overflow = 'hidden';
+    }
+
+    closeAll() {
+      if (this.openMega) {
+        this.openMega.setAttribute('aria-expanded', 'false');
+        this.openMega = null;
+      }
+      this.megaPanels.forEach((p) => p.classList.remove('is-open'));
+      if (this.searchPanel) this.searchPanel.classList.remove('is-open');
+      if (this.drawer) this.drawer.classList.remove('is-open');
+      if (this.scrim) this.scrim.classList.remove('is-visible');
+      document.body.style.overflow = '';
+    }
+
+    // Live Predictive Search
+    suggest(query) {
+      if (!this.searchResults || !this.searchIdle) return;
+      if (!query || query.length < 2) {
+        this.searchResults.innerHTML = '';
+        this.searchIdle.hidden = false;
+        return;
+      }
+
+      const url = `${window.Shopify?.routes?.root || '/'}search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product&resources[limit]=6`;
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => {
+          const products = data?.resources?.results?.products || [];
+          if (!products.length) {
+            this.searchResults.innerHTML = `<p style="padding: 12px; color: #666; font-size: 13px;">No journals or products found for “${query}”.</p>`;
+            this.searchIdle.hidden = true;
+            return;
+          }
+
+          this.searchIdle.hidden = true;
+          this.searchResults.innerHTML = products.map((p) => {
+            const img = p.featured_image?.url || p.image;
+            const price = this.formatMoney(p.price);
+            return `
+              <a href="${p.url}" class="atelier-search-item" data-search-term="${query}">
+                ${img ? `<img src="${img}" alt="" width="48" height="48" loading="lazy">` : `<div style="width:48px;height:48px;background:#eee;border-radius:6px;"></div>`}
+                <div class="atelier-search-item__info">
+                  <span class="atelier-search-item__title">${p.title}</span>
+                  <span class="atelier-search-item__price">${price}</span>
+                </div>
+              </a>
+            `;
+          }).join('');
+
+          this.rememberSearch(query);
+        })
+        .catch(() => {
+          this.searchIdle.hidden = false;
+        });
+    }
+
+    formatMoney(cents) {
+      if (!cents) return '';
+      const amount = (cents / 100).toFixed(0);
+      return `${this.moneyFormat}${amount}`;
+    }
+
+    // Recent Searches
+    getRecentSearches() {
+      try {
+        return JSON.parse(localStorage.getItem('graffeine_recent_searches') || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    rememberSearch(q) {
+      if (!q || q.length < 2) return;
+      let list = this.getRecentSearches().filter((item) => item.toLowerCase() !== q.toLowerCase());
+      list.unshift(q);
+      try {
+        localStorage.setItem('graffeine_recent_searches', JSON.stringify(list.slice(0, 5)));
+        this.renderRecentSearches();
+      } catch {}
+    }
+
+    renderRecentSearches() {
+      const container = this.querySelector('[data-recent-chips]');
+      if (!container) return;
+      const list = this.getRecentSearches();
+      if (!list.length) {
+        const wrap = container.closest('[data-recent-wrapper]');
+        if (wrap) wrap.hidden = true;
+        return;
+      }
+      const wrap = container.closest('[data-recent-wrapper]');
+      if (wrap) wrap.hidden = false;
+
+      container.innerHTML = list.map((term) => `
+        <li>
+          <a class="atelier-chip" href="${window.Shopify?.routes?.root || '/'}search?q=${encodeURIComponent(term)}&type=product">
+            ${term}
+          </a>
+        </li>
+      `).join('');
+    }
+
+    // Wishlist Badges
+    updateWishlistCount() {
+      try {
+        const list = JSON.parse(localStorage.getItem('graffeine-wishlist') || '[]');
+        const count = Array.isArray(list) ? list.length : 0;
+        this.querySelectorAll('[data-wishlist-count]').forEach((badge) => {
+          badge.textContent = String(count);
+          badge.hidden = count === 0;
+        });
+      } catch {}
+    }
+  }
+
+  customElements.define('atelier-header', AtelierHeader);
 }

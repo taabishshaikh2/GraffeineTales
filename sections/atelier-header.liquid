@@ -1,124 +1,601 @@
 {{ 'atelier-header.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'atelier-header.js' | asset_url }}" defer></script>
-<atelier-header class="atelier-header" data-sticky="{{ section.settings.sticky }}" style="--header-background:{{ section.settings.background }};--header-text:{{ section.settings.text }};--header-accent:{{ section.settings.accent }};--header-logo-height:{{ section.settings.logo_height }}px;--header-mobile-logo-height:{{ section.settings.mobile_logo_height }}px;--header-desktop-height:{{ section.settings.height }}px;--header-mobile-height:{{ section.settings.mobile_height }}px;--header-width:{{ section.settings.width }}px;--header-menu-size:{{ section.settings.menu_font_size | default: 14 }}px;--header-menu-weight:{{ section.settings.menu_font_weight | default: 500 }};--header-menu-transform:{{ section.settings.menu_text_transform | default: 'none' }}">
-<header class="atelier-header__bar" role="banner">
-  <div class="atelier-header__inner">
-    <button type="button" class="atelier-header__action atelier-header__hamburger" data-open-mobile aria-label="Open navigation menu" aria-haspopup="dialog">{% render 'header-icon', name: 'menu' %}</button>
-    <a class="atelier-header__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
-      {% if section.settings.show_cup %}<span class="atelier-header__cup{% if section.settings.animate_steam %} atelier-header__cup--steam{% endif %}">{% if section.settings.cup_image != blank %}{{ section.settings.cup_image | image_url: width: 120 | image_tag: loading: 'eager', widths: '60,120', alt: '' }}{% else %}<img src="{{ 'header-cup.png' | asset_url }}" width="30" height="44" loading="eager" alt="">{% endif %}<span class="atelier-header__steam" aria-hidden="true"></span><span class="atelier-header__steam atelier-header__steam--second" aria-hidden="true"></span></span>{% endif %}
-      {% if section.settings.logo != blank %}{{ section.settings.logo | image_url: width: 440 | image_tag: class: 'atelier-header__wordmark', widths: '220,440', loading: 'eager', fetchpriority: 'high', alt: shop.name }}{% else %}<img class="atelier-header__wordmark" src="{{ 'brand-wordmark.png' | asset_url }}" width="140" height="44" loading="eager" fetchpriority="high" alt="{{ shop.name | escape }}">{% endif %}
-    </a>
-    <nav class="atelier-header__navigation" aria-label="Main navigation">
-      <ul class="atelier-header__menu" role="list">
-        {% assign menu_links = section.settings.menu.links | default: linklists.main-menu.links %}
-        {% for link in menu_links %}
-          <li>
-            {% if link.links != blank %}
-              <details class="atelier-header__dropdown" data-header-dropdown>
-                <summary>{{ link.title | escape }}{% render 'header-icon', name: 'chevron' %}</summary>
-                <div class="atelier-header__mega">
-                  <ul class="atelier-header__submenu" role="list">
-                    {% for child in link.links %}
-                      <li>
-                        <a href="{{ child.url }}"><span>{{ child.title | escape }}</span></a>
-                        {% if child.links != blank %}
-                          <ul role="list">
-                            {% for grandchild in child.links %}
-                              <li><a href="{{ grandchild.url }}">{{ grandchild.title | escape }}</a></li>
-                            {% endfor %}
-                          </ul>
-                        {% endif %}
-                      </li>
-                    {% endfor %}
-                  </ul>
-                  <a class="atelier-header__explore" href="{{ link.url }}">Explore {{ link.title | escape }}{% render 'header-icon', name: 'arrow' %}</a>
-                </div>
-              </details>
-            {% else %}
-              <a class="atelier-header__top-link" href="{{ link.url }}">{{ link.title | escape }}</a>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    </nav>
-    <div class="atelier-header__actions">
-      {% if section.settings.show_search %}<div class="atelier-header__search">{% render 'header-search', input_id: 'AtelierSearchInput' %}</div>{% endif %}
-      {% if section.settings.show_wishlist %}<button type="button" class="atelier-header__action atelier-header__wishlist" data-open-wishlist aria-label="Your saved stories" aria-haspopup="dialog">{% render 'header-icon', name: 'heart' %}<span class="atelier-header__badge" data-wishlist-count hidden>0</span></button>{% endif %}
-      {% if section.settings.show_cart %}<a class="atelier-header__action header__icon--cart" id="cart-icon-bubble" href="{{ routes.cart_url }}" aria-label="{{ 'templates.cart.cart' | t }}">
-        {% render 'header-icon', name: 'bag' %}
-        <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-        {% if cart.item_count > 0 %}<div class="cart-count-bubble atelier-header__badge"><span aria-hidden="true">{{ cart.item_count }}</span><span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span></div>{% endif %}
-      </a>{% endif %}
-    </div>
-  </div>
-</header>
-<dialog class="atelier-header__drawer atelier-header__mobile-drawer" data-mobile-dialog aria-labelledby="MobileMenuHeading-{{ section.id }}">
-  <div class="atelier-header__drawer-heading">
-    <h2 id="MobileMenuHeading-{{ section.id }}">Explore the atelier</h2>
-    <button type="button" class="atelier-header__action" data-close-dialog aria-label="Close menu">{% render 'header-icon', name: 'close' %}</button>
-  </div>
-  <nav aria-label="Mobile navigation">
-    {% assign mobile_links = section.settings.menu.links | default: linklists.main-menu.links %}
-    {% for link in mobile_links %}
-      {% if link.links != blank %}
-        <details class="atelier-header__mobile-group">
-          <summary>{{ link.title | escape }}{% render 'header-icon', name: 'chevron' %}</summary>
-          <ul class="atelier-header__submenu" role="list">
-            {% for child in link.links %}
-              <li>
-                <a href="{{ child.url }}">{{ child.title | escape }}</a>
-                {% if child.links != blank %}
-                  <ul role="list">
-                    {% for grandchild in child.links %}
-                      <li><a href="{{ grandchild.url }}">{{ grandchild.title | escape }}</a></li>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </li>
-            {% endfor %}
-          </ul>
-          <a class="atelier-header__explore" href="{{ link.url }}">Explore {{ link.title | escape }}{% render 'header-icon', name: 'arrow' %}</a>
-        </details>
-      {% else %}
-        <div class="atelier-header__mobile-item">
-          <a href="{{ link.url }}">{{ link.title | escape }}</a>
-        </div>
-      {% endif %}
-    {% endfor %}
-  </nav>
-  <div class="atelier-header__mobile-footer">
-    {% if shop.customer_accounts_enabled %}
-      <a class="atelier-header__mobile-footer-link" href="{{ routes.account_url }}">
-        <span class="atelier-header__mobile-footer-icon">{% render 'header-icon', name: 'account' %}</span>
-        <span>
-          {%- if customer -%}
-            {{ customer.first_name | default: 'Account' }}
+<script src="{{ 'atelier-header.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign s = section.settings
+  assign menu = s.menu.links | default: linklists.main-menu.links
+  assign mobile_menu = s.mobile_menu.links | default: menu
+  assign glass_alpha = s.glass_opacity | divided_by: 100.0
+  assign phone_clean = s.phone | remove: ' ' | remove: '-' | remove: '(' | remove: ')'
+  assign whatsapp_clean = s.whatsapp | remove: ' ' | remove: '+' | remove: '-'
+  assign logo_alt = s.logo.alt | default: shop.name
+
+  # Announcement Bar Logic
+  assign show_announcement = s.show_announcement
+  if s.announcement_text == blank
+    assign show_announcement = false
+  endif
+-%}
+
+{%- capture icon_search -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4.35-4.35"/></svg>{%- endcapture -%}
+{%- capture icon_account -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c.9-3.6 3.9-5.6 7.5-5.6s6.6 2 7.5 5.6"/></svg>{%- endcapture -%}
+{%- capture icon_heart -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>{%- endcapture -%}
+{%- capture icon_bag -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>{%- endcapture -%}
+{%- capture icon_phone -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.2l1.6 4-2 1.3a10.5 10.5 0 0 0 4.9 4.9l1.3-2 4 1.6V17a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>{%- endcapture -%}
+{%- capture icon_burger -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7h17M3.5 12h17M3.5 17h11"/></svg>{%- endcapture -%}
+{%- capture icon_close -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>{%- endcapture -%}
+{%- capture icon_arrow -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-5-6 6 6-6 6"/></svg>{%- endcapture -%}
+{%- capture icon_chev -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>{%- endcapture -%}
+
+{%- capture logo_markup -%}
+  <a class="atelier-logo" href="{{ s.logo_link | default: routes.root_url }}" aria-label="{{ shop.name | escape }} – home">
+    {%- if s.show_cup -%}
+      <span class="atelier-cup{% if s.animate_steam %} atelier-cup--steam{% endif %}">
+        {%- if s.cup_image != blank -%}
+          {{ s.cup_image | image_url: width: 120 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '60,120', alt: '' }}
+        {%- else -%}
+          <img src="{{ 'header-cup.png' | asset_url }}" width="30" height="44" loading="eager" alt="">
+        {%- endif -%}
+        <span class="atelier-steam" aria-hidden="true"></span>
+        <span class="atelier-steam atelier-steam--second" aria-hidden="true"></span>
+      </span>
+    {%- endif -%}
+
+    {%- if s.logo != blank -%}
+      {{ s.logo | image_url: width: 600 | image_tag: widths: '200, 300, 400, 600', sizes: '240px', loading: 'eager', fetchpriority: 'high', alt: logo_alt }}
+    {%- else -%}
+      <span class="atelier-logo__text">{{ s.logo_text | default: shop.name | escape }}</span>
+    {%- endif -%}
+  </a>
+{%- endcapture -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --ann-bg: {{ s.announcement_bg }};
+    --ann-color: {{ s.announcement_text_color }};
+    --ann-size: {{ s.announcement_font_size }}px;
+    --ann-speed: {{ s.announcement_speed }}s;
+
+    --header-glass: {{ s.glass_color | color_modify: 'alpha', glass_alpha }};
+    --header-solid: {{ s.glass_color }};
+    --header-text: {{ s.text_color }};
+    --header-accent: {{ s.accent_color }};
+    --header-border: {{ s.border_color | color_modify: 'alpha', 0.4 }};
+    --header-line: {{ s.text_color | color_modify: 'alpha', 0.1 }};
+    --header-radius: {{ s.radius }}px;
+    --header-blur: {{ s.blur }}px;
+
+    --gap-top: {{ s.gap_top }}px;
+    --gap-side: {{ s.gap_side }}px;
+    --gap-top-mobile: {{ s.gap_top_mobile }}px;
+    --gap-side-mobile: {{ s.gap_side_mobile }}px;
+
+    --logo-width: {{ s.logo_width }}px;
+    --logo-width-mobile: {{ s.logo_width_mobile }}px;
+
+    --menu-size: {{ s.menu_font_size }}px;
+    --menu-weight: {{ s.menu_font_weight }};
+    --menu-transform: {{ s.menu_text_transform }};
+    --menu-letter-spacing: {{ s.menu_letter_spacing | divided_by: 100.0 }}em;
+    --icon-size: {{ s.icon_size }}px;
+  }
+{%- endstyle -%}
+
+<section
+  id="shopify-section-{{ section.id }}"
+  class="atelier-header-section{% if s.sticky %} is-sticky{% endif %}"
+  data-section-id="{{ section.id }}"
+>
+  {%- comment -%} ==================== A. ANNOUNCEMENT BAR ==================== {%- endcomment -%}
+  {%- if show_announcement -%}
+    <aside
+      class="atelier-announcement atelier-announcement--{{ s.announcement_visibility }}{% if s.announcement_scroll %} atelier-announcement--marquee{% endif %}"
+      aria-label="Announcement"
+    >
+      <div class="atelier-announcement__inner">
+        <div class="atelier-announcement__content atelier-announcement__content--{{ s.announcement_align }}">
+          {%- if s.announcement_scroll -%}
+            <div class="atelier-announcement__track">
+              <span>{{ s.announcement_text | escape }}</span>
+              <span>{{ s.announcement_text | escape }}</span>
+              <span>{{ s.announcement_text | escape }}</span>
+            </div>
           {%- else -%}
-            {{ 'customer.log_in' | t | default: 'Account' }}
+            {%- if s.announcement_link != blank -%}
+              <a href="{{ s.announcement_link }}" class="atelier-announcement__link">
+                <span>{{ s.announcement_text | escape }}</span>
+                {{ icon_arrow }}
+              </a>
+            {%- else -%}
+              <span>{{ s.announcement_text | escape }}</span>
+            {%- endif -%}
           {%- endif -%}
-        </span>
-      </a>
-    {% endif %}
-    {% if section.settings.show_wishlist %}
-      <button type="button" class="atelier-header__mobile-footer-link" data-open-wishlist-from-menu aria-label="Wishlist">
-        <span class="atelier-header__mobile-footer-icon">
-          {% render 'header-icon', name: 'heart' %}
-          <span class="atelier-header__badge" data-wishlist-count hidden>0</span>
-        </span>
-        <span>Wishlist</span>
-      </button>
-    {% endif %}
-  </div>
-</dialog>
-<dialog class="atelier-header__drawer" data-wishlist-dialog aria-labelledby="WishlistHeading-{{ section.id }}" data-remove-label="Remove">
-  <div class="atelier-header__drawer-heading">
-    <h2 id="WishlistHeading-{{ section.id }}">Your saved stories</h2>
-    <button type="button" class="atelier-header__action" data-close-dialog aria-label="Close wishlist">{% render 'header-icon', name: 'close' %}</button>
-  </div>
-  <div class="atelier-header__saved-items" data-saved-items></div>
-  <div class="atelier-header__empty" data-wishlist-empty><p>Save the pieces you love. Your favourites will appear here.</p><a class="button" href="{{ routes.all_products_collection_url }}">Explore the collection</a></div>
-</dialog>
-</atelier-header>
+        </div>
+
+        {%- if s.show_country_selector -%}
+          <div class="atelier-announcement__country">
+            <span>IN</span>
+            <span>({{ cart.currency.iso_code }})</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </aside>
+  {%- endif -%}
+
+  {%- comment -%} ==================== B. MAIN HEADER FLOATING CONTAINER ==================== {%- endcomment -%}
+  <atelier-header
+    class="layout--{{ s.layout }}"
+    data-layout="{{ s.layout }}"
+    data-hide-on-scroll="{{ s.hide_on_scroll }}"
+    data-overlay-home="{{ s.overlay_home }}"
+    data-money-format="{{ shop.money_format | escape }}"
+  >
+    <div class="atelier-header__bar">
+      <div class="atelier-header__pill">
+
+        {%- comment -%} ---------- LEFT AREA ---------- {%- endcomment -%}
+        <div class="atelier-header__left">
+          {%- comment -%} Mobile hamburger trigger {%- endcomment -%}
+          <button
+            type="button"
+            class="atelier-icon-btn atelier-burger"
+            data-open-drawer
+            aria-label="Open mobile menu"
+            aria-expanded="false"
+          >
+            {{ icon_burger }}
+          </button>
+
+          {%- if s.layout == 'two_rows' -%}
+            {%- comment -%} Two-rows layout: Search pill on left {%- endcomment -%}
+            <button
+              type="button"
+              class="atelier-search-pill"
+              data-open-search
+              aria-label="Search journals and gifts"
+              aria-expanded="false"
+            >
+              {{ icon_search }}
+              <span>{{ s.search_placeholder | escape }}</span>
+            </button>
+          {%- elsif s.layout == 'logo_center' -%}
+            {%- comment -%} Logo Center layout: Desktop menu on left {%- endcomment -%}
+            <nav class="atelier-header__nav" aria-label="Main navigation">
+              <ul class="atelier-header__nav-list" role="list">
+                {%- for link in menu -%}
+                  <li>
+                    {%- if link.links.size > 0 -%}
+                      <button
+                        type="button"
+                        class="atelier-nav__link{% if link.active or link.child_active %} is-current{% endif %}"
+                        data-mega-trigger="{{ forloop.index }}"
+                        aria-expanded="false"
+                      >
+                        {{ link.title | escape }}{{ icon_chev }}
+                      </button>
+                    {%- else -%}
+                      <a class="atelier-nav__link{% if link.active %} is-current{% endif %}" href="{{ link.url }}">
+                        {{ link.title | escape }}
+                      </a>
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </nav>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} ---------- CENTER AREA (LOGO) ---------- {%- endcomment -%}
+        <div class="atelier-header__center">
+          {%- if request.page_type == 'index' and s.logo_h1 -%}
+            <h1 style="margin: 0; line-height: 1;">{{ logo_markup }}</h1>
+          {%- else -%}
+            {{ logo_markup }}
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} ---------- RIGHT AREA (ACTION ICONS) ---------- {%- endcomment -%}
+        <div class="atelier-header__right">
+          {%- if s.layout != 'two_rows' -%}
+            <button
+              type="button"
+              class="atelier-icon-btn atelier-desk-only"
+              data-open-search
+              aria-label="Search"
+            >
+              {{ icon_search }}
+            </button>
+          {%- endif -%}
+
+          {%- if s.show_phone and phone_clean != blank -%}
+            <a
+              class="atelier-icon-btn atelier-desk-only"
+              href="tel:{{ phone_clean }}"
+              aria-label="Call customer support"
+            >
+              {{ icon_phone }}
+            </a>
+          {%- endif -%}
+
+          {%- if s.show_account and shop.customer_accounts_enabled -%}
+            <a
+              class="atelier-icon-btn atelier-desk-only"
+              href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+              aria-label="Customer account"
+            >
+              {{ icon_account }}
+            </a>
+          {%- endif -%}
+
+          {%- if s.show_wishlist -%}
+            <button
+              type="button"
+              class="atelier-icon-btn"
+              data-open-wishlist
+              aria-label="Wishlist saved items"
+            >
+              {{ icon_heart }}
+              <span class="atelier-badge" data-wishlist-count hidden>0</span>
+            </button>
+          {%- endif -%}
+
+          {%- if s.show_cart -%}
+            <a
+              class="atelier-icon-btn"
+              id="cart-icon-bubble"
+              data-cart-btn
+              href="{{ routes.cart_url }}"
+              aria-label="Shopping Cart"
+            >
+              {{ icon_bag }}
+              {%- if cart.item_count > 0 -%}
+                <span class="atelier-badge cart-count-bubble">
+                  <span aria-hidden="true">{{ cart.item_count }}</span>
+                  <span class="visually-hidden">{{ cart.item_count }} items</span>
+                </span>
+              {%- endif -%}
+            </a>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} ---------- SECOND ROW (TWO-ROWS NAVIGATION) ---------- {%- endcomment -%}
+        {%- if s.layout == 'two_rows' or s.layout == 'logo_left' -%}
+          <nav class="atelier-header__nav" aria-label="Main navigation">
+            <ul class="atelier-header__nav-list" role="list">
+              {%- for link in menu -%}
+                {%- liquid
+                  assign bold = false
+                  assign t_down = link.title | downcase
+                  if s.bold_words != blank
+                    assign words = s.bold_words | downcase | split: ','
+                    for w in words
+                      assign ww = w | strip
+                      if ww != blank and t_down contains ww
+                        assign bold = true
+                      endif
+                    endfor
+                  endif
+                -%}
+                <li>
+                  {%- if link.links.size > 0 -%}
+                    <button
+                      type="button"
+                      class="atelier-nav__link{% if link.active or link.child_active %} is-current{% endif %}{% if bold %} is-bold{% endif %}"
+                      data-mega-trigger="{{ forloop.index }}"
+                      aria-expanded="false"
+                    >
+                      {{ link.title | escape }}{{ icon_chev }}
+                    </button>
+                  {%- else -%}
+                    <a
+                      class="atelier-nav__link{% if link.active %} is-current{% endif %}{% if bold %} is-bold{% endif %}"
+                      href="{{ link.url }}"
+                    >
+                      {{ link.title | escape }}
+                    </a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+
+      </div>
+
+      {%- comment -%} ==================== C. DESKTOP MEGA MENUS ==================== {%- endcomment -%}
+      {%- for link in menu -%}
+        {%- if link.links.size == 0 -%}{%- continue -%}{%- endif -%}
+        {%- assign lt = link.title | downcase | strip -%}
+        <div
+          class="atelier-mega"
+          id="atelier-mega-{{ forloop.index }}"
+          data-mega-panel="{{ forloop.index }}"
+          role="region"
+          aria-label="{{ link.title | escape }} sub-menu"
+        >
+          <div class="atelier-mega__inner">
+            <div class="atelier-mega__main">
+              <a class="atelier-mega__title" href="{{ link.url }}">
+                Shop All {{ link.title | escape }}{{ icon_arrow }}
+              </a>
+
+              <ul class="atelier-mega__cols" role="list">
+                {%- for child in link.links -%}
+                  <li>
+                    <a class="atelier-mega__head" href="{{ child.url }}">{{ child.title | escape }}</a>
+                    {%- if child.links.size > 0 -%}
+                      <ul class="atelier-mega__sub" role="list">
+                        {%- for grandchild in child.links -%}
+                          <li>
+                            <a class="atelier-mega__a" href="{{ grandchild.url }}">{{ grandchild.title | escape }}</a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+
+            {%- comment -%} Promotional Photo Card on Right {%- endcomment -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'promo' -%}
+                {%- assign bt = block.settings.menu_item | downcase | strip -%}
+                {%- if bt == lt -%}
+                  <a
+                    class="atelier-promo-card"
+                    href="{{ block.settings.link | default: link.url }}"
+                    {{ block.shopify_attributes }}
+                  >
+                    <div class="atelier-promo-card__img">
+                      {%- if block.settings.image != blank -%}
+                        {{ block.settings.image | image_url: width: 600 | image_tag: widths: '300, 480, 600', sizes: '280px', loading: 'lazy', alt: block.settings.heading | escape }}
+                      {%- else -%}
+                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #E9DFC2 0%, #C6B58E 100%);"></div>
+                      {%- endif -%}
+                    </div>
+                    <div class="atelier-promo-card__body">
+                      {%- if block.settings.heading != blank -%}
+                        <span class="atelier-promo-card__h">{{ block.settings.heading | escape }}</span>
+                      {%- endif -%}
+                      {%- if block.settings.subheading != blank -%}
+                        <span class="atelier-promo-card__s">{{ block.settings.subheading | escape }}{{ icon_arrow }}</span>
+                      {%- endif -%}
+                    </div>
+                  </a>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endfor -%}
+
+      {%- comment -%} ==================== D. LIVE PREDICTIVE SEARCH DROPDOWN ==================== {%- endcomment -%}
+      <div
+        class="atelier-search-panel"
+        data-search-panel
+        role="dialog"
+        aria-label="Product search"
+      >
+        <form class="atelier-search-form" action="{{ routes.search_url }}" method="get" role="search">
+          {{ icon_search }}
+          <input type="hidden" name="type" value="product">
+          <input
+            class="atelier-search-input"
+            type="search"
+            name="q"
+            placeholder="{{ s.search_placeholder | escape }}"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+            data-search-input
+          >
+          <button type="button" class="atelier-icon-btn" data-close-drawer aria-label="Close search">
+            {{ icon_close }}
+          </button>
+        </form>
+
+        <div class="atelier-search-results" data-search-results></div>
+
+        <div data-search-idle>
+          {%- comment -%} Recent Searches {%- endcomment -%}
+          <div data-recent-wrapper hidden style="margin-top: 14px;">
+            <p style="font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 6px; color: var(--header-accent, #4D351D);">
+              Recent Searches
+            </p>
+            <ul class="atelier-search-chips" data-recent-chips role="list"></ul>
+          </div>
+
+          {%- comment -%} Popular Searches {%- endcomment -%}
+          {%- if s.popular_searches != blank -%}
+            <div style="margin-top: 14px;">
+              <p style="font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 6px; color: var(--header-accent, #4D351D);">
+                Popular Searches
+              </p>
+              <ul class="atelier-search-chips" role="list">
+                {%- assign terms = s.popular_searches | split: ',' -%}
+                {%- for term in terms -%}
+                  {%- assign tt = term | strip -%}
+                  {%- if tt != blank -%}
+                    <li>
+                      <a class="atelier-chip" href="{{ routes.search_url }}?type=product&q={{ tt | url_encode }}">
+                        {{ tt | escape }}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Category Photo Tiles {%- endcomment -%}
+          {%- if s.search_collections != blank -%}
+            <div style="margin-top: 16px;">
+              <p style="font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 8px; color: var(--header-accent, #4D351D);">
+                {{ s.search_collections_title | escape }}
+              </p>
+              <ul class="atelier-search-chips" role="list">
+                {%- for col in s.search_collections limit: 6 -%}
+                  <li>
+                    <a class="atelier-chip" href="{{ col.url }}">
+                      {{ col.title | escape }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+
+    {%- comment -%} Backdrop Scrim {%- endcomment -%}
+    <div class="atelier-scrim" data-scrim aria-hidden="true"></div>
+
+    {%- comment -%} ==================== E. MOBILE SLIDE-OUT DRAWER ==================== {%- endcomment -%}
+    <div
+      class="atelier-drawer"
+      data-mobile-drawer
+      role="dialog"
+      aria-modal="true"
+      aria-label="Navigation menu"
+    >
+      <div class="atelier-drawer__top">
+        {{ logo_markup }}
+        <button type="button" class="atelier-icon-btn" data-close-drawer aria-label="Close menu">
+          {{ icon_close }}
+        </button>
+      </div>
+
+      <div class="atelier-drawer__body">
+        {%- comment -%} Mobile Search Trigger {%- endcomment -%}
+        <button
+          type="button"
+          class="atelier-search-pill"
+          style="display: flex; width: 100%; margin-bottom: 12px;"
+          data-open-search
+          aria-label="Search"
+        >
+          {{ icon_search }}
+          <span>{{ s.search_placeholder | escape }}</span>
+        </button>
+
+        {%- comment -%} Mobile Promo Banner {%- endcomment -%}
+        {%- if s.m_show_promo and s.promo_heading != blank -%}
+          <a
+            href="{{ s.promo_link | default: routes.all_products_collection_url }}"
+            style="display: block; padding: 14px 18px; border-radius: 12px; background: {{ s.promo_bg }}; color: {{ s.promo_text }}; text-decoration: none; margin-bottom: 14px;"
+          >
+            <strong style="display: block; font-family: 'DM Serif Display', Georgia, serif; font-size: 15px;">{{ s.promo_heading | escape }}</strong>
+            {%- if s.promo_link_label != blank -%}
+              <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; opacity: 0.9;">
+                {{ s.promo_link_label | escape }}{{ icon_arrow }}
+              </span>
+            {%- endif -%}
+          </a>
+        {%- endif -%}
+
+        {%- comment -%} Mobile Menu Links {%- endcomment -%}
+        <ul class="atelier-drawer__nav-list" role="list">
+          {%- for link in mobile_menu -%}
+            <li>
+              {%- if link.links.size > 0 -%}
+                <details style="border-bottom: 1px solid rgba(198, 181, 142, 0.25); padding: 8px 0;">
+                  <summary class="atelier-drawer__nav-link" style="cursor: pointer; list-style: none;">
+                    <span>{{ link.title | escape }}</span>
+                    {{ icon_chev }}
+                  </summary>
+                  <ul style="list-style: none; margin: 4px 0 8px 12px; padding: 0; display: flex; flex-direction: column; gap: 6px;" role="list">
+                    {%- for child in link.links -%}
+                      <li>
+                        <a href="{{ child.url }}" style="display: block; padding: 6px 12px; font-size: 13.5px; color: var(--header-text, #363638);">
+                          {{ child.title | escape }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                    <li>
+                      <a href="{{ link.url }}" style="display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--header-accent, #4D351D); text-transform: uppercase;">
+                        All {{ link.title | escape }}{{ icon_arrow }}
+                      </a>
+                    </li>
+                  </ul>
+                </details>
+              {%- else -%}
+                <a class="atelier-drawer__nav-link" href="{{ link.url }}">
+                  <span>{{ link.title | escape }}</span>
+                  {{ icon_arrow }}
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- comment -%} Mobile Contact Buttons (Call & WhatsApp) {%- endcomment -%}
+        {%- if s.m_show_contact -%}
+          <div class="atelier-drawer__contact">
+            {%- if phone_clean != blank -%}
+              <a class="atelier-drawer__btn" href="tel:{{ phone_clean }}">
+                {{ icon_phone }}
+                <span>Call Us</span>
+              </a>
+            {%- endif -%}
+            {%- if whatsapp_clean != blank -%}
+              <a class="atelier-drawer__btn atelier-drawer__btn--wa" href="https://wa.me/{{ whatsapp_clean }}" target="_blank" rel="noopener">
+                <span>WhatsApp</span>
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Customer Account & Hours {%- endcomment -%}
+        <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(198, 181, 142, 0.3);">
+          {%- if shop.customer_accounts_enabled -%}
+            <a
+              href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+              style="display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--header-text, #363638); margin-bottom: 8px;"
+            >
+              {{ icon_account }}
+              <span>{% if customer %}{{ customer.first_name | default: 'My Account' }}{% else %}Log In / Sign Up{% endif %}</span>
+            </a>
+          {%- endif -%}
+          {%- if s.m_hours != blank -%}
+            <p style="margin: 0; font-size: 11.5px; color: #888;">{{ s.m_hours | escape }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- if s.tagline != blank -%}
+          <p style="margin: 12px 0 0; font-size: 11px; color: #999; text-align: center;">{{ s.tagline | escape }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} Wishlist Slide-Out Modal Integration {%- endcomment -%}
+    <dialog
+      class="atelier-header__drawer"
+      data-wishlist-dialog
+      aria-labelledby="WishlistHeading-{{ section.id }}"
+      style="padding: 24px; border: 0; background: #F8F5ED; border-radius: 16px; max-width: 440px; width: 90vw; margin: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.25);"
+    >
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+        <h2 id="WishlistHeading-{{ section.id }}" style="font-family: 'DM Serif Display', Georgia, serif; font-size: 22px; margin: 0; color: #363638;">
+          Your Saved Pieces
+        </h2>
+        <button type="button" class="atelier-icon-btn" onclick="this.closest('dialog').close()" aria-label="Close wishlist">
+          {{ icon_close }}
+        </button>
+      </div>
+      <div data-wishlist-empty style="text-align: center; padding: 32px 16px;">
+        <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Save the journals, stickers and pieces you love. They will appear right here.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="atelier-drawer__btn" style="background: #4D351D; color: #FFFFFF; border-color: #4D351D; width: 100%;">
+          Explore All Products
+        </a>
+      </div>
+    </dialog>
+
+  </atelier-header>
+</section>
+
 {% schema %}
 {
   "name": "Atelier header",
@@ -126,195 +603,628 @@
   "class": "atelier-header-section",
   "limit": 1,
   "enabled_on": {
-    "groups": [
-      "header"
-    ]
+    "groups": ["header"]
   },
   "settings": [
     {
       "type": "header",
-      "content": "Navigation"
+      "content": "Announcement Bar"
     },
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Main menu",
-      "default": "main-menu",
-      "info": "Select the primary navigation menu from Online Store → Navigation."
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Enable announcement bar",
+      "default": true
     },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Artful Things. Thoughtful Living. | Free Shipping on orders over ₹999"
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Announcement link"
+    },
+    {
+      "type": "select",
+      "id": "announcement_align",
+      "label": "Text alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "announcement_bg",
+      "label": "Background colour",
+      "default": "#1E1814"
+    },
+    {
+      "type": "color",
+      "id": "announcement_text_color",
+      "label": "Text colour",
+      "default": "#F8F5ED"
+    },
+    {
+      "type": "range",
+      "id": "announcement_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_scroll",
+      "label": "Enable scrolling marquee text",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "announcement_speed",
+      "label": "Scrolling speed (seconds)",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "default": 25
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country_selector",
+      "label": "Show country/currency indicator",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "announcement_visibility",
+      "label": "Device visibility",
+      "default": "all",
+      "options": [
+        { "value": "all", "label": "Desktop & Mobile" },
+        { "value": "desktop", "label": "Desktop only" },
+        { "value": "mobile", "label": "Mobile only" }
+      ]
+    },
+
     {
       "type": "header",
-      "content": "Brand"
+      "content": "Logo"
     },
     {
       "type": "image_picker",
       "id": "logo",
-      "label": "Wordmark",
-      "info": "Uses the supplied Graffeine Tales wordmark until an image is selected."
-    },
-    {
-      "type": "range",
-      "id": "logo_height",
-      "label": "Desktop wordmark height",
-      "min": 24,
-      "max": 54,
-      "step": 2,
-      "unit": "px",
-      "default": 38
-    },
-    {
-      "type": "range",
-      "id": "mobile_logo_height",
-      "label": "Mobile wordmark height",
-      "min": 20,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 30
+      "label": "Desktop logo"
     },
     {
       "type": "image_picker",
-      "id": "cup_image",
-      "label": "Cup illustration"
+      "id": "mobile_logo",
+      "label": "Mobile logo"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Text logo (fallback)",
+      "default": "GRAFFEINE TALES"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width (desktop)",
+      "min": 80,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "default": 170
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "label": "Logo width (mobile)",
+      "min": 60,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "checkbox",
+      "id": "logo_h1",
+      "label": "Logo is the H1 on the homepage",
+      "default": false
+    },
+    {
+      "type": "url",
+      "id": "logo_link",
+      "label": "Logo link destination"
     },
     {
       "type": "checkbox",
       "id": "show_cup",
-      "label": "Show cup beside wordmark",
+      "label": "Show signature coffee cup icon",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "animate_steam",
-      "label": "Animate cup steam",
+      "label": "Animate coffee steam",
       "default": true
     },
     {
+      "type": "image_picker",
+      "id": "cup_image",
+      "label": "Custom coffee cup image"
+    },
+
+    {
       "type": "header",
-      "content": "Layout and appearance"
+      "content": "Navigation & Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Main menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Desktop layout",
+      "default": "two_rows",
+      "options": [
+        { "value": "two_rows", "label": "Two lines: logo on top, menu below" },
+        { "value": "logo_center", "label": "Menu left, logo centre" },
+        { "value": "logo_left", "label": "Logo left, menu centre" }
+      ],
+      "info": "Two lines provides the UrbanDeco layout with search pill on top left, logo centered, icons on top right, and navigation below."
+    },
+    {
+      "type": "link_list",
+      "id": "mobile_menu",
+      "label": "Phone menu (optional)",
+      "info": "Use a longer menu on phones. Leave empty to use the main menu."
+    },
+    {
+      "type": "text",
+      "id": "bold_words",
+      "label": "Make these menu items bold",
+      "default": "journal, sale, new",
+      "info": "Separate with commas"
     },
     {
       "type": "range",
       "id": "menu_font_size",
       "label": "Menu font size",
-      "min": 12,
+      "min": 11,
       "max": 18,
       "step": 1,
       "unit": "px",
-      "default": 14
+      "default": 13
     },
     {
       "type": "select",
       "id": "menu_font_weight",
       "label": "Menu font weight",
+      "default": "600",
       "options": [
         { "value": "400", "label": "Normal (400)" },
         { "value": "500", "label": "Medium (500)" },
         { "value": "600", "label": "Semi-bold (600)" },
         { "value": "700", "label": "Bold (700)" }
-      ],
-      "default": "500"
+      ]
     },
     {
       "type": "select",
       "id": "menu_text_transform",
-      "label": "Menu text casing",
+      "label": "Text transformation",
+      "default": "uppercase",
       "options": [
-        { "value": "none", "label": "Default (Normal)" },
         { "value": "uppercase", "label": "Uppercase" },
-        { "value": "capitalize", "label": "Capitalize" }
-      ],
-      "default": "none"
-    },
-    {
-      "type": "select",
-      "id": "sticky",
-      "label": "Sticky behaviour",
-      "options": [
-        {
-          "value": "up",
-          "label": "Show on scroll up"
-        },
-        {
-          "value": "always",
-          "label": "Always visible"
-        },
-        {
-          "value": "none",
-          "label": "Not sticky"
-        }
-      ],
-      "default": "up"
+        { "value": "capitalize", "label": "Capitalize" },
+        { "value": "none", "label": "None" }
+      ]
     },
     {
       "type": "range",
-      "id": "height",
-      "label": "Desktop height",
-      "min": 54,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "default": 64
+      "id": "menu_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 30,
+      "step": 5,
+      "unit": "px/10",
+      "default": 10
     },
-    {
-      "type": "range",
-      "id": "mobile_height",
-      "label": "Mobile height",
-      "min": 48,
-      "max": 72,
-      "step": 2,
-      "unit": "px",
-      "default": 56
-    },
-    {
-      "type": "range",
-      "id": "width",
-      "label": "Content width",
-      "min": 1100,
-      "max": 1500,
-      "step": 20,
-      "unit": "px",
-      "default": 1340
-    },
-    {
-      "type": "color",
-      "id": "background",
-      "label": "Background",
-      "default": "#F8F5ED"
-    },
-    {
-      "type": "color",
-      "id": "text",
-      "label": "Text and icons",
-      "default": "#363638"
-    },
-    {
-      "type": "color",
-      "id": "accent",
-      "label": "Badges and highlights",
-      "default": "#927B53"
-    },
+
     {
       "type": "header",
-      "content": "Actions"
+      "content": "Search"
     },
     {
       "type": "checkbox",
       "id": "show_search",
-      "label": "Show search",
+      "label": "Enable search",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search journals, notebooks, gifts…"
+    },
+    {
+      "type": "text",
+      "id": "popular_searches",
+      "label": "Popular searches",
+      "default": "Linen Journals, Daily Planners, Bookmarks, Stickers, Gift Sets",
+      "info": "Separate with commas"
+    },
+    {
+      "type": "collection_list",
+      "id": "search_collections",
+      "label": "Search photo tiles",
+      "limit": 6
+    },
+    {
+      "type": "text",
+      "id": "search_collections_title",
+      "label": "Photo tiles heading",
+      "default": "Shop by category"
+    },
+    {
+      "type": "checkbox",
+      "id": "search_recent",
+      "label": "Remember recent searches",
+      "default": true
+    },
+
+    {
+      "type": "header",
+      "content": "Icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "label": "Show phone icon",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone number",
+      "default": "919876543210"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Show account icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account_mobile",
+      "label": "Show account icon on phones",
+      "default": false
     },
     {
       "type": "checkbox",
       "id": "show_wishlist",
-      "label": "Show wishlist",
+      "label": "Show wishlist (heart) icon",
       "default": true
+    },
+    {
+      "type": "page",
+      "id": "wishlist_page",
+      "label": "Wishlist page destination (optional)"
     },
     {
       "type": "checkbox",
       "id": "show_cart",
-      "label": "Show bag",
+      "label": "Show shopping bag/cart icon",
       "default": true
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 16,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+
+    {
+      "type": "header",
+      "content": "Glass Style & Colors"
+    },
+    {
+      "type": "color",
+      "id": "glass_color",
+      "label": "Glass background color",
+      "default": "#F8F5ED"
+    },
+    {
+      "type": "range",
+      "id": "glass_opacity",
+      "label": "Glass opacity (transparency)",
+      "min": 20,
+      "max": 95,
+      "step": 5,
+      "unit": "%",
+      "default": 75
+    },
+    {
+      "type": "range",
+      "id": "blur",
+      "label": "Backdrop blur strength",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text & icon color",
+      "default": "#363638"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent & active color",
+      "default": "#4D351D"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#C6B58E"
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+
+    {
+      "type": "header",
+      "content": "Position & Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "Stay at top when scrolling (sticky)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_scroll",
+      "label": "Hide when scrolling down",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay_home",
+      "label": "Float over hero banner on homepage",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "gap_top",
+      "label": "Desktop top spacing",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "gap_side",
+      "label": "Desktop side spacing",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "gap_top_mobile",
+      "label": "Mobile top spacing",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "gap_side_mobile",
+      "label": "Mobile side spacing",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+
+    {
+      "type": "header",
+      "content": "Mobile Drawer Navigation"
+    },
+    {
+      "type": "select",
+      "id": "m_style",
+      "label": "Mobile menu style",
+      "default": "photos",
+      "options": [
+        { "value": "photos", "label": "With category photos" },
+        { "value": "text", "label": "Clean text only" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "m_tiles",
+      "label": "Category photo tiles count",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "m_show_promo",
+      "label": "Show promo banner in mobile menu",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "promo_heading",
+      "label": "Mobile promo heading",
+      "default": "Handcrafted with Art & Intention"
+    },
+    {
+      "type": "text",
+      "id": "promo_link_label",
+      "label": "Mobile promo link text",
+      "default": "Shop New Arrivals"
+    },
+    {
+      "type": "url",
+      "id": "promo_link",
+      "label": "Mobile promo link"
+    },
+    {
+      "type": "color",
+      "id": "promo_bg",
+      "label": "Mobile promo card background",
+      "default": "#4D351D"
+    },
+    {
+      "type": "color",
+      "id": "promo_text",
+      "label": "Mobile promo card text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "m_show_contact",
+      "label": "Show WhatsApp and Call buttons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "whatsapp",
+      "label": "WhatsApp phone number",
+      "default": "919876543210"
+    },
+    {
+      "type": "text",
+      "id": "m_hours",
+      "label": "Store operating hours",
+      "default": "Mon–Sat 10am–7pm"
+    },
+    {
+      "type": "link_list",
+      "id": "drawer_menu",
+      "label": "Footer links in mobile menu"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Footer tagline",
+      "default": "Artful Things. Thoughtful Living."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promo",
+      "name": "Mega menu photo card",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Displays a promotional image card inside the mega menu dropdown."
+        },
+        {
+          "type": "text",
+          "id": "menu_item",
+          "label": "Target menu item name",
+          "default": "Notebooks",
+          "info": "Type exactly as in Shopify navigation (e.g. Notebooks, Journals)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Promotional photo"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Card heading",
+          "default": "New Season Notebooks"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "CTA link label",
+          "default": "Discover"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Card destination link"
+        }
+      ]
+    },
+    {
+      "type": "menu_photo",
+      "name": "Mobile menu photo tile",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Adds a photo to a menu item in the mobile drawer."
+        },
+        {
+          "type": "text",
+          "id": "item",
+          "label": "Menu item name",
+          "default": "Journals"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier header",
+      "blocks": [
+        {
+          "type": "promo",
+          "settings": {
+            "menu_item": "Notebooks",
+            "heading": "Handcrafted Linen Journals",
+            "subheading": "Discover"
+          }
+        }
+      ]
     }
   ]
 }
