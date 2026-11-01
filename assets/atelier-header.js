@@ -514,7 +514,7 @@ if (!customElements.get('atelier-header')) {
     }
   }
 
-  // Bulletproof delegated interactions for mobile drawer & accordions
+  // Bulletproof delegated interactions for mobile drawer, accordions & outside click closing
   document.addEventListener('click', (e) => {
     // 1. Accordion trigger click inside mobile drawer
     const accordionTrigger = e.target.closest('#atelier-mobile-drawer [data-accordion-trigger]');
@@ -545,46 +545,72 @@ if (!customElements.get('atelier-header')) {
     }
 
     // 2. Open drawer button
-    const openBtn = e.target.closest('[data-open-drawer]');
+    const openBtn = e.target.closest('[data-open-drawer], .atelier-btn--menu');
     if (openBtn) {
       e.preventDefault();
       e.stopPropagation();
       const hdr = document.querySelector('atelier-header');
       if (hdr && typeof hdr.openMobileDrawer === 'function') {
         hdr.openMobileDrawer();
+      } else if (typeof window.gtOpenMobileDrawer === 'function') {
+        window.gtOpenMobileDrawer();
       }
       return;
     }
 
-    // 3. Close drawer button
-    const closeBtn = e.target.closest('#atelier-mobile-drawer [data-close-drawer], [data-close-drawer]');
+    // 3. Close drawer button (X button)
+    const closeBtn = e.target.closest('#atelier-mobile-drawer [data-close-drawer], .atelier-drawer__close');
     if (closeBtn) {
       e.preventDefault();
       e.stopPropagation();
-      const hdr = document.querySelector('atelier-header');
-      if (hdr && typeof hdr.closeMobileDrawer === 'function') {
-        hdr.closeMobileDrawer();
-      }
+      window.gtCloseMobileDrawer();
       return;
     }
 
-    // 4. Scrim click
+    // 4. Scrim / Backdrop click
     const scrim = e.target.closest('.atelier-scrim, [data-scrim]');
-    if (scrim && scrim.classList.contains('is-visible')) {
+    if (scrim) {
       e.preventDefault();
       e.stopPropagation();
+      window.gtCloseMobileDrawer();
       const hdr = document.querySelector('atelier-header');
       if (hdr) {
-        if (typeof hdr.closeMobileDrawer === 'function') hdr.closeMobileDrawer();
         if (typeof hdr.closeMega === 'function') hdr.closeMega();
         if (typeof hdr.closeSearch === 'function') hdr.closeSearch();
       }
       return;
     }
 
-    // 5. Clicks inside drawer never close it
+    // 5. OUTSIDE DRAWER CLICK: If mobile drawer is open and click was outside #atelier-mobile-drawer, CLOSE IT!
+    const drawer = document.getElementById('atelier-mobile-drawer');
+    const isDrawerOpen = drawer && (
+      drawer.classList.contains('is-open') ||
+      document.documentElement.classList.contains('atelier-drawer-open') ||
+      document.body.classList.contains('atelier-drawer-open')
+    );
+    if (isDrawerOpen) {
+      const insideDrawer = e.target.closest('#atelier-mobile-drawer');
+      if (!insideDrawer && !openBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.gtCloseMobileDrawer();
+        return;
+      }
+    }
+
+    // 6. Clicks inside drawer never bubble out
     if (e.target.closest('#atelier-mobile-drawer')) {
       e.stopPropagation();
+    }
+  });
+
+  // Also bind touchstart / pointerdown on scrim for instant mobile dismissal
+  document.addEventListener('pointerdown', (e) => {
+    const scrim = e.target.closest('.atelier-scrim, [data-scrim]');
+    if (scrim && (document.documentElement.classList.contains('atelier-drawer-open') || document.querySelector('#atelier-mobile-drawer.is-open'))) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.gtCloseMobileDrawer();
     }
   });
 

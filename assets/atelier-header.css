@@ -1101,7 +1101,7 @@ atelier-header button {
 }
 .atelier-drawer__accordion-item.is-open .atelier-drawer__chev,
 .atelier-drawer__accordion-item[open] .atelier-drawer__chev {
-  transform: rotate(90deg) !important;
+  transform: rotate(180deg) !important;
   color: #4D351D !important;
 }
 .atelier-drawer__accordion-body {
@@ -1112,24 +1112,55 @@ atelier-header button {
 .atelier-drawer__accordion-item[open] > .atelier-drawer__accordion-body {
   display: block !important;
 }
+.atelier-drawer__accordion-body {
+  display: none !important;
+  padding: 4px 10px 12px 10px !important;
+}
+.atelier-drawer__accordion-item.is-open > .atelier-drawer__accordion-body,
+.atelier-drawer__accordion-item[open] > .atelier-drawer__accordion-body {
+  display: block !important;
+}
 .atelier-drawer__sublist {
-  border-left: 2px solid rgba(54, 54, 56, 0.12) !important;
-  padding: 2px 0 2px 14px !important;
+  border-left: none !important;
+  padding: 6px 8px !important;
   margin: 0 !important;
+  background: #F4EFE6 !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(77, 53, 29, 0.08) !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 4px !important;
+  gap: 2px !important;
+  list-style: none !important;
+}
+.atelier-drawer__sublist li {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-bottom: 1px solid rgba(77, 53, 29, 0.04) !important;
+}
+.atelier-drawer__sublist li:last-child {
+  border-bottom: none !important;
 }
 .atelier-drawer__sublink {
-  display: block !important;
-  padding: 6px 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 10px 12px !important;
+  min-height: 40px !important;
   font-size: 13.5px !important;
-  color: rgba(54, 54, 56, 0.75) !important;
+  font-weight: 500 !important;
+  color: #382A1D !important;
   text-decoration: none !important;
-  transition: color 0.2s ease !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
 }
-.atelier-drawer__sublink:hover {
-  color: #4D351D !important;
+.atelier-drawer__sublink:hover,
+.atelier-drawer__sublink:focus,
+.atelier-drawer__sublink:active {
+  background: rgba(255, 255, 255, 0.88) !important;
+  color: #1A120B !important;
+  font-weight: 600 !important;
+  padding-left: 15px !important;
 }
 
 /* 3. PINNED FOOTER (UrbanDeco Screenshot 2 reference) */
@@ -1245,7 +1276,9 @@ atelier-header button {
   pointer-events: none !important;
   transition: opacity 0.35s ease !important;
 }
-.atelier-scrim.is-visible {
+.atelier-scrim.is-visible,
+html.atelier-drawer-open .atelier-scrim {
   opacity: 1 !important;
   pointer-events: auto !important;
+  cursor: pointer !important;
 }

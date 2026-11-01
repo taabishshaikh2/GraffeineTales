@@ -1336,7 +1336,7 @@ atelier-header li,
 }
 .atelier-drawer__accordion-item.is-open .atelier-drawer__chev,
 .atelier-drawer__accordion-item[open] .atelier-drawer__chev {
-  transform: rotate(90deg) !important;
+  transform: rotate(180deg) !important;
   color: #4D351D !important;
 }
 .atelier-drawer__accordion-body {
@@ -1347,25 +1347,55 @@ atelier-header li,
 .atelier-drawer__accordion-item[open] > .atelier-drawer__accordion-body {
   display: block !important;
 }
+.atelier-drawer__accordion-body {
+  display: none !important;
+  padding: 4px 10px 12px 10px !important;
+}
+.atelier-drawer__accordion-item.is-open > .atelier-drawer__accordion-body,
+.atelier-drawer__accordion-item[open] > .atelier-drawer__accordion-body {
+  display: block !important;
+}
 .atelier-drawer__sublist {
-  border-left: 2px solid rgba(54, 54, 56, 0.12) !important;
-  padding: 2px 0 2px 14px !important;
+  border-left: none !important;
+  padding: 6px 8px !important;
   margin: 0 !important;
+  background: #F4EFE6 !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(77, 53, 29, 0.08) !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 4px !important;
+  gap: 2px !important;
   list-style: none !important;
 }
-.atelier-drawer__sublink {
-  display: block !important;
-  padding: 6px 0 !important;
-  font-size: 13.5px !important;
-  color: rgba(54, 54, 56, 0.75) !important;
-  text-decoration: none !important;
-  transition: color 0.2s ease !important;
+.atelier-drawer__sublist li {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-bottom: 1px solid rgba(77, 53, 29, 0.04) !important;
 }
-.atelier-drawer__sublink:hover {
-  color: #4D351D !important;
+.atelier-drawer__sublist li:last-child {
+  border-bottom: none !important;
+}
+.atelier-drawer__sublink {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 10px 12px !important;
+  min-height: 40px !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  color: #382A1D !important;
+  text-decoration: none !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+.atelier-drawer__sublink:hover,
+.atelier-drawer__sublink:focus,
+.atelier-drawer__sublink:active {
+  background: rgba(255, 255, 255, 0.88) !important;
+  color: #1A120B !important;
+  font-weight: 600 !important;
+  padding-left: 15px !important;
 }
 
 /* Drawer Pinned Footer */
@@ -1709,33 +1739,27 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
               </ul>
             </div>
 
-            {%- comment -%} Promotional Photo Card on Right {%- endcomment -%}
+            {%- comment -%} Promotional Photo Card on Right (UrbanDeco model: matches Menu item name) {%- endcomment -%}
             {%- for block in section.blocks -%}
-              {%- if block.type == 'promo' -%}
-                {%- assign bt = block.settings.menu_item | downcase | strip -%}
-                {%- if bt == lt -%}
-                  <a
-                    class="atelier-promo-card"
-                    href="{{ block.settings.link | default: link.url }}"
-                    {{ block.shopify_attributes }}
-                  >
-                    <div class="atelier-promo-card__img">
-                      {%- if block.settings.image != blank -%}
-                        {{ block.settings.image | image_url: width: 600 | image_tag: widths: '300, 480, 600', sizes: '280px', loading: 'lazy', alt: block.settings.heading | escape }}
-                      {%- else -%}
-                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #E9DFC2 0%, #C6B58E 100%);"></div>
-                      {%- endif -%}
-                    </div>
-                    <div class="atelier-promo-card__body">
-                      {%- if block.settings.heading != blank -%}
-                        <span class="atelier-promo-card__h">{{ block.settings.heading | escape }}</span>
-                      {%- endif -%}
-                      {%- if block.settings.subheading != blank -%}
-                        <span class="atelier-promo-card__s">{{ block.settings.subheading | escape }}{{ icon_arrow }}</span>
-                      {%- endif -%}
-                    </div>
-                  </a>
-                {%- endif -%}
+              {%- assign bt = block.settings.heading | default: block.settings.menu_item | downcase | strip -%}
+              {%- if bt == lt and block.settings.image != blank -%}
+                <a
+                  class="atelier-promo-card"
+                  href="{{ block.settings.link | default: link.url }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <div class="atelier-promo-card__img">
+                    {{ block.settings.image | image_url: width: 600 | image_tag: widths: '300, 480, 600', sizes: '280px', loading: 'lazy', alt: block.settings.heading | default: link.title | escape }}
+                  </div>
+                  <div class="atelier-promo-card__body">
+                    <span class="atelier-promo-card__h">{{ block.settings.heading | default: link.title | escape }}</span>
+                    {%- if block.settings.subheading != blank -%}
+                      <span class="atelier-promo-card__s">{{ block.settings.subheading | escape }}{{ icon_arrow }}</span>
+                    {%- else -%}
+                      <span class="atelier-promo-card__s">Explore {{ link.title | escape }}{{ icon_arrow }}</span>
+                    {%- endif -%}
+                  </div>
+                </a>
               {%- endif -%}
             {%- endfor -%}
           </div>
@@ -1825,15 +1849,42 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
           {%- if s.promo_link_label != blank -%}<span class="atelier-drawer__promo-cta">{{ s.promo_link_label | escape }}{{ icon_arrow }}</span>{%- endif -%}
         </a>
       {%- endif -%}
-      {%- assign drawer_tiles = section.blocks | where: 'type', 'drawer_tile' -%}
-      {%- if drawer_tiles.size > 0 -%}
+      {%- comment -%} Mobile Drawer Photo Tiles Grid (UrbanDeco model: all blocks with photo) {%- endcomment -%}
+      {%- assign has_photo_tiles = false -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.image != blank -%}
+          {%- assign has_photo_tiles = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if has_photo_tiles -%}
         <div class="atelier-drawer__tiles-grid" aria-label="Featured categories">
-          {%- for block in drawer_tiles -%}
+          {%- for block in section.blocks -%}
             {%- if block.settings.image != blank -%}
-              <a class="atelier-photo-tile" href="{{ block.settings.link | default: routes.all_products_collection_url }}" {{ block.shopify_attributes }}>
-                <span class="atelier-photo-tile__media">{{ block.settings.image | image_url: width: 600 | image_tag: widths: '240, 360, 480, 600', sizes: '(max-width: 749px) 42vw, 180px', loading: 'lazy', alt: block.settings.heading | default: block.settings.menu_item | escape }}</span>
+              {%- assign tile_name = block.settings.heading | default: block.settings.menu_item | strip -%}
+              {%- assign tile_url = block.settings.link -%}
+              {%- if tile_url == blank and tile_name != blank -%}
+                {%- assign match_name_lower = tile_name | downcase -%}
+                {%- for mlink in mobile_menu -%}
+                  {%- assign mlink_title_lower = mlink.title | downcase | strip -%}
+                  {%- if mlink_title_lower == match_name_lower -%}
+                    {%- assign tile_url = mlink.url -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+              {%- if tile_url == blank -%}
+                {%- assign tile_url = routes.all_products_collection_url -%}
+              {%- endif -%}
+              <a class="atelier-photo-tile" href="{{ tile_url }}" {{ block.shopify_attributes }}>
+                <span class="atelier-photo-tile__media">{{ block.settings.image | image_url: width: 600 | image_tag: widths: '240, 360, 480, 600', sizes: '(max-width: 749px) 42vw, 180px', loading: 'lazy', alt: tile_name | escape }}</span>
                 <span class="atelier-photo-tile__overlay"></span>
-                <span class="atelier-photo-tile__info"><span class="atelier-photo-tile__title">{{ block.settings.heading | default: block.settings.menu_item | escape }}</span>{%- if block.settings.subheading != blank -%}<span class="atelier-photo-tile__count">{{ block.settings.subheading | escape }}</span>{%- endif -%}</span>
+                <span class="atelier-photo-tile__info">
+                  <span class="atelier-photo-tile__title">{{ tile_name | escape }}</span>
+                  {%- if block.settings.subheading != blank -%}
+                    <span class="atelier-photo-tile__count">{{ block.settings.subheading | escape }}</span>
+                  {%- endif -%}
+                </span>
               </a>
             {%- endif -%}
           {%- endfor -%}
@@ -1886,7 +1937,8 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
   </aside>
 </section>
 
-{% schema %}{
+{% schema %}
+{
   "name": "Atelier header",
   "tag": "section",
   "class": "atelier-header-section",
@@ -2514,36 +2566,36 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
   ],
   "blocks": [
     {
-      "type": "promo",
-      "name": "Mega menu promo card",
+      "type": "menu_photo",
+      "name": "Menu photo / tile",
       "settings": [
         {
-          "type": "text",
-          "id": "menu_item",
-          "label": "Navigation item title",
-          "info": "Exact title of navigation link to attach this promo card to (e.g. Journals)"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Promotional image"
+          "type": "paragraph",
+          "content": "Adds a photo to a menu item in the phone menu and desktop mega menu. Handy for items that link to pages (e.g. Quirky Stationary, Journals, Home Décor). Order used: Mobile menu image -> this block -> collection image."
         },
         {
           "type": "text",
           "id": "heading",
-          "label": "Heading",
-          "default": "Artisan Linen Journals"
+          "label": "Menu item name",
+          "info": "Type it exactly as in the menu (e.g. Quirky Stationary, Journals, Home Décor)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo",
+          "info": "800 × 1000 px. Used for the photo tile on mobile, banner at top of sub-menu, and desktop mega menu promo card."
         },
         {
           "type": "text",
           "id": "subheading",
-          "label": "Subtitle / CTA",
-          "default": "Discover Collection"
+          "label": "Supporting text / badge (optional)",
+          "info": "e.g. 'Explore Collection', 'New Arrivals', '24 items'"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "Card link"
+          "label": "Destination URL (optional)",
+          "info": "Leave blank to link automatically to the matching menu item URL."
         }
       ]
     },
@@ -2552,29 +2604,69 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
       "name": "Mobile drawer image tile",
       "settings": [
         {
-          "type": "text",
-          "id": "menu_item",
-          "label": "Category / menu item"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Tile image"
+          "type": "paragraph",
+          "content": "Adds a photo to a menu item in the phone menu and desktop mega menu."
         },
         {
           "type": "text",
           "id": "heading",
-          "label": "Tile heading"
+          "label": "Menu item name",
+          "info": "Type it exactly as in the menu (e.g. Quirky Stationary, Journals, Home Décor)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo",
+          "info": "800 × 1000 px recommended"
         },
         {
           "type": "text",
           "id": "subheading",
-          "label": "Supporting text"
+          "label": "Supporting text / badge (optional)"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "Tile destination"
+          "label": "Destination URL (optional)",
+          "info": "Leave blank to link automatically to the matching menu item URL."
+        },
+        {
+          "type": "text",
+          "id": "menu_item",
+          "label": "Menu item name (legacy field)"
+        }
+      ]
+    },
+    {
+      "type": "promo",
+      "name": "Mega menu promo card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Menu item name",
+          "info": "Type it exactly as in the menu (e.g. Quirky Stationary, Journals, Home Décor)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Supporting text / CTA",
+          "default": "Discover Collection"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom link URL (optional)"
+        },
+        {
+          "type": "text",
+          "id": "menu_item",
+          "label": "Menu item name (legacy field)"
         }
       ]
     }
@@ -2584,4 +2676,5 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
       "name": "Atelier header"
     }
   ]
-}{% endschema %}
+}
+{% endschema %}
