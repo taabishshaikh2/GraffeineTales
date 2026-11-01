@@ -1,6 +1,6 @@
 /**
  * Graffeine Tales — Premium Glass Header Web Component
- * Handles layout sizing, sticky scroll, mega menu hover/click, live search, wishlist, cart drawer & mobile drawer.
+ * Unified Architecture with responsive layout switching and real frosted glassmorphism
  */
 if (!customElements.get('atelier-header')) {
   class AtelierHeader extends HTMLElement {
@@ -9,6 +9,7 @@ if (!customElements.get('atelier-header')) {
       this.__initialized = true;
 
       this.section = this.closest('.shopify-section') || this.parentElement;
+      this.bar = this.querySelector('.atelier-header__bar');
       this.pill = this.querySelector('.atelier-header__pill');
       this.megaPanels = this.querySelectorAll('[data-mega-panel]');
       this.searchPanel = this.querySelector('[data-search-panel]');
@@ -17,16 +18,23 @@ if (!customElements.get('atelier-header')) {
       this.searchIdle = this.querySelector('[data-search-idle]');
       this.drawer = this.querySelector('[data-mobile-drawer]');
       this.scrim = this.querySelector('[data-scrim]');
-      this.moneyFormat = this.dataset.moneyFormat || '₹';
       this.lastScrollY = window.scrollY;
       this.openMega = null;
       this.hideOnScroll = this.dataset.hideOnScroll === 'true';
 
-      // 1. Measure and set CSS variables
+      // 1. Measure and set CSS variables & negative margin
       this.measure();
       window.addEventListener('resize', () => this.measure(), { passive: true });
 
-      // 2. Scroll listener for sticky header
+      // Shopify Editor Section Listeners
+      document.addEventListener('shopify:section:load', (e) => {
+        if (e.target.contains(this) || e.target === this.section) this.measure();
+      });
+      document.addEventListener('shopify:section:select', (e) => {
+        if (e.target.contains(this) || e.target === this.section) this.measure();
+      });
+
+      // 2. Scroll listener
       this.onScroll = () => {
         if (this.raf) return;
         this.raf = requestAnimationFrame(() => {
@@ -46,7 +54,7 @@ if (!customElements.get('atelier-header')) {
           if (window.innerWidth < 990) return;
           clearTimeout(this.leaveTimer);
           clearTimeout(this.enterTimer);
-          this.enterTimer = setTimeout(() => this.showMega(btn, panel), this.openMega ? 0 : 100);
+          this.enterTimer = setTimeout(() => this.showMega(btn, panel), this.openMega ? 0 : 80);
         };
 
         const close = () => {
@@ -54,7 +62,7 @@ if (!customElements.get('atelier-header')) {
           clearTimeout(this.enterTimer);
           this.leaveTimer = setTimeout(() => {
             if (this.openMega === btn) this.closeAll();
-          }, 200);
+          }, 180);
         };
 
         if (parentLi) {
@@ -85,12 +93,28 @@ if (!customElements.get('atelier-header')) {
         });
       });
 
+      this.querySelectorAll('[data-close-search]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.closeAll();
+        });
+      });
+
       if (this.searchInput) {
         this.searchInput.addEventListener('input', () => {
           clearTimeout(this.searchTimer);
           this.searchTimer = setTimeout(() => this.suggest(this.searchInput.value.trim()), 240);
         });
       }
+
+      this.querySelectorAll('[data-search-chip]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (this.searchInput) {
+            this.searchInput.value = btn.dataset.searchChip;
+            this.suggest(btn.dataset.searchChip);
+          }
+        });
+      });
 
       // 5. Mobile Drawer
       this.querySelectorAll('[data-open-drawer]').forEach((btn) => {
@@ -106,37 +130,6 @@ if (!customElements.get('atelier-header')) {
           this.closeAll();
         });
       });
-
-      // Swipe Left to close drawer on mobile
-      if (this.drawer) {
-        let startX = 0, currentX = 0, isDragging = false;
-        this.drawer.addEventListener('touchstart', (e) => {
-          if (!this.drawer.classList.contains('is-open') || e.touches.length !== 1) return;
-          startX = e.touches[0].clientX;
-          isDragging = false;
-        }, { passive: true });
-
-        this.drawer.addEventListener('touchmove', (e) => {
-          if (!startX) return;
-          const diff = e.touches[0].clientX - startX;
-          if (diff < -10) {
-            isDragging = true;
-            this.drawer.style.transform = `translateX(${Math.min(0, diff)}px)`;
-          }
-        }, { passive: true });
-
-        const onTouchEnd = () => {
-          if (isDragging) {
-            this.drawer.style.transform = '';
-            if (currentX < -60) this.closeAll();
-          }
-          startX = 0;
-          isDragging = false;
-        };
-
-        this.drawer.addEventListener('touchend', onTouchEnd);
-        this.drawer.addEventListener('touchcancel', onTouchEnd);
-      }
 
       // 6. Global Escape key & outside clicks
       document.addEventListener('keydown', (e) => {
@@ -177,7 +170,6 @@ if (!customElements.get('atelier-header')) {
         });
       });
 
-      // Render recent searches
       this.renderRecentSearches();
     }
 
@@ -185,7 +177,7 @@ if (!customElements.get('atelier-header')) {
       const bar = this.querySelector('.atelier-header__bar');
       const pill = this.querySelector('.atelier-header__pill');
       const ann = this.section.querySelector('.atelier-announcement');
-      
+
       const pillH = bar ? bar.offsetHeight : (pill ? pill.offsetHeight + 14 : this.offsetHeight);
       const annH = (ann && ann.offsetParent !== null) ? ann.offsetHeight : 0;
       const totalH = pillH + annH;
@@ -193,7 +185,7 @@ if (!customElements.get('atelier-header')) {
       document.documentElement.style.setProperty('--header-height', totalH + 'px');
       document.documentElement.style.setProperty('--header-pill-height', pillH + 'px');
 
-      // Check if the first section is a hero banner (collections, homepage hero, image-banner)
+      // Check if current page begins with a banner
       const mainFirst = document.querySelector('#MainContent > .shopify-section:first-child');
       const isBanner = mainFirst && (
         mainFirst.querySelector('.atelier-col-hero, .atelier-hero, .image-banner, .slideshow, .hero-carousel, [data-hero-banner]')
@@ -201,14 +193,14 @@ if (!customElements.get('atelier-header')) {
         || document.body.classList.contains('template-collection')
       );
 
-      // Float header over banners
+      // Negative margin pulls subsequent banner directly behind the header!
       this.section.style.marginBottom = '-' + pillH + 'px';
+
       if (!isBanner && mainFirst) {
-        mainFirst.style.paddingTop = (totalH + 24) + 'px';
+        mainFirst.style.paddingTop = (totalH + 20) + 'px';
       } else if (mainFirst) {
         mainFirst.style.paddingTop = '';
       }
-    }
     }
 
     handleScroll() {
@@ -249,124 +241,91 @@ if (!customElements.get('atelier-header')) {
       }
     }
 
+    suggest(query) {
+      if (!this.searchResults || !this.searchIdle) return;
+      if (!query || query.length < 2) {
+        this.searchResults.style.display = 'none';
+        this.searchIdle.style.display = 'block';
+        return;
+      }
+
+      fetch(`/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product&resources[limit]=6`)
+        .then((res) => res.json())
+        .then((data) => {
+          const products = data.resources && data.resources.results && data.resources.results.products;
+          if (!products || products.length === 0) {
+            this.searchResults.innerHTML = '<p style="padding: 18px 0; color: #888; text-align: center;">No matching products found.</p>';
+            this.searchResults.style.display = 'block';
+            this.searchIdle.style.display = 'none';
+            return;
+          }
+
+          let html = '<ul style="list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px;">';
+          products.forEach((p) => {
+            html += `
+              <li>
+                <a href="${p.url}" style="display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 14px; padding: 8px; border-radius: 8px; transition: background 0.2s;">
+                  <img src="${p.image || ''}" width="48" height="48" style="object-fit: cover; border-radius: 6px; background: #f0f0f0;" alt="">
+                  <div>
+                    <span style="display: block; font-size: 14px; font-weight: 600; color: #363638;">${p.title}</span>
+                    <span style="font-size: 13px; color: #4D351D;">${p.price}</span>
+                  </div>
+                  <span style="font-size: 12px; color: #999;">&rarr;</span>
+                </a>
+              </li>
+            `;
+          });
+          html += '</ul>';
+          html += `<a href="/search?q=${encodeURIComponent(query)}&type=product" style="display: block; text-align: center; margin-top: 16px; padding: 10px; background: #363638; color: #fff; border-radius: 8px; font-size: 13px; font-weight: 600; text-transform: uppercase;">View all results &rarr;</a>`;
+
+          this.searchResults.innerHTML = html;
+          this.searchResults.style.display = 'block';
+          this.searchIdle.style.display = 'none';
+        })
+        .catch(() => {});
+    }
+
     openMobileDrawer() {
-      if (!this.drawer) return;
       this.closeAll();
-      this.drawer.classList.add('is-open');
+      if (this.drawer) this.drawer.classList.add('is-open');
       if (this.scrim) this.scrim.classList.add('is-visible');
       document.body.style.overflow = 'hidden';
     }
 
     closeAll() {
-      if (this.openMega) {
-        this.openMega.setAttribute('aria-expanded', 'false');
-        this.openMega = null;
-      }
-      this.megaPanels.forEach((p) => p.classList.remove('is-open'));
+      this.querySelectorAll('[data-mega-panel].is-open').forEach((p) => p.classList.remove('is-open'));
+      this.querySelectorAll('[data-mega-trigger][aria-expanded="true"]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
       if (this.searchPanel) this.searchPanel.classList.remove('is-open');
       if (this.drawer) this.drawer.classList.remove('is-open');
       if (this.scrim) this.scrim.classList.remove('is-visible');
       document.body.style.overflow = '';
+      this.openMega = null;
     }
 
-    // Live Predictive Search
-    suggest(query) {
-      if (!this.searchResults || !this.searchIdle) return;
-      if (!query || query.length < 2) {
-        this.searchResults.innerHTML = '';
-        this.searchIdle.hidden = false;
-        return;
-      }
-
-      const url = `${window.Shopify?.routes?.root || '/'}search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product&resources[limit]=6`;
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => {
-          const products = data?.resources?.results?.products || [];
-          if (!products.length) {
-            this.searchResults.innerHTML = `<p style="padding: 12px; color: #666; font-size: 13px;">No journals or products found for “${query}”.</p>`;
-            this.searchIdle.hidden = true;
-            return;
-          }
-
-          this.searchIdle.hidden = true;
-          this.searchResults.innerHTML = products.map((p) => {
-            const img = p.featured_image?.url || p.image;
-            const price = this.formatMoney(p.price);
-            return `
-              <a href="${p.url}" class="atelier-search-item" data-search-term="${query}">
-                ${img ? `<img src="${img}" alt="" width="48" height="48" loading="lazy">` : `<div style="width:48px;height:48px;background:#eee;border-radius:6px;"></div>`}
-                <div class="atelier-search-item__info">
-                  <span class="atelier-search-item__title">${p.title}</span>
-                  <span class="atelier-search-item__price">${price}</span>
-                </div>
-              </a>
-            `;
-          }).join('');
-
-          this.rememberSearch(query);
-        })
-        .catch(() => {
-          this.searchIdle.hidden = false;
+    updateWishlistCount() {
+      try {
+        const items = JSON.parse(localStorage.getItem('graffeine-wishlist') || '[]');
+        const count = Array.isArray(items) ? items.length : 0;
+        this.querySelectorAll('[data-wishlist-count]').forEach((badge) => {
+          badge.textContent = count;
+          badge.hidden = count === 0;
         });
-    }
-
-    formatMoney(cents) {
-      if (!cents) return '';
-      const amount = (cents / 100).toFixed(0);
-      return `${this.moneyFormat}${amount}`;
-    }
-
-    // Recent Searches
-    getRecentSearches() {
-      try {
-        return JSON.parse(localStorage.getItem('graffeine_recent_searches') || '[]');
-      } catch {
-        return [];
-      }
-    }
-
-    rememberSearch(q) {
-      if (!q || q.length < 2) return;
-      let list = this.getRecentSearches().filter((item) => item.toLowerCase() !== q.toLowerCase());
-      list.unshift(q);
-      try {
-        localStorage.setItem('graffeine_recent_searches', JSON.stringify(list.slice(0, 5)));
-        this.renderRecentSearches();
-      } catch {}
+      } catch (e) {}
     }
 
     renderRecentSearches() {
-      const container = this.querySelector('[data-recent-chips]');
-      if (!container) return;
-      const list = this.getRecentSearches();
-      if (!list.length) {
-        const wrap = container.closest('[data-recent-wrapper]');
-        if (wrap) wrap.hidden = true;
-        return;
-      }
-      const wrap = container.closest('[data-recent-wrapper]');
-      if (wrap) wrap.hidden = false;
-
-      container.innerHTML = list.map((term) => `
-        <li>
-          <a class="atelier-chip" href="${window.Shopify?.routes?.root || '/'}search?q=${encodeURIComponent(term)}&type=product">
-            ${term}
-          </a>
-        </li>
-      `).join('');
-    }
-
-    // Wishlist Badges
-    updateWishlistCount() {
       try {
-        const list = JSON.parse(localStorage.getItem('graffeine-wishlist') || '[]');
-        const count = Array.isArray(list) ? list.length : 0;
-        this.querySelectorAll('[data-wishlist-count]').forEach((badge) => {
-          badge.textContent = String(count);
-          badge.hidden = count === 0;
-        });
-      } catch {}
+        const wrap = this.querySelector('[data-recent-searches-wrap]');
+        const list = this.querySelector('[data-recent-searches-list]');
+        if (!wrap || !list) return;
+        const recents = JSON.parse(localStorage.getItem('gt_recent_searches') || '[]');
+        if (!Array.isArray(recents) || recents.length === 0) {
+          wrap.style.display = 'none';
+          return;
+        }
+        wrap.style.display = 'block';
+        list.innerHTML = recents.slice(0, 5).map((t) => `<button type="button" class="atelier-search-chip" data-search-chip="${t}">${t}</button>`).join('');
+      } catch (e) {}
     }
   }
 

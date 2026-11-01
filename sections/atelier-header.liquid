@@ -5,7 +5,7 @@
   assign s = section.settings
   assign menu = s.menu.links | default: linklists.main-menu.links
   assign mobile_menu = s.mobile_menu.links | default: menu
-  assign glass_alpha = s.glass_opacity | divided_by: 100.0
+  assign glass_alpha = s.glass_opacity | default: 50 | divided_by: 100.0
   assign phone_clean = s.phone | remove: ' ' | remove: '-' | remove: '(' | remove: ')'
   assign whatsapp_clean = s.whatsapp | remove: ' ' | remove: '+' | remove: '-'
   assign logo_alt = s.logo.alt | default: shop.name
@@ -28,13 +28,13 @@
 {%- capture icon_chev -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>{%- endcapture -%}
 
 {%- capture logo_markup -%}
-  <a class="atelier-logo" href="{{ s.logo_link | default: routes.root_url }}" aria-label="{{ shop.name | escape }} – home">
+  <a class="atelier-logo" href="{{ s.logo_link | default: routes.root_url }}" aria-label="{{ shop.name | escape }} — Home">
     {%- if s.show_cup -%}
       <span class="atelier-cup{% if s.animate_steam %} atelier-cup--steam{% endif %}">
         {%- if s.cup_image != blank -%}
           {{ s.cup_image | image_url: width: 120 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '60,120', alt: '' }}
         {%- else -%}
-          <img src="{{ 'header-cup.png' | asset_url }}" width="30" height="44" loading="eager" alt="">
+          <img src="{{ 'header-cup.png' | asset_url }}" width="26" height="38" loading="eager" alt="">
         {%- endif -%}
         <span class="atelier-steam" aria-hidden="true"></span>
         <span class="atelier-steam atelier-steam--second" aria-hidden="true"></span>
@@ -80,154 +80,9 @@
     --icon-size: {{ s.icon_size }}px;
   }
 
-
 /* ==========================================================================
-   Graffeine Tales - Universal Header Core Styles
-   Guarantees zero FOUC, no bullet points, correct flex/grid layout and floating pill
-   ========================================================================== */
-.atelier-header-section {
-  position: -webkit-sticky !important;
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 40 !important;
-  pointer-events: none !important;
-  margin-bottom: calc(-1 * var(--header-pill-height, 108px)) !important;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-atelier-header {
-  display: block !important;
-  width: 100% !important;
-  pointer-events: none !important;
-  font-family: 'Inter', -apple-system, sans-serif !important;
-  color: var(--header-text, #363638) !important;
-}
-
-atelier-header, atelier-header * {
-  box-sizing: border-box !important;
-}
-
-atelier-header a {
-  color: inherit !important;
-  text-decoration: none !important;
-}
-
-atelier-header button {
-  font: inherit !important;
-  color: inherit !important;
-  background: transparent !important;
-  border: none !important;
-  cursor: pointer !important;
-}
-
-atelier-header ul,
-atelier-header li,
-.atelier-header__nav-list,
-.atelier-header__nav-list li {
-  list-style: none !important;
-  list-style-type: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.atelier-header__bar {
-  pointer-events: none !important;
-  position: relative !important;
-  max-width: calc(1400px + var(--gap-side, 24px) * 2) !important;
-  margin-inline: auto !important;
-  padding: var(--gap-top, 14px) var(--gap-side, 24px) 0 !important;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.atelier-header__pill {
-  pointer-events: auto !important;
-  position: relative !important;
-  isolation: isolate !important;
-  border-radius: var(--header-radius, 18px) !important;
-  padding: 8px 24px !important;
-  min-height: 60px !important;
-  background: var(--header-glass, rgba(248, 245, 237, 0.78)) !important;
-  -webkit-backdrop-filter: blur(var(--header-blur, 20px)) saturate(160%) !important;
-  backdrop-filter: blur(var(--header-blur, 20px)) saturate(160%) !important;
-  border: 1px solid var(--header-border, rgba(198, 181, 142, 0.35)) !important;
-  box-shadow: 0 12px 36px -12px rgba(54, 54, 56, 0.12), 0 2px 8px -2px rgba(54, 54, 56, 0.04) !important;
-  transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease !important;
-}
-
-/* Two-rows layout explicit rules */
-.layout--two-rows .atelier-header__pill,
-.layout--two_rows .atelier-header__pill {
-  display: grid !important;
-  grid-template-columns: 1fr auto 1fr !important;
-  grid-template-areas: "left center right" "nav nav nav" !important;
-  align-items: center !important;
-  padding-top: 10px !important;
-  padding-bottom: 8px !important;
-}
-
-.layout--two-rows .atelier-header__left,
-.layout--two_rows .atelier-header__left {
-  grid-area: left !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  min-width: 0 !important;
-}
-
-.layout--two-rows .atelier-header__center,
-.layout--two_rows .atelier-header__center {
-  grid-area: center !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.layout--two-rows .atelier-header__right,
-.layout--two_rows .atelier-header__right {
-  grid-area: right !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  gap: 8px !important;
-}
-
-.layout--two-rows .atelier-header__nav,
-.layout--two_rows .atelier-header__nav {
-  grid-area: nav !important;
-  display: flex !important;
-  justify-content: center !important;
-  margin-top: 8px !important;
-  padding-top: 8px !important;
-  border-top: 1px solid var(--header-line, rgba(54, 54, 56, 0.08)) !important;
-  width: 100% !important;
-}
-
-.layout--two-rows .atelier-header__nav-list,
-.layout--two_rows .atelier-header__nav-list {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex-wrap: wrap !important;
-  gap: 4px 16px !important;
-  list-style: none !important;
-  width: 100% !important;
-}
-
-/* Fallback padding for pages that don't have a hero banner */
-body:not(.template-index):not(.template-collection) #MainContent > .shopify-section:first-child:not(:has(.atelier-col-hero)):not(:has(.atelier-hero)):not(:has(.image-banner)):not(:has(.slideshow)) {
-  padding-top: calc(var(--header-height, 120px) + 24px) !important;
-}
-
-/* ==========================================================================
-   Graffeine Tales — Premium Glass Header
-   Adapted from UrbanDeco Reference Architecture for Graffeine Tales Editorial Brand
-   Brand Palette:
-   - Warm Paper: #F8F5ED
-   - Espresso Charcoal: #363638
-   - Logo Cream: #E9DFC2
-   - Sand / Gold Accent: #C6B58E / #927B53
-   - Deep Coffee: #4D351D
-   - Soft Cream Card: #FDFBF7
+   Graffeine Tales — Premium Frosted Glassmorphic Header System
+   Exact reproduction of UrbanDeco Reference Architecture & Interaction Patterns
    ========================================================================== */
 
 :root {
@@ -271,7 +126,6 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
   text-align: center;
   overflow: hidden;
 }
-
 .atelier-announcement__content--left { text-align: left; }
 .atelier-announcement__content--center { text-align: center; }
 .atelier-announcement__content--right { text-align: right; }
@@ -284,18 +138,13 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
   gap: 6px;
   transition: opacity 0.2s ease;
 }
+.atelier-announcement__link:hover { opacity: 0.85; }
 
-.atelier-announcement__link:hover {
-  opacity: 0.85;
-}
-
-/* Scrolling Marquee */
 .atelier-announcement--marquee .atelier-announcement__content {
   display: flex;
   white-space: nowrap;
   overflow: hidden;
 }
-
 .atelier-announcement__track {
   display: inline-flex;
   white-space: nowrap;
@@ -303,7 +152,6 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
   gap: 40px;
   padding-left: 100%;
 }
-
 @keyframes atelierMarquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
@@ -318,34 +166,25 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
   flex-shrink: 0;
 }
 
-.atelier-announcement__country svg {
-  width: 14px;
-  height: 14px;
-}
-
-/* Visibility modifiers */
 .atelier-announcement--desktop-only { display: block; }
 .atelier-announcement--mobile-only { display: none; }
-
 @media screen and (max-width: 767px) {
   .atelier-announcement--desktop-only { display: none; }
   .atelier-announcement--mobile-only { display: block; }
 }
 
 /* ==========================================================================
-   Main Header Section & Floating Bar Container
+   Section & Floating Pill Container
    ========================================================================== */
 .atelier-header-section {
-  width: 100%;
-  z-index: 40;
-  pointer-events: none;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.atelier-header-section.is-sticky {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 40 !important;
+  width: 100% !important;
+  pointer-events: none !important;
+  margin-bottom: calc(-1 * var(--header-pill-height, 108px)) !important;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .atelier-header-section.is-hidden {
@@ -353,970 +192,845 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
 }
 
 atelier-header {
-  display: block;
-  width: 100%;
-  pointer-events: none;
-  font-family: 'Inter', -apple-system, sans-serif;
-  color: var(--header-text, #363638);
+  display: block !important;
+  width: 100% !important;
+  pointer-events: none !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  color: var(--header-text, #363638) !important;
 }
 
-atelier-header *, atelier-header *::before, atelier-header *::after {
-  box-sizing: border-box;
+atelier-header, atelier-header * {
+  box-sizing: border-box !important;
 }
 
 atelier-header a {
-  color: inherit;
-  text-decoration: none;
+  color: inherit !important;
+  text-decoration: none !important;
 }
 
 atelier-header button {
-  font: inherit;
-  color: inherit;
+  font: inherit !important;
+  color: inherit !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
 }
 
-/* Floating Bar Container */
+atelier-header ul,
+atelier-header li,
+.atelier-header__nav-list,
+.atelier-header__nav-list li {
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Outer Bar Padding & Width */
 .atelier-header__bar {
-  position: relative;
-  max-width: calc(1400px + var(--gap-side, 24px) * 2);
-  margin-inline: auto;
-  padding: var(--gap-top, 14px) var(--gap-side, 24px) 0;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none !important;
+  position: relative !important;
+  max-width: calc(1400px + var(--gap-side, 24px) * 2) !important;
+  margin-inline: auto !important;
+  padding: var(--gap-top, 14px) var(--gap-side, 24px) 0 !important;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* Frosted Glass Floating Pill */
+/* ==========================================================================
+   AUTHENTIC FROSTED GLASS PILL (UrbanDeco Reference)
+   ========================================================================== */
 .atelier-header__pill {
-  position: relative;
-  isolation: isolate;
-  border-radius: var(--header-radius, 18px);
-  padding: 0 20px;
-  min-height: 64px;
-  pointer-events: auto;
-  border: 1px solid var(--header-border, rgba(198, 181, 142, 0.35));
-  box-shadow: 0 12px 36px -12px rgba(54, 54, 56, 0.12),
-              0 2px 8px -2px rgba(54, 54, 56, 0.04);
-  transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  pointer-events: auto !important;
+  position: relative !important;
+  isolation: isolate !important;
+  background: transparent !important;
+  border-radius: var(--header-radius, 18px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 12px 32px -14px rgba(28, 27, 25, 0.28),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+  transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease !important;
 }
 
 .atelier-header__pill::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.08) 60%),
-              var(--header-glass, rgba(248, 245, 237, 0.82));
-  -webkit-backdrop-filter: blur(var(--header-blur, 20px)) saturate(160%);
-  backdrop-filter: blur(var(--header-blur, 20px)) saturate(160%);
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  border-radius: inherit !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.05) 60%),
+              var(--header-glass, rgba(248, 245, 237, 0.50)) !important;
+  -webkit-backdrop-filter: blur(var(--header-blur, 20px)) saturate(170%) !important;
+  backdrop-filter: blur(var(--header-blur, 20px)) saturate(170%) !important;
+  transition: background 0.4s ease !important;
 }
 
 @supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
   .atelier-header__pill::before {
-    background: var(--header-solid, #F8F5ED);
+    background: var(--header-solid, #F8F5ED) !important;
   }
 }
 
 .atelier-header__bar.is-scrolled .atelier-header__pill {
-  box-shadow: 0 16px 42px -12px rgba(54, 54, 56, 0.18),
-              0 4px 12px -2px rgba(54, 54, 56, 0.06);
+  box-shadow: 0 18px 42px -14px rgba(28, 27, 25, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
 }
 
 /* ==========================================================================
-   Header Layout Options:
-   1. Two lines: logo on top, menu below (.layout--two-rows, .layout--two_rows)
-   2. Menu left, logo centre (.layout--logo-center, .layout--logo_center)
-   3. Logo left, menu centre (.layout--logo-left, .layout--logo_left)
+   Header Elements (Left, Center, Right)
    ========================================================================== */
-
-/* Layout 1: Two rows (UrbanDeco reference) */
-.layout--two-rows, .layout--two_rows .atelier-header__pill {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  grid-template-areas: "left center right" "nav nav nav";
-  align-items: center;
-  padding-top: 10px;
-  padding-bottom: 6px;
+.atelier-header__left {
+  display: flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
 }
 
-.layout--two-rows, .layout--two_rows .atelier-header__left {
-  grid-area: left;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  min-width: 0;
+.atelier-header__center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-.layout--two-rows, .layout--two_rows .atelier-header__center {
-  grid-area: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.atelier-header__right {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 4px !important;
 }
 
-.layout--two-rows, .layout--two_rows .atelier-header__right {
-  grid-area: right;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-}
-
-.layout--two-rows, .layout--two_rows .atelier-header__nav {
-  grid-area: nav;
-  display: flex;
-  justify-content: center;
-  margin-top: 8px;
-  padding-top: 6px;
-  border-top: 1px solid var(--header-line, rgba(54, 54, 56, 0.08));
-}
-
-.layout--two-rows, .layout--two_rows .atelier-header__nav-list {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* Layout 2: Logo Centre, Menu Left */
-.layout--logo-center, .layout--logo_center .atelier-header__pill {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  min-height: 72px;
-}
-
-.layout--logo-center, .layout--logo_center .atelier-header__left {
-  display: flex;
-  align-items: center;
-}
-
-.layout--logo-center, .layout--logo_center .atelier-header__center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.layout--logo-center, .layout--logo_center .atelier-header__right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-}
-
-.layout--logo-center, .layout--logo_center .atelier-header__nav-list {
-  display: flex;
-  align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* Layout 3: Logo Left, Menu Centre */
-.layout--logo-left, .layout--logo_left .atelier-header__pill {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  min-height: 72px;
-}
-
-.layout--logo-left, .layout--logo_left .atelier-header__center {
-  order: -1;
-  padding-right: 24px;
-}
-
-.layout--logo-left, .layout--logo_left .atelier-header__left {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.layout--logo-left, .layout--logo_left .atelier-header__right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-}
-
-.layout--logo-left, .layout--logo_left .atelier-header__nav-list {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* ==========================================================================
-   Search Input Pill in Main Header (UrbanDeco reference)
-   ========================================================================== */
-.atelier-search-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  width: min(100%, 280px);
-  height: 42px;
-  margin: 0;
-  padding: 0 16px;
-  border: 1px solid var(--header-line, rgba(54, 54, 56, 0.12));
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.55);
-  color: rgba(54, 54, 56, 0.65);
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 13px;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.atelier-search-pill:hover {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: var(--gt-sand, #C6B58E);
-  box-shadow: 0 2px 8px rgba(54, 54, 56, 0.05);
-}
-
-.atelier-search-pill svg {
-  flex: 0 0 18px;
-  width: 18px;
-  height: 18px;
-  color: var(--header-text, #363638);
-}
-
-.atelier-search-pill span {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* ==========================================================================
-   Logo & Brand Treatment
-   ========================================================================== */
+/* Logo */
 .atelier-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  text-decoration: none;
-  min-height: 44px;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  min-height: 44px !important;
+  line-height: 1 !important;
 }
-
 .atelier-logo img {
-  display: block;
-  width: var(--logo-width, 170px);
-  max-width: 100%;
-  height: auto;
-  transition: opacity 0.2s ease;
+  display: block !important;
+  width: var(--logo-width, 170px) !important;
+  max-width: 100% !important;
+  height: auto !important;
 }
-
-.atelier-logo:hover img {
-  opacity: 0.9;
-}
-
 .atelier-logo__text {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 24px;
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  color: var(--header-text, #363638);
-  white-space: nowrap;
+  font-family: 'DM Serif Display', Georgia, serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  color: var(--header-text, #363638) !important;
 }
 
-/* Graffeine Tales Coffee Cup with Steam */
+/* Coffee Cup & Animated Steam */
 .atelier-cup {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 44px;
-  flex-shrink: 0;
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 26px !important;
+  height: 38px !important;
+  flex-shrink: 0 !important;
 }
-
 .atelier-cup img {
-  width: 100%;
-  height: auto;
-  display: block;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
 }
-
 .atelier-steam {
-  position: absolute;
-  top: 4px;
-  left: 50%;
-  width: 4px;
-  height: 12px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(198, 181, 142, 0.8), transparent);
-  transform: translateX(-50%);
-  opacity: 0;
-  pointer-events: none;
+  position: absolute !important;
+  top: -4px !important;
+  left: 45% !important;
+  width: 3.5px !important;
+  height: 10px !important;
+  background: linear-gradient(to top, rgba(198, 181, 142, 0.7), transparent) !important;
+  border-radius: 4px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
-
+.atelier-steam--second {
+  left: 60% !important;
+  top: -2px !important;
+  animation-delay: 1.2s !important;
+}
 .atelier-cup--steam .atelier-steam {
-  animation: steamRise 2.4s ease-in-out infinite;
+  animation: atelierSteamRise 2.8s ease-in-out infinite !important;
+}
+@keyframes atelierSteamRise {
+  0% { transform: translateY(0) scaleX(0.8); opacity: 0; }
+  40% { opacity: 0.7; transform: translateY(-8px) scaleX(1.1); }
+  80% { opacity: 0.2; transform: translateY(-16px) scaleX(1.4); }
+  100% { transform: translateY(-22px) scaleX(1.6); opacity: 0; }
 }
 
-.atelier-cup--steam .atelier-steam--second {
-  animation: steamRise 2.4s ease-in-out infinite 1.2s;
-  left: calc(50% + 4px);
-}
-
-@keyframes steamRise {
-  0% { transform: translate(-50%, 0) scaleX(1); opacity: 0; }
-  50% { opacity: 0.6; }
-  100% { transform: translate(-50%, -14px) scaleX(1.6); opacity: 0; }
-}
-
-/* ==========================================================================
-   Header Action Icons (Right)
-   ========================================================================== */
+/* Action Icons */
 .atelier-icon-btn {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--header-text, #363638);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 42px !important;
+  height: 42px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: var(--header-text, #363638) !important;
+  cursor: pointer !important;
+  transition: background 0.25s ease, transform 0.25s ease !important;
 }
-
 .atelier-icon-btn svg {
-  width: var(--icon-size, 22px);
-  height: var(--icon-size, 22px);
-  transition: transform 0.3s ease;
+  width: 20px !important;
+  height: 20px !important;
+  transition: transform 0.3s ease !important;
 }
-
 .atelier-icon-btn:hover {
-  background: rgba(255, 255, 255, 0.65);
-  color: var(--header-accent, #4D351D);
+  background: rgba(255, 255, 255, 0.45) !important;
 }
-
 .atelier-icon-btn:hover svg {
-  transform: translateY(-1px);
+  transform: translateY(-1px) !important;
 }
 
-.atelier-icon-btn:focus-visible {
-  outline: 2px solid var(--header-accent, #4D351D);
-  outline-offset: 2px;
+/* Badges (Wishlist & Cart) */
+.atelier-badge,
+.header__cart-count {
+  position: absolute !important;
+  top: 3px !important;
+  right: 1px !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  padding: 0 5px !important;
+  border-radius: 9px !important;
+  background: var(--header-text, #363638) !important;
+  color: #FFFFFF !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 18px !important;
+  text-align: center !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7) !important;
+}
+.atelier-badge[hidden] { display: none !important; }
+
+/* Capsule Search Pill (UrbanDeco reference) */
+.atelier-search-pill {
+  display: none;
+  align-items: center !important;
+  gap: 10px !important;
+  width: min(100%, 280px) !important;
+  height: 40px !important;
+  margin: 0 !important;
+  padding: 0 16px !important;
+  border: 1px solid var(--header-line, rgba(54, 54, 56, 0.12)) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  color: var(--header-text, #363638) !important;
+  opacity: 0.85 !important;
+  font-size: 13px !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: background 0.3s ease, border-color 0.3s ease, opacity 0.3s ease !important;
+}
+.atelier-search-pill:hover {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(54, 54, 56, 0.25) !important;
+  opacity: 1 !important;
+}
+.atelier-search-pill svg {
+  flex: 0 0 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+.atelier-search-pill span {
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
 }
 
-/* Count Badges (Wishlist & Cart) */
-.atelier-badge {
-  position: absolute;
-  top: 2px;
-  right: 0px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  border-radius: 9px;
-  background: var(--header-accent, #4D351D);
-  color: #FFFFFF;
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 18px;
-  text-align: center;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
-  pointer-events: none;
+/* Navigation Links */
+.atelier-header__nav-list {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
 }
-
-.atelier-badge[hidden] {
-  display: none !important;
-}
-
-/* ==========================================================================
-   Desktop Navigation Links & Active Indicators
-   ========================================================================== */
 .atelier-nav__link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  height: 44px;
-  margin: 0;
-  padding: 0 14px;
-  border: 0;
-  background: none;
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: var(--menu-size, 13px);
-  font-weight: var(--menu-weight, 600);
-  letter-spacing: var(--menu-letter-spacing, 0.08em);
-  text-transform: var(--menu-transform, uppercase);
-  color: var(--header-text, #363638);
-  white-space: nowrap;
-  cursor: pointer;
-  transition: color 0.25s ease;
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  height: 44px !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  border: 0 !important;
+  background: none !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  font-size: var(--menu-size, 13px) !important;
+  font-weight: var(--menu-weight, 600) !important;
+  letter-spacing: var(--menu-letter-spacing, 1px) !important;
+  text-transform: var(--menu-transform, uppercase) !important;
+  color: var(--header-text, #363638) !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  transition: color 0.25s ease !important;
 }
-
 .atelier-nav__link svg {
-  width: 12px;
-  height: 12px;
-  opacity: 0.65;
-  transition: transform 0.35s ease;
+  width: 13px !important;
+  height: 13px !important;
+  opacity: 0.65 !important;
+  transition: transform 0.35s ease !important;
 }
-
-/* Refined Underline Indicator */
 .atelier-nav__link::after {
-  content: '';
-  position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 8px;
-  height: 2px;
-  background: var(--header-accent, #4D351D);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  content: '' !important;
+  position: absolute !important;
+  left: 12px !important;
+  right: 12px !important;
+  bottom: 8px !important;
+  height: 1.5px !important;
+  background: currentColor !important;
+  transform: scaleX(0) !important;
+  transform-origin: right !important;
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1) !important;
 }
-
-.atelier-nav__link:hover,
-.atelier-nav__link[aria-expanded="true"],
-.atelier-nav__link.is-current {
-  color: var(--header-accent, #4D351D);
-}
-
 .atelier-nav__link:hover::after,
 .atelier-nav__link[aria-expanded="true"]::after,
 .atelier-nav__link.is-current::after {
-  transform: scaleX(1);
-  transform-origin: left;
+  transform: scaleX(1) !important;
+  transform-origin: left !important;
 }
-
 .atelier-nav__link[aria-expanded="true"] svg {
-  transform: rotate(180deg);
+  transform: rotate(180deg) !important;
 }
+.atelier-nav__link.is-bold { font-weight: 800 !important; }
 
-.atelier-nav__link.is-bold {
-  font-weight: 800;
+/* ==========================================================================
+   DESKTOP LAYOUT 1: TWO LINES (UrbanDeco reference)
+   Row 1: Search Pill on Left | Logo in Center | Action Icons on Right
+   DIVIDER LINE
+   Row 2: Centered Navigation Menu
+   ========================================================================== */
+@media (min-width: 990px) {
+  .layout--two_rows .atelier-header__pill,
+  .layout--two-rows .atelier-header__pill {
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr !important;
+    grid-template-areas: "left center right" "nav nav nav" !important;
+    padding: 8px 20px 6px !important;
+    align-items: center !important;
+  }
+  .layout--two_rows .atelier-header__left,
+  .layout--two-rows .atelier-header__left {
+    display: contents !important;
+  }
+  .layout--two_rows .atelier-search-pill,
+  .layout--two-rows .atelier-search-pill {
+    display: inline-flex !important;
+    grid-area: left !important;
+    justify-self: start !important;
+  }
+  .layout--two_rows .atelier-header__center,
+  .layout--two-rows .atelier-header__center {
+    grid-area: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .layout--two_rows .atelier-header__right,
+  .layout--two-rows .atelier-header__right {
+    grid-area: right !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+  .layout--two_rows .atelier-header__right .atelier-search-icon,
+  .layout--two-rows .atelier-header__right .atelier-search-icon {
+    display: none !important;
+  }
+  .layout--two_rows .atelier-header__nav,
+  .layout--two-rows .atelier-header__nav {
+    grid-area: nav !important;
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-top: 8px !important;
+    padding-top: 4px !important;
+    border-top: 1px solid var(--header-line, rgba(54, 54, 56, 0.1)) !important;
+  }
+  .layout--two_rows .atelier-header__nav-list,
+  .layout--two-rows .atelier-header__nav-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px 16px !important;
+  }
 }
 
 /* ==========================================================================
-   Floating Frosted Glass Mega Menu Panel (UrbanDeco style)
+   DESKTOP LAYOUT 2: LOGO LEFT, MENU CENTRE (Single Line)
+   Logo on Left | Menu in Center | Search Icon + Action Icons on Right
+   ========================================================================== */
+@media (min-width: 990px) {
+  .layout--logo_left .atelier-header__pill,
+  .layout--logo-left .atelier-header__pill {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    grid-template-areas: none !important;
+    align-items: center !important;
+    min-height: 64px !important;
+    padding: 0 20px !important;
+  }
+  .layout--logo_left .atelier-header__center,
+  .layout--logo-left .atelier-header__center {
+    order: -1 !important;
+    padding-right: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  .layout--logo_left .atelier-header__left,
+  .layout--logo-left .atelier-header__left {
+    order: 0 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .layout--logo_left .atelier-search-pill,
+  .layout--logo-left .atelier-search-pill {
+    display: none !important;
+  }
+  .layout--logo_left .atelier-header__nav,
+  .layout--logo-left .atelier-header__nav {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+  .layout--logo_left .atelier-header__nav-list,
+  .layout--logo-left .atelier-header__nav-list {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px 16px !important;
+  }
+  .layout--logo_left .atelier-header__right,
+  .layout--logo-left .atelier-header__right {
+    order: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 4px !important;
+  }
+  .layout--logo_left .atelier-header__right .atelier-search-icon,
+  .layout--logo-left .atelier-header__right .atelier-search-icon {
+    display: grid !important;
+  }
+}
+
+/* ==========================================================================
+   DESKTOP LAYOUT 3: MENU LEFT, LOGO CENTRE (Single Line)
+   Menu on Left | Logo in Center | Search Icon + Action Icons on Right
+   ========================================================================== */
+@media (min-width: 990px) {
+  .layout--logo_center .atelier-header__pill,
+  .layout--logo-center .atelier-header__pill {
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr !important;
+    grid-template-areas: none !important;
+    align-items: center !important;
+    min-height: 64px !important;
+    padding: 0 20px !important;
+  }
+  .layout--logo_center .atelier-header__left,
+  .layout--logo-center .atelier-header__left {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    min-width: 0 !important;
+  }
+  .layout--logo_center .atelier-search-pill,
+  .layout--logo-center .atelier-search-pill {
+    display: none !important;
+  }
+  .layout--logo_center .atelier-header__nav,
+  .layout--logo-center .atelier-header__nav {
+    display: flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+  .layout--logo_center .atelier-header__nav-list,
+  .layout--logo-center .atelier-header__nav-list {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px 16px !important;
+  }
+  .layout--logo_center .atelier-header__center,
+  .layout--logo-center .atelier-header__center {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .layout--logo_center .atelier-header__right,
+  .layout--logo-center .atelier-header__right {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 4px !important;
+  }
+  .layout--logo_center .atelier-header__right .atelier-search-icon,
+  .layout--logo-center .atelier-header__right .atelier-search-icon {
+    display: grid !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile (< 990px)
+   ========================================================================== */
+@media screen and (max-width: 989px) {
+  .atelier-header__bar {
+    padding: var(--gap-top-mobile, 10px) var(--gap-side-mobile, 10px) 0 !important;
+  }
+  .atelier-header__pill {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    grid-template-areas: none !important;
+    min-height: 54px !important;
+    padding: 0 12px !important;
+  }
+  .atelier-header__left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 2px !important;
+  }
+  .atelier-header__center {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+  }
+  .atelier-header__right {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 2px !important;
+  }
+  .atelier-burger {
+    display: grid !important;
+  }
+  .atelier-search-pill {
+    display: none !important;
+  }
+  .atelier-header__nav {
+    display: none !important;
+  }
+  .atelier-desk-only {
+    display: none !important;
+  }
+  .atelier-logo img {
+    width: var(--logo-width-mobile, 120px) !important;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .atelier-burger {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Desktop Mega Menu Floating Panel (UrbanDeco reference)
    ========================================================================== */
 .atelier-mega {
+  display: none;
   position: absolute;
   top: calc(100% + 10px);
   left: var(--gap-side, 24px);
   right: var(--gap-side, 24px);
-  max-width: 1400px;
-  margin: 0 auto;
   border-radius: var(--header-radius, 18px);
-  border: 1px solid var(--header-border, rgba(198, 181, 142, 0.35));
-  box-shadow: 0 24px 64px -16px rgba(54, 54, 56, 0.22),
-              0 4px 16px -2px rgba(54, 54, 56, 0.06);
-  padding: 32px 36px;
+  padding: 32px 40px;
+  background: rgba(248, 245, 237, 0.88);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 24px 60px -16px rgba(54, 54, 56, 0.22),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
   pointer-events: auto;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-8px);
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              visibility 0.3s;
   z-index: 50;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.15) 60%),
-              var(--header-glass, rgba(248, 245, 237, 0.94));
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  backdrop-filter: blur(24px) saturate(160%);
+  animation: atelierMegaSlide 0.35s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
-
-.atelier-mega.is-open {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+.atelier-mega.is-open { display: block; }
+@keyframes atelierMegaSlide {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 .atelier-mega__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 36px;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 48px;
   align-items: start;
 }
-
 .atelier-mega__title {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 18px;
-  letter-spacing: 0.04em;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--header-accent, #4D351D);
+  color: var(--header-text, #363638);
   margin-bottom: 24px;
-  text-decoration: none;
-  transition: opacity 0.2s ease;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(54, 54, 56, 0.1);
 }
-
-.atelier-mega__title:hover {
-  opacity: 0.8;
-}
-
-.atelier-mega__title svg {
-  width: 14px;
-  height: 14px;
-  transition: transform 0.2s ease;
-}
-
-.atelier-mega__title:hover svg {
-  transform: translateX(3px);
-}
-
+.atelier-mega__title svg { width: 14px; height: 14px; transition: transform 0.25s ease; }
+.atelier-mega__title:hover svg { transform: translateX(4px); }
 .atelier-mega__cols {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 28px 24px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px 32px;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
 }
-
 .atelier-mega__head {
   display: block;
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 13.5px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
   color: var(--header-text, #363638);
   margin-bottom: 12px;
   text-decoration: none;
   transition: color 0.2s ease;
 }
-
-.atelier-mega__head:hover {
-  color: var(--header-accent, #4D351D);
-}
-
+.atelier-mega__head:hover { color: var(--header-accent, #4D351D); }
 .atelier-mega__sub {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
 }
-
 .atelier-mega__a {
-  display: inline-block;
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 13px;
-  font-weight: 400;
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
   color: rgba(54, 54, 56, 0.75);
   text-decoration: none;
   transition: color 0.2s ease, transform 0.2s ease;
 }
-
 .atelier-mega__a:hover {
-  color: var(--header-accent, #4D351D);
-  transform: translateX(2px);
+  color: var(--header-text, #363638);
+  transform: translateX(3px);
 }
 
-/* Mega Menu Promotional Card (Right Side) */
+/* Promotional Card */
 .atelier-promo-card {
   display: flex;
   flex-direction: column;
-  width: 280px;
   border-radius: 14px;
   overflow: hidden;
   background: #FFFFFF;
-  border: 1px solid rgba(198, 181, 142, 0.35);
-  box-shadow: 0 10px 28px -10px rgba(54, 54, 56, 0.12);
+  box-shadow: 0 8px 24px -8px rgba(54, 54, 56, 0.12);
   text-decoration: none;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .atelier-promo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 36px -12px rgba(77, 53, 29, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -12px rgba(54, 54, 56, 0.2);
 }
-
 .atelier-promo-card__img {
-  width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  background-color: var(--gt-warm-paper);
+  background: rgba(54, 54, 56, 0.05);
 }
-
 .atelier-promo-card__img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s ease;
 }
-
-.atelier-promo-card:hover .atelier-promo-card__img img {
-  transform: scale(1.05);
-}
-
+.atelier-promo-card:hover .atelier-promo-card__img img { transform: scale(1.06); }
 .atelier-promo-card__body {
-  padding: 16px 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-
 .atelier-promo-card__h {
   font-family: 'DM Serif Display', Georgia, serif;
   font-size: 16px;
-  font-weight: 400;
   color: var(--header-text, #363638);
-  line-height: 1.3;
 }
-
 .atelier-promo-card__s {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-family: 'Inter', -apple-system, sans-serif;
+  gap: 5px;
+  font-family: 'Inter', sans-serif;
   font-size: 11.5px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--header-accent, #4D351D);
-  margin-top: 6px;
 }
-
-.atelier-promo-card__s svg {
-  width: 12px;
-  height: 12px;
-  transition: transform 0.2s ease;
-}
-
-.atelier-promo-card:hover .atelier-promo-card__s svg {
-  transform: translateX(4px);
-}
+.atelier-promo-card__s svg { width: 12px; height: 12px; }
 
 /* ==========================================================================
-   Live Search Dropdown Panel
+   Predictive Search Panel (Floating Glass Modal)
    ========================================================================== */
 .atelier-search-panel {
+  display: none;
   position: absolute;
   top: calc(100% + 10px);
   left: var(--gap-side, 24px);
   right: var(--gap-side, 24px);
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
   border-radius: var(--header-radius, 18px);
-  border: 1px solid var(--header-border, rgba(198, 181, 142, 0.35));
-  box-shadow: 0 24px 64px -16px rgba(54, 54, 56, 0.25);
-  padding: 24px 28px;
-  pointer-events: auto;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-8px);
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  background: rgba(248, 245, 237, 0.92);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 24px 60px -16px rgba(54, 54, 56, 0.22);
+  padding: 24px;
   z-index: 50;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.25) 60%),
-              var(--header-glass, rgba(248, 245, 237, 0.94));
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  backdrop-filter: blur(24px) saturate(160%);
+  pointer-events: auto;
 }
-
-.atelier-search-panel.is-open {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
+.atelier-search-panel.is-open { display: block; }
 .atelier-search-form {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 18px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid var(--gt-sand, #C6B58E);
+  border-bottom: 1px solid rgba(54, 54, 56, 0.15);
+  padding-bottom: 12px;
 }
-
 .atelier-search-form svg {
   width: 20px;
   height: 20px;
-  color: var(--header-accent, #4D351D);
+  color: var(--header-text, #363638);
+  margin-right: 12px;
 }
-
-.atelier-search-input {
+.atelier-search-form input[type="search"] {
   flex: 1;
-  border: 0;
   background: transparent;
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 15px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
   color: var(--header-text, #363638);
   outline: none;
 }
-
-.atelier-search-input::placeholder {
-  color: rgba(54, 54, 56, 0.5);
+.atelier-search-panel__close {
+  padding: 6px;
+  cursor: pointer;
 }
-
+.atelier-search-panel__close svg { width: 18px; height: 18px; }
+.atelier-search-idle {
+  margin-top: 18px;
+}
+.atelier-search-recents-h {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(54, 54, 56, 0.6);
+  margin-bottom: 10px;
+}
 .atelier-search-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  list-style: none;
-  margin: 12px 0 0;
-  padding: 0;
 }
-
-.atelier-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.atelier-search-chip {
   padding: 6px 14px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(198, 181, 142, 0.4);
-  font-size: 12.5px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(54, 54, 56, 0.1);
+  font-size: 13px;
   color: var(--header-text, #363638);
-  text-decoration: none;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
-
-.atelier-chip:hover {
+.atelier-search-chip:hover {
   background: #FFFFFF;
-  border-color: var(--header-accent, #4D351D);
-  color: var(--header-accent, #4D351D);
-}
-
-/* Live Search Results List */
-.atelier-search-results {
-  margin-top: 16px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 12px;
-  max-height: 380px;
-  overflow-y: auto;
-}
-
-.atelier-search-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  text-decoration: none;
-  color: inherit;
-  transition: background 0.2s ease;
-}
-
-.atelier-search-item:hover {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-.atelier-search-item img {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  border-radius: 6px;
-  background: #eee;
-}
-
-.atelier-search-item__info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  overflow: hidden;
-}
-
-.atelier-search-item__title {
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.atelier-search-item__price {
-  font-size: 12px;
-  color: var(--header-accent, #4D351D);
-  font-weight: 500;
+  border-color: rgba(54, 54, 56, 0.3);
 }
 
 /* ==========================================================================
-   Mobile Responsive Navigation & Drawer (< 990px)
+   Mobile Drawer & Scrim
    ========================================================================== */
-.atelier-burger {
-  display: none;
+.atelier-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 24, 20, 0.45);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.atelier-scrim.is-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-@media screen and (max-width: 989px) {
-  .atelier-header__bar {
-    padding: var(--gap-top-mobile, 10px) var(--gap-side-mobile, 10px) 0;
-  }
-
-  .atelier-header__pill {
-    min-height: 56px;
-    padding: 0 10px;
-    display: grid !important;
-    grid-template-columns: 1fr auto 1fr !important;
-    grid-template-areas: none !important;
-  }
-
-  .atelier-header__nav {
-    display: none !important;
-  }
-
-  .atelier-search-pill {
-    display: none !important;
-  }
-
-  .atelier-burger {
-    display: grid !important;
-  }
-
-  .atelier-header__left {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .atelier-header__center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .atelier-header__right {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 2px;
-  }
-
-  .atelier-desk-only {
-    display: none !important;
-  }
-}
-
-/* Mobile Slide-Out Drawer */
 .atelier-drawer {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
-  width: min(88vw, 380px);
-  background: var(--gt-warm-paper, #F8F5ED);
-  color: var(--header-text, #363638);
-  box-shadow: 24px 0 60px -20px rgba(54, 54, 56, 0.35);
+  width: min(88vw, 400px);
+  background: #F8F5ED;
+  z-index: 100;
+  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.25);
   transform: translateX(-102%);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 100;
   display: flex;
   flex-direction: column;
   pointer-events: auto;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
-
 .atelier-drawer.is-open {
   transform: translateX(0);
 }
-
-.atelier-drawer__top {
+.atelier-drawer__head {
+  padding: 18px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(198, 181, 142, 0.3);
+  border-bottom: 1px solid rgba(54, 54, 56, 0.08);
 }
-
 .atelier-drawer__body {
-  padding: 20px;
   flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.atelier-drawer__nav {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 4px;
 }
-
-.atelier-drawer__nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.atelier-drawer__nav-link {
+.atelier-drawer__link {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--header-text, #363638);
   border-radius: 8px;
-  font-size: 14.5px;
-  font-weight: 600;
-  color: var(--header-text, #363638);
-  text-decoration: none;
-  transition: background 0.2s ease;
+}
+.atelier-drawer__link:hover {
+  background: rgba(255, 255, 255, 0.6);
 }
 
-.atelier-drawer__nav-link:hover {
-  background: rgba(198, 181, 142, 0.15);
-  color: var(--header-accent, #4D351D);
-}
-
-.atelier-drawer__nav-link svg {
-  width: 14px;
-  height: 14px;
-  opacity: 0.6;
-}
-
-/* Mobile Quick Contact (Call & WhatsApp) */
-.atelier-drawer__contact {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.atelier-drawer__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--header-border, rgba(198, 181, 142, 0.4));
-  background: #FFFFFF;
-  color: var(--header-text, #363638);
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.atelier-drawer__btn--wa {
-  background: #25D366;
-  border-color: #25D366;
-  color: #FFFFFF;
-}
-
-.atelier-drawer__btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* Scrim / Backdrop */
-.atelier-scrim {
-  position: fixed;
-  inset: 0;
-  background: rgba(30, 24, 20, 0.45);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.35s ease, visibility 0.35s;
-  z-index: 90;
-  pointer-events: auto;
-}
-
-.atelier-scrim.is-visible {
-  opacity: 1;
-  visibility: visible;
+/* Clearances for non-banner pages */
+body:not(.template-index):not(.template-collection) #MainContent > .shopify-section:first-child:not(:has(.atelier-col-hero)):not(:has(.atelier-hero)):not(:has(.image-banner)):not(:has(.slideshow)) {
+  padding-top: calc(var(--header-height, 120px) + 24px) !important;
 }
 
 {%- endstyle -%}
@@ -1364,10 +1078,10 @@ atelier-header button {
 
   {%- comment -%} ==================== B. MAIN HEADER FLOATING CONTAINER ==================== {%- endcomment -%}
   <atelier-header
-    class="layout--{{ s.layout }}"
+    id="atelier-header-{{ section.id }}"
+    class="atelier-header layout--{{ s.layout }} layout--{{ s.layout | replace: '_', '-' }}"
     data-layout="{{ s.layout }}"
     data-hide-on-scroll="{{ s.hide_on_scroll }}"
-    data-overlay-home="{{ s.overlay_home }}"
     data-money-format="{{ shop.money_format | escape }}"
   >
     <div class="atelier-header__bar">
@@ -1386,43 +1100,57 @@ atelier-header button {
             {{ icon_burger }}
           </button>
 
-          {%- if s.layout == 'two_rows' -%}
-            {%- comment -%} Two-rows layout: Search pill on left {%- endcomment -%}
-            <button
-              type="button"
-              class="atelier-search-pill"
-              data-open-search
-              aria-label="Search journals and gifts"
-              aria-expanded="false"
-            >
-              {{ icon_search }}
-              <span>{{ s.search_placeholder | escape }}</span>
-            </button>
-          {%- elsif s.layout == 'logo_center' -%}
-            {%- comment -%} Logo Center layout: Desktop menu on left {%- endcomment -%}
-            <nav class="atelier-header__nav" aria-label="Main navigation">
-              <ul class="atelier-header__nav-list" role="list">
-                {%- for link in menu -%}
-                  <li>
-                    {%- if link.links.size > 0 -%}
-                      <button
-                        type="button"
-                        class="atelier-nav__link{% if link.active or link.child_active %} is-current{% endif %}"
-                        data-mega-trigger="{{ forloop.index }}"
-                        aria-expanded="false"
-                      >
-                        {{ link.title | escape }}{{ icon_chev }}
-                      </button>
-                    {%- else -%}
-                      <a class="atelier-nav__link{% if link.active %} is-current{% endif %}" href="{{ link.url }}">
-                        {{ link.title | escape }}
-                      </a>
-                    {%- endif -%}
-                  </li>
-                {%- endfor -%}
-              </ul>
-            </nav>
-          {%- endif -%}
+          {%- comment -%} Capsule Search Pill (Used in Two-Rows layout) {%- endcomment -%}
+          <button
+            type="button"
+            class="atelier-search-pill"
+            data-open-search
+            aria-label="Search journals and gifts"
+            aria-expanded="false"
+          >
+            {{ icon_search }}
+            <span>{{ s.search_placeholder | escape }}</span>
+          </button>
+
+          {%- comment -%} Desktop Navigation Menu (Always in DOM; position controlled by layout CSS) {%- endcomment -%}
+          <nav class="atelier-header__nav" aria-label="Main navigation">
+            <ul class="atelier-header__nav-list" role="list">
+              {%- for link in menu -%}
+                {%- liquid
+                  assign bold = false
+                  assign t_down = link.title | downcase
+                  if s.bold_words != blank
+                    assign words = s.bold_words | downcase | split: ','
+                    for w in words
+                      assign ww = w | strip
+                      if ww != blank and t_down contains ww
+                        assign bold = true
+                      endif
+                    endfor
+                  endif
+                -%}
+                <li>
+                  {%- if link.links.size > 0 -%}
+                    <button
+                      type="button"
+                      class="atelier-nav__link{% if link.active or link.child_active %} is-current{% endif %}{% if bold %} is-bold{% endif %}"
+                      data-mega-trigger="{{ forloop.index }}"
+                      aria-expanded="false"
+                    >
+                      {{ link.title | escape }}{{ icon_chev }}
+                    </button>
+                  {%- else -%}
+                    <a
+                      class="atelier-nav__link{% if link.active %} is-current{% endif %}{% if bold %} is-bold{% endif %}"
+                      href="{{ link.url }}"
+                    >
+                      {{ link.title | escape }}
+                    </a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
         </div>
 
         {%- comment -%} ---------- CENTER AREA (LOGO) ---------- {%- endcomment -%}
@@ -1436,16 +1164,15 @@ atelier-header button {
 
         {%- comment -%} ---------- RIGHT AREA (ACTION ICONS) ---------- {%- endcomment -%}
         <div class="atelier-header__right">
-          {%- if s.layout != 'two_rows' -%}
-            <button
-              type="button"
-              class="atelier-icon-btn atelier-desk-only"
-              data-open-search
-              aria-label="Search"
-            >
-              {{ icon_search }}
-            </button>
-          {%- endif -%}
+          {%- comment -%} Search icon button (Used in single-row layouts) {%- endcomment -%}
+          <button
+            type="button"
+            class="atelier-icon-btn atelier-search-icon"
+            data-open-search
+            aria-label="Search"
+          >
+            {{ icon_search }}
+          </button>
 
           {%- if s.show_phone and phone_clean != blank -%}
             <a
@@ -1497,48 +1224,6 @@ atelier-header button {
             </a>
           {%- endif -%}
         </div>
-
-        {%- comment -%} ---------- SECOND ROW (TWO-ROWS NAVIGATION) ---------- {%- endcomment -%}
-        {%- if s.layout == 'two_rows' or s.layout == 'logo_left' -%}
-          <nav class="atelier-header__nav" aria-label="Main navigation">
-            <ul class="atelier-header__nav-list" role="list">
-              {%- for link in menu -%}
-                {%- liquid
-                  assign bold = false
-                  assign t_down = link.title | downcase
-                  if s.bold_words != blank
-                    assign words = s.bold_words | downcase | split: ','
-                    for w in words
-                      assign ww = w | strip
-                      if ww != blank and t_down contains ww
-                        assign bold = true
-                      endif
-                    endfor
-                  endif
-                -%}
-                <li>
-                  {%- if link.links.size > 0 -%}
-                    <button
-                      type="button"
-                      class="atelier-nav__link{% if link.active or link.child_active %} is-current{% endif %}{% if bold %} is-bold{% endif %}"
-                      data-mega-trigger="{{ forloop.index }}"
-                      aria-expanded="false"
-                    >
-                      {{ link.title | escape }}{{ icon_chev }}
-                    </button>
-                  {%- else -%}
-                    <a
-                      class="atelier-nav__link{% if link.active %} is-current{% endif %}{% if bold %} is-bold{% endif %}"
-                      href="{{ link.url }}"
-                    >
-                      {{ link.title | escape }}
-                    </a>
-                  {%- endif -%}
-                </li>
-              {%- endfor -%}
-            </ul>
-          </nav>
-        {%- endif -%}
 
       </div>
 
@@ -1619,221 +1304,127 @@ atelier-header button {
       >
         <form class="atelier-search-form" action="{{ routes.search_url }}" method="get" role="search">
           {{ icon_search }}
-          <input type="hidden" name="type" value="product">
           <input
-            class="atelier-search-input"
             type="search"
             name="q"
             placeholder="{{ s.search_placeholder | escape }}"
-            autocomplete="off"
-            autocorrect="off"
-            spellcheck="false"
             data-search-input
+            autocomplete="off"
+            aria-label="Search"
           >
-          <button type="button" class="atelier-icon-btn" data-close-drawer aria-label="Close search">
+          <input type="hidden" name="type" value="product">
+          <button type="button" class="atelier-search-panel__close" data-close-search aria-label="Close search">
             {{ icon_close }}
           </button>
         </form>
 
-        <div class="atelier-search-results" data-search-results></div>
-
-        <div data-search-idle>
-          {%- comment -%} Recent Searches {%- endcomment -%}
-          <div data-recent-wrapper hidden style="margin-top: 14px;">
-            <p style="font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 6px; color: var(--header-accent, #4D351D);">
-              Recent Searches
-            </p>
-            <ul class="atelier-search-chips" data-recent-chips role="list"></ul>
-          </div>
-
-          {%- comment -%} Popular Searches {%- endcomment -%}
+        <div class="atelier-search-idle" data-search-idle>
           {%- if s.popular_searches != blank -%}
-            <div style="margin-top: 14px;">
-              <p style="font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 6px; color: var(--header-accent, #4D351D);">
-                Popular Searches
-              </p>
-              <ul class="atelier-search-chips" role="list">
-                {%- assign terms = s.popular_searches | split: ',' -%}
-                {%- for term in terms -%}
-                  {%- assign tt = term | strip -%}
-                  {%- if tt != blank -%}
-                    <li>
-                      <a class="atelier-chip" href="{{ routes.search_url }}?type=product&q={{ tt | url_encode }}">
-                        {{ tt | escape }}
-                      </a>
-                    </li>
-                  {%- endif -%}
-                {%- endfor -%}
-              </ul>
+            <p class="atelier-search-recents-h">Popular Searches</p>
+            <div class="atelier-search-chips">
+              {%- assign popular = s.popular_searches | split: ',' -%}
+              {%- for term in popular -%}
+                {%- assign t_clean = term | strip -%}
+                {%- if t_clean != blank -%}
+                  <button type="button" class="atelier-search-chip" data-search-chip="{{ t_clean | escape }}">
+                    {{ t_clean }}
+                  </button>
+                {%- endif -%}
+              {%- endfor -%}
             </div>
           {%- endif -%}
 
-          {%- comment -%} Category Photo Tiles {%- endcomment -%}
-          {%- if s.search_collections != blank -%}
-            <div style="margin-top: 16px;">
-              <p style="font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 8px; color: var(--header-accent, #4D351D);">
-                {{ s.search_collections_title | escape }}
-              </p>
-              <ul class="atelier-search-chips" role="list">
-                {%- for col in s.search_collections limit: 6 -%}
-                  <li>
-                    <a class="atelier-chip" href="{{ col.url }}">
-                      {{ col.title | escape }}
-                    </a>
-                  </li>
-                {%- endfor -%}
-              </ul>
-            </div>
-          {%- endif -%}
+          <div data-recent-searches-wrap style="display: none; margin-top: 18px;">
+            <p class="atelier-search-recents-h">Recent Searches</p>
+            <div class="atelier-search-chips" data-recent-searches-list></div>
+          </div>
         </div>
+
+        <div class="atelier-search-results" data-search-results style="display: none;"></div>
       </div>
 
     </div>
+  </atelier-header>
 
-    {%- comment -%} Backdrop Scrim {%- endcomment -%}
-    <div class="atelier-scrim" data-scrim aria-hidden="true"></div>
+  {%- comment -%} ==================== E. MOBILE SLIDE-OUT DRAWER ==================== {%- endcomment -%}
+  <div class="atelier-scrim" data-scrim aria-hidden="true"></div>
 
-    {%- comment -%} ==================== E. MOBILE SLIDE-OUT DRAWER ==================== {%- endcomment -%}
-    <div
-      class="atelier-drawer"
-      data-mobile-drawer
-      role="dialog"
-      aria-modal="true"
-      aria-label="Navigation menu"
-    >
-      <div class="atelier-drawer__top">
+  <aside
+    class="atelier-drawer"
+    id="atelier-mobile-drawer"
+    data-mobile-drawer
+    aria-label="Mobile navigation"
+    aria-hidden="true"
+  >
+    <div class="atelier-drawer__head">
+      <div class="atelier-drawer__brand">
         {{ logo_markup }}
-        <button type="button" class="atelier-icon-btn" data-close-drawer aria-label="Close menu">
-          {{ icon_close }}
-        </button>
       </div>
+      <button
+        type="button"
+        class="atelier-icon-btn"
+        data-close-drawer
+        aria-label="Close mobile menu"
+      >
+        {{ icon_close }}
+      </button>
+    </div>
 
-      <div class="atelier-drawer__body">
-        {%- comment -%} Mobile Search Trigger {%- endcomment -%}
-        <button
-          type="button"
-          class="atelier-search-pill"
-          style="display: flex; width: 100%; margin-bottom: 12px;"
-          data-open-search
-          aria-label="Search"
-        >
-          {{ icon_search }}
-          <span>{{ s.search_placeholder | escape }}</span>
-        </button>
+    <div class="atelier-drawer__body">
+      {%- if s.m_show_promo and s.promo_heading != blank -%}
+        <a class="atelier-drawer__promo" href="{{ s.promo_link | default: routes.all_products_collection_url }}">
+          <p class="atelier-drawer__promo-h">{{ s.promo_heading | escape }}</p>
+          {%- if s.promo_link_label != blank -%}
+            <span class="atelier-drawer__promo-cta">{{ s.promo_link_label | escape }}{{ icon_arrow }}</span>
+          {%- endif -%}
+        </a>
+      {%- endif -%}
 
-        {%- comment -%} Mobile Promo Banner {%- endcomment -%}
-        {%- if s.m_show_promo and s.promo_heading != blank -%}
-          <a
-            href="{{ s.promo_link | default: routes.all_products_collection_url }}"
-            style="display: block; padding: 14px 18px; border-radius: 12px; background: {{ s.promo_bg }}; color: {{ s.promo_text }}; text-decoration: none; margin-bottom: 14px;"
-          >
-            <strong style="display: block; font-family: 'DM Serif Display', Georgia, serif; font-size: 15px;">{{ s.promo_heading | escape }}</strong>
-            {%- if s.promo_link_label != blank -%}
-              <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; opacity: 0.9;">
-                {{ s.promo_link_label | escape }}{{ icon_arrow }}
-              </span>
-            {%- endif -%}
-          </a>
-        {%- endif -%}
-
-        {%- comment -%} Mobile Menu Links {%- endcomment -%}
-        <ul class="atelier-drawer__nav-list" role="list">
+      <nav class="atelier-drawer__nav" aria-label="Mobile main navigation">
+        <ul role="list">
           {%- for link in mobile_menu -%}
             <li>
               {%- if link.links.size > 0 -%}
-                <details style="border-bottom: 1px solid rgba(198, 181, 142, 0.25); padding: 8px 0;">
-                  <summary class="atelier-drawer__nav-link" style="cursor: pointer; list-style: none;">
+                <details class="atelier-drawer__accordion">
+                  <summary class="atelier-drawer__link">
                     <span>{{ link.title | escape }}</span>
                     {{ icon_chev }}
                   </summary>
-                  <ul style="list-style: none; margin: 4px 0 8px 12px; padding: 0; display: flex; flex-direction: column; gap: 6px;" role="list">
+                  <ul class="atelier-drawer__sublist" role="list">
                     {%- for child in link.links -%}
                       <li>
-                        <a href="{{ child.url }}" style="display: block; padding: 6px 12px; font-size: 13.5px; color: var(--header-text, #363638);">
+                        <a class="atelier-drawer__sublink" href="{{ child.url }}">
                           {{ child.title | escape }}
                         </a>
                       </li>
                     {%- endfor -%}
-                    <li>
-                      <a href="{{ link.url }}" style="display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--header-accent, #4D351D); text-transform: uppercase;">
-                        All {{ link.title | escape }}{{ icon_arrow }}
-                      </a>
-                    </li>
                   </ul>
                 </details>
               {%- else -%}
-                <a class="atelier-drawer__nav-link" href="{{ link.url }}">
-                  <span>{{ link.title | escape }}</span>
-                  {{ icon_arrow }}
+                <a class="atelier-drawer__link" href="{{ link.url }}">
+                  {{ link.title | escape }}
                 </a>
               {%- endif -%}
             </li>
           {%- endfor -%}
         </ul>
+      </nav>
 
-        {%- comment -%} Mobile Contact Buttons (Call & WhatsApp) {%- endcomment -%}
-        {%- if s.m_show_contact -%}
-          <div class="atelier-drawer__contact">
-            {%- if phone_clean != blank -%}
-              <a class="atelier-drawer__btn" href="tel:{{ phone_clean }}">
-                {{ icon_phone }}
-                <span>Call Us</span>
-              </a>
-            {%- endif -%}
-            {%- if whatsapp_clean != blank -%}
-              <a class="atelier-drawer__btn atelier-drawer__btn--wa" href="https://wa.me/{{ whatsapp_clean }}" target="_blank" rel="noopener">
-                <span>WhatsApp</span>
-              </a>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
-
-        {%- comment -%} Customer Account & Hours {%- endcomment -%}
-        <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(198, 181, 142, 0.3);">
-          {%- if shop.customer_accounts_enabled -%}
-            <a
-              href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
-              style="display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--header-text, #363638); margin-bottom: 8px;"
-            >
-              {{ icon_account }}
-              <span>{% if customer %}{{ customer.first_name | default: 'My Account' }}{% else %}Log In / Sign Up{% endif %}</span>
+      {%- if s.m_show_contact -%}
+        <div class="atelier-drawer__contact">
+          <p class="atelier-drawer__contact-tagline">{{ s.tagline | default: 'Artful Things. Thoughtful Living.' }}</p>
+          {%- if whatsapp_clean != blank -%}
+            <a class="atelier-drawer__wa" href="https://wa.me/{{ whatsapp_clean }}" target="_blank" rel="noopener">
+              Chat on WhatsApp
             </a>
           {%- endif -%}
           {%- if s.m_hours != blank -%}
-            <p style="margin: 0; font-size: 11.5px; color: #888;">{{ s.m_hours | escape }}</p>
+            <p class="atelier-drawer__hours">{{ s.m_hours }}</p>
           {%- endif -%}
         </div>
-
-        {%- if s.tagline != blank -%}
-          <p style="margin: 12px 0 0; font-size: 11px; color: #999; text-align: center;">{{ s.tagline | escape }}</p>
-        {%- endif -%}
-      </div>
+      {%- endif -%}
     </div>
-
-    {%- comment -%} Wishlist Slide-Out Modal Integration {%- endcomment -%}
-    <dialog
-      class="atelier-header__drawer"
-      data-wishlist-dialog
-      aria-labelledby="WishlistHeading-{{ section.id }}"
-      style="padding: 24px; border: 0; background: #F8F5ED; border-radius: 16px; max-width: 440px; width: 90vw; margin: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.25);"
-    >
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-        <h2 id="WishlistHeading-{{ section.id }}" style="font-family: 'DM Serif Display', Georgia, serif; font-size: 22px; margin: 0; color: #363638;">
-          Your Saved Pieces
-        </h2>
-        <button type="button" class="atelier-icon-btn" onclick="this.closest('dialog').close()" aria-label="Close wishlist">
-          {{ icon_close }}
-        </button>
-      </div>
-      <div data-wishlist-empty style="text-align: center; padding: 32px 16px;">
-        <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Save the journals, stickers and pieces you love. They will appear right here.</p>
-        <a href="{{ routes.all_products_collection_url }}" class="atelier-drawer__btn" style="background: #4D351D; color: #FFFFFF; border-color: #4D351D; width: 100%;">
-          Explore All Products
-        </a>
-      </div>
-    </dialog>
-
-  </atelier-header>
+  </aside>
 </section>
 
 {% schema %}
@@ -1854,7 +1445,7 @@ atelier-header button {
       "type": "checkbox",
       "id": "show_announcement",
       "label": "Enable announcement bar",
-      "default": true
+      "default": false
     },
     {
       "type": "text",
@@ -1944,40 +1535,35 @@ atelier-header button {
       "label": "Desktop logo"
     },
     {
-      "type": "image_picker",
-      "id": "mobile_logo",
-      "label": "Mobile logo"
-    },
-    {
       "type": "text",
       "id": "logo_text",
-      "label": "Text logo (fallback)",
+      "label": "Text fallback logo",
       "default": "GRAFFEINE TALES"
     },
     {
       "type": "range",
       "id": "logo_width",
-      "label": "Logo width (desktop)",
+      "label": "Desktop logo width",
       "min": 80,
-      "max": 300,
-      "step": 5,
+      "max": 320,
+      "step": 10,
       "unit": "px",
       "default": 170
     },
     {
       "type": "range",
       "id": "logo_width_mobile",
-      "label": "Logo width (mobile)",
+      "label": "Mobile logo width",
       "min": 60,
       "max": 200,
-      "step": 5,
+      "step": 10,
       "unit": "px",
       "default": 120
     },
     {
       "type": "checkbox",
       "id": "logo_h1",
-      "label": "Logo is the H1 on the homepage",
+      "label": "Logo is H1 on homepage",
       "default": false
     },
     {
@@ -1992,26 +1578,31 @@ atelier-header button {
       "default": true
     },
     {
-      "type": "checkbox",
-      "id": "animate_steam",
-      "label": "Animate coffee steam",
-      "default": true
-    },
-    {
       "type": "image_picker",
       "id": "cup_image",
-      "label": "Custom coffee cup image"
+      "label": "Custom cup icon (optional)"
+    },
+    {
+      "type": "checkbox",
+      "id": "animate_steam",
+      "label": "Animate cup steam",
+      "default": true
     },
 
     {
       "type": "header",
-      "content": "Navigation & Menu"
+      "content": "Menu & Navigation"
     },
     {
       "type": "link_list",
       "id": "menu",
       "label": "Main menu",
       "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "mobile_menu",
+      "label": "Phone menu (optional)"
     },
     {
       "type": "select",
@@ -2022,26 +1613,18 @@ atelier-header button {
         { "value": "two_rows", "label": "Two lines: logo on top, menu below" },
         { "value": "logo_center", "label": "Menu left, logo centre" },
         { "value": "logo_left", "label": "Logo left, menu centre" }
-      ],
-      "info": "Two lines provides the UrbanDeco layout with search pill on top left, logo centered, icons on top right, and navigation below."
-    },
-    {
-      "type": "link_list",
-      "id": "mobile_menu",
-      "label": "Phone menu (optional)",
-      "info": "Use a longer menu on phones. Leave empty to use the main menu."
+      ]
     },
     {
       "type": "text",
       "id": "bold_words",
-      "label": "Make these menu items bold",
-      "default": "journal, sale, new",
-      "info": "Separate with commas"
+      "label": "Words to bold in menu",
+      "default": "journal, sale, new"
     },
     {
       "type": "range",
       "id": "menu_font_size",
-      "label": "Menu font size",
+      "label": "Font size",
       "min": 11,
       "max": 18,
       "step": 1,
@@ -2051,13 +1634,13 @@ atelier-header button {
     {
       "type": "select",
       "id": "menu_font_weight",
-      "label": "Menu font weight",
+      "label": "Font weight",
       "default": "600",
       "options": [
-        { "value": "400", "label": "Normal (400)" },
-        { "value": "500", "label": "Medium (500)" },
-        { "value": "600", "label": "Semi-bold (600)" },
-        { "value": "700", "label": "Bold (700)" }
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" }
       ]
     },
     {
@@ -2066,9 +1649,9 @@ atelier-header button {
       "label": "Text transformation",
       "default": "uppercase",
       "options": [
+        { "value": "none", "label": "Normal" },
         { "value": "uppercase", "label": "Uppercase" },
-        { "value": "capitalize", "label": "Capitalize" },
-        { "value": "none", "label": "None" }
+        { "value": "capitalize", "label": "Capitalize" }
       ]
     },
     {
@@ -2101,32 +1684,30 @@ atelier-header button {
     {
       "type": "text",
       "id": "popular_searches",
-      "label": "Popular searches",
-      "default": "Linen Journals, Daily Planners, Bookmarks, Stickers, Gift Sets",
-      "info": "Separate with commas"
+      "label": "Popular search suggestions",
+      "default": "Linen Journals, Daily Planners, Bookmarks, Stickers, Gift Sets"
     },
     {
       "type": "collection_list",
       "id": "search_collections",
-      "label": "Search photo tiles",
-      "limit": 6
+      "label": "Featured search collections"
     },
     {
       "type": "text",
       "id": "search_collections_title",
-      "label": "Photo tiles heading",
+      "label": "Collections category title",
       "default": "Shop by category"
     },
     {
       "type": "checkbox",
       "id": "search_recent",
-      "label": "Remember recent searches",
+      "label": "Remember recent searches on this device",
       "default": true
     },
 
     {
       "type": "header",
-      "content": "Icons"
+      "content": "Action Icons"
     },
     {
       "type": "checkbox",
@@ -2143,67 +1724,67 @@ atelier-header button {
     {
       "type": "checkbox",
       "id": "show_account",
-      "label": "Show account icon",
+      "label": "Show customer account icon",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "show_account_mobile",
-      "label": "Show account icon on phones",
+      "label": "Show customer account on mobile",
       "default": false
     },
     {
       "type": "checkbox",
       "id": "show_wishlist",
-      "label": "Show wishlist (heart) icon",
+      "label": "Show wishlist icon",
       "default": true
     },
     {
       "type": "page",
       "id": "wishlist_page",
-      "label": "Wishlist page destination (optional)"
+      "label": "Wishlist destination page"
     },
     {
       "type": "checkbox",
       "id": "show_cart",
-      "label": "Show shopping bag/cart icon",
+      "label": "Show cart icon",
       "default": true
     },
     {
       "type": "range",
       "id": "icon_size",
       "label": "Icon size",
-      "min": 16,
+      "min": 18,
       "max": 28,
-      "step": 2,
+      "step": 1,
       "unit": "px",
       "default": 22
     },
 
     {
       "type": "header",
-      "content": "Glass Style & Colors"
+      "content": "Frosted Glassmorphic Surface"
     },
     {
       "type": "color",
       "id": "glass_color",
-      "label": "Glass background color",
+      "label": "Glass tint colour",
       "default": "#F8F5ED"
     },
     {
       "type": "range",
       "id": "glass_opacity",
-      "label": "Glass opacity (transparency)",
+      "label": "Glass opacity (Lower = clearer/more transparent)",
       "min": 20,
       "max": 95,
       "step": 5,
       "unit": "%",
-      "default": 75
+      "default": 50
     },
     {
       "type": "range",
       "id": "blur",
-      "label": "Backdrop blur strength",
+      "label": "Blur strength",
       "min": 0,
       "max": 40,
       "step": 2,
@@ -2213,25 +1794,25 @@ atelier-header button {
     {
       "type": "color",
       "id": "text_color",
-      "label": "Text & icon color",
+      "label": "Text & icon colour",
       "default": "#363638"
     },
     {
       "type": "color",
       "id": "accent_color",
-      "label": "Accent & active color",
+      "label": "Accent colour",
       "default": "#4D351D"
     },
     {
       "type": "color",
       "id": "border_color",
-      "label": "Border color",
+      "label": "Border colour",
       "default": "#C6B58E"
     },
     {
       "type": "range",
       "id": "radius",
-      "label": "Corner radius",
+      "label": "Corner rounding",
       "min": 0,
       "max": 32,
       "step": 2,
@@ -2241,17 +1822,17 @@ atelier-header button {
 
     {
       "type": "header",
-      "content": "Position & Layout"
+      "content": "Position & Spacing"
     },
     {
       "type": "select",
       "id": "sticky",
-      "label": "Sticky header",
+      "label": "Sticky header behavior",
       "default": "always",
       "options": [
-        { "value": "always", "label": "Always sticky" },
-        { "value": "scroll_up", "label": "On scroll up only" },
-        { "value": "none", "label": "None" }
+        { "value": "always", "label": "Always stay at top" },
+        { "value": "scroll_up", "label": "Show on scroll up" },
+        { "value": "none", "label": "Not sticky" }
       ]
     },
     {
@@ -2263,13 +1844,13 @@ atelier-header button {
     {
       "type": "checkbox",
       "id": "overlay_home",
-      "label": "Float over hero banner on homepage",
-      "default": false
+      "label": "Overlay homepage banner",
+      "default": true
     },
     {
       "type": "range",
       "id": "gap_top",
-      "label": "Desktop top spacing",
+      "label": "Space above pill (Desktop)",
       "min": 0,
       "max": 40,
       "step": 2,
@@ -2279,7 +1860,7 @@ atelier-header button {
     {
       "type": "range",
       "id": "gap_side",
-      "label": "Desktop side spacing",
+      "label": "Space at sides (Desktop)",
       "min": 0,
       "max": 80,
       "step": 4,
@@ -2289,7 +1870,7 @@ atelier-header button {
     {
       "type": "range",
       "id": "gap_top_mobile",
-      "label": "Mobile top spacing",
+      "label": "Space above pill (Mobile)",
       "min": 0,
       "max": 24,
       "step": 2,
@@ -2299,7 +1880,7 @@ atelier-header button {
     {
       "type": "range",
       "id": "gap_side_mobile",
-      "label": "Mobile side spacing",
+      "label": "Space at sides (Mobile)",
       "min": 0,
       "max": 24,
       "step": 2,
@@ -2309,7 +1890,7 @@ atelier-header button {
 
     {
       "type": "header",
-      "content": "Mobile Drawer Navigation"
+      "content": "Mobile Drawer"
     },
     {
       "type": "select",
@@ -2317,14 +1898,14 @@ atelier-header button {
       "label": "Mobile menu style",
       "default": "photos",
       "options": [
-        { "value": "photos", "label": "With category photos" },
-        { "value": "text", "label": "Clean text only" }
+        { "value": "photos", "label": "With photo tiles" },
+        { "value": "text", "label": "Text only" }
       ]
     },
     {
       "type": "range",
       "id": "m_tiles",
-      "label": "Category photo tiles count",
+      "label": "Number of photo tiles",
       "min": 0,
       "max": 8,
       "step": 1,
@@ -2333,42 +1914,42 @@ atelier-header button {
     {
       "type": "checkbox",
       "id": "m_show_promo",
-      "label": "Show promo banner in mobile menu",
+      "label": "Show top promo card in drawer",
       "default": true
     },
     {
       "type": "text",
       "id": "promo_heading",
-      "label": "Mobile promo heading",
+      "label": "Promo heading",
       "default": "Handcrafted with Art & Intention"
     },
     {
       "type": "text",
       "id": "promo_link_label",
-      "label": "Mobile promo link text",
+      "label": "Promo link label",
       "default": "Shop New Arrivals"
     },
     {
       "type": "url",
       "id": "promo_link",
-      "label": "Mobile promo link"
+      "label": "Promo link"
     },
     {
       "type": "color",
       "id": "promo_bg",
-      "label": "Mobile promo card background",
+      "label": "Promo background",
       "default": "#4D351D"
     },
     {
       "type": "color",
       "id": "promo_text",
-      "label": "Mobile promo card text",
+      "label": "Promo text color",
       "default": "#FFFFFF"
     },
     {
       "type": "checkbox",
       "id": "m_show_contact",
-      "label": "Show WhatsApp and Call buttons",
+      "label": "Show contact details in drawer",
       "default": true
     },
     {
@@ -2380,96 +1961,60 @@ atelier-header button {
     {
       "type": "text",
       "id": "m_hours",
-      "label": "Store operating hours",
+      "label": "Customer care hours",
       "default": "Mon–Sat 10am–7pm"
     },
     {
       "type": "link_list",
       "id": "drawer_menu",
-      "label": "Footer links in mobile menu"
+      "label": "Extra drawer menu (optional)"
     },
     {
       "type": "text",
       "id": "tagline",
-      "label": "Footer tagline",
+      "label": "Brand tagline in drawer",
       "default": "Artful Things. Thoughtful Living."
     }
   ],
   "blocks": [
     {
       "type": "promo",
-      "name": "Mega menu photo card",
+      "name": "Mega menu promo card",
       "settings": [
-        {
-          "type": "paragraph",
-          "content": "Displays a promotional image card inside the mega menu dropdown."
-        },
         {
           "type": "text",
           "id": "menu_item",
-          "label": "Target menu item name",
-          "default": "Notebooks",
-          "info": "Type exactly as in Shopify navigation (e.g. Notebooks, Journals)"
+          "label": "Navigation item title",
+          "info": "Exact title of navigation link to attach this promo card to (e.g. Journals)"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Promotional photo"
+          "label": "Promotional image"
         },
         {
           "type": "text",
           "id": "heading",
-          "label": "Card heading",
-          "default": "New Season Notebooks"
+          "label": "Heading",
+          "default": "Artisan Linen Journals"
         },
         {
           "type": "text",
           "id": "subheading",
-          "label": "CTA link label",
-          "default": "Discover"
+          "label": "Subtitle / CTA",
+          "default": "Discover Collection"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "Card destination link"
-        }
-      ]
-    },
-    {
-      "type": "menu_photo",
-      "name": "Mobile menu photo tile",
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Adds a photo to a menu item in the mobile drawer."
-        },
-        {
-          "type": "text",
-          "id": "item",
-          "label": "Menu item name",
-          "default": "Journals"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Photo"
+          "label": "Card link"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Atelier header",
-      "blocks": [
-        {
-          "type": "promo",
-          "settings": {
-            "menu_item": "Notebooks",
-            "heading": "Handcrafted Linen Journals",
-            "subheading": "Discover"
-          }
-        }
-      ]
+      "name": "Atelier header"
     }
   ]
 }

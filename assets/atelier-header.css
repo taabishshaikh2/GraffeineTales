@@ -1,151 +1,6 @@
-
 /* ==========================================================================
-   Graffeine Tales - Universal Header Core Styles
-   Guarantees zero FOUC, no bullet points, correct flex/grid layout and floating pill
-   ========================================================================== */
-.atelier-header-section {
-  position: -webkit-sticky !important;
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 40 !important;
-  pointer-events: none !important;
-  margin-bottom: calc(-1 * var(--header-pill-height, 108px)) !important;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-atelier-header {
-  display: block !important;
-  width: 100% !important;
-  pointer-events: none !important;
-  font-family: 'Inter', -apple-system, sans-serif !important;
-  color: var(--header-text, #363638) !important;
-}
-
-atelier-header, atelier-header * {
-  box-sizing: border-box !important;
-}
-
-atelier-header a {
-  color: inherit !important;
-  text-decoration: none !important;
-}
-
-atelier-header button {
-  font: inherit !important;
-  color: inherit !important;
-  background: transparent !important;
-  border: none !important;
-  cursor: pointer !important;
-}
-
-atelier-header ul,
-atelier-header li,
-.atelier-header__nav-list,
-.atelier-header__nav-list li {
-  list-style: none !important;
-  list-style-type: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.atelier-header__bar {
-  pointer-events: none !important;
-  position: relative !important;
-  max-width: calc(1400px + var(--gap-side, 24px) * 2) !important;
-  margin-inline: auto !important;
-  padding: var(--gap-top, 14px) var(--gap-side, 24px) 0 !important;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.atelier-header__pill {
-  pointer-events: auto !important;
-  position: relative !important;
-  isolation: isolate !important;
-  border-radius: var(--header-radius, 18px) !important;
-  padding: 8px 24px !important;
-  min-height: 60px !important;
-  background: var(--header-glass, rgba(248, 245, 237, 0.78)) !important;
-  -webkit-backdrop-filter: blur(var(--header-blur, 20px)) saturate(160%) !important;
-  backdrop-filter: blur(var(--header-blur, 20px)) saturate(160%) !important;
-  border: 1px solid var(--header-border, rgba(198, 181, 142, 0.35)) !important;
-  box-shadow: 0 12px 36px -12px rgba(54, 54, 56, 0.12), 0 2px 8px -2px rgba(54, 54, 56, 0.04) !important;
-  transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease !important;
-}
-
-/* Two-rows layout explicit rules */
-.layout--two-rows .atelier-header__pill,
-.layout--two_rows .atelier-header__pill {
-  display: grid !important;
-  grid-template-columns: 1fr auto 1fr !important;
-  grid-template-areas: "left center right" "nav nav nav" !important;
-  align-items: center !important;
-  padding-top: 10px !important;
-  padding-bottom: 8px !important;
-}
-
-.layout--two-rows .atelier-header__left,
-.layout--two_rows .atelier-header__left {
-  grid-area: left !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  min-width: 0 !important;
-}
-
-.layout--two-rows .atelier-header__center,
-.layout--two_rows .atelier-header__center {
-  grid-area: center !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.layout--two-rows .atelier-header__right,
-.layout--two_rows .atelier-header__right {
-  grid-area: right !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  gap: 8px !important;
-}
-
-.layout--two-rows .atelier-header__nav,
-.layout--two_rows .atelier-header__nav {
-  grid-area: nav !important;
-  display: flex !important;
-  justify-content: center !important;
-  margin-top: 8px !important;
-  padding-top: 8px !important;
-  border-top: 1px solid var(--header-line, rgba(54, 54, 56, 0.08)) !important;
-  width: 100% !important;
-}
-
-.layout--two-rows .atelier-header__nav-list,
-.layout--two_rows .atelier-header__nav-list {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex-wrap: wrap !important;
-  gap: 4px 16px !important;
-  list-style: none !important;
-  width: 100% !important;
-}
-
-/* Fallback padding for pages that don't have a hero banner */
-body:not(.template-index):not(.template-collection) #MainContent > .shopify-section:first-child:not(:has(.atelier-col-hero)):not(:has(.atelier-hero)):not(:has(.image-banner)):not(:has(.slideshow)) {
-  padding-top: calc(var(--header-height, 120px) + 24px) !important;
-}
-
-/* ==========================================================================
-   Graffeine Tales — Premium Glass Header
-   Adapted from UrbanDeco Reference Architecture for Graffeine Tales Editorial Brand
-   Brand Palette:
-   - Warm Paper: #F8F5ED
-   - Espresso Charcoal: #363638
-   - Logo Cream: #E9DFC2
-   - Sand / Gold Accent: #C6B58E / #927B53
-   - Deep Coffee: #4D351D
-   - Soft Cream Card: #FDFBF7
+   Graffeine Tales — Premium Frosted Glassmorphic Header System
+   Exact reproduction of UrbanDeco Reference Architecture & Interaction Patterns
    ========================================================================== */
 
 :root {
@@ -189,7 +44,6 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
   text-align: center;
   overflow: hidden;
 }
-
 .atelier-announcement__content--left { text-align: left; }
 .atelier-announcement__content--center { text-align: center; }
 .atelier-announcement__content--right { text-align: right; }
@@ -202,18 +56,13 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
   gap: 6px;
   transition: opacity 0.2s ease;
 }
+.atelier-announcement__link:hover { opacity: 0.85; }
 
-.atelier-announcement__link:hover {
-  opacity: 0.85;
-}
-
-/* Scrolling Marquee */
 .atelier-announcement--marquee .atelier-announcement__content {
   display: flex;
   white-space: nowrap;
   overflow: hidden;
 }
-
 .atelier-announcement__track {
   display: inline-flex;
   white-space: nowrap;
@@ -221,7 +70,6 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
   gap: 40px;
   padding-left: 100%;
 }
-
 @keyframes atelierMarquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
@@ -236,34 +84,25 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
   flex-shrink: 0;
 }
 
-.atelier-announcement__country svg {
-  width: 14px;
-  height: 14px;
-}
-
-/* Visibility modifiers */
 .atelier-announcement--desktop-only { display: block; }
 .atelier-announcement--mobile-only { display: none; }
-
 @media screen and (max-width: 767px) {
   .atelier-announcement--desktop-only { display: none; }
   .atelier-announcement--mobile-only { display: block; }
 }
 
 /* ==========================================================================
-   Main Header Section & Floating Bar Container
+   Section & Floating Pill Container
    ========================================================================== */
 .atelier-header-section {
-  width: 100%;
-  z-index: 40;
-  pointer-events: none;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.atelier-header-section.is-sticky {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 40 !important;
+  width: 100% !important;
+  pointer-events: none !important;
+  margin-bottom: calc(-1 * var(--header-pill-height, 108px)) !important;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .atelier-header-section.is-hidden {
@@ -271,968 +110,843 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
 }
 
 atelier-header {
-  display: block;
-  width: 100%;
-  pointer-events: none;
-  font-family: 'Inter', -apple-system, sans-serif;
-  color: var(--header-text, #363638);
+  display: block !important;
+  width: 100% !important;
+  pointer-events: none !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  color: var(--header-text, #363638) !important;
 }
 
-atelier-header *, atelier-header *::before, atelier-header *::after {
-  box-sizing: border-box;
+atelier-header, atelier-header * {
+  box-sizing: border-box !important;
 }
 
 atelier-header a {
-  color: inherit;
-  text-decoration: none;
+  color: inherit !important;
+  text-decoration: none !important;
 }
 
 atelier-header button {
-  font: inherit;
-  color: inherit;
+  font: inherit !important;
+  color: inherit !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
 }
 
-/* Floating Bar Container */
+atelier-header ul,
+atelier-header li,
+.atelier-header__nav-list,
+.atelier-header__nav-list li {
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Outer Bar Padding & Width */
 .atelier-header__bar {
-  position: relative;
-  max-width: calc(1400px + var(--gap-side, 24px) * 2);
-  margin-inline: auto;
-  padding: var(--gap-top, 14px) var(--gap-side, 24px) 0;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none !important;
+  position: relative !important;
+  max-width: calc(1400px + var(--gap-side, 24px) * 2) !important;
+  margin-inline: auto !important;
+  padding: var(--gap-top, 14px) var(--gap-side, 24px) 0 !important;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* Frosted Glass Floating Pill */
+/* ==========================================================================
+   AUTHENTIC FROSTED GLASS PILL (UrbanDeco Reference)
+   ========================================================================== */
 .atelier-header__pill {
-  position: relative;
-  isolation: isolate;
-  border-radius: var(--header-radius, 18px);
-  padding: 0 20px;
-  min-height: 64px;
-  pointer-events: auto;
-  border: 1px solid var(--header-border, rgba(198, 181, 142, 0.35));
-  box-shadow: 0 12px 36px -12px rgba(54, 54, 56, 0.12),
-              0 2px 8px -2px rgba(54, 54, 56, 0.04);
-  transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  pointer-events: auto !important;
+  position: relative !important;
+  isolation: isolate !important;
+  background: transparent !important;
+  border-radius: var(--header-radius, 18px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 12px 32px -14px rgba(28, 27, 25, 0.28),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+  transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease !important;
 }
 
 .atelier-header__pill::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.08) 60%),
-              var(--header-glass, rgba(248, 245, 237, 0.82));
-  -webkit-backdrop-filter: blur(var(--header-blur, 20px)) saturate(160%);
-  backdrop-filter: blur(var(--header-blur, 20px)) saturate(160%);
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  border-radius: inherit !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.05) 60%),
+              var(--header-glass, rgba(248, 245, 237, 0.50)) !important;
+  -webkit-backdrop-filter: blur(var(--header-blur, 20px)) saturate(170%) !important;
+  backdrop-filter: blur(var(--header-blur, 20px)) saturate(170%) !important;
+  transition: background 0.4s ease !important;
 }
 
 @supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
   .atelier-header__pill::before {
-    background: var(--header-solid, #F8F5ED);
+    background: var(--header-solid, #F8F5ED) !important;
   }
 }
 
 .atelier-header__bar.is-scrolled .atelier-header__pill {
-  box-shadow: 0 16px 42px -12px rgba(54, 54, 56, 0.18),
-              0 4px 12px -2px rgba(54, 54, 56, 0.06);
+  box-shadow: 0 18px 42px -14px rgba(28, 27, 25, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
 }
 
 /* ==========================================================================
-   Header Layout Options:
-   1. Two lines: logo on top, menu below (.layout--two-rows, .layout--two_rows)
-   2. Menu left, logo centre (.layout--logo-center, .layout--logo_center)
-   3. Logo left, menu centre (.layout--logo-left, .layout--logo_left)
+   Header Elements (Left, Center, Right)
    ========================================================================== */
-
-/* Layout 1: Two rows (UrbanDeco reference) */
-.layout--two-rows, .layout--two_rows .atelier-header__pill {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  grid-template-areas: "left center right" "nav nav nav";
-  align-items: center;
-  padding-top: 10px;
-  padding-bottom: 6px;
+.atelier-header__left {
+  display: flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
 }
 
-.layout--two-rows, .layout--two_rows .atelier-header__left {
-  grid-area: left;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  min-width: 0;
+.atelier-header__center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-.layout--two-rows, .layout--two_rows .atelier-header__center {
-  grid-area: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.atelier-header__right {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 4px !important;
 }
 
-.layout--two-rows, .layout--two_rows .atelier-header__right {
-  grid-area: right;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-}
-
-.layout--two-rows, .layout--two_rows .atelier-header__nav {
-  grid-area: nav;
-  display: flex;
-  justify-content: center;
-  margin-top: 8px;
-  padding-top: 6px;
-  border-top: 1px solid var(--header-line, rgba(54, 54, 56, 0.08));
-}
-
-.layout--two-rows, .layout--two_rows .atelier-header__nav-list {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* Layout 2: Logo Centre, Menu Left */
-.layout--logo-center, .layout--logo_center .atelier-header__pill {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  min-height: 72px;
-}
-
-.layout--logo-center, .layout--logo_center .atelier-header__left {
-  display: flex;
-  align-items: center;
-}
-
-.layout--logo-center, .layout--logo_center .atelier-header__center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.layout--logo-center, .layout--logo_center .atelier-header__right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-}
-
-.layout--logo-center, .layout--logo_center .atelier-header__nav-list {
-  display: flex;
-  align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* Layout 3: Logo Left, Menu Centre */
-.layout--logo-left, .layout--logo_left .atelier-header__pill {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  min-height: 72px;
-}
-
-.layout--logo-left, .layout--logo_left .atelier-header__center {
-  order: -1;
-  padding-right: 24px;
-}
-
-.layout--logo-left, .layout--logo_left .atelier-header__left {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.layout--logo-left, .layout--logo_left .atelier-header__right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-}
-
-.layout--logo-left, .layout--logo_left .atelier-header__nav-list {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* ==========================================================================
-   Search Input Pill in Main Header (UrbanDeco reference)
-   ========================================================================== */
-.atelier-search-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  width: min(100%, 280px);
-  height: 42px;
-  margin: 0;
-  padding: 0 16px;
-  border: 1px solid var(--header-line, rgba(54, 54, 56, 0.12));
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.55);
-  color: rgba(54, 54, 56, 0.65);
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 13px;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.atelier-search-pill:hover {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: var(--gt-sand, #C6B58E);
-  box-shadow: 0 2px 8px rgba(54, 54, 56, 0.05);
-}
-
-.atelier-search-pill svg {
-  flex: 0 0 18px;
-  width: 18px;
-  height: 18px;
-  color: var(--header-text, #363638);
-}
-
-.atelier-search-pill span {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* ==========================================================================
-   Logo & Brand Treatment
-   ========================================================================== */
+/* Logo */
 .atelier-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  text-decoration: none;
-  min-height: 44px;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  min-height: 44px !important;
+  line-height: 1 !important;
 }
-
 .atelier-logo img {
-  display: block;
-  width: var(--logo-width, 170px);
-  max-width: 100%;
-  height: auto;
-  transition: opacity 0.2s ease;
+  display: block !important;
+  width: var(--logo-width, 170px) !important;
+  max-width: 100% !important;
+  height: auto !important;
 }
-
-.atelier-logo:hover img {
-  opacity: 0.9;
-}
-
 .atelier-logo__text {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 24px;
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  color: var(--header-text, #363638);
-  white-space: nowrap;
+  font-family: 'DM Serif Display', Georgia, serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  color: var(--header-text, #363638) !important;
 }
 
-/* Graffeine Tales Coffee Cup with Steam */
+/* Coffee Cup & Animated Steam */
 .atelier-cup {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 44px;
-  flex-shrink: 0;
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 26px !important;
+  height: 38px !important;
+  flex-shrink: 0 !important;
 }
-
 .atelier-cup img {
-  width: 100%;
-  height: auto;
-  display: block;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
 }
-
 .atelier-steam {
-  position: absolute;
-  top: 4px;
-  left: 50%;
-  width: 4px;
-  height: 12px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(198, 181, 142, 0.8), transparent);
-  transform: translateX(-50%);
-  opacity: 0;
-  pointer-events: none;
+  position: absolute !important;
+  top: -4px !important;
+  left: 45% !important;
+  width: 3.5px !important;
+  height: 10px !important;
+  background: linear-gradient(to top, rgba(198, 181, 142, 0.7), transparent) !important;
+  border-radius: 4px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
-
+.atelier-steam--second {
+  left: 60% !important;
+  top: -2px !important;
+  animation-delay: 1.2s !important;
+}
 .atelier-cup--steam .atelier-steam {
-  animation: steamRise 2.4s ease-in-out infinite;
+  animation: atelierSteamRise 2.8s ease-in-out infinite !important;
+}
+@keyframes atelierSteamRise {
+  0% { transform: translateY(0) scaleX(0.8); opacity: 0; }
+  40% { opacity: 0.7; transform: translateY(-8px) scaleX(1.1); }
+  80% { opacity: 0.2; transform: translateY(-16px) scaleX(1.4); }
+  100% { transform: translateY(-22px) scaleX(1.6); opacity: 0; }
 }
 
-.atelier-cup--steam .atelier-steam--second {
-  animation: steamRise 2.4s ease-in-out infinite 1.2s;
-  left: calc(50% + 4px);
-}
-
-@keyframes steamRise {
-  0% { transform: translate(-50%, 0) scaleX(1); opacity: 0; }
-  50% { opacity: 0.6; }
-  100% { transform: translate(-50%, -14px) scaleX(1.6); opacity: 0; }
-}
-
-/* ==========================================================================
-   Header Action Icons (Right)
-   ========================================================================== */
+/* Action Icons */
 .atelier-icon-btn {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--header-text, #363638);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 42px !important;
+  height: 42px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: var(--header-text, #363638) !important;
+  cursor: pointer !important;
+  transition: background 0.25s ease, transform 0.25s ease !important;
 }
-
 .atelier-icon-btn svg {
-  width: var(--icon-size, 22px);
-  height: var(--icon-size, 22px);
-  transition: transform 0.3s ease;
+  width: 20px !important;
+  height: 20px !important;
+  transition: transform 0.3s ease !important;
 }
-
 .atelier-icon-btn:hover {
-  background: rgba(255, 255, 255, 0.65);
-  color: var(--header-accent, #4D351D);
+  background: rgba(255, 255, 255, 0.45) !important;
 }
-
 .atelier-icon-btn:hover svg {
-  transform: translateY(-1px);
+  transform: translateY(-1px) !important;
 }
 
-.atelier-icon-btn:focus-visible {
-  outline: 2px solid var(--header-accent, #4D351D);
-  outline-offset: 2px;
+/* Badges (Wishlist & Cart) */
+.atelier-badge,
+.header__cart-count {
+  position: absolute !important;
+  top: 3px !important;
+  right: 1px !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  padding: 0 5px !important;
+  border-radius: 9px !important;
+  background: var(--header-text, #363638) !important;
+  color: #FFFFFF !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 18px !important;
+  text-align: center !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7) !important;
+}
+.atelier-badge[hidden] { display: none !important; }
+
+/* Capsule Search Pill (UrbanDeco reference) */
+.atelier-search-pill {
+  display: none;
+  align-items: center !important;
+  gap: 10px !important;
+  width: min(100%, 280px) !important;
+  height: 40px !important;
+  margin: 0 !important;
+  padding: 0 16px !important;
+  border: 1px solid var(--header-line, rgba(54, 54, 56, 0.12)) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  color: var(--header-text, #363638) !important;
+  opacity: 0.85 !important;
+  font-size: 13px !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: background 0.3s ease, border-color 0.3s ease, opacity 0.3s ease !important;
+}
+.atelier-search-pill:hover {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(54, 54, 56, 0.25) !important;
+  opacity: 1 !important;
+}
+.atelier-search-pill svg {
+  flex: 0 0 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+.atelier-search-pill span {
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
 }
 
-/* Count Badges (Wishlist & Cart) */
-.atelier-badge {
-  position: absolute;
-  top: 2px;
-  right: 0px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  border-radius: 9px;
-  background: var(--header-accent, #4D351D);
-  color: #FFFFFF;
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 18px;
-  text-align: center;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
-  pointer-events: none;
+/* Navigation Links */
+.atelier-header__nav-list {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
 }
-
-.atelier-badge[hidden] {
-  display: none !important;
-}
-
-/* ==========================================================================
-   Desktop Navigation Links & Active Indicators
-   ========================================================================== */
 .atelier-nav__link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  height: 44px;
-  margin: 0;
-  padding: 0 14px;
-  border: 0;
-  background: none;
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: var(--menu-size, 13px);
-  font-weight: var(--menu-weight, 600);
-  letter-spacing: var(--menu-letter-spacing, 0.08em);
-  text-transform: var(--menu-transform, uppercase);
-  color: var(--header-text, #363638);
-  white-space: nowrap;
-  cursor: pointer;
-  transition: color 0.25s ease;
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  height: 44px !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  border: 0 !important;
+  background: none !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  font-size: var(--menu-size, 13px) !important;
+  font-weight: var(--menu-weight, 600) !important;
+  letter-spacing: var(--menu-letter-spacing, 1px) !important;
+  text-transform: var(--menu-transform, uppercase) !important;
+  color: var(--header-text, #363638) !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  transition: color 0.25s ease !important;
 }
-
 .atelier-nav__link svg {
-  width: 12px;
-  height: 12px;
-  opacity: 0.65;
-  transition: transform 0.35s ease;
+  width: 13px !important;
+  height: 13px !important;
+  opacity: 0.65 !important;
+  transition: transform 0.35s ease !important;
 }
-
-/* Refined Underline Indicator */
 .atelier-nav__link::after {
-  content: '';
-  position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 8px;
-  height: 2px;
-  background: var(--header-accent, #4D351D);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  content: '' !important;
+  position: absolute !important;
+  left: 12px !important;
+  right: 12px !important;
+  bottom: 8px !important;
+  height: 1.5px !important;
+  background: currentColor !important;
+  transform: scaleX(0) !important;
+  transform-origin: right !important;
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1) !important;
 }
-
-.atelier-nav__link:hover,
-.atelier-nav__link[aria-expanded="true"],
-.atelier-nav__link.is-current {
-  color: var(--header-accent, #4D351D);
-}
-
 .atelier-nav__link:hover::after,
 .atelier-nav__link[aria-expanded="true"]::after,
 .atelier-nav__link.is-current::after {
-  transform: scaleX(1);
-  transform-origin: left;
+  transform: scaleX(1) !important;
+  transform-origin: left !important;
 }
-
 .atelier-nav__link[aria-expanded="true"] svg {
-  transform: rotate(180deg);
+  transform: rotate(180deg) !important;
 }
+.atelier-nav__link.is-bold { font-weight: 800 !important; }
 
-.atelier-nav__link.is-bold {
-  font-weight: 800;
+/* ==========================================================================
+   DESKTOP LAYOUT 1: TWO LINES (UrbanDeco reference)
+   Row 1: Search Pill on Left | Logo in Center | Action Icons on Right
+   DIVIDER LINE
+   Row 2: Centered Navigation Menu
+   ========================================================================== */
+@media (min-width: 990px) {
+  .layout--two_rows .atelier-header__pill,
+  .layout--two-rows .atelier-header__pill {
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr !important;
+    grid-template-areas: "left center right" "nav nav nav" !important;
+    padding: 8px 20px 6px !important;
+    align-items: center !important;
+  }
+  .layout--two_rows .atelier-header__left,
+  .layout--two-rows .atelier-header__left {
+    display: contents !important;
+  }
+  .layout--two_rows .atelier-search-pill,
+  .layout--two-rows .atelier-search-pill {
+    display: inline-flex !important;
+    grid-area: left !important;
+    justify-self: start !important;
+  }
+  .layout--two_rows .atelier-header__center,
+  .layout--two-rows .atelier-header__center {
+    grid-area: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .layout--two_rows .atelier-header__right,
+  .layout--two-rows .atelier-header__right {
+    grid-area: right !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+  .layout--two_rows .atelier-header__right .atelier-search-icon,
+  .layout--two-rows .atelier-header__right .atelier-search-icon {
+    display: none !important;
+  }
+  .layout--two_rows .atelier-header__nav,
+  .layout--two-rows .atelier-header__nav {
+    grid-area: nav !important;
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-top: 8px !important;
+    padding-top: 4px !important;
+    border-top: 1px solid var(--header-line, rgba(54, 54, 56, 0.1)) !important;
+  }
+  .layout--two_rows .atelier-header__nav-list,
+  .layout--two-rows .atelier-header__nav-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px 16px !important;
+  }
 }
 
 /* ==========================================================================
-   Floating Frosted Glass Mega Menu Panel (UrbanDeco style)
+   DESKTOP LAYOUT 2: LOGO LEFT, MENU CENTRE (Single Line)
+   Logo on Left | Menu in Center | Search Icon + Action Icons on Right
+   ========================================================================== */
+@media (min-width: 990px) {
+  .layout--logo_left .atelier-header__pill,
+  .layout--logo-left .atelier-header__pill {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    grid-template-areas: none !important;
+    align-items: center !important;
+    min-height: 64px !important;
+    padding: 0 20px !important;
+  }
+  .layout--logo_left .atelier-header__center,
+  .layout--logo-left .atelier-header__center {
+    order: -1 !important;
+    padding-right: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  .layout--logo_left .atelier-header__left,
+  .layout--logo-left .atelier-header__left {
+    order: 0 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .layout--logo_left .atelier-search-pill,
+  .layout--logo-left .atelier-search-pill {
+    display: none !important;
+  }
+  .layout--logo_left .atelier-header__nav,
+  .layout--logo-left .atelier-header__nav {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+  .layout--logo_left .atelier-header__nav-list,
+  .layout--logo-left .atelier-header__nav-list {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px 16px !important;
+  }
+  .layout--logo_left .atelier-header__right,
+  .layout--logo-left .atelier-header__right {
+    order: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 4px !important;
+  }
+  .layout--logo_left .atelier-header__right .atelier-search-icon,
+  .layout--logo-left .atelier-header__right .atelier-search-icon {
+    display: grid !important;
+  }
+}
+
+/* ==========================================================================
+   DESKTOP LAYOUT 3: MENU LEFT, LOGO CENTRE (Single Line)
+   Menu on Left | Logo in Center | Search Icon + Action Icons on Right
+   ========================================================================== */
+@media (min-width: 990px) {
+  .layout--logo_center .atelier-header__pill,
+  .layout--logo-center .atelier-header__pill {
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr !important;
+    grid-template-areas: none !important;
+    align-items: center !important;
+    min-height: 64px !important;
+    padding: 0 20px !important;
+  }
+  .layout--logo_center .atelier-header__left,
+  .layout--logo-center .atelier-header__left {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    min-width: 0 !important;
+  }
+  .layout--logo_center .atelier-search-pill,
+  .layout--logo-center .atelier-search-pill {
+    display: none !important;
+  }
+  .layout--logo_center .atelier-header__nav,
+  .layout--logo-center .atelier-header__nav {
+    display: flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+  .layout--logo_center .atelier-header__nav-list,
+  .layout--logo-center .atelier-header__nav-list {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px 16px !important;
+  }
+  .layout--logo_center .atelier-header__center,
+  .layout--logo-center .atelier-header__center {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .layout--logo_center .atelier-header__right,
+  .layout--logo-center .atelier-header__right {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 4px !important;
+  }
+  .layout--logo_center .atelier-header__right .atelier-search-icon,
+  .layout--logo-center .atelier-header__right .atelier-search-icon {
+    display: grid !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile (< 990px)
+   ========================================================================== */
+@media screen and (max-width: 989px) {
+  .atelier-header__bar {
+    padding: var(--gap-top-mobile, 10px) var(--gap-side-mobile, 10px) 0 !important;
+  }
+  .atelier-header__pill {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    grid-template-areas: none !important;
+    min-height: 54px !important;
+    padding: 0 12px !important;
+  }
+  .atelier-header__left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 2px !important;
+  }
+  .atelier-header__center {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+  }
+  .atelier-header__right {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 2px !important;
+  }
+  .atelier-burger {
+    display: grid !important;
+  }
+  .atelier-search-pill {
+    display: none !important;
+  }
+  .atelier-header__nav {
+    display: none !important;
+  }
+  .atelier-desk-only {
+    display: none !important;
+  }
+  .atelier-logo img {
+    width: var(--logo-width-mobile, 120px) !important;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .atelier-burger {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Desktop Mega Menu Floating Panel (UrbanDeco reference)
    ========================================================================== */
 .atelier-mega {
+  display: none;
   position: absolute;
   top: calc(100% + 10px);
   left: var(--gap-side, 24px);
   right: var(--gap-side, 24px);
-  max-width: 1400px;
-  margin: 0 auto;
   border-radius: var(--header-radius, 18px);
-  border: 1px solid var(--header-border, rgba(198, 181, 142, 0.35));
-  box-shadow: 0 24px 64px -16px rgba(54, 54, 56, 0.22),
-              0 4px 16px -2px rgba(54, 54, 56, 0.06);
-  padding: 32px 36px;
+  padding: 32px 40px;
+  background: rgba(248, 245, 237, 0.88);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 24px 60px -16px rgba(54, 54, 56, 0.22),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
   pointer-events: auto;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-8px);
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              visibility 0.3s;
   z-index: 50;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.15) 60%),
-              var(--header-glass, rgba(248, 245, 237, 0.94));
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  backdrop-filter: blur(24px) saturate(160%);
+  animation: atelierMegaSlide 0.35s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
-
-.atelier-mega.is-open {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+.atelier-mega.is-open { display: block; }
+@keyframes atelierMegaSlide {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 .atelier-mega__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 36px;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 48px;
   align-items: start;
 }
-
 .atelier-mega__title {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 18px;
-  letter-spacing: 0.04em;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--header-accent, #4D351D);
+  color: var(--header-text, #363638);
   margin-bottom: 24px;
-  text-decoration: none;
-  transition: opacity 0.2s ease;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(54, 54, 56, 0.1);
 }
-
-.atelier-mega__title:hover {
-  opacity: 0.8;
-}
-
-.atelier-mega__title svg {
-  width: 14px;
-  height: 14px;
-  transition: transform 0.2s ease;
-}
-
-.atelier-mega__title:hover svg {
-  transform: translateX(3px);
-}
-
+.atelier-mega__title svg { width: 14px; height: 14px; transition: transform 0.25s ease; }
+.atelier-mega__title:hover svg { transform: translateX(4px); }
 .atelier-mega__cols {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 28px 24px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px 32px;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
 }
-
 .atelier-mega__head {
   display: block;
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 13.5px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
   color: var(--header-text, #363638);
   margin-bottom: 12px;
   text-decoration: none;
   transition: color 0.2s ease;
 }
-
-.atelier-mega__head:hover {
-  color: var(--header-accent, #4D351D);
-}
-
+.atelier-mega__head:hover { color: var(--header-accent, #4D351D); }
 .atelier-mega__sub {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
 }
-
 .atelier-mega__a {
-  display: inline-block;
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 13px;
-  font-weight: 400;
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
   color: rgba(54, 54, 56, 0.75);
   text-decoration: none;
   transition: color 0.2s ease, transform 0.2s ease;
 }
-
 .atelier-mega__a:hover {
-  color: var(--header-accent, #4D351D);
-  transform: translateX(2px);
+  color: var(--header-text, #363638);
+  transform: translateX(3px);
 }
 
-/* Mega Menu Promotional Card (Right Side) */
+/* Promotional Card */
 .atelier-promo-card {
   display: flex;
   flex-direction: column;
-  width: 280px;
   border-radius: 14px;
   overflow: hidden;
   background: #FFFFFF;
-  border: 1px solid rgba(198, 181, 142, 0.35);
-  box-shadow: 0 10px 28px -10px rgba(54, 54, 56, 0.12);
+  box-shadow: 0 8px 24px -8px rgba(54, 54, 56, 0.12);
   text-decoration: none;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .atelier-promo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 36px -12px rgba(77, 53, 29, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -12px rgba(54, 54, 56, 0.2);
 }
-
 .atelier-promo-card__img {
-  width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  background-color: var(--gt-warm-paper);
+  background: rgba(54, 54, 56, 0.05);
 }
-
 .atelier-promo-card__img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s ease;
 }
-
-.atelier-promo-card:hover .atelier-promo-card__img img {
-  transform: scale(1.05);
-}
-
+.atelier-promo-card:hover .atelier-promo-card__img img { transform: scale(1.06); }
 .atelier-promo-card__body {
-  padding: 16px 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-
 .atelier-promo-card__h {
   font-family: 'DM Serif Display', Georgia, serif;
   font-size: 16px;
-  font-weight: 400;
   color: var(--header-text, #363638);
-  line-height: 1.3;
 }
-
 .atelier-promo-card__s {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-family: 'Inter', -apple-system, sans-serif;
+  gap: 5px;
+  font-family: 'Inter', sans-serif;
   font-size: 11.5px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--header-accent, #4D351D);
-  margin-top: 6px;
 }
-
-.atelier-promo-card__s svg {
-  width: 12px;
-  height: 12px;
-  transition: transform 0.2s ease;
-}
-
-.atelier-promo-card:hover .atelier-promo-card__s svg {
-  transform: translateX(4px);
-}
+.atelier-promo-card__s svg { width: 12px; height: 12px; }
 
 /* ==========================================================================
-   Live Search Dropdown Panel
+   Predictive Search Panel (Floating Glass Modal)
    ========================================================================== */
 .atelier-search-panel {
+  display: none;
   position: absolute;
   top: calc(100% + 10px);
   left: var(--gap-side, 24px);
   right: var(--gap-side, 24px);
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
   border-radius: var(--header-radius, 18px);
-  border: 1px solid var(--header-border, rgba(198, 181, 142, 0.35));
-  box-shadow: 0 24px 64px -16px rgba(54, 54, 56, 0.25);
-  padding: 24px 28px;
-  pointer-events: auto;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-8px);
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  background: rgba(248, 245, 237, 0.92);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 24px 60px -16px rgba(54, 54, 56, 0.22);
+  padding: 24px;
   z-index: 50;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.25) 60%),
-              var(--header-glass, rgba(248, 245, 237, 0.94));
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  backdrop-filter: blur(24px) saturate(160%);
+  pointer-events: auto;
 }
-
-.atelier-search-panel.is-open {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
+.atelier-search-panel.is-open { display: block; }
 .atelier-search-form {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 18px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid var(--gt-sand, #C6B58E);
+  border-bottom: 1px solid rgba(54, 54, 56, 0.15);
+  padding-bottom: 12px;
 }
-
 .atelier-search-form svg {
   width: 20px;
   height: 20px;
-  color: var(--header-accent, #4D351D);
+  color: var(--header-text, #363638);
+  margin-right: 12px;
 }
-
-.atelier-search-input {
+.atelier-search-form input[type="search"] {
   flex: 1;
-  border: 0;
   background: transparent;
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 15px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
   color: var(--header-text, #363638);
   outline: none;
 }
-
-.atelier-search-input::placeholder {
-  color: rgba(54, 54, 56, 0.5);
+.atelier-search-panel__close {
+  padding: 6px;
+  cursor: pointer;
 }
-
+.atelier-search-panel__close svg { width: 18px; height: 18px; }
+.atelier-search-idle {
+  margin-top: 18px;
+}
+.atelier-search-recents-h {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(54, 54, 56, 0.6);
+  margin-bottom: 10px;
+}
 .atelier-search-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  list-style: none;
-  margin: 12px 0 0;
-  padding: 0;
 }
-
-.atelier-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.atelier-search-chip {
   padding: 6px 14px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(198, 181, 142, 0.4);
-  font-size: 12.5px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(54, 54, 56, 0.1);
+  font-size: 13px;
   color: var(--header-text, #363638);
-  text-decoration: none;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
-
-.atelier-chip:hover {
+.atelier-search-chip:hover {
   background: #FFFFFF;
-  border-color: var(--header-accent, #4D351D);
-  color: var(--header-accent, #4D351D);
-}
-
-/* Live Search Results List */
-.atelier-search-results {
-  margin-top: 16px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 12px;
-  max-height: 380px;
-  overflow-y: auto;
-}
-
-.atelier-search-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  text-decoration: none;
-  color: inherit;
-  transition: background 0.2s ease;
-}
-
-.atelier-search-item:hover {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-.atelier-search-item img {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  border-radius: 6px;
-  background: #eee;
-}
-
-.atelier-search-item__info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  overflow: hidden;
-}
-
-.atelier-search-item__title {
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.atelier-search-item__price {
-  font-size: 12px;
-  color: var(--header-accent, #4D351D);
-  font-weight: 500;
+  border-color: rgba(54, 54, 56, 0.3);
 }
 
 /* ==========================================================================
-   Mobile Responsive Navigation & Drawer (< 990px)
+   Mobile Drawer & Scrim
    ========================================================================== */
-.atelier-burger {
-  display: none;
+.atelier-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 24, 20, 0.45);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.atelier-scrim.is-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-@media screen and (max-width: 989px) {
-  .atelier-header__bar {
-    padding: var(--gap-top-mobile, 10px) var(--gap-side-mobile, 10px) 0;
-  }
-
-  .atelier-header__pill {
-    min-height: 56px;
-    padding: 0 10px;
-    display: grid !important;
-    grid-template-columns: 1fr auto 1fr !important;
-    grid-template-areas: none !important;
-  }
-
-  .atelier-header__nav {
-    display: none !important;
-  }
-
-  .atelier-search-pill {
-    display: none !important;
-  }
-
-  .atelier-burger {
-    display: grid !important;
-  }
-
-  .atelier-header__left {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .atelier-header__center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .atelier-header__right {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 2px;
-  }
-
-  .atelier-desk-only {
-    display: none !important;
-  }
-}
-
-/* Mobile Slide-Out Drawer */
 .atelier-drawer {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
-  width: min(88vw, 380px);
-  background: var(--gt-warm-paper, #F8F5ED);
-  color: var(--header-text, #363638);
-  box-shadow: 24px 0 60px -20px rgba(54, 54, 56, 0.35);
+  width: min(88vw, 400px);
+  background: #F8F5ED;
+  z-index: 100;
+  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.25);
   transform: translateX(-102%);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 100;
   display: flex;
   flex-direction: column;
   pointer-events: auto;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
-
 .atelier-drawer.is-open {
   transform: translateX(0);
 }
-
-.atelier-drawer__top {
+.atelier-drawer__head {
+  padding: 18px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(198, 181, 142, 0.3);
+  border-bottom: 1px solid rgba(54, 54, 56, 0.08);
 }
-
 .atelier-drawer__body {
-  padding: 20px;
   flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.atelier-drawer__nav {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 4px;
 }
-
-.atelier-drawer__nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.atelier-drawer__nav-link {
+.atelier-drawer__link {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--header-text, #363638);
   border-radius: 8px;
-  font-size: 14.5px;
-  font-weight: 600;
-  color: var(--header-text, #363638);
-  text-decoration: none;
-  transition: background 0.2s ease;
+}
+.atelier-drawer__link:hover {
+  background: rgba(255, 255, 255, 0.6);
 }
 
-.atelier-drawer__nav-link:hover {
-  background: rgba(198, 181, 142, 0.15);
-  color: var(--header-accent, #4D351D);
-}
-
-.atelier-drawer__nav-link svg {
-  width: 14px;
-  height: 14px;
-  opacity: 0.6;
-}
-
-/* Mobile Quick Contact (Call & WhatsApp) */
-.atelier-drawer__contact {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.atelier-drawer__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--header-border, rgba(198, 181, 142, 0.4));
-  background: #FFFFFF;
-  color: var(--header-text, #363638);
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.atelier-drawer__btn--wa {
-  background: #25D366;
-  border-color: #25D366;
-  color: #FFFFFF;
-}
-
-.atelier-drawer__btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* Scrim / Backdrop */
-.atelier-scrim {
-  position: fixed;
-  inset: 0;
-  background: rgba(30, 24, 20, 0.45);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.35s ease, visibility 0.35s;
-  z-index: 90;
-  pointer-events: auto;
-}
-
-.atelier-scrim.is-visible {
-  opacity: 1;
-  visibility: visible;
+/* Clearances for non-banner pages */
+body:not(.template-index):not(.template-collection) #MainContent > .shopify-section:first-child:not(:has(.atelier-col-hero)):not(:has(.atelier-hero)):not(:has(.image-banner)):not(:has(.slideshow)) {
+  padding-top: calc(var(--header-height, 120px) + 24px) !important;
 }
