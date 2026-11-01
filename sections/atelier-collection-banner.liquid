@@ -13,8 +13,10 @@
   # Metafield collections list
   assign meta_tabs = collection.metafields.custom.collection_tabs.value | default: collection.metafields.custom.collection_tabs
   assign has_meta_tabs = false
-  if meta_tabs != blank and meta_tabs.size > 0
-    assign has_meta_tabs = true
+  if meta_tabs != blank
+    if meta_tabs.size > 0 or meta_tabs.count > 0
+      assign has_meta_tabs = true
+    endif
   endif
 
   # Fallback to section blocks if metafield has no collections
@@ -24,6 +26,13 @@
   endif
 
   assign show_tabs = section.settings.show_subcollections
+
+  assign render_tabs = false
+  if show_tabs
+    if has_meta_tabs or has_block_tabs
+      assign render_tabs = true
+    endif
+  endif
 -%}
 
 {%- style -%}
@@ -86,7 +95,7 @@
   </div>
 
   {%- comment -%} ==================== CIRCULAR SUB-COLLECTION TABS ==================== {%- endcomment -%}
-  {%- if show_tabs and has_meta_tabs or has_block_tabs -%}
+  {%- if render_tabs -%}
     <nav class="atelier-col-nav" aria-label="Sub-collection filters">
       <div class="atelier-col-nav__inner">
         {%- if section.settings.nav_heading != blank -%}
@@ -217,6 +226,10 @@
         </ul>
       </div>
     </nav>
+  {%- elsif request.design_mode and show_tabs -%}
+    <div style="padding: 24px 20px; text-align: center; background: #F8F5ED; border-bottom: 1px dashed #C6B58E; font-family: 'Inter', -apple-system, sans-serif; color: #4D351D; font-size: 13px;">
+      <strong>Circular Sub-Collection Tabs:</strong> Click <em>"+ Add"</em> next to <code>Collection Tabs</code> in Shopify Admin for this collection, or add <em>"Sub-Collection Tab"</em> blocks in the sidebar to preview tabs immediately.
+    </div>
   {%- endif -%}
 </section>
 
