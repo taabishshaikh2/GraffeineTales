@@ -10,16 +10,70 @@
 {
   "sections": {
     "banner": {
-      "type": "atelier-collection-banner",
+      "type": "main-collection-banner",
+      "disabled": true,
       "settings": {
+        "show_collection_description": true,
+        "show_collection_image": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "atelier_collection_banner_RnAYN4": {
+      "type": "atelier-collection-banner",
+      "blocks": {
+        "subcollection_tab_AVJfHB": {
+          "type": "subcollection_tab",
+          "settings": {
+            "collection": "",
+            "custom_title": "",
+            "custom_link": ""
+          }
+        },
+        "subcollection_tab_eeNFyf": {
+          "type": "subcollection_tab",
+          "settings": {
+            "collection": "",
+            "custom_title": "",
+            "custom_link": ""
+          }
+        },
+        "subcollection_tab_MNC4KY": {
+          "type": "subcollection_tab",
+          "settings": {
+            "collection": "",
+            "custom_title": "",
+            "custom_link": ""
+          }
+        },
+        "subcollection_tab_C7DCRY": {
+          "type": "subcollection_tab",
+          "settings": {
+            "collection": "",
+            "custom_title": "",
+            "custom_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "subcollection_tab_AVJfHB",
+        "subcollection_tab_eeNFyf",
+        "subcollection_tab_MNC4KY",
+        "subcollection_tab_C7DCRY"
+      ],
+      "name": "Atelier Collection Banner",
+      "settings": {
+        "image_position": "center center",
+        "hero_height_desktop": 360,
+        "hero_height_mobile": 260,
+        "overlay_opacity": 85,
+        "text_alignment": "center",
         "show_badge": true,
         "badge_text": "WEBSITE EXCLUSIVE",
         "show_description": true,
         "show_subcollections": true,
-        "hero_height_desktop": 360,
-        "hero_height_mobile": 260,
-        "overlay_opacity": 85,
-        "text_alignment": "center"
+        "nav_heading": "",
+        "avatar_size_desktop": 84,
+        "avatar_size_mobile": 68
       }
     },
     "product-grid": {
@@ -45,6 +99,7 @@
   },
   "order": [
     "banner",
+    "atelier_collection_banner_RnAYN4",
     "product-grid"
   ]
 }
