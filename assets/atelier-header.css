@@ -1099,7 +1099,8 @@ atelier-header button {
   height: 14px !important;
   stroke: currentColor !important;
 }
-.atelier-drawer__accordion-item.is-open .atelier-drawer__chev {
+.atelier-drawer__accordion-item.is-open .atelier-drawer__chev,
+.atelier-drawer__accordion-item[open] .atelier-drawer__chev {
   transform: rotate(90deg) !important;
   color: #4D351D !important;
 }
@@ -1107,7 +1108,8 @@ atelier-header button {
   display: none !important;
   padding: 4px 0 12px 14px !important;
 }
-.atelier-drawer__accordion-item.is-open .atelier-drawer__accordion-body {
+.atelier-drawer__accordion-item.is-open > .atelier-drawer__accordion-body,
+.atelier-drawer__accordion-item[open] > .atelier-drawer__accordion-body {
   display: block !important;
 }
 .atelier-drawer__sublist {

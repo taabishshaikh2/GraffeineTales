@@ -224,17 +224,27 @@ if (!customElements.get('atelier-header')) {
       if (!drawer) return;
 
       drawer.querySelectorAll('[data-accordion-trigger]').forEach((trigger) => {
+        if (trigger.__gtBound) return;
+        trigger.__gtBound = true;
         trigger.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          const item = trigger.closest('[data-drawer-accordion]');
+          const item = trigger.closest('[data-drawer-accordion], .atelier-drawer__accordion-item, details');
           if (item) {
-            const isOpen = item.classList.contains('is-open');
-            // Optional: close other accordions at same level for clean UI
-            drawer.querySelectorAll('[data-drawer-accordion].is-open').forEach((other) => {
-              if (other !== item) other.classList.remove('is-open');
+            const isOpen = item.classList.contains('is-open') || item.hasAttribute('open');
+            drawer.querySelectorAll('[data-drawer-accordion], .atelier-drawer__accordion-item, details').forEach((other) => {
+              if (other !== item) {
+                other.classList.remove('is-open');
+                other.removeAttribute('open');
+              }
             });
-            item.classList.toggle('is-open', !isOpen);
+            if (isOpen) {
+              item.classList.remove('is-open');
+              item.removeAttribute('open');
+            } else {
+              item.classList.add('is-open');
+              item.setAttribute('open', '');
+            }
           }
         });
       });
@@ -327,14 +337,15 @@ if (!customElements.get('atelier-header')) {
     }
 
     openMobileDrawer() {
-      const drawer = this.drawer || document.getElementById('atelier-mobile-drawer');
-      const scrim = this.scrim || document.querySelector('.atelier-scrim');
-      if (drawer) {
-        drawer.classList.add('is-open');
-        drawer.setAttribute('aria-hidden', 'false');
+      this.drawer = this.drawer || document.getElementById('atelier-mobile-drawer');
+      this.scrim = this.scrim || document.querySelector('.atelier-scrim, [data-scrim]');
+      if (this.drawer) {
+        this.drawer.classList.add('is-open');
+        this.drawer.setAttribute('aria-hidden', 'false');
+        this.setupDrawerAccordions();
       }
-      if (scrim) {
-        scrim.classList.add('is-visible');
+      if (this.scrim) {
+        this.scrim.classList.add('is-visible');
       }
       document.body.style.overflow = 'hidden';
       document.documentElement.classList.add('atelier-drawer-open');
@@ -439,16 +450,77 @@ if (!customElements.get('atelier-header')) {
     }
   }
 
-  // Global listener for hamburger buttons
+  // Bulletproof delegated interactions for mobile drawer & accordions
   document.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-open-drawer]');
-    if (btn) {
+    // 1. Accordion trigger click inside mobile drawer
+    const accordionTrigger = e.target.closest('#atelier-mobile-drawer [data-accordion-trigger]');
+    if (accordionTrigger) {
+      e.preventDefault();
+      e.stopPropagation();
+      const item = accordionTrigger.closest('[data-drawer-accordion], .atelier-drawer__accordion-item, details');
+      if (item) {
+        const isOpen = item.classList.contains('is-open') || item.hasAttribute('open');
+        const drawer = document.getElementById('atelier-mobile-drawer');
+        if (drawer) {
+          drawer.querySelectorAll('[data-drawer-accordion], .atelier-drawer__accordion-item, details').forEach((other) => {
+            if (other !== item) {
+              other.classList.remove('is-open');
+              other.removeAttribute('open');
+            }
+          });
+        }
+        if (isOpen) {
+          item.classList.remove('is-open');
+          item.removeAttribute('open');
+        } else {
+          item.classList.add('is-open');
+          item.setAttribute('open', '');
+        }
+      }
+      return;
+    }
+
+    // 2. Open drawer button
+    const openBtn = e.target.closest('[data-open-drawer]');
+    if (openBtn) {
       e.preventDefault();
       e.stopPropagation();
       const hdr = document.querySelector('atelier-header');
       if (hdr && typeof hdr.openMobileDrawer === 'function') {
         hdr.openMobileDrawer();
       }
+      return;
+    }
+
+    // 3. Close drawer button
+    const closeBtn = e.target.closest('#atelier-mobile-drawer [data-close-drawer], [data-close-drawer]');
+    if (closeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const hdr = document.querySelector('atelier-header');
+      if (hdr && typeof hdr.closeMobileDrawer === 'function') {
+        hdr.closeMobileDrawer();
+      }
+      return;
+    }
+
+    // 4. Scrim click
+    const scrim = e.target.closest('.atelier-scrim, [data-scrim]');
+    if (scrim && scrim.classList.contains('is-visible')) {
+      e.preventDefault();
+      e.stopPropagation();
+      const hdr = document.querySelector('atelier-header');
+      if (hdr) {
+        if (typeof hdr.closeMobileDrawer === 'function') hdr.closeMobileDrawer();
+        if (typeof hdr.closeMega === 'function') hdr.closeMega();
+        if (typeof hdr.closeSearch === 'function') hdr.closeSearch();
+      }
+      return;
+    }
+
+    // 5. Clicks inside drawer never close it
+    if (e.target.closest('#atelier-mobile-drawer')) {
+      e.stopPropagation();
     }
   });
 
