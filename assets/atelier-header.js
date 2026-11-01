@@ -120,6 +120,7 @@ if (!customElements.get('atelier-header')) {
       this.querySelectorAll('[data-open-drawer]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
+          e.stopPropagation();
           this.openMobileDrawer();
         });
       });
@@ -285,10 +286,10 @@ if (!customElements.get('atelier-header')) {
         .catch(() => {});
     }
 
-    openMobileDrawer() {
+        openMobileDrawer() {
       this.closeAll();
-      const drawer = this.querySelector('[data-mobile-drawer]') || document.querySelector('[data-mobile-drawer]');
-      const scrim = this.querySelector('[data-scrim]') || document.querySelector('[data-scrim]');
+      const drawer = document.getElementById('atelier-mobile-drawer') || this.querySelector('[data-mobile-drawer]');
+      const scrim = document.querySelector('[data-scrim], .atelier-scrim') || this.querySelector('[data-scrim]');
       if (drawer) {
         drawer.classList.add('is-open');
         drawer.setAttribute('aria-hidden', 'false');
@@ -304,8 +305,8 @@ if (!customElements.get('atelier-header')) {
       this.querySelectorAll('[data-mega-panel].is-open').forEach((p) => p.classList.remove('is-open'));
       this.querySelectorAll('[data-mega-trigger][aria-expanded="true"]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
       if (this.searchPanel) this.searchPanel.classList.remove('is-open');
-      const drawer = this.querySelector('[data-mobile-drawer]') || document.querySelector('[data-mobile-drawer]');
-      const scrim = this.querySelector('[data-scrim]') || document.querySelector('[data-scrim]');
+      const drawer = document.getElementById('atelier-mobile-drawer') || this.querySelector('[data-mobile-drawer]');
+      const scrim = document.querySelector('[data-scrim], .atelier-scrim') || this.querySelector('[data-scrim]');
       if (drawer) {
         drawer.classList.remove('is-open');
         drawer.setAttribute('aria-hidden', 'true');
