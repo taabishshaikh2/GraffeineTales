@@ -37,19 +37,33 @@ for (const file of liquidFiles) {
   if (match) {
     try {
       const parsed = JSON.parse(match[1]);
-      (parsed.settings || []).forEach(s => {
+      const validateSetting = (s, loc) => {
         if (s.default === '') {
-          console.error(`[FAIL] ${file}: setting "${s.id}" has empty string default!`);
+          console.error(`[FAIL] ${file}: ${loc} "${s.id}" has empty string default!`);
           hasError = true;
         }
-      });
-      (parsed.blocks || []).forEach(b => {
-        (b.settings || []).forEach(s => {
-          if (s.default === '') {
-            console.error(`[FAIL] ${file}: block "${b.type}" setting "${s.id}" has empty string default!`);
+        if (s.type === 'range') {
+          const range = s.max - s.min;
+          if (s.step && range % s.step !== 0) {
+            console.error(`[FAIL] ${file}: ${loc} "${s.id}" step ${s.step} does not evenly divide range (${s.max} - ${s.min} = ${range})!`);
             hasError = true;
           }
-        });
+          if (s.default !== undefined) {
+            if (s.default < s.min || s.default > s.max) {
+              console.error(`[FAIL] ${file}: ${loc} "${s.id}" default ${s.default} is out of range [${s.min}, ${s.max}]!`);
+              hasError = true;
+            }
+            if (s.step && (s.default - s.min) % s.step !== 0) {
+              console.error(`[FAIL] ${file}: ${loc} "${s.id}" (default ${s.default} - min ${s.min}) is not divisible by step ${s.step}!`);
+              hasError = true;
+            }
+          }
+        }
+      };
+
+      (parsed.settings || []).forEach(s => validateSetting(s, 'setting'));
+      (parsed.blocks || []).forEach(b => {
+        (b.settings || []).forEach(s => validateSetting(s, `block "${b.type}" setting`));
       });
       // console.log(`[PASS] Schema valid: ${file}`);
     } catch (e) {
