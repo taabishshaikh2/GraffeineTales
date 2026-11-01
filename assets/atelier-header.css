@@ -393,9 +393,19 @@ atelier-header button {
    DESKTOP LAYOUT 1: TWO LINES (two_rows)
    ========================================================================== */
 @media (min-width: 990px) {
+  .atelier-header__mobile-controls,
   .atelier-burger,
   .atelier-search-btn--mobile {
     display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    top: -9999px !important;
+    left: -9999px !important;
   }
   .atelier-search-btn--desktop {
     display: none !important;
@@ -406,7 +416,7 @@ atelier-header button {
     display: grid !important;
     grid-template-columns: 1fr auto 1fr !important;
     grid-template-areas: "left center right" "nav nav nav" !important;
-    padding: 8px 20px 6px !important;
+    padding: 5px 20px 4px !important;
     align-items: center !important;
   }
   .layout--two_rows .atelier-header__left,
@@ -418,6 +428,9 @@ atelier-header button {
     display: inline-flex !important;
     grid-area: left !important;
     justify-self: start !important;
+    height: 34px !important;
+    padding: 0 14px !important;
+    font-size: 12.5px !important;
   }
   .layout--two_rows .atelier-header__center,
   .layout--two-rows .atelier-header__center {
@@ -425,6 +438,9 @@ atelier-header button {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+  }
+  .layout--two_rows .atelier-logo {
+    min-height: 34px !important;
   }
   .layout--two_rows .atelier-header__right,
   .layout--two-rows .atelier-header__right {
@@ -434,15 +450,44 @@ atelier-header button {
     align-items: center !important;
     gap: 4px !important;
   }
+  .layout--two_rows .atelier-header__right .atelier-search-icon,
+  .layout--two-rows .atelier-header__right .atelier-search-icon,
+  .layout--two_rows .atelier-search-btn--desktop,
+  .layout--two-rows .atelier-search-btn--desktop {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
   .layout--two_rows .atelier-header__nav,
   .layout--two-rows .atelier-header__nav {
     grid-area: nav !important;
     display: flex !important;
     justify-content: center !important;
     width: 100% !important;
-    margin-top: 8px !important;
-    padding-top: 4px !important;
+    margin-top: 4px !important;
+    padding-top: 2px !important;
     border-top: 1px solid var(--header-line, rgba(54, 54, 56, 0.1)) !important;
+  }
+  .layout--two_rows .atelier-header__nav-list {
+    gap: 2px 14px !important;
+  }
+  .layout--two_rows .atelier-nav__link {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    line-height: 1.15 !important;
+  }
+  .atelier-header__pill .atelier-icon-btn {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  .atelier-header__pill .atelier-icon-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .atelier-account-btn {
+    display: grid !important;
   }
 }
 
@@ -610,93 +655,75 @@ atelier-header button {
 }
 
 /* ==========================================================================
-   MOBILE HEADER (< 990px) — EXACT URBANDECO 2 - 1 - 2 LAYOUT
-   Left: [ ≡ ] [ 🔍 ] (Hamburger + Search Icon Side-by-side)
-   Center: Centered Logo with independent Mobile Sizing Controls
-   Right: [ ♡ ] [ 🛍️ ] (Wishlist + Cart ONLY, ZERO Search/Account Icons)
+   MOBILE HEADER (< 990px) — Symmetrical 2 - 1 - 2 Pure Flexbox Layout
+   Left: [ ≡ ] [ 🔍 ] (Hamburger + Search, 76px locked)
+   Center: Centered Logo
+   Right: [ ♡ ] [ 🛍️ ] (Wishlist + Cart, 76px locked)
    ========================================================================== */
 @media screen and (max-width: 989px) {
   .atelier-header__bar {
-    padding: var(--gap-top-mobile, 10px) var(--gap-side-mobile, 12px) 0 !important;
+    padding: var(--gap-top-mobile, 8px) var(--gap-side-mobile, 10px) 0 !important;
   }
   .atelier-header__pill {
     display: flex !important;
+    flex-direction: row !important;
     align-items: center !important;
     justify-content: space-between !important;
     width: 100% !important;
     min-height: 52px !important;
-    padding: 0 12px !important;
-    gap: 8px !important;
-    border-radius: var(--header-radius, 22px) !important;
+    height: 52px !important;
+    padding: 0 10px !important;
+    box-sizing: border-box !important;
+    grid-template-columns: none !important;
+    grid-template-areas: none !important;
   }
 
-  /* LEFT: Hamburger + Search Icon Buttons STRICTLY SIDE-BY-SIDE */
+  /* LEFT: Exactly 2 icons (Hamburger + Search) locked to 76px */
   .atelier-header__left {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
-    flex: 0 0 auto !important;
-    gap: 6px !important;
-    min-width: 0 !important;
+    flex: 0 0 76px !important;
+    width: 76px !important;
+    min-width: 76px !important;
+    max-width: 76px !important;
+    gap: 4px !important;
+    margin: 0 !important;
+    padding: 0 !important;
     overflow: visible !important;
   }
-  .atelier-burger {
+  .atelier-header__mobile-controls {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .atelier-burger,
+  .atelier-search-btn--mobile {
     display: grid !important;
     place-items: center !important;
     width: 36px !important;
     height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    flex: 0 0 36px !important;
     padding: 0 !important;
     margin: 0 !important;
     border: none !important;
+    border-radius: 50% !important;
     background: transparent !important;
     color: var(--header-text, #363638) !important;
-    border-radius: 50% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    cursor: pointer !important;
   }
-  .atelier-burger svg {
+  .atelier-burger svg,
+  .atelier-search-btn--mobile svg {
     display: block !important;
     width: 20px !important;
     height: 20px !important;
     stroke: currentColor !important;
-  }
-
-  .atelier-header__left .atelier-search-btn,
-  .atelier-header__left .atelier-search-btn--mobile {
-    display: grid !important;
-    place-items: center !important;
-    width: 36px !important;
-    height: 36px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border: none !important;
-    background: transparent !important;
-    color: var(--header-text, #363638) !important;
-    border-radius: 50% !important;
-  }
-  .atelier-header__left .atelier-search-btn svg,
-  .atelier-header__left .atelier-search-btn--mobile svg {
-    display: block !important;
-    width: 19px !important;
-    height: 19px !important;
-    stroke: currentColor !important;
-  }
-
-  /* HIDE Desktop Elements on Mobile */
-  .atelier-search-pill,
-  .atelier-header__nav {
-    display: none !important;
-  }
-
-  /* CRITICAL: GUARANTEE Search is NEVER on the right on mobile */
-  .atelier-header__right .atelier-search-btn,
-  .atelier-header__right .atelier-search-btn--desktop,
-  .atelier-search-btn--desktop {
-    display: none !important;
-    visibility: hidden !important;
-    width: 0 !important;
-    height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    pointer-events: none !important;
   }
 
   /* CENTER: Centered Logo */
@@ -709,53 +736,101 @@ atelier-header button {
     padding: 0 4px !important;
     margin: 0 !important;
     text-align: center !important;
+    overflow: visible !important;
   }
-  .atelier-logo {
+  .atelier-header__center .atelier-logo {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     gap: 6px !important;
     max-width: 100% !important;
-    min-height: unset !important;
+    min-width: 0 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
   }
-  .atelier-logo img {
+  .atelier-header__center .atelier-logo img {
+    display: block !important;
     width: var(--logo-width-mobile, 95px) !important;
     max-width: var(--logo-width-mobile, 95px) !important;
     height: auto !important;
   }
-  .atelier-logo__text {
+  .atelier-header__center .atelier-logo__text {
+    font-family: 'DM Serif Display', Georgia, serif !important;
     font-size: var(--logo-font-size-mobile, 13px) !important;
     font-weight: 700 !important;
     letter-spacing: 0.08em !important;
     white-space: nowrap !important;
+    text-transform: uppercase !important;
+    color: var(--header-text, #363638) !important;
     overflow: visible !important;
     text-overflow: clip !important;
   }
-  .atelier-cup {
-    height: var(--cup-size-mobile, 22px) !important;
+  .atelier-header__center .atelier-cup {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     width: auto !important;
+    height: var(--cup-size-mobile, 22px) !important;
+    flex-shrink: 0 !important;
   }
-  .atelier-cup img {
-    height: var(--cup-size-mobile, 22px) !important;
+  .atelier-header__center .atelier-cup img {
     width: auto !important;
+    height: var(--cup-size-mobile, 22px) !important;
+    object-fit: contain !important;
   }
 
-  /* RIGHT: ONLY Wishlist + Cart */
+  /* RIGHT: Exactly 2 icons (Wishlist + Cart) locked to 76px */
   .atelier-header__right {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    flex: 0 0 auto !important;
+    flex: 0 0 76px !important;
+    width: 76px !important;
+    min-width: 76px !important;
+    max-width: 76px !important;
     gap: 4px !important;
-    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   .atelier-header__right .atelier-icon-btn {
+    display: grid !important;
+    place-items: center !important;
     width: 36px !important;
     height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    flex: 0 0 36px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    color: var(--header-text, #363638) !important;
+    border: none !important;
   }
   .atelier-header__right .atelier-icon-btn svg {
+    display: block !important;
     width: 19px !important;
     height: 19px !important;
+    stroke: currentColor !important;
+  }
+
+  /* HIDE ALL NON-MOBILE / EXTRA ICONS */
+  .atelier-search-pill,
+  .atelier-header__nav,
+  .atelier-desk-only,
+  .atelier-account-btn,
+  .atelier-header__right .atelier-search-icon,
+  .atelier-header__right .atelier-search-btn,
+  .atelier-header__right .atelier-search-btn--desktop,
+  .atelier-header__right .atelier-account-btn {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    top: -9999px !important;
   }
 }
 
@@ -1171,160 +1246,4 @@ atelier-header button {
 .atelier-scrim.is-visible {
   opacity: 1 !important;
   pointer-events: auto !important;
-}
-
-/* GRAFFEINE TALES — MOBILE HEADER + ATELIER DRAWER FIX */
-@media(max-width:989px){
- .atelier-header__pill{display:grid!important;grid-template-columns:minmax(72px,1fr) minmax(0,auto) minmax(72px,1fr)!important;grid-template-areas:"left center right"!important;align-items:center!important;min-height:58px!important;padding:6px 10px!important;gap:2px!important}
- .atelier-header__left{grid-area:left!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:2px!important;min-width:0!important}
- .atelier-burger,.atelier-search-btn--mobile{display:grid!important;place-items:center!important;flex:0 0 36px!important;width:36px!important;height:36px!important;padding:0!important;margin:0!important}
- .atelier-search-btn--mobile svg,.atelier-burger svg{width:19px!important;height:19px!important}
- .atelier-header__center{grid-area:center!important;display:flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;padding:0 3px!important;overflow:visible!important}
- .atelier-logo{display:inline-flex!important;flex:0 0 auto!important;align-items:center!important;justify-content:center!important;gap:5px!important;max-width:none!important;min-width:max-content!important;white-space:nowrap!important;overflow:visible!important}
- .atelier-logo__text{font-size:var(--logo-font-size-mobile,13px)!important;white-space:nowrap!important;overflow:visible!important;text-overflow:unset!important;max-width:none!important;letter-spacing:.055em!important}
- .atelier-logo img{width:var(--logo-width-mobile,90px)!important;max-width:none!important;flex:0 0 auto!important}
- .atelier-cup,.atelier-cup img{height:var(--cup-size-mobile,22px)!important;width:auto!important;max-height:var(--cup-size-mobile,22px)!important;flex:0 0 auto!important}
- .atelier-header__right{grid-area:right!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:2px!important;min-width:72px!important}
- .atelier-header__right .atelier-icon-btn{width:36px!important;height:36px!important;flex:0 0 36px!important}
- .atelier-header__right .atelier-icon-btn svg{width:19px!important;height:19px!important}
- .atelier-header__right .atelier-search-icon,.atelier-header__right .atelier-search-btn,.atelier-header__right .atelier-search-btn--desktop{display:none!important;width:0!important;height:0!important;visibility:hidden!important;padding:0!important;margin:0!important;pointer-events:none!important}
- .atelier-header__right .atelier-desk-only{display:none!important}
- .atelier-header__nav,.atelier-search-pill{display:none!important}
-}
-#atelier-mobile-drawer.atelier-drawer{display:flex!important;flex-direction:column!important;height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;background:#FAF8F5!important;color:#363638!important}
-#atelier-mobile-drawer,#atelier-mobile-drawer *{box-sizing:border-box!important;list-style:none!important}
-#atelier-mobile-drawer .atelier-drawer__body{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain!important;padding:16px 20px 20px!important}
-#atelier-mobile-drawer a,#atelier-mobile-drawer a:link,#atelier-mobile-drawer a:visited,#atelier-mobile-drawer a:hover,#atelier-mobile-drawer a:active,#atelier-mobile-drawer a:focus{color:inherit!important;text-decoration:none!important}
-#atelier-mobile-drawer .atelier-drawer__promo-banner{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:8px!important;padding:17px 18px!important;margin:0 0 18px!important;border-radius:13px!important;background:linear-gradient(135deg,#4D351D 0%,#2E2118 100%)!important;color:#fff!important}
-#atelier-mobile-drawer .atelier-drawer__promo-h{margin:0!important;color:#fff!important;font-family:'DM Serif Display',Georgia,serif!important;font-size:17px!important;line-height:1.25!important}
-#atelier-mobile-drawer .atelier-drawer__promo-cta{display:inline-flex!important;align-items:center!important;gap:6px!important;padding:7px 11px!important;border-radius:999px!important;background:#F8F5ED!important;color:#4D351D!important;font-size:11px!important;font-weight:700!important}
-#atelier-mobile-drawer .atelier-drawer__row-link{display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:48px!important;padding:12px 2px!important;border-bottom:1px solid rgba(54,54,56,.08)!important;color:#363638!important;font-size:14px!important;font-weight:600!important}
-#atelier-mobile-drawer .atelier-drawer__chev,#atelier-mobile-drawer .atelier-drawer__chev svg{display:inline-grid!important;place-items:center!important;width:14px!important;min-width:14px!important;height:14px!important;min-height:14px!important;max-width:14px!important;max-height:14px!important;flex:0 0 14px!important}
-#atelier-mobile-drawer .atelier-drawer__sublist{margin:0!important;padding:3px 0 8px 14px!important;border-left:1px solid rgba(54,54,56,.16)!important}
-#atelier-mobile-drawer .atelier-drawer__sublink{display:block!important;padding:7px 0!important;color:rgba(54,54,56,.75)!important;font-size:13px!important}
-#atelier-mobile-drawer .atelier-drawer__footer{position:relative!important;flex:0 0 auto!important;width:100%!important;margin-top:auto!important;padding:14px 20px max(16px,env(safe-area-inset-bottom))!important;border-top:1px solid rgba(54,54,56,.1)!important;background:#F8F5ED!important;box-shadow:0 -8px 24px rgba(54,54,56,.05)!important;display:flex!important;flex-direction:column!important;gap:11px!important}
-#atelier-mobile-drawer .atelier-drawer__account-card{display:flex!important;align-items:center!important;gap:11px!important;width:100%!important;min-height:58px!important;padding:9px 12px!important;border:1px solid rgba(77,53,29,.15)!important;border-radius:12px!important;background:#fff!important;color:#363638!important}
-#atelier-mobile-drawer .atelier-drawer__account-avatar{display:grid!important;place-items:center!important;width:36px!important;height:36px!important;flex:0 0 36px!important;border-radius:50%!important;background:#F0E9DC!important;color:#4D351D!important}
-#atelier-mobile-drawer .atelier-drawer__account-avatar svg{width:18px!important;height:18px!important}
-#atelier-mobile-drawer .atelier-drawer__account-copy{display:flex!important;flex:1 1 auto!important;flex-direction:column!important;gap:3px!important;min-width:0!important}
-#atelier-mobile-drawer .atelier-drawer__account-copy strong{color:#363638!important;font-size:13px!important;font-weight:700!important}
-#atelier-mobile-drawer .atelier-drawer__account-copy small{color:rgba(54,54,56,.65)!important;font-size:11px!important}
-#atelier-mobile-drawer .atelier-drawer__account-arrow{color:#4D351D!important;font-size:20px!important}
-#atelier-mobile-drawer .atelier-drawer__btn--wa{display:flex!important;align-items:center!important;justify-content:center!important;gap:9px!important;width:100%!important;min-height:46px!important;border:1px solid #25D366!important;border-radius:999px!important;background:#25D366!important;color:#fff!important;font-size:13px!important;font-weight:700!important}
-#atelier-mobile-drawer .atelier-drawer__footer-tagline{margin:0!important;color:rgba(54,54,56,.55)!important;font-size:10px!important;text-align:center!important}
-@media(max-width:480px){#atelier-mobile-drawer.atelier-drawer{width:min(88vw,380px)!important}#atelier-mobile-drawer .atelier-drawer__tiles-grid{gap:8px!important}#atelier-mobile-drawer .atelier-photo-tile{min-height:116px!important}}
-
-/* HEADER LAYOUT REPAIR — stable mobile grid + compact desktop spacing */
-@media screen and (max-width: 989px) {
-  .atelier-header__bar {
-    padding: 8px 10px 0 !important;
-  }
-  .atelier-header__pill {
-    display: grid !important;
-    grid-template-columns: 76px minmax(0, 1fr) 76px !important;
-    grid-template-areas: "left center right" !important;
-    align-items: center !important;
-    justify-content: stretch !important;
-    column-gap: 4px !important;
-    min-height: 56px !important;
-    padding: 5px 8px !important;
-    width: 100% !important;
-  }
-  .atelier-header__left {
-    grid-area: left !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 2px !important;
-    width: 76px !important;
-    min-width: 76px !important;
-    overflow: visible !important;
-  }
-  .atelier-header__left .atelier-burger,
-  .atelier-header__left .atelier-search-btn--mobile {
-    display: grid !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    place-items: center !important;
-    flex: 0 0 36px !important;
-    width: 36px !important;
-    min-width: 36px !important;
-    height: 36px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  .atelier-header__center {
-    grid-area: center !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-width: 0 !important;
-    width: 100% !important;
-    padding: 0 !important;
-    overflow: visible !important;
-  }
-  .atelier-header__center .atelier-logo {
-    max-width: 100% !important;
-    min-width: 0 !important;
-    gap: 4px !important;
-  }
-  .atelier-header__center .atelier-logo__text {
-    font-size: var(--logo-font-size-mobile, 13px) !important;
-    letter-spacing: .08em !important;
-  }
-  .atelier-header__center .atelier-logo img {
-    width: var(--logo-width-mobile, 112px) !important;
-  }
-  .atelier-header__right {
-    grid-area: right !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 2px !important;
-    width: 76px !important;
-    min-width: 76px !important;
-  }
-  .atelier-header__right .atelier-icon-btn {
-    display: grid !important;
-    place-items: center !important;
-    flex: 0 0 36px !important;
-    width: 36px !important;
-    height: 36px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  .atelier-header__right .atelier-search-icon,
-  .atelier-header__right .atelier-search-btn,
-  .atelier-header__right .atelier-search-btn--desktop,
-  .atelier-header__right .atelier-desk-only {
-    display: none !important;
-  }
-  .atelier-header__nav,
-  .atelier-search-pill {
-    display: none !important;
-  }
-}
-
-@media screen and (min-width: 990px) {
-  .atelier-header__bar {
-    padding-top: 8px !important;
-    padding-bottom: 0 !important;
-  }
-  .atelier-header__pill {
-    min-height: 0 !important;
-    padding-top: 8px !important;
-    padding-bottom: 8px !important;
-  }
-  .atelier-header__nav-list {
-    align-items: center !important;
-    min-height: 0 !important;
-  }
-  .atelier-nav__link {
-    padding-top: 7px !important;
-    padding-bottom: 7px !important;
-    line-height: 1.15 !important;
-  }
-  .atelier-logo {
-    min-height: 34px !important;
-  }
 }
