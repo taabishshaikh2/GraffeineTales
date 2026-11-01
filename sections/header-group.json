@@ -51,8 +51,8 @@
         "show_country_selector": true,
         "announcement_visibility": "all",
         "logo_text": "GRAFFEINE TALES",
-        "logo_width": 170,
-        "logo_width_mobile": 100,
+        "logo_width": 160,
+        "logo_width_mobile": 90,
         "logo_h1": false,
         "logo_link": "",
         "show_cup": true,
@@ -105,7 +105,11 @@
         "whatsapp": "919876543210",
         "m_hours": "Mon–Sat 10am–7pm",
         "drawer_menu": "",
-        "tagline": "Artful Things. Thoughtful Living."
+        "tagline": "Artful Things. Thoughtful Living.",
+        "logo_font_size": 20,
+        "logo_font_size_mobile": 13,
+        "cup_size_desktop": 34,
+        "cup_size_mobile": 22
       }
     },
     "mobile_bottom_nav": {
