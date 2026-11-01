@@ -1,19 +1,92 @@
-/* ==========================================================================
-   Graffeine Tales — Premium Frosted Glassmorphic Header System
-   Exact reproduction of UrbanDeco Reference Architecture & Interaction Patterns
-   ========================================================================== */
 
-:root {
-  --gt-warm-paper: #F8F5ED;
-  --gt-espresso: #363638;
-  --gt-logo-cream: #E9DFC2;
-  --gt-sand: #C6B58E;
-  --gt-deep-coffee: #4D351D;
-  --gt-cream-card: #FDFBF7;
+  .atelier-header-section {
+    --ann-bg: inherit;
+    --ann-color: inherit;
+    --ann-size: inheritpx;
+    --ann-speed: inherits;
+
+    --header-glass: inherit;
+    --header-solid: inherit;
+    --header-text: inherit;
+    --header-accent: inherit;
+    --header-border: inherit;
+    --header-line: inherit;
+    --header-radius: inheritpx;
+    --header-blur: inheritpx;
+
+    --gap-top: inheritpx;
+    --gap-side: inheritpx;
+    --gap-top-mobile: inheritpx;
+    --gap-side-mobile: inheritpx;
+
+    --logo-width: inheritpx;
+    --logo-font-size: inheritpx;
+    --cup-size-desktop: inheritpx;
+    --logo-width-mobile: inheritpx;
+    --logo-font-size-mobile: inheritpx;
+    --cup-size-mobile: inheritpx;
+
+    --menu-size: inheritpx;
+    --menu-weight: inherit;
+    --menu-transform: inherit;
+    --menu-letter-spacing: inheritpx;
+    --icon-size: inheritpx;
+  }
+
+/* ==========================================================================
+   GRAFFEINE TALES — ZERO-TOLERANCE BULLET & FOUC RESETS
+   ========================================================================== */
+.atelier-header-section ul,
+.atelier-header-section ol,
+.atelier-header-section li,
+.atelier-header-section summary,
+.atelier-header-section details,
+.atelier-header,
+.atelier-header ul,
+.atelier-header ol,
+.atelier-header li,
+.atelier-header summary,
+.atelier-header details,
+.atelier-drawer,
+.atelier-drawer ul,
+.atelier-drawer ol,
+.atelier-drawer li,
+.atelier-drawer summary,
+.atelier-drawer details {
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.atelier-header-section summary::-webkit-details-marker,
+.atelier-header-section summary::marker,
+.atelier-drawer summary::-webkit-details-marker,
+.atelier-drawer summary::marker {
+  display: none !important;
+  content: '' !important;
+}
+
+.atelier-drawer svg {
+  box-sizing: content-box !important;
+}
+
+/* Constrain drawer chevrons strictly to 14px */
+.atelier-drawer summary svg,
+.atelier-drawer .atelier-drawer__row-link svg,
+.atelier-drawer details svg {
+  width: 14px !important;
+  max-width: 14px !important;
+  min-width: 14px !important;
+  height: 14px !important;
+  max-height: 14px !important;
+  min-height: 14px !important;
+  flex: 0 0 14px !important;
+  display: block !important;
 }
 
 /* ==========================================================================
-   Announcement Bar (Top Strip)
+   ANNOUNCEMENT BAR
    ========================================================================== */
 .atelier-announcement {
   width: 100%;
@@ -22,91 +95,72 @@
   background-color: var(--ann-bg, #1E1814);
   color: var(--ann-color, #F8F5ED);
   font-family: 'Inter', -apple-system, sans-serif;
-  font-size: var(--ann-size, 12px);
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  padding: 8px 16px;
   overflow: hidden;
-  pointer-events: auto;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-
 .atelier-announcement__inner {
-  max-width: 1400px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: center;
+  min-height: 36px;
+  padding: 6px 20px;
+  position: relative;
 }
-
-.atelier-announcement__content {
-  flex: 1;
-  text-align: center;
+.atelier-announcement__marquee {
+  width: 100%;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
 }
-.atelier-announcement__content--left { text-align: left; }
-.atelier-announcement__content--center { text-align: center; }
-.atelier-announcement__content--right { text-align: right; }
-
-.atelier-announcement__link {
+.atelier-announcement__track {
+  display: inline-flex;
+  align-items: center;
+  gap: 36px;
+}
+.atelier-announcement__track.has-marquee {
+  animation: atelierMarquee var(--ann-speed, 25s) linear infinite;
+}
+.atelier-announcement:hover .atelier-announcement__track.has-marquee {
+  animation-play-state: paused;
+}
+.atelier-announcement__text {
+  font-size: var(--ann-size, 11px);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: inherit;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  transition: opacity 0.2s ease;
 }
-.atelier-announcement__link:hover { opacity: 0.85; }
-
-.atelier-announcement--marquee .atelier-announcement__content {
-  display: flex;
-  white-space: nowrap;
-  overflow: hidden;
-}
-.atelier-announcement__track {
-  display: inline-flex;
-  white-space: nowrap;
-  animation: atelierMarquee var(--ann-speed, 25s) linear infinite;
-  gap: 40px;
-  padding-left: 100%;
-}
-@keyframes atelierMarquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
-}
-
 .atelier-announcement__country {
+  position: absolute;
+  right: 20px;
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 11px;
-  opacity: 0.85;
-  flex-shrink: 0;
+  letter-spacing: 0.05em;
+  opacity: 0.75;
 }
-
-.atelier-announcement--desktop-only { display: block; }
-.atelier-announcement--mobile-only { display: none; }
-@media screen and (max-width: 767px) {
-  .atelier-announcement--desktop-only { display: none; }
-  .atelier-announcement--mobile-only { display: block; }
+@keyframes atelierMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* ==========================================================================
-   Section & Floating Pill Container
+   FLOATING HEADER PILL BASE
    ========================================================================== */
 .atelier-header-section {
   position: -webkit-sticky !important;
   position: sticky !important;
   top: 0 !important;
   z-index: 40 !important;
-  width: 100% !important;
   pointer-events: none !important;
   margin-bottom: calc(-1 * var(--header-pill-height, 108px)) !important;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.atelier-header-section.is-hidden {
-  transform: translateY(-110%);
 }
 
 atelier-header {
@@ -117,7 +171,7 @@ atelier-header {
   color: var(--header-text, #363638) !important;
 }
 
-atelier-header, atelier-header * {
+atelier-header * {
   box-sizing: border-box !important;
 }
 
@@ -134,17 +188,6 @@ atelier-header button {
   cursor: pointer !important;
 }
 
-atelier-header ul,
-atelier-header li,
-.atelier-header__nav-list,
-.atelier-header__nav-list li {
-  list-style: none !important;
-  list-style-type: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* Outer Bar Padding & Width */
 .atelier-header__bar {
   pointer-events: none !important;
   position: relative !important;
@@ -154,9 +197,6 @@ atelier-header li,
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* ==========================================================================
-   AUTHENTIC FROSTED GLASS PILL (UrbanDeco Reference)
-   ========================================================================== */
 .atelier-header__pill {
   pointer-events: auto !important;
   position: relative !important;
@@ -194,65 +234,45 @@ atelier-header li,
 }
 
 /* ==========================================================================
-   Header Elements (Left, Center, Right)
+   LOGO & CUP
    ========================================================================== */
-.atelier-header__left {
-  display: flex !important;
-  align-items: center !important;
-  min-width: 0 !important;
-}
-
-.atelier-header__center {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.atelier-header__right {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  gap: 4px !important;
-}
-
-/* Logo */
 .atelier-logo {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 10px !important;
-  min-height: 44px !important;
+  gap: 8px !important;
+  min-height: 40px !important;
   line-height: 1 !important;
+  text-decoration: none !important;
 }
 .atelier-logo img {
   display: block !important;
-  width: var(--logo-width, 170px) !important;
+  width: var(--logo-width, 160px) !important;
   max-width: 100% !important;
   height: auto !important;
 }
 .atelier-logo__text {
   font-family: 'DM Serif Display', Georgia, serif !important;
-  font-size: 20px !important;
+  font-size: var(--logo-font-size, 20px) !important;
   font-weight: 700 !important;
-  letter-spacing: 0.16em !important;
+  letter-spacing: 0.14em !important;
   text-transform: uppercase !important;
   white-space: nowrap !important;
   color: var(--header-text, #363638) !important;
 }
 
-/* Coffee Cup & Animated Steam */
 .atelier-cup {
   position: relative !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 26px !important;
-  height: 38px !important;
+  height: var(--cup-size-desktop, 34px) !important;
+  width: auto !important;
   flex-shrink: 0 !important;
 }
 .atelier-cup img {
-  width: 100% !important;
-  height: auto !important;
+  height: var(--cup-size-desktop, 34px) !important;
+  width: auto !important;
   object-fit: contain !important;
 }
 .atelier-steam {
@@ -272,162 +292,135 @@ atelier-header li,
   animation-delay: 1.2s !important;
 }
 .atelier-cup--steam .atelier-steam {
-  animation: atelierSteamRise 2.8s ease-in-out infinite !important;
+  animation: steamRise 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
 }
-@keyframes atelierSteamRise {
+@keyframes steamRise {
   0% { transform: translateY(0) scaleX(0.8); opacity: 0; }
-  40% { opacity: 0.7; transform: translateY(-8px) scaleX(1.1); }
-  80% { opacity: 0.2; transform: translateY(-16px) scaleX(1.4); }
-  100% { transform: translateY(-22px) scaleX(1.6); opacity: 0; }
+  35% { opacity: 0.7; }
+  70% { transform: translateY(-8px) scaleX(1.4); opacity: 0.35; }
+  100% { transform: translateY(-14px) scaleX(1.8); opacity: 0; }
 }
 
-/* Action Icons */
+/* ==========================================================================
+   BUTTONS & BADGES
+   ========================================================================== */
 .atelier-icon-btn {
-  position: relative !important;
   display: grid !important;
   place-items: center !important;
-  width: 42px !important;
-  height: 42px !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  width: 40px !important;
+  height: 40px !important;
+  position: relative !important;
   border-radius: 50% !important;
-  background: transparent !important;
   color: var(--header-text, #363638) !important;
+  transition: background-color 0.2s ease, transform 0.2s ease !important;
   cursor: pointer !important;
-  transition: background 0.25s ease, transform 0.25s ease !important;
-}
-.atelier-icon-btn svg {
-  width: 20px !important;
-  height: 20px !important;
-  transition: transform 0.3s ease !important;
 }
 .atelier-icon-btn:hover {
-  background: rgba(255, 255, 255, 0.45) !important;
-}
-.atelier-icon-btn:hover svg {
+  background-color: rgba(54, 54, 56, 0.05) !important;
   transform: translateY(-1px) !important;
 }
-
-/* Badges (Wishlist & Cart) */
-.atelier-badge,
-.header__cart-count {
+.atelier-icon-btn svg {
+  width: var(--icon-size, 20px) !important;
+  height: var(--icon-size, 20px) !important;
+  stroke: currentColor !important;
+  fill: none !important;
+}
+.atelier-badge {
   position: absolute !important;
-  top: 3px !important;
-  right: 1px !important;
-  min-width: 18px !important;
-  height: 18px !important;
-  padding: 0 5px !important;
+  top: 4px !important;
+  right: 4px !important;
+  min-width: 17px !important;
+  height: 17px !important;
+  padding: 0 4px !important;
   border-radius: 9px !important;
-  background: var(--header-text, #363638) !important;
-  color: #FFFFFF !important;
-  font-family: 'Inter', sans-serif !important;
+  background: var(--header-accent, #363638) !important;
+  color: #fff !important;
   font-size: 10px !important;
   font-weight: 700 !important;
-  line-height: 18px !important;
-  text-align: center !important;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7) !important;
+  display: grid !important;
+  place-items: center !important;
+  line-height: 1 !important;
 }
-.atelier-badge[hidden] { display: none !important; }
 
-/* Capsule Search Pill (UrbanDeco reference) */
+/* ==========================================================================
+   DESKTOP SEARCH PILL (Used in Two Rows)
+   ========================================================================== */
 .atelier-search-pill {
-  display: none;
+  display: inline-flex !important;
   align-items: center !important;
   gap: 10px !important;
-  width: min(100%, 280px) !important;
-  height: 40px !important;
-  margin: 0 !important;
   padding: 0 16px !important;
-  border: 1px solid var(--header-line, rgba(54, 54, 56, 0.12)) !important;
+  height: 38px !important;
   border-radius: 999px !important;
-  background: rgba(255, 255, 255, 0.45) !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  border: 1px solid rgba(198, 181, 142, 0.3) !important;
   color: var(--header-text, #363638) !important;
-  opacity: 0.85 !important;
   font-size: 13px !important;
-  text-align: left !important;
   cursor: pointer !important;
-  transition: background 0.3s ease, border-color 0.3s ease, opacity 0.3s ease !important;
+  transition: all 0.25s ease !important;
 }
 .atelier-search-pill:hover {
-  background: rgba(255, 255, 255, 0.8) !important;
-  border-color: rgba(54, 54, 56, 0.25) !important;
-  opacity: 1 !important;
+  background: #ffffff !important;
+  border-color: rgba(198, 181, 142, 0.6) !important;
+  box-shadow: 0 4px 14px rgba(54, 54, 56, 0.08) !important;
 }
 .atelier-search-pill svg {
-  flex: 0 0 16px !important;
-  width: 16px !important;
-  height: 16px !important;
-}
-.atelier-search-pill span {
-  overflow: hidden !important;
-  white-space: nowrap !important;
-  text-overflow: ellipsis !important;
+  width: 15px !important;
+  height: 15px !important;
+  opacity: 0.6 !important;
 }
 
-/* Navigation Links */
+/* ==========================================================================
+   DESKTOP NAV LINKS
+   ========================================================================== */
 .atelier-header__nav-list {
   display: flex !important;
   align-items: center !important;
+  gap: 4px 16px !important;
   margin: 0 !important;
   padding: 0 !important;
   list-style: none !important;
 }
 .atelier-nav__link {
-  position: relative !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 4px !important;
-  height: 44px !important;
-  margin: 0 !important;
-  padding: 0 12px !important;
-  border: 0 !important;
-  background: none !important;
-  font-family: 'Inter', -apple-system, sans-serif !important;
+  gap: 5px !important;
+  padding: 8px 10px !important;
   font-size: var(--menu-size, 13px) !important;
-  font-weight: var(--menu-weight, 600) !important;
+  font-weight: var(--menu-weight, 500) !important;
   letter-spacing: var(--menu-letter-spacing, 1px) !important;
   text-transform: var(--menu-transform, uppercase) !important;
   color: var(--header-text, #363638) !important;
   white-space: nowrap !important;
-  cursor: pointer !important;
-  transition: color 0.25s ease !important;
+  position: relative !important;
+  transition: color 0.2s ease !important;
+}
+.atelier-nav__link:hover,
+.atelier-nav__link.is-current {
+  color: var(--header-accent, #4D351D) !important;
+}
+.atelier-nav__link.is-bold {
+  font-weight: 700 !important;
 }
 .atelier-nav__link svg {
-  width: 13px !important;
-  height: 13px !important;
-  opacity: 0.65 !important;
-  transition: transform 0.35s ease !important;
+  width: 11px !important;
+  height: 11px !important;
+  transition: transform 0.2s ease !important;
+  opacity: 0.6 !important;
 }
-.atelier-nav__link::after {
-  content: '' !important;
-  position: absolute !important;
-  left: 12px !important;
-  right: 12px !important;
-  bottom: 8px !important;
-  height: 1.5px !important;
-  background: currentColor !important;
-  transform: scaleX(0) !important;
-  transform-origin: right !important;
-  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1) !important;
-}
-.atelier-nav__link:hover::after,
-.atelier-nav__link[aria-expanded="true"]::after,
-.atelier-nav__link.is-current::after {
-  transform: scaleX(1) !important;
-  transform-origin: left !important;
-}
-.atelier-nav__link[aria-expanded="true"] svg {
-  transform: rotate(180deg) !important;
-}
-.atelier-nav__link.is-bold { font-weight: 800 !important; }
 
 /* ==========================================================================
-   DESKTOP LAYOUT 1: TWO LINES (UrbanDeco reference)
-   Row 1: Search Pill on Left | Logo in Center | Action Icons on Right
-   DIVIDER LINE
-   Row 2: Centered Navigation Menu
+   DESKTOP LAYOUT 1: TWO LINES (two_rows)
    ========================================================================== */
 @media (min-width: 990px) {
+  .atelier-burger,
+  .atelier-search-btn--mobile {
+    display: none !important;
+  }
+  .atelier-search-btn--desktop {
+    display: none !important;
+  }
+
   .layout--two_rows .atelier-header__pill,
   .layout--two-rows .atelier-header__pill {
     display: grid !important;
@@ -461,10 +454,6 @@ atelier-header li,
     align-items: center !important;
     gap: 4px !important;
   }
-  .layout--two_rows .atelier-header__right .atelier-search-icon,
-  .layout--two-rows .atelier-header__right .atelier-search-icon {
-    display: none !important;
-  }
   .layout--two_rows .atelier-header__nav,
   .layout--two-rows .atelier-header__nav {
     grid-area: nav !important;
@@ -475,19 +464,11 @@ atelier-header li,
     padding-top: 4px !important;
     border-top: 1px solid var(--header-line, rgba(54, 54, 56, 0.1)) !important;
   }
-  .layout--two_rows .atelier-header__nav-list,
-  .layout--two-rows .atelier-header__nav-list {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 4px 16px !important;
-  }
 }
 
 /* ==========================================================================
-   DESKTOP LAYOUT 2: LOGO LEFT, MENU CENTRE (Single Line)
-   Logo on Left | Menu in Center | Search Icon + Action Icons on Right
+   DESKTOP LAYOUT 2: LOGO LEFT, MENU CENTRE (logo_left)
+   Logo on Left | Menu in Center | Search, Heart, Bag on Right
    ========================================================================== */
 @media (min-width: 990px) {
   .layout--logo_left .atelier-header__pill,
@@ -498,7 +479,7 @@ atelier-header li,
     align-items: center !important;
     min-height: 64px !important;
     padding: 0 20px !important;
-    gap: 12px !important;
+    gap: 16px !important;
   }
   .layout--logo_left .atelier-header__center,
   .layout--logo-left .atelier-header__center {
@@ -506,7 +487,6 @@ atelier-header li,
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
-    padding-right: 16px !important;
     flex-shrink: 0 !important;
   }
   .layout--logo_left .atelier-header__left,
@@ -522,19 +502,12 @@ atelier-header li,
   .layout--logo-left .atelier-search-pill {
     display: none !important;
   }
-  .layout--logo_left .atelier-burger,
-  .layout--logo-left .atelier-burger {
-    display: none !important;
-  }
   .layout--logo_left .atelier-header__nav,
   .layout--logo-left .atelier-header__nav {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
     min-width: 0 !important;
     overflow-x: auto !important;
     scrollbar-width: none !important;
@@ -549,7 +522,7 @@ atelier-header li,
     justify-content: center !important;
     align-items: center !important;
     flex-wrap: nowrap !important;
-    gap: 2px 8px !important;
+    gap: 2px 10px !important;
     white-space: nowrap !important;
   }
   .layout--logo_left .atelier-nav__link,
@@ -568,15 +541,15 @@ atelier-header li,
     gap: 4px !important;
     flex-shrink: 0 !important;
   }
-  .layout--logo_left .atelier-header__right .atelier-search-icon,
-  .layout--logo-left .atelier-header__right .atelier-search-icon {
+  .layout--logo_left .atelier-search-btn--desktop,
+  .layout--logo-left .atelier-search-btn--desktop {
     display: grid !important;
   }
 }
 
 /* ==========================================================================
-   DESKTOP LAYOUT 3: MENU LEFT, LOGO CENTRE (Single Line)
-   Menu on Left | Logo in Center | Search Icon + Action Icons on Right
+   DESKTOP LAYOUT 3: MENU LEFT, LOGO CENTRE (logo_center)
+   Menu on Left | Logo in Center | Search, Heart, Bag on Right
    ========================================================================== */
 @media (min-width: 990px) {
   .layout--logo_center .atelier-header__pill,
@@ -587,7 +560,7 @@ atelier-header li,
     align-items: center !important;
     min-height: 64px !important;
     padding: 0 20px !important;
-    gap: 12px !important;
+    gap: 16px !important;
   }
   .layout--logo_center .atelier-header__left,
   .layout--logo-center .atelier-header__left {
@@ -602,19 +575,12 @@ atelier-header li,
   .layout--logo-center .atelier-search-pill {
     display: none !important;
   }
-  .layout--logo_center .atelier-burger,
-  .layout--logo-center .atelier-burger {
-    display: none !important;
-  }
   .layout--logo_center .atelier-header__nav,
   .layout--logo-center .atelier-header__nav {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
     width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
     min-width: 0 !important;
     overflow-x: auto !important;
     scrollbar-width: none !important;
@@ -629,7 +595,7 @@ atelier-header li,
     align-items: center !important;
     justify-content: flex-start !important;
     flex-wrap: nowrap !important;
-    gap: 2px 6px !important;
+    gap: 2px 8px !important;
     white-space: nowrap !important;
   }
   .layout--logo_center .atelier-nav__link,
@@ -657,16 +623,17 @@ atelier-header li,
     gap: 4px !important;
     flex-shrink: 0 !important;
   }
-  .layout--logo_center .atelier-header__right .atelier-search-icon,
-  .layout--logo-center .atelier-header__right .atelier-search-icon {
+  .layout--logo_center .atelier-search-btn--desktop,
+  .layout--logo-center .atelier-search-btn--desktop {
     display: grid !important;
   }
 }
 
-
 /* ==========================================================================
-   MOBILE HEADER (< 990px) — Clean Symmetrical 2 - 1 - 2 Layout
-   Left: [ ≡ ] [ 🔍 ] | Center: Centered Logo | Right: [ ♡ ] [ 🛍️ ]
+   MOBILE HEADER (< 990px) — PERFECT SYMMETRICAL 2 - 1 - 2 LAYOUT
+   Left: [ ≡ ] [ 🔍 ]
+   Center: Centered Logo with independent Mobile Sizing Controls
+   Right: [ ♡ ] [ 🛍️ ]
    ========================================================================== */
 @media screen and (max-width: 989px) {
   .atelier-header__bar {
@@ -679,28 +646,19 @@ atelier-header li,
     width: 100% !important;
     min-height: 52px !important;
     padding: 0 10px !important;
-    gap: 8px !important;
+    gap: 6px !important;
     border-radius: var(--header-radius, 22px) !important;
   }
 
-  /* LEFT AREA: Hamburger + Search Icon Buttons */
-  .atelier-header__left,
-  .layout--two_rows .atelier-header__left,
-  .layout--two-rows .atelier-header__left,
-  .layout--logo_left .atelier-header__left,
-  .layout--logo-left .atelier-header__left,
-  .layout--logo_center .atelier-header__left,
-  .layout--logo-center .atelier-header__left {
+  /* LEFT: Hamburger + Search Icon Buttons */
+  .atelier-header__left {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
     flex: 0 0 auto !important;
-    gap: 4px !important;
+    gap: 2px !important;
     min-width: 0 !important;
     overflow: visible !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border: none !important;
   }
   .atelier-burger {
     display: grid !important;
@@ -712,7 +670,6 @@ atelier-header li,
     border: none !important;
     background: transparent !important;
     color: var(--header-text, #363638) !important;
-    cursor: pointer !important;
     border-radius: 50% !important;
   }
   .atelier-burger svg {
@@ -721,7 +678,7 @@ atelier-header li,
     height: 20px !important;
     stroke: currentColor !important;
   }
-  .atelier-search-btn {
+  .atelier-search-btn--mobile {
     display: grid !important;
     place-items: center !important;
     width: 36px !important;
@@ -731,30 +688,22 @@ atelier-header li,
     border: none !important;
     background: transparent !important;
     color: var(--header-text, #363638) !important;
-    cursor: pointer !important;
     border-radius: 50% !important;
   }
-  .atelier-search-btn svg {
+  .atelier-search-btn--mobile svg {
     display: block !important;
     width: 19px !important;
     height: 19px !important;
     stroke: currentColor !important;
   }
-  .atelier-search-pill {
-    display: none !important;
-  }
-  .atelier-header__nav {
+  .atelier-search-pill,
+  .atelier-header__nav,
+  .atelier-search-btn--desktop {
     display: none !important;
   }
 
-  /* CENTER AREA: Perfectly Centered Logo with Customizer Sizing */
-  .atelier-header__center,
-  .layout--two_rows .atelier-header__center,
-  .layout--two-rows .atelier-header__center,
-  .layout--logo_left .atelier-header__center,
-  .layout--logo-left .atelier-header__center,
-  .layout--logo_center .atelier-header__center,
-  .layout--logo-center .atelier-header__center {
+  /* CENTER: Centered Logo */
+  .atelier-header__center {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -778,99 +727,57 @@ atelier-header li,
     height: auto !important;
   }
   .atelier-logo__text {
-    font-family: 'DM Serif Display', Georgia, serif !important;
     font-size: var(--logo-font-size-mobile, 13px) !important;
     font-weight: 700 !important;
     letter-spacing: 0.08em !important;
     white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    color: var(--header-text, #363638) !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
   }
   .atelier-cup {
     height: var(--cup-size-mobile, 22px) !important;
-    width: calc(var(--cup-size-mobile, 22px) * 0.68) !important;
-    flex-shrink: 0 !important;
+    width: auto !important;
   }
   .atelier-cup img {
     height: var(--cup-size-mobile, 22px) !important;
     width: auto !important;
-    object-fit: contain !important;
   }
 
-  /* RIGHT AREA: Wishlist + Cart ONLY (No Search, No Account) */
-  .atelier-header__right,
-  .layout--two_rows .atelier-header__right,
-  .layout--two-rows .atelier-header__right,
-  .layout--logo_left .atelier-header__right,
-  .layout--logo-left .atelier-header__right,
-  .layout--logo_center .atelier-header__right,
-  .layout--logo-center .atelier-header__right {
+  /* RIGHT: ONLY Wishlist + Cart */
+  .atelier-header__right {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
     flex: 0 0 auto !important;
-    gap: 4px !important;
+    gap: 2px !important;
     min-width: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
   }
   .atelier-header__right .atelier-icon-btn {
     width: 36px !important;
     height: 36px !important;
-    display: grid !important;
-    place-items: center !important;
-    padding: 0 !important;
   }
   .atelier-header__right .atelier-icon-btn svg {
-    display: block !important;
     width: 19px !important;
     height: 19px !important;
   }
 }
 
-@media screen and (min-width: 990px) {
-  .atelier-burger {
-    display: none !important;
-  }
-  .layout--two_rows .atelier-search-btn,
-  .layout--two-rows .atelier-search-btn {
-    display: none !important;
-  }
-}
-
 /* ==========================================================================
-   MOBILE DRAWER & SIDE MENU (Image 3 UrbanDeco Reference)
+   MOBILE DRAWER NAVIGATION
    ========================================================================== */
-.atelier-scrim {
-  position: fixed !important;
-  inset: 0 !important;
-  background: rgba(28, 24, 20, 0.45) !important;
-  -webkit-backdrop-filter: blur(4px) !important;
-  backdrop-filter: blur(4px) !important;
-  z-index: 999 !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 0.35s ease !important;
-}
-.atelier-scrim.is-visible {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
 #atelier-mobile-drawer.atelier-drawer {
   position: fixed !important;
   top: 0 !important;
-  bottom: 0 !important;
   left: 0 !important;
-  width: min(92vw, 410px) !important;
+  width: 88vw !important;
+  max-width: 380px !important;
   height: 100vh !important;
-  background: #FDFBF7 !important;
-  z-index: 1000 !important;
-  box-shadow: 24px 0 60px -20px rgba(28, 27, 25, 0.45) !important;
-  border-radius: 0 24px 24px 0 !important;
-  transform: translateX(-104%) !important;
-  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  height: 100dvh !important;
+  background: #F8F5ED !important;
+  z-index: 100000 !important;
+  box-shadow: 12px 0 36px rgba(0, 0, 0, 0.22) !important;
+  transform: translateX(-105%) !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
   display: flex !important;
   flex-direction: column !important;
   pointer-events: auto !important;
@@ -881,216 +788,100 @@ atelier-header li,
 }
 
 .atelier-drawer__head {
-  padding: 16px 20px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
+  padding: 16px 20px !important;
   border-bottom: 1px solid rgba(54, 54, 56, 0.08) !important;
   background: #F8F5ED !important;
   flex-shrink: 0 !important;
-}
-.atelier-drawer__brand {
-  display: flex !important;
-  align-items: center !important;
 }
 .atelier-drawer__close {
   width: 36px !important;
   height: 36px !important;
   border-radius: 50% !important;
-  background: #FFFFFF !important;
+  background: rgba(54, 54, 56, 0.06) !important;
   border: 1px solid rgba(54, 54, 56, 0.12) !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
   display: grid !important;
   place-items: center !important;
   cursor: pointer !important;
   color: #363638 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  transition: transform 0.2s ease, background 0.2s ease !important;
-}
-.atelier-drawer__close:hover {
-  transform: scale(1.05) !important;
-  background: #F8F5ED !important;
 }
 .atelier-drawer__close svg {
-  width: 14px !important;
-  height: 14px !important;
-  stroke: currentColor !important;
+  width: 16px !important;
+  height: 16px !important;
 }
 
 .atelier-drawer__body {
   flex: 1 1 auto !important;
   overflow-y: auto !important;
-  padding: 18px 20px 32px !important;
   -webkit-overflow-scrolling: touch !important;
+  padding: 16px 20px 40px !important;
 }
 
-/* Search input in drawer */
+/* Full Width Drawer Search Input */
 .atelier-drawer__search {
   position: relative !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-  height: 44px !important;
   margin-bottom: 16px !important;
-  padding: 0 16px !important;
-  border-radius: 999px !important;
-  background: #FFFFFF !important;
-  border: 1px solid rgba(54, 54, 56, 0.12) !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
+  width: 100% !important;
 }
 .atelier-drawer__search svg {
-  width: 17px !important;
-  height: 17px !important;
-  color: rgba(54, 54, 56, 0.6) !important;
-  flex-shrink: 0 !important;
-  stroke: currentColor !important;
+  position: absolute !important;
+  left: 14px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 16px !important;
+  height: 16px !important;
+  opacity: 0.55 !important;
+  pointer-events: none !important;
 }
 .atelier-drawer__search input {
-  flex: 1 1 auto !important;
-  border: none !important;
-  background: transparent !important;
-  font-family: 'Inter', sans-serif !important;
+  width: 100% !important;
+  height: 42px !important;
+  padding: 0 16px 0 40px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(54, 54, 56, 0.14) !important;
+  background: #ffffff !important;
   font-size: 13.5px !important;
   color: #363638 !important;
   outline: none !important;
-  padding: 0 !important;
 }
 
-/* Promo Card in drawer */
+/* Promo Card in Drawer */
 .atelier-drawer__promo-banner {
-  display: block !important;
-  margin-bottom: 18px !important;
-  padding: 16px 18px !important;
-  border-radius: 14px !important;
-  background: linear-gradient(135deg, #4D351D 0%, #2B1D10 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  background: linear-gradient(135deg, #4D351D, #2B1D10) !important;
   color: #FFFFFF !important;
+  padding: 14px 18px !important;
+  border-radius: 12px !important;
   text-decoration: none !important;
-  border: none !important;
-  box-shadow: 0 8px 20px -8px rgba(77, 53, 29, 0.4) !important;
-  transition: transform 0.2s ease !important;
-}
-.atelier-drawer__promo-banner:hover {
-  transform: translateY(-2px) !important;
+  margin-bottom: 20px !important;
+  box-shadow: 0 4px 16px rgba(43, 29, 16, 0.25) !important;
 }
 .atelier-drawer__promo-h {
-  display: block !important;
   font-family: 'DM Serif Display', Georgia, serif !important;
-  font-size: 16px !important;
-  font-weight: 600 !important;
-  color: #FFFFFF !important;
-  line-height: 1.3 !important;
-  margin: 0 !important;
-  text-decoration: none !important;
+  font-size: 15px !important;
+  letter-spacing: 0.02em !important;
 }
 .atelier-drawer__promo-cta {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  margin-top: 6px !important;
-  font-family: 'Inter', sans-serif !important;
-  font-size: 11.5px !important;
-  font-weight: 600 !important;
-  color: #E9DFC2 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.08em !important;
-  text-decoration: none !important;
+  color: #E9DFC2 !important;
+  white-space: nowrap !important;
 }
 
-/* 2-Column Photo Tiles Grid */
-.atelier-drawer__tiles-grid {
-  display: grid !important;
-  grid-template-columns: repeat(2, 1fr) !important;
-  gap: 10px !important;
-  margin-bottom: 18px !important;
-}
-.atelier-photo-tile {
-  position: relative !important;
-  aspect-ratio: 1 !important;
-  border-radius: 14px !important;
-  overflow: hidden !important;
-  background: #E9DFC2 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-end !important;
-  padding: 12px !important;
-  text-decoration: none !important;
-  border: none !important;
-  box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.12) !important;
-  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
-}
-.atelier-photo-tile:hover {
-  transform: scale(1.02) !important;
-  box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.18) !important;
-}
-.atelier-photo-tile__img {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  z-index: 1 !important;
-}
-.atelier-photo-tile__img img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  transition: transform 0.4s ease !important;
-}
-.atelier-photo-tile:hover .atelier-photo-tile__img img {
-  transform: scale(1.08) !important;
-}
-.atelier-photo-tile__placeholder {
-  width: 100% !important;
-  height: 100% !important;
-  background: linear-gradient(135deg, #4D351D 0%, #C6B58E 100%) !important;
-}
-.atelier-photo-tile__scrim {
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 2 !important;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.4) 65%, rgba(0,0,0,0.85) 100%) !important;
-  pointer-events: none !important;
-}
-.atelier-photo-tile__info {
-  position: relative !important;
-  z-index: 3 !important;
-  color: #FFFFFF !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 2px !important;
-}
-.atelier-photo-tile__title {
-  font-family: 'DM Serif Display', Georgia, serif !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  color: #FFFFFF !important;
-  line-height: 1.25 !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
-}
-.atelier-photo-tile__count {
-  font-family: 'Inter', sans-serif !important;
-  font-size: 10.5px !important;
-  color: rgba(255, 255, 255, 0.85) !important;
-  font-weight: 500 !important;
-}
-
-/* Navigation Menu Rows — Bullet & Chevron Bug Fixes */
-.atelier-drawer,
-.atelier-drawer *,
-.atelier-drawer ul,
-.atelier-drawer li,
-.atelier-drawer__rows,
-.atelier-drawer__rows li,
-.atelier-drawer__sublist,
-.atelier-drawer__sublist li {
-  list-style: none !important;
-  list-style-type: none !important;
-}
-
+/* Drawer Rows & Links */
 .atelier-drawer__rows {
-  margin: 0 0 18px !important;
+  margin: 0 0 20px !important;
   padding: 0 !important;
-  border-top: 1px solid rgba(54, 54, 56, 0.08) !important;
+}
+.atelier-drawer__rows li {
+  list-style: none !important;
 }
 .atelier-drawer__row-link {
   display: flex !important;
@@ -1098,141 +889,86 @@ atelier-header li,
   justify-content: space-between !important;
   padding: 13px 4px !important;
   border-bottom: 1px solid rgba(54, 54, 56, 0.08) !important;
-  font-family: 'Inter', sans-serif !important;
   font-size: 14.5px !important;
   font-weight: 600 !important;
   color: #363638 !important;
   text-decoration: none !important;
-  background: transparent !important;
-  border-top: none !important;
-  border-left: none !important;
-  border-right: none !important;
-  cursor: pointer !important;
-  width: 100% !important;
-  outline: none !important;
-  box-shadow: none !important;
-  transition: color 0.2s ease !important;
-}
-.atelier-drawer__row-link:hover {
-  color: #4D351D !important;
-}
-.atelier-drawer__row-link span {
-  text-decoration: none !important;
-}
-.atelier-drawer__details summary::-webkit-details-marker,
-.atelier-drawer__details summary::marker {
-  display: none !important;
-  content: '' !important;
-}
-.atelier-drawer__details summary {
-  list-style: none !important;
-  list-style-type: none !important;
-  outline: none !important;
-}
-.atelier-drawer__row-link svg,
-.atelier-drawer__details svg,
-.atelier-drawer summary svg {
-  width: 14px !important;
-  max-width: 14px !important;
-  height: 14px !important;
-  max-height: 14px !important;
-  flex: 0 0 14px !important;
-  display: block !important;
-  opacity: 0.55 !important;
-  stroke: currentColor !important;
-  transition: transform 0.25s ease !important;
-}
-.atelier-drawer__details[open] > summary svg {
-  transform: rotate(180deg) !important;
 }
 .atelier-drawer__sublist {
-  margin: 0 !important;
-  padding: 4px 0 10px 14px !important;
-  border-top: none !important;
-  border-left: 2px solid rgba(54, 54, 56, 0.1) !important;
+  padding: 6px 0 10px 14px !important;
+  border-left: 2px solid rgba(54, 54, 56, 0.12) !important;
+  margin: 0 0 8px !important;
 }
 .atelier-drawer__sublink {
   display: block !important;
   padding: 8px 0 !important;
-  font-family: 'Inter', sans-serif !important;
   font-size: 13.5px !important;
-  color: rgba(54, 54, 56, 0.75) !important;
+  color: rgba(54, 54, 56, 0.8) !important;
   text-decoration: none !important;
-  border: none !important;
-  transition: color 0.2s ease !important;
-}
-.atelier-drawer__sublink:hover {
-  color: #4D351D !important;
 }
 
-/* Account Card Inside Drawer */
+/* Dedicated Account Card in Drawer */
 .atelier-drawer__account-wrap {
-  margin: 14px 0 18px !important;
+  margin: 16px 0 20px !important;
 }
 .atelier-drawer__account-card {
   display: flex !important;
   align-items: center !important;
-  gap: 12px !important;
-  padding: 12px 14px !important;
-  border-radius: 14px !important;
-  background: #FFFFFF !important;
-  border: 1px solid rgba(54, 54, 56, 0.1) !important;
+  gap: 14px !important;
+  padding: 14px 16px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(198, 181, 142, 0.45) !important;
+  border-radius: 12px !important;
   text-decoration: none !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-  transition: transform 0.2s ease, border-color 0.2s ease !important;
+  box-shadow: 0 2px 8px rgba(54, 54, 56, 0.04) !important;
+  transition: all 0.25s ease !important;
 }
 .atelier-drawer__account-card:hover {
-  transform: translateY(-1px) !important;
-  border-color: rgba(54, 54, 56, 0.25) !important;
+  background: #FDFBF7 !important;
+  border-color: #4D351D !important;
+  box-shadow: 0 4px 14px rgba(77, 53, 29, 0.12) !important;
 }
 .atelier-drawer__account-icon {
-  width: 38px !important;
-  height: 38px !important;
+  width: 40px !important;
+  height: 40px !important;
   border-radius: 50% !important;
   background: #F8F5ED !important;
+  border: 1px solid rgba(198, 181, 142, 0.5) !important;
   display: grid !important;
   place-items: center !important;
   flex-shrink: 0 !important;
-  color: #363638 !important;
+  color: #4D351D !important;
 }
 .atelier-drawer__account-icon svg {
-  width: 18px !important;
-  height: 18px !important;
-  stroke: currentColor !important;
+  width: 20px !important;
+  height: 20px !important;
 }
 .atelier-drawer__account-text {
   flex: 1 1 auto !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 2px !important;
-  min-width: 0 !important;
 }
 .atelier-drawer__account-title {
-  font-family: 'Inter', sans-serif !important;
-  font-size: 13.5px !important;
-  font-weight: 600 !important;
+  font-family: 'DM Serif Display', Georgia, serif !important;
+  font-size: 15px !important;
   color: #363638 !important;
-  line-height: 1.2 !important;
 }
 .atelier-drawer__account-sub {
-  font-family: 'Inter', sans-serif !important;
-  font-size: 11px !important;
+  font-size: 11.5px !important;
   color: rgba(54, 54, 56, 0.6) !important;
-  line-height: 1.2 !important;
 }
 .atelier-drawer__account-arrow {
-  font-size: 16px !important;
-  color: rgba(54, 54, 56, 0.4) !important;
-  flex-shrink: 0 !important;
+  font-size: 18px !important;
+  color: #4D351D !important;
 }
 
-/* Action Buttons: Call Us & WhatsApp */
+/* Contact Action Buttons */
 .atelier-drawer__actions {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 10px !important;
-  margin-top: 10px !important;
-  margin-bottom: 16px !important;
+  margin-top: 20px !important;
 }
 .atelier-drawer__btn {
   display: flex !important;
@@ -1240,64 +976,33 @@ atelier-header li,
   justify-content: center !important;
   gap: 8px !important;
   height: 44px !important;
-  border-radius: 999px !important;
-  font-family: 'Inter', sans-serif !important;
+  border-radius: 10px !important;
   font-size: 13px !important;
   font-weight: 600 !important;
   text-decoration: none !important;
-  border: none !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-}
-.atelier-drawer__btn:hover {
-  transform: translateY(-1px) !important;
 }
 .atelier-drawer__btn--call {
-  background: #FFFFFF !important;
+  background: rgba(54, 54, 56, 0.06) !important;
   color: #363638 !important;
-  border: 1.5px solid rgba(54, 54, 56, 0.25) !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
-}
-.atelier-drawer__btn--call svg {
-  width: 16px !important;
-  height: 16px !important;
-  stroke: currentColor !important;
 }
 .atelier-drawer__btn--wa {
-  background: #128C7E !important;
-  color: #FFFFFF !important;
-  border: none !important;
-  box-shadow: 0 4px 12px -2px rgba(18, 140, 126, 0.4) !important;
-}
-.atelier-drawer__btn--wa svg {
-  width: 17px !important;
-  height: 17px !important;
-  fill: currentColor !important;
+  background: #25D366 !important;
+  color: #ffffff !important;
 }
 
-.atelier-drawer__meta {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 16px !important;
-  margin-top: 14px !important;
-  font-family: 'Inter', sans-serif !important;
-  font-size: 12px !important;
-  color: rgba(54, 54, 56, 0.6) !important;
+/* Scrim Backdrop */
+.atelier-scrim {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(18, 16, 14, 0.55) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  z-index: 99999 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.35s ease !important;
 }
-.atelier-drawer__hours {
-  font-size: 11.5px !important;
-  color: rgba(54, 54, 56, 0.6) !important;
-  text-align: center !important;
-}
-.atelier-drawer__tagline {
-  margin: 10px 0 0 !important;
-  font-size: 11px !important;
-  color: rgba(54, 54, 56, 0.5) !important;
-  text-align: center !important;
-}
-
-
-/* Clearances for non-banner pages */
-body:not(.template-index):not(.template-collection) #MainContent > .shopify-section:first-child:not(:has(.atelier-col-hero)):not(:has(.atelier-hero)):not(:has(.image-banner)):not(:has(.slideshow)) {
-  padding-top: calc(var(--header-height, 120px) + 24px) !important;
+.atelier-scrim.is-visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
