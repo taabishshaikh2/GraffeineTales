@@ -36,7 +36,21 @@ for (const file of liquidFiles) {
   const match = content.match(/\{%\s*schema\s*%\}([\s\S]*?)\{%\s*endschema\s*%\}/);
   if (match) {
     try {
-      JSON.parse(match[1]);
+      const parsed = JSON.parse(match[1]);
+      (parsed.settings || []).forEach(s => {
+        if (s.default === '') {
+          console.error(`[FAIL] ${file}: setting "${s.id}" has empty string default!`);
+          hasError = true;
+        }
+      });
+      (parsed.blocks || []).forEach(b => {
+        (b.settings || []).forEach(s => {
+          if (s.default === '') {
+            console.error(`[FAIL] ${file}: block "${b.type}" setting "${s.id}" has empty string default!`);
+            hasError = true;
+          }
+        });
+      });
       // console.log(`[PASS] Schema valid: ${file}`);
     } catch (e) {
       console.error(`[FAIL] Schema invalid: ${file} - ${e.message}`);
