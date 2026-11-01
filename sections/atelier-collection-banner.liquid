@@ -1,0 +1,388 @@
+{{ 'atelier-collection-banner.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign hero_image = section.settings.fallback_image
+  if collection.image != blank
+    assign hero_image = collection.image
+  endif
+
+  assign show_badge = section.settings.show_badge
+  assign badge_text = section.settings.badge_text
+  assign text_align = section.settings.text_alignment | default: 'center'
+
+  # Metafield collections list
+  assign meta_tabs = collection.metafields.custom.collection_tabs.value | default: collection.metafields.custom.collection_tabs
+  assign has_meta_tabs = false
+  if meta_tabs != blank and meta_tabs.size > 0
+    assign has_meta_tabs = true
+  endif
+
+  # Fallback to section blocks if metafield has no collections
+  assign has_block_tabs = false
+  if section.blocks.size > 0
+    assign has_block_tabs = true
+  endif
+
+  assign show_tabs = section.settings.show_subcollections
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --hero-min-height-desktop: {{ section.settings.hero_height_desktop }}px;
+    --hero-min-height-mobile: {{ section.settings.hero_height_mobile }}px;
+    --hero-image-position: {{ section.settings.image_position | default: 'center center' }};
+    --avatar-size-desktop: {{ section.settings.avatar_size_desktop }}px;
+    --avatar-size-mobile: {{ section.settings.avatar_size_mobile }}px;
+    --tab-item-width: {{ section.settings.avatar_size_desktop | plus: 20 }}px;
+    --tab-item-width-mobile: {{ section.settings.avatar_size_mobile | plus: 16 }}px;
+  }
+
+  #shopify-section-{{ section.id }} .atelier-col-hero__overlay {
+    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  }
+{%- endstyle -%}
+
+<section class="atelier-col-banner-section" data-section-id="{{ section.id }}">
+  {%- comment -%} ==================== TOP BANNER HERO ==================== {%- endcomment -%}
+  <div class="atelier-col-hero">
+    {%- if hero_image != blank -%}
+      <div class="atelier-col-hero__media">
+        {{
+          hero_image
+          | image_url: width: 2400
+          | image_tag:
+            class: 'atelier-col-hero__img',
+            loading: 'eager',
+            fetchpriority: 'high',
+            sizes: '100vw',
+            widths: '375, 550, 750, 1100, 1500, 1780, 2000, 2400',
+            alt: hero_image.alt | default: collection.title | escape
+        }}
+      </div>
+    {%- else -%}
+      <div class="atelier-col-hero__media" style="background: linear-gradient(135deg, #363638 0%, #201813 100%);"></div>
+    {%- endif -%}
+
+    <div class="atelier-col-hero__overlay"></div>
+
+    <div class="atelier-col-hero__inner atelier-col-hero__inner--{{ text_align }}">
+      {%- if show_badge and badge_text != blank -%}
+        <div class="atelier-col-hero__badge">
+          <span class="atelier-col-hero__badge-dot"></span>
+          <span>{{ badge_text | escape }}</span>
+        </div>
+      {%- endif -%}
+
+      <h1 class="atelier-col-hero__title">
+        {{ collection.title | escape }}
+      </h1>
+
+      {%- if section.settings.show_description and collection.description != blank -%}
+        <div class="atelier-col-hero__description rte">
+          {{ collection.description }}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} ==================== CIRCULAR SUB-COLLECTION TABS ==================== {%- endcomment -%}
+  {%- if show_tabs and has_meta_tabs or has_block_tabs -%}
+    <nav class="atelier-col-nav" aria-label="Sub-collection filters">
+      <div class="atelier-col-nav__inner">
+        {%- if section.settings.nav_heading != blank -%}
+          <div class="atelier-col-nav__header">
+            <h2 class="atelier-col-nav__heading">{{ section.settings.nav_heading | escape }}</h2>
+          </div>
+        {%- endif -%}
+
+        <ul class="atelier-col-tabs" role="list">
+          {%- if has_meta_tabs -%}
+            {%- comment -%} 1. Render Sub-collections from Metafields {%- endcomment -%}
+            {%- for sub_col in meta_tabs -%}
+              {%- liquid
+                assign tab_url = sub_col.url
+                assign is_active = false
+                if sub_col.handle == collection.handle or sub_col.id == collection.id
+                  assign is_active = true
+                endif
+
+                # Custom metafield title fallback to collection title
+                assign tab_title = sub_col.metafields.custom.collection_tab_title.value | default: sub_col.metafields.custom.collection_tab_title | default: sub_col.title
+
+                # Custom metafield image fallback to collection image or first product image
+                assign tab_image = sub_col.metafields.custom.collection_tab_image.value | default: sub_col.metafields.custom.collection_tab_image
+                if tab_image == blank
+                  assign tab_image = sub_col.image | default: sub_col.products.first.featured_image
+                endif
+              -%}
+
+              <li class="atelier-col-tabs__item">
+                <a
+                  href="{{ tab_url }}"
+                  class="atelier-col-tab{% if is_active %} is-active{% endif %}"
+                  {% if is_active %}aria-current="page"{% endif %}
+                  title="{{ tab_title | escape }}"
+                >
+                  <div class="atelier-col-tab__avatar">
+                    {%- if tab_image != blank -%}
+                      {{
+                        tab_image
+                        | image_url: width: 240
+                        | image_tag:
+                          class: 'atelier-col-tab__img',
+                          loading: 'lazy',
+                          widths: '120, 180, 240',
+                          alt: tab_title | escape
+                      }}
+                    {%- else -%}
+                      <div class="atelier-col-tab__placeholder">
+                        {{ tab_title | slice: 0, 1 | upcase }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+
+                  <span class="atelier-col-tab__title">
+                    {{ tab_title | escape }}
+                  </span>
+
+                  <span class="atelier-col-tab__indicator"></span>
+                </a>
+              </li>
+            {%- endfor -%}
+
+          {%- elsif has_block_tabs -%}
+            {%- comment -%} 2. Render Sub-collections from Section Blocks (Fallback / Editor Curation) {%- endcomment -%}
+            {%- for block in section.blocks -%}
+              {%- liquid
+                assign block_col = block.settings.collection
+                assign tab_url = block.settings.custom_link | default: block_col.url | default: '#'
+                assign is_active = false
+                if block_col != blank and block_col.handle == collection.handle
+                  assign is_active = true
+                endif
+
+                # Priority: Block custom title > Sub-collection metafield title > Collection title
+                assign tab_title = block.settings.custom_title
+                if tab_title == blank and block_col != blank
+                  assign tab_title = block_col.metafields.custom.collection_tab_title.value | default: block_col.metafields.custom.collection_tab_title | default: block_col.title
+                endif
+                if tab_title == blank
+                  assign tab_title = 'Collection ' | append: forloop.index
+                endif
+
+                # Priority: Block custom image > Sub-collection metafield image > Collection image > First product
+                assign tab_image = block.settings.custom_image
+                if tab_image == blank and block_col != blank
+                  assign tab_image = block_col.metafields.custom.collection_tab_image.value | default: block_col.metafields.custom.collection_tab_image
+                  if tab_image == blank
+                    assign tab_image = block_col.image | default: block_col.products.first.featured_image
+                  endif
+                endif
+              -%}
+
+              <li class="atelier-col-tabs__item" {{ block.shopify_attributes }}>
+                <a
+                  href="{{ tab_url }}"
+                  class="atelier-col-tab{% if is_active %} is-active{% endif %}"
+                  {% if is_active %}aria-current="page"{% endif %}
+                  title="{{ tab_title | escape }}"
+                >
+                  <div class="atelier-col-tab__avatar">
+                    {%- if tab_image != blank -%}
+                      {{
+                        tab_image
+                        | image_url: width: 240
+                        | image_tag:
+                          class: 'atelier-col-tab__img',
+                          loading: 'lazy',
+                          widths: '120, 180, 240',
+                          alt: tab_title | escape
+                      }}
+                    {%- else -%}
+                      <div class="atelier-col-tab__placeholder">
+                        {{ tab_title | slice: 0, 1 | upcase }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+
+                  <span class="atelier-col-tab__title">
+                    {{ tab_title | escape }}
+                  </span>
+
+                  <span class="atelier-col-tab__indicator"></span>
+                </a>
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+      </div>
+    </nav>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Atelier Collection Banner",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Editorial Banner Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Banner Fallback Image",
+      "info": "Used if the collection has no default media image uploaded."
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Focal Position",
+      "default": "center center",
+      "options": [
+        { "value": "top center", "label": "Top Center" },
+        { "value": "center center", "label": "Center" },
+        { "value": "bottom center", "label": "Bottom Center" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "hero_height_desktop",
+      "min": 240,
+      "max": 540,
+      "step": 20,
+      "unit": "px",
+      "label": "Desktop Banner Height",
+      "default": 360
+    },
+    {
+      "type": "range",
+      "id": "hero_height_mobile",
+      "min": 180,
+      "max": 380,
+      "step": 20,
+      "unit": "px",
+      "label": "Mobile Banner Height",
+      "default": 260
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Dark Overlay Scrim Opacity",
+      "default": 85
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "default": "center",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "left", "label": "Left" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show Badge / Tagline",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "WEBSITE EXCLUSIVE"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show Collection Description",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Circular Sub-Collection Tabs"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subcollections",
+      "label": "Enable Sub-Collection Navigation",
+      "info": "Populated dynamically via collection.metafields.custom.collection_tabs, or falls back to blocks below.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "nav_heading",
+      "label": "Sub-Collection Section Title (Optional)",
+      "default": ""
+    },
+    {
+      "type": "range",
+      "id": "avatar_size_desktop",
+      "min": 64,
+      "max": 110,
+      "step": 4,
+      "unit": "px",
+      "label": "Desktop Circle Avatar Size",
+      "default": 84
+    },
+    {
+      "type": "range",
+      "id": "avatar_size_mobile",
+      "min": 56,
+      "max": 88,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Circle Avatar Size",
+      "default": 68
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subcollection_tab",
+      "name": "Sub-Collection Tab",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Target Collection"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Override Tab Title",
+          "info": "Leave blank to use collection title or metafield"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Override Circular Avatar",
+          "info": "Leave blank to use collection image or metafield"
+        },
+        {
+          "type": "url",
+          "id": "custom_link",
+          "label": "Custom URL",
+          "info": "Optional override if not linking directly to collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier Collection Banner",
+      "blocks": [
+        { "type": "subcollection_tab" },
+        { "type": "subcollection_tab" },
+        { "type": "subcollection_tab" },
+        { "type": "subcollection_tab" }
+      ]
+    }
+  ]
+}
+{% endschema %}

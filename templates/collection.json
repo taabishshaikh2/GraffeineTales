@@ -10,11 +10,16 @@
 {
   "sections": {
     "banner": {
-      "type": "main-collection-banner",
+      "type": "atelier-collection-banner",
       "settings": {
-        "show_collection_description": true,
-        "show_collection_image": false,
-        "color_scheme": "scheme-1"
+        "show_badge": true,
+        "badge_text": "WEBSITE EXCLUSIVE",
+        "show_description": true,
+        "show_subcollections": true,
+        "hero_height_desktop": 360,
+        "hero_height_mobile": 260,
+        "overlay_opacity": 85,
+        "text_alignment": "center"
       }
     },
     "product-grid": {
