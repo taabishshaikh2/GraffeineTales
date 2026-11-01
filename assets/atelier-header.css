@@ -34,7 +34,7 @@
   }
 
 /* ==========================================================================
-   GRAFFEINE TALES — ZERO-TOLERANCE BULLET & FOUC RESETS
+   GRAFFEINE TALES — BULLETPROOF ZERO-BULLET & ANTI-FOUC RESETS
    ========================================================================== */
 .atelier-header-section ul,
 .atelier-header-section ol,
@@ -67,8 +67,13 @@
   content: '' !important;
 }
 
-.atelier-drawer svg {
-  box-sizing: content-box !important;
+/* Anti-Blue Links Reset in Drawer */
+.atelier-drawer a,
+.atelier-drawer a:visited,
+.atelier-drawer a:hover,
+.atelier-drawer a:active {
+  color: inherit !important;
+  text-decoration: none !important;
 }
 
 /* Constrain drawer chevrons strictly to 14px */
@@ -105,14 +110,6 @@
   min-height: 36px;
   padding: 6px 20px;
   position: relative;
-}
-.atelier-announcement__marquee {
-  width: 100%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  white-space: nowrap;
 }
 .atelier-announcement__track {
   display: inline-flex;
@@ -170,16 +167,13 @@ atelier-header {
   font-family: 'Inter', -apple-system, sans-serif !important;
   color: var(--header-text, #363638) !important;
 }
-
 atelier-header * {
   box-sizing: border-box !important;
 }
-
 atelier-header a {
   color: inherit !important;
   text-decoration: none !important;
 }
-
 atelier-header button {
   font: inherit !important;
   color: inherit !important;
@@ -631,9 +625,9 @@ atelier-header button {
 
 /* ==========================================================================
    MOBILE HEADER (< 990px) — PERFECT SYMMETRICAL 2 - 1 - 2 LAYOUT
-   Left: [ ≡ ] [ 🔍 ]
+   Left: [ ≡ ] [ 🔍 ] (Hamburger + Search Icon Side-by-side)
    Center: Centered Logo with independent Mobile Sizing Controls
-   Right: [ ♡ ] [ 🛍️ ]
+   Right: [ ♡ ] [ 🛍️ ] (Wishlist + Cart ONLY, ZERO Search/Account Icons)
    ========================================================================== */
 @media screen and (max-width: 989px) {
   .atelier-header__bar {
@@ -650,7 +644,7 @@ atelier-header button {
     border-radius: var(--header-radius, 22px) !important;
   }
 
-  /* LEFT: Hamburger + Search Icon Buttons */
+  /* LEFT: Hamburger + Search Icon Buttons STRICTLY SIDE-BY-SIDE */
   .atelier-header__left {
     display: flex !important;
     align-items: center !important;
@@ -678,7 +672,9 @@ atelier-header button {
     height: 20px !important;
     stroke: currentColor !important;
   }
-  .atelier-search-btn--mobile {
+
+  .atelier-header__left .atelier-search-btn,
+  .atelier-header__left .atelier-search-btn--mobile {
     display: grid !important;
     place-items: center !important;
     width: 36px !important;
@@ -690,16 +686,31 @@ atelier-header button {
     color: var(--header-text, #363638) !important;
     border-radius: 50% !important;
   }
-  .atelier-search-btn--mobile svg {
+  .atelier-header__left .atelier-search-btn svg,
+  .atelier-header__left .atelier-search-btn--mobile svg {
     display: block !important;
     width: 19px !important;
     height: 19px !important;
     stroke: currentColor !important;
   }
+
+  /* HIDE Desktop Elements on Mobile */
   .atelier-search-pill,
-  .atelier-header__nav,
+  .atelier-header__nav {
+    display: none !important;
+  }
+
+  /* CRITICAL: GUARANTEE Search is NEVER on the right on mobile */
+  .atelier-header__right .atelier-search-btn,
+  .atelier-header__right .atelier-search-btn--desktop,
   .atelier-search-btn--desktop {
     display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    pointer-events: none !important;
   }
 
   /* CENTER: Centered Logo */
@@ -763,7 +774,7 @@ atelier-header button {
 }
 
 /* ==========================================================================
-   MOBILE DRAWER NAVIGATION
+   MOBILE DRAWER NAVIGATION — LUXURY ATELIER FINISH
    ========================================================================== */
 #atelier-mobile-drawer.atelier-drawer {
   position: fixed !important;
@@ -774,6 +785,7 @@ atelier-header button {
   height: 100vh !important;
   height: 100dvh !important;
   background: #F8F5ED !important;
+  color: #363638 !important;
   z-index: 100000 !important;
   box-shadow: 12px 0 36px rgba(0, 0, 0, 0.22) !important;
   transform: translateX(-105%) !important;
@@ -816,7 +828,7 @@ atelier-header button {
   flex: 1 1 auto !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
-  padding: 16px 20px 40px !important;
+  padding: 16px 20px !important;
 }
 
 /* Full Width Drawer Search Input */
@@ -847,29 +859,30 @@ atelier-header button {
   outline: none !important;
 }
 
-/* Promo Card in Drawer */
+/* Promo Banner Card in Drawer */
 .atelier-drawer__promo-banner {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
   gap: 12px !important;
-  background: linear-gradient(135deg, #4D351D, #2B1D10) !important;
+  background: linear-gradient(135deg, #4D351D 0%, #2B1D10 100%) !important;
   color: #FFFFFF !important;
   padding: 14px 18px !important;
   border-radius: 12px !important;
   text-decoration: none !important;
-  margin-bottom: 20px !important;
-  box-shadow: 0 4px 16px rgba(43, 29, 16, 0.25) !important;
+  margin-bottom: 18px !important;
+  box-shadow: 0 4px 14px rgba(43, 29, 16, 0.22) !important;
 }
 .atelier-drawer__promo-h {
   font-family: 'DM Serif Display', Georgia, serif !important;
   font-size: 15px !important;
+  color: #FFFFFF !important;
   letter-spacing: 0.02em !important;
 }
 .atelier-drawer__promo-cta {
   font-size: 11px !important;
   font-weight: 700 !important;
-  letter-spacing: 0.1em !important;
+  letter-spacing: 0.12em !important;
   text-transform: uppercase !important;
   color: #E9DFC2 !important;
   white-space: nowrap !important;
@@ -877,11 +890,12 @@ atelier-header button {
 
 /* Drawer Rows & Links */
 .atelier-drawer__rows {
-  margin: 0 0 20px !important;
+  margin: 0 0 16px !important;
   padding: 0 !important;
 }
 .atelier-drawer__rows li {
   list-style: none !important;
+  list-style-type: none !important;
 }
 .atelier-drawer__row-link {
   display: flex !important;
@@ -893,9 +907,18 @@ atelier-header button {
   font-weight: 600 !important;
   color: #363638 !important;
   text-decoration: none !important;
+  background: transparent !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  cursor: pointer !important;
+  width: 100% !important;
+}
+.atelier-drawer__row-link:hover {
+  color: #4D351D !important;
 }
 .atelier-drawer__sublist {
-  padding: 6px 0 10px 14px !important;
+  padding: 4px 0 10px 14px !important;
   border-left: 2px solid rgba(54, 54, 56, 0.12) !important;
   margin: 0 0 8px !important;
 }
@@ -903,34 +926,45 @@ atelier-header button {
   display: block !important;
   padding: 8px 0 !important;
   font-size: 13.5px !important;
-  color: rgba(54, 54, 56, 0.8) !important;
+  color: rgba(54, 54, 56, 0.75) !important;
   text-decoration: none !important;
 }
-
-/* Dedicated Account Card in Drawer */
-.atelier-drawer__account-wrap {
-  margin: 16px 0 20px !important;
+.atelier-drawer__sublink:hover {
+  color: #4D351D !important;
 }
+
+/* PINNED BOTTOM FOOTER IN DRAWER */
+.atelier-drawer__footer {
+  flex-shrink: 0 !important;
+  padding: 16px 20px !important;
+  border-top: 1px solid rgba(54, 54, 56, 0.1) !important;
+  background: #FDFBF7 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+/* Dedicated Account Card at Drawer Bottom */
 .atelier-drawer__account-card {
   display: flex !important;
   align-items: center !important;
-  gap: 14px !important;
-  padding: 14px 16px !important;
-  background: #ffffff !important;
+  gap: 12px !important;
+  padding: 12px 14px !important;
+  background: #FFFFFF !important;
   border: 1px solid rgba(198, 181, 142, 0.45) !important;
   border-radius: 12px !important;
   text-decoration: none !important;
-  box-shadow: 0 2px 8px rgba(54, 54, 56, 0.04) !important;
-  transition: all 0.25s ease !important;
+  color: #363638 !important;
+  box-shadow: 0 2px 6px rgba(54, 54, 56, 0.04) !important;
+  transition: all 0.2s ease !important;
 }
 .atelier-drawer__account-card:hover {
-  background: #FDFBF7 !important;
+  background: #FAF6EE !important;
   border-color: #4D351D !important;
-  box-shadow: 0 4px 14px rgba(77, 53, 29, 0.12) !important;
 }
 .atelier-drawer__account-icon {
-  width: 40px !important;
-  height: 40px !important;
+  width: 38px !important;
+  height: 38px !important;
   border-radius: 50% !important;
   background: #F8F5ED !important;
   border: 1px solid rgba(198, 181, 142, 0.5) !important;
@@ -940,8 +974,8 @@ atelier-header button {
   color: #4D351D !important;
 }
 .atelier-drawer__account-icon svg {
-  width: 20px !important;
-  height: 20px !important;
+  width: 19px !important;
+  height: 19px !important;
 }
 .atelier-drawer__account-text {
   flex: 1 1 auto !important;
@@ -951,43 +985,55 @@ atelier-header button {
 }
 .atelier-drawer__account-title {
   font-family: 'DM Serif Display', Georgia, serif !important;
-  font-size: 15px !important;
+  font-size: 14.5px !important;
   color: #363638 !important;
 }
 .atelier-drawer__account-sub {
-  font-size: 11.5px !important;
+  font-size: 11px !important;
   color: rgba(54, 54, 56, 0.6) !important;
 }
 .atelier-drawer__account-arrow {
-  font-size: 18px !important;
+  font-size: 16px !important;
   color: #4D351D !important;
 }
 
-/* Contact Action Buttons */
-.atelier-drawer__actions {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
-  margin-top: 20px !important;
-}
-.atelier-drawer__btn {
+/* WhatsApp Button at Drawer Bottom */
+.atelier-drawer__wa-btn {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
+  width: 100% !important;
   height: 44px !important;
   border-radius: 10px !important;
-  font-size: 13px !important;
+  background: #25D366 !important;
+  color: #FFFFFF !important;
+  font-size: 13.5px !important;
   font-weight: 600 !important;
   text-decoration: none !important;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.22) !important;
+  transition: opacity 0.2s ease !important;
 }
-.atelier-drawer__btn--call {
-  background: rgba(54, 54, 56, 0.06) !important;
-  color: #363638 !important;
+.atelier-drawer__wa-btn:hover {
+  opacity: 0.92 !important;
 }
-.atelier-drawer__btn--wa {
-  background: #25D366 !important;
-  color: #ffffff !important;
+.atelier-drawer__wa-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: currentColor !important;
+}
+.atelier-drawer__footer-hours {
+  text-align: center !important;
+  font-size: 11px !important;
+  color: rgba(54, 54, 56, 0.55) !important;
+  letter-spacing: 0.04em !important;
+}
+.atelier-drawer__footer-tagline {
+  text-align: center !important;
+  font-size: 10.5px !important;
+  font-style: italic !important;
+  color: rgba(54, 54, 56, 0.45) !important;
+  margin: 0 !important;
 }
 
 /* Scrim Backdrop */

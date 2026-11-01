@@ -85,7 +85,7 @@
   }
 
 /* ==========================================================================
-   GRAFFEINE TALES — ZERO-TOLERANCE BULLET & FOUC RESETS
+   GRAFFEINE TALES — BULLETPROOF ZERO-BULLET & ANTI-FOUC RESETS
    ========================================================================== */
 #shopify-section-{{ section.id }} ul,
 #shopify-section-{{ section.id }} ol,
@@ -118,8 +118,13 @@
   content: '' !important;
 }
 
-.atelier-drawer svg {
-  box-sizing: content-box !important;
+/* Anti-Blue Links Reset in Drawer */
+.atelier-drawer a,
+.atelier-drawer a:visited,
+.atelier-drawer a:hover,
+.atelier-drawer a:active {
+  color: inherit !important;
+  text-decoration: none !important;
 }
 
 /* Constrain drawer chevrons strictly to 14px */
@@ -156,14 +161,6 @@
   min-height: 36px;
   padding: 6px 20px;
   position: relative;
-}
-.atelier-announcement__marquee {
-  width: 100%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  white-space: nowrap;
 }
 .atelier-announcement__track {
   display: inline-flex;
@@ -221,16 +218,13 @@ atelier-header {
   font-family: 'Inter', -apple-system, sans-serif !important;
   color: var(--header-text, #363638) !important;
 }
-
 atelier-header * {
   box-sizing: border-box !important;
 }
-
 atelier-header a {
   color: inherit !important;
   text-decoration: none !important;
 }
-
 atelier-header button {
   font: inherit !important;
   color: inherit !important;
@@ -682,9 +676,9 @@ atelier-header button {
 
 /* ==========================================================================
    MOBILE HEADER (< 990px) — PERFECT SYMMETRICAL 2 - 1 - 2 LAYOUT
-   Left: [ ≡ ] [ 🔍 ]
+   Left: [ ≡ ] [ 🔍 ] (Hamburger + Search Icon Side-by-side)
    Center: Centered Logo with independent Mobile Sizing Controls
-   Right: [ ♡ ] [ 🛍️ ]
+   Right: [ ♡ ] [ 🛍️ ] (Wishlist + Cart ONLY, ZERO Search/Account Icons)
    ========================================================================== */
 @media screen and (max-width: 989px) {
   .atelier-header__bar {
@@ -701,7 +695,7 @@ atelier-header button {
     border-radius: var(--header-radius, 22px) !important;
   }
 
-  /* LEFT: Hamburger + Search Icon Buttons */
+  /* LEFT: Hamburger + Search Icon Buttons STRICTLY SIDE-BY-SIDE */
   .atelier-header__left {
     display: flex !important;
     align-items: center !important;
@@ -729,7 +723,9 @@ atelier-header button {
     height: 20px !important;
     stroke: currentColor !important;
   }
-  .atelier-search-btn--mobile {
+
+  .atelier-header__left .atelier-search-btn,
+  .atelier-header__left .atelier-search-btn--mobile {
     display: grid !important;
     place-items: center !important;
     width: 36px !important;
@@ -741,16 +737,31 @@ atelier-header button {
     color: var(--header-text, #363638) !important;
     border-radius: 50% !important;
   }
-  .atelier-search-btn--mobile svg {
+  .atelier-header__left .atelier-search-btn svg,
+  .atelier-header__left .atelier-search-btn--mobile svg {
     display: block !important;
     width: 19px !important;
     height: 19px !important;
     stroke: currentColor !important;
   }
+
+  /* HIDE Desktop Elements on Mobile */
   .atelier-search-pill,
-  .atelier-header__nav,
+  .atelier-header__nav {
+    display: none !important;
+  }
+
+  /* CRITICAL: GUARANTEE Search is NEVER on the right on mobile */
+  .atelier-header__right .atelier-search-btn,
+  .atelier-header__right .atelier-search-btn--desktop,
   .atelier-search-btn--desktop {
     display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    pointer-events: none !important;
   }
 
   /* CENTER: Centered Logo */
@@ -814,7 +825,7 @@ atelier-header button {
 }
 
 /* ==========================================================================
-   MOBILE DRAWER NAVIGATION
+   MOBILE DRAWER NAVIGATION — LUXURY ATELIER FINISH
    ========================================================================== */
 #atelier-mobile-drawer.atelier-drawer {
   position: fixed !important;
@@ -825,6 +836,7 @@ atelier-header button {
   height: 100vh !important;
   height: 100dvh !important;
   background: #F8F5ED !important;
+  color: #363638 !important;
   z-index: 100000 !important;
   box-shadow: 12px 0 36px rgba(0, 0, 0, 0.22) !important;
   transform: translateX(-105%) !important;
@@ -867,7 +879,7 @@ atelier-header button {
   flex: 1 1 auto !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
-  padding: 16px 20px 40px !important;
+  padding: 16px 20px !important;
 }
 
 /* Full Width Drawer Search Input */
@@ -898,29 +910,30 @@ atelier-header button {
   outline: none !important;
 }
 
-/* Promo Card in Drawer */
+/* Promo Banner Card in Drawer */
 .atelier-drawer__promo-banner {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
   gap: 12px !important;
-  background: linear-gradient(135deg, #4D351D, #2B1D10) !important;
+  background: linear-gradient(135deg, #4D351D 0%, #2B1D10 100%) !important;
   color: #FFFFFF !important;
   padding: 14px 18px !important;
   border-radius: 12px !important;
   text-decoration: none !important;
-  margin-bottom: 20px !important;
-  box-shadow: 0 4px 16px rgba(43, 29, 16, 0.25) !important;
+  margin-bottom: 18px !important;
+  box-shadow: 0 4px 14px rgba(43, 29, 16, 0.22) !important;
 }
 .atelier-drawer__promo-h {
   font-family: 'DM Serif Display', Georgia, serif !important;
   font-size: 15px !important;
+  color: #FFFFFF !important;
   letter-spacing: 0.02em !important;
 }
 .atelier-drawer__promo-cta {
   font-size: 11px !important;
   font-weight: 700 !important;
-  letter-spacing: 0.1em !important;
+  letter-spacing: 0.12em !important;
   text-transform: uppercase !important;
   color: #E9DFC2 !important;
   white-space: nowrap !important;
@@ -928,11 +941,12 @@ atelier-header button {
 
 /* Drawer Rows & Links */
 .atelier-drawer__rows {
-  margin: 0 0 20px !important;
+  margin: 0 0 16px !important;
   padding: 0 !important;
 }
 .atelier-drawer__rows li {
   list-style: none !important;
+  list-style-type: none !important;
 }
 .atelier-drawer__row-link {
   display: flex !important;
@@ -944,9 +958,18 @@ atelier-header button {
   font-weight: 600 !important;
   color: #363638 !important;
   text-decoration: none !important;
+  background: transparent !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  cursor: pointer !important;
+  width: 100% !important;
+}
+.atelier-drawer__row-link:hover {
+  color: #4D351D !important;
 }
 .atelier-drawer__sublist {
-  padding: 6px 0 10px 14px !important;
+  padding: 4px 0 10px 14px !important;
   border-left: 2px solid rgba(54, 54, 56, 0.12) !important;
   margin: 0 0 8px !important;
 }
@@ -954,34 +977,45 @@ atelier-header button {
   display: block !important;
   padding: 8px 0 !important;
   font-size: 13.5px !important;
-  color: rgba(54, 54, 56, 0.8) !important;
+  color: rgba(54, 54, 56, 0.75) !important;
   text-decoration: none !important;
 }
-
-/* Dedicated Account Card in Drawer */
-.atelier-drawer__account-wrap {
-  margin: 16px 0 20px !important;
+.atelier-drawer__sublink:hover {
+  color: #4D351D !important;
 }
+
+/* PINNED BOTTOM FOOTER IN DRAWER */
+.atelier-drawer__footer {
+  flex-shrink: 0 !important;
+  padding: 16px 20px !important;
+  border-top: 1px solid rgba(54, 54, 56, 0.1) !important;
+  background: #FDFBF7 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+/* Dedicated Account Card at Drawer Bottom */
 .atelier-drawer__account-card {
   display: flex !important;
   align-items: center !important;
-  gap: 14px !important;
-  padding: 14px 16px !important;
-  background: #ffffff !important;
+  gap: 12px !important;
+  padding: 12px 14px !important;
+  background: #FFFFFF !important;
   border: 1px solid rgba(198, 181, 142, 0.45) !important;
   border-radius: 12px !important;
   text-decoration: none !important;
-  box-shadow: 0 2px 8px rgba(54, 54, 56, 0.04) !important;
-  transition: all 0.25s ease !important;
+  color: #363638 !important;
+  box-shadow: 0 2px 6px rgba(54, 54, 56, 0.04) !important;
+  transition: all 0.2s ease !important;
 }
 .atelier-drawer__account-card:hover {
-  background: #FDFBF7 !important;
+  background: #FAF6EE !important;
   border-color: #4D351D !important;
-  box-shadow: 0 4px 14px rgba(77, 53, 29, 0.12) !important;
 }
 .atelier-drawer__account-icon {
-  width: 40px !important;
-  height: 40px !important;
+  width: 38px !important;
+  height: 38px !important;
   border-radius: 50% !important;
   background: #F8F5ED !important;
   border: 1px solid rgba(198, 181, 142, 0.5) !important;
@@ -991,8 +1025,8 @@ atelier-header button {
   color: #4D351D !important;
 }
 .atelier-drawer__account-icon svg {
-  width: 20px !important;
-  height: 20px !important;
+  width: 19px !important;
+  height: 19px !important;
 }
 .atelier-drawer__account-text {
   flex: 1 1 auto !important;
@@ -1002,43 +1036,55 @@ atelier-header button {
 }
 .atelier-drawer__account-title {
   font-family: 'DM Serif Display', Georgia, serif !important;
-  font-size: 15px !important;
+  font-size: 14.5px !important;
   color: #363638 !important;
 }
 .atelier-drawer__account-sub {
-  font-size: 11.5px !important;
+  font-size: 11px !important;
   color: rgba(54, 54, 56, 0.6) !important;
 }
 .atelier-drawer__account-arrow {
-  font-size: 18px !important;
+  font-size: 16px !important;
   color: #4D351D !important;
 }
 
-/* Contact Action Buttons */
-.atelier-drawer__actions {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
-  margin-top: 20px !important;
-}
-.atelier-drawer__btn {
+/* WhatsApp Button at Drawer Bottom */
+.atelier-drawer__wa-btn {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
+  width: 100% !important;
   height: 44px !important;
   border-radius: 10px !important;
-  font-size: 13px !important;
+  background: #25D366 !important;
+  color: #FFFFFF !important;
+  font-size: 13.5px !important;
   font-weight: 600 !important;
   text-decoration: none !important;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.22) !important;
+  transition: opacity 0.2s ease !important;
 }
-.atelier-drawer__btn--call {
-  background: rgba(54, 54, 56, 0.06) !important;
-  color: #363638 !important;
+.atelier-drawer__wa-btn:hover {
+  opacity: 0.92 !important;
 }
-.atelier-drawer__btn--wa {
-  background: #25D366 !important;
-  color: #ffffff !important;
+.atelier-drawer__wa-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: currentColor !important;
+}
+.atelier-drawer__footer-hours {
+  text-align: center !important;
+  font-size: 11px !important;
+  color: rgba(54, 54, 56, 0.55) !important;
+  letter-spacing: 0.04em !important;
+}
+.atelier-drawer__footer-tagline {
+  text-align: center !important;
+  font-size: 10.5px !important;
+  font-style: italic !important;
+  color: rgba(54, 54, 56, 0.45) !important;
+  margin: 0 !important;
 }
 
 /* Scrim Backdrop */
@@ -1125,7 +1171,7 @@ atelier-header button {
             {{ icon_burger }}
           </button>
 
-          {%- comment -%} Search Icon Button (On left for mobile & single-row desktop) {%- endcomment -%}
+          {%- comment -%} Mobile Search Icon Button (On left next to burger, mobile only) {%- endcomment -%}
           <button
             type="button"
             class="atelier-icon-btn atelier-search-btn atelier-search-btn--mobile"
@@ -1199,6 +1245,7 @@ atelier-header button {
 
         {%- comment -%} ---------- RIGHT AREA (ACTION ICONS) ---------- {%- endcomment -%}
         <div class="atelier-header__right">
+          {%- comment -%} Desktop Search Button (ONLY on desktop single-row layouts, NEVER on mobile) {%- endcomment -%}
           <button
             type="button"
             class="atelier-icon-btn atelier-search-btn atelier-search-btn--desktop"
@@ -1207,6 +1254,7 @@ atelier-header button {
           >
             {{ icon_search }}
           </button>
+
           {%- comment -%} Wishlist Icon Button {%- endcomment -%}
           {%- if s.show_wishlist -%}
             <button
@@ -1241,8 +1289,8 @@ atelier-header button {
         </div>
 
       </div>
-
-      {%- comment -%} ==================== C. DESKTOP MEGA MENUS ==================== {%- endcomment -%}
+    </div>
+    {%- comment -%} ==================== C. DESKTOP MEGA MENUS ==================== {%- endcomment -%}
       {%- for link in menu -%}
         {%- if link.links.size == 0 -%}{%- continue -%}{%- endif -%}
         {%- assign lt = link.title | downcase | strip -%}
@@ -1378,12 +1426,16 @@ atelier-header button {
       </div>
       <button
         type="button"
-        class="atelier-drawer__close" data-close-drawer aria-label="Close mobile menu" onclick="const d=document.getElementById('atelier-mobile-drawer');const s=document.querySelector('.atelier-scrim');if(d)d.classList.remove('is-open');if(s)s.classList.remove('is-visible');document.body.style.overflow='';" >
+        class="atelier-drawer__close"
+        data-close-drawer
+        aria-label="Close mobile menu"
+        onclick="const d=document.getElementById('atelier-mobile-drawer');const s=document.querySelector('.atelier-scrim');if(d)d.classList.remove('is-open');if(s)s.classList.remove('is-visible');document.body.style.overflow='';"
+      >
         {{ icon_close }}
       </button>
     </div>
 
-    <!-- Body Content -->
+    <!-- Scrollable Body Content -->
     <div class="atelier-drawer__body">
       <!-- Search Input -->
       <form class="atelier-drawer__search" action="{{ routes.search_url }}" method="get" role="search">
@@ -1408,7 +1460,7 @@ atelier-header button {
         </a>
       {%- endif -%}
 
-      <!-- 2-Column Photo Tiles Grid (Image 3 reference) -->
+      <!-- 2-Column Photo Tiles Grid (if enabled) -->
       {%- if s.m_tiles > 0 and s.m_style != 'text' -%}
         <div class="atelier-drawer__tiles-grid">
           {%- assign tile_count = 0 -%}
@@ -1419,7 +1471,6 @@ atelier-header button {
               assign tile_img = nil
               assign lt_m = link.title | downcase | strip
 
-              # Check menu_photo blocks
               for b in section.blocks
                 if b.type == 'menu_photo' and b.settings.image != blank
                   assign bt_m = b.settings.item | downcase | strip
@@ -1430,48 +1481,39 @@ atelier-header button {
                 endif
               endfor
 
-              # Check collection image
               if tile_img == nil and link.type == 'collection_link' and link.object
                 if link.object.metafields.custom.collection_tab_image != blank
                   assign tile_img = link.object.metafields.custom.collection_tab_image
                 elsif link.object.featured_image != blank
                   assign tile_img = link.object.featured_image
-                elsif link.object.image != blank
-                  assign tile_img = link.object.image
                 endif
               endif
 
-              # Check children for collection image
-              if tile_img == nil
-                for c in link.links
-                  if c.type == 'collection_link' and c.object.featured_image != blank
-                    assign tile_img = c.object.featured_image
-                    break
-                  endif
-                endfor
+              if tile_img == nil and link.type == 'catalog_link'
+                assign coll_first = collections.first
+                if coll_first and coll_first.featured_image != blank
+                  assign tile_img = coll_first.featured_image
+                endif
               endif
-
-              assign tile_count = tile_count | plus: 1
-              assign tile_handles = tile_handles | append: forloop.index | append: ','
             -%}
-            <a class="atelier-photo-tile" href="{{ link.url }}">
-              <div class="atelier-photo-tile__img">
-                {%- if tile_img != blank -%}
-                  {{ tile_img | image_url: width: 400 | image_tag: widths: '200, 300, 400', sizes: '44vw', loading: 'lazy', alt: link.title | escape }}
-                {%- else -%}
-                  <div class="atelier-photo-tile__placeholder"></div>
-                {%- endif -%}
-              </div>
-              <div class="atelier-photo-tile__scrim"></div>
-              <div class="atelier-photo-tile__info">
-                <span class="atelier-photo-tile__title">{{ link.title | escape }}</span>
-                {%- if link.links.size > 0 -%}
-                  <span class="atelier-photo-tile__count">{{ link.links.size }} categories</span>
-                {%- else -%}
-                  <span class="atelier-photo-tile__count">View collection</span>
-                {%- endif -%}
-              </div>
-            </a>
+
+            {%- if tile_img != blank -%}
+              {%- assign tile_count = tile_count | plus: 1 -%}
+              {%- assign tile_handles = tile_handles | append: forloop.index | append: ',' -%}
+              <a class="atelier-photo-tile" href="{{ link.url }}">
+                <div class="atelier-photo-tile__media">
+                  {{ tile_img | image_url: width: 360 | image_tag: loading: 'lazy', widths: '160, 240, 360', sizes: '140px', alt: link.title }}
+                </div>
+                <div class="atelier-photo-tile__info">
+                  <span class="atelier-photo-tile__title">{{ link.title | escape }}</span>
+                  {%- if link.type == 'collection_link' and link.object -%}
+                    <span class="atelier-photo-tile__count">{{ link.object.all_products_count }} items</span>
+                  {%- else -%}
+                    <span class="atelier-photo-tile__count">View collection</span>
+                  {%- endif -%}
+                </div>
+              </a>
+            {%- endif -%}
           {%- endfor -%}
         </div>
       {%- endif -%}
@@ -1507,56 +1549,38 @@ atelier-header button {
           </li>
         {%- endfor -%}
       </ul>
+    </div>
 
-      <!-- Dedicated Account Card Inside Side Menu (User Request) -->
-      <div class="atelier-drawer__account-wrap">
-        <a class="atelier-drawer__account-card" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">
-          <div class="atelier-drawer__account-icon">
-            {{ icon_account }}
-          </div>
-          <div class="atelier-drawer__account-text">
-            <span class="atelier-drawer__account-title">
-              {% if customer %}My Account ({{ customer.first_name }}){% else %}Log in / Register{% endif %}
-            </span>
-            <span class="atelier-drawer__account-sub">
-              {% if customer %}View orders, addresses & details{% else %}Access your wishlist & order history{% endif %}
-            </span>
-          </div>
-          <div class="atelier-drawer__account-arrow">&rarr;</div>
-        </a>
-      </div>
+    <!-- Pinned Bottom Section: Account Card & WhatsApp Button (User Explicit Request) -->
+    <div class="atelier-drawer__footer">
+      <!-- Dedicated Account Card -->
+      <a class="atelier-drawer__account-card" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">
+        <div class="atelier-drawer__account-icon">
+          {{ icon_account }}
+        </div>
+        <div class="atelier-drawer__account-text">
+          <span class="atelier-drawer__account-title">
+            {% if customer %}My Account ({{ customer.first_name }}){% else %}Log in / Register{% endif %}
+          </span>
+          <span class="atelier-drawer__account-sub">
+            {% if customer %}View orders & wishlist{% else %}Access your wishlist & order history{% endif %}
+          </span>
+        </div>
+        <div class="atelier-drawer__account-arrow">&rarr;</div>
+      </a>
 
-      <!-- Action Buttons: Call Us & WhatsApp (Image 3 reference) -->
+      <!-- WhatsApp Action Button -->
       {%- if s.m_show_contact -%}
-        <div class="atelier-drawer__actions">
-          {%- if phone_clean != blank -%}
-            <a class="atelier-drawer__btn atelier-drawer__btn--call" href="tel:{{ phone_clean }}">
-              {{ icon_phone }}
-              <span>Call us</span>
-            </a>
-          {%- endif -%}
-          {%- if whatsapp_clean != blank -%}
-            <a class="atelier-drawer__btn atelier-drawer__btn--wa" href="https://wa.me/{{ whatsapp_clean }}" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M12 2.2a9.7 9.7 0 0 0-8.4 14.6L2.3 21.8l5.1-1.3A9.7 9.7 0 1 0 12 2.2Zm0 17.7c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 19.9Zm4.4-6c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.8.9c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 4 3.5 1.5.6 2.1.7 2.8.6.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1l-.6-.4Z"/></svg>
-              <span>WhatsApp</span>
-            </a>
-          {%- endif -%}
-        </div>
-
-        <div class="atelier-drawer__meta">
-          {%- if shop.customer_accounts_enabled -%}
-            <a class="atelier-drawer__login" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">
-              {{ icon_account }}
-              <span>{% if customer %}My Account{% else %}Log in / Register{% endif %}</span>
-            </a>
-          {%- endif -%}
-          {%- if s.m_hours != blank -%}
-            <span class="atelier-drawer__hours">{{ s.m_hours | escape }}</span>
-          {%- endif -%}
-        </div>
-
-        <p class="atelier-drawer__tagline">{{ s.tagline | default: 'Loved by thousands of storytellers across India' }}</p>
+        <a class="atelier-drawer__wa-btn" href="https://wa.me/{{ whatsapp_clean | default: '919876543210' }}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true"><path d="M12 2.2a9.7 9.7 0 0 0-8.4 14.6L2.3 21.8l5.1-1.3A9.7 9.7 0 1 0 12 2.2Zm0 17.7c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 19.9Zm4.4-6c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.8.9c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 4 3.5 1.5.6 2.1.7 2.8.6.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1l-.6-.4Z"/></svg>
+          <span>Chat on WhatsApp</span>
+        </a>
       {%- endif -%}
+
+      {%- if s.m_hours != blank -%}
+        <div class="atelier-drawer__footer-hours">{{ s.m_hours | escape }}</div>
+      {%- endif -%}
+      <p class="atelier-drawer__footer-tagline">{{ s.tagline | default: 'Artful Things. Thoughtful Living.' }}</p>
     </div>
   </aside>
   </atelier-header>
