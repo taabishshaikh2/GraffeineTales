@@ -184,3 +184,33 @@ body:has(.atelier-pdp__sticky-bar.is-visible) .atelier-whatsapp-wrapper {
     transition: none !important;
   }
 }
+
+/* ==========================================================================
+   Hide Floating WhatsApp Widget When Drawer or Cart is Open
+   ========================================================================== */
+html.atelier-drawer-open .atelier-whatsapp-wrapper,
+html.atelier-drawer-open .atelier-whatsapp-widget,
+body.atelier-drawer-open .atelier-whatsapp-wrapper,
+body.atelier-drawer-open .atelier-whatsapp-widget,
+html.cart-drawer-open .atelier-whatsapp-wrapper,
+html.cart-drawer-open .atelier-whatsapp-widget,
+body.cart-drawer-open .atelier-whatsapp-wrapper,
+body.cart-drawer-open .atelier-whatsapp-widget,
+body:has(#atelier-mobile-drawer.is-open) .atelier-whatsapp-wrapper,
+body:has(#atelier-mobile-drawer.is-open) .atelier-whatsapp-widget,
+body:has(cart-drawer.active) .atelier-whatsapp-wrapper,
+body:has(cart-drawer[open]) .atelier-whatsapp-wrapper,
+body:has(.cart-drawer.active) .atelier-whatsapp-wrapper,
+body:has(.drawer--is-open) .atelier-whatsapp-wrapper,
+/* Third party widget catch-alls */
+html.atelier-drawer-open [class*="whatsapp"]:not(.atelier-drawer *):not(.atelier-header *),
+html.atelier-drawer-open [id*="whatsapp"]:not(.atelier-drawer *):not(.atelier-header *),
+html.atelier-drawer-open [class*="wa-chat"]:not(.atelier-drawer *):not(.atelier-header *),
+html.atelier-drawer-open .wa-widget,
+html.atelier-drawer-open #wa-widget {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: scale(0.7) !important;
+}

@@ -1,5 +1,5 @@
 /**
- * Graffeine Tales — Premium Glass Header Web Component
+ * Graffeine Tales — Premium Glass Header & UrbanDeco Mobile Drawer
  * Unified Architecture with responsive layout switching and real frosted glassmorphism
  */
 if (!customElements.get('atelier-header')) {
@@ -17,7 +17,7 @@ if (!customElements.get('atelier-header')) {
       this.searchResults = this.querySelector('[data-search-results]');
       this.searchIdle = this.querySelector('[data-search-idle]');
       this.drawer = document.getElementById('atelier-mobile-drawer') || this.querySelector('[data-mobile-drawer]');
-      this.scrim = this.querySelector('[data-scrim]') || document.querySelector('.atelier-scrim');
+      this.scrim = document.querySelector('[data-scrim], .atelier-scrim');
       this.lastScrollY = window.scrollY;
       this.openMega = null;
       this.hideOnScroll = this.dataset.hideOnScroll === 'true';
@@ -117,7 +117,7 @@ if (!customElements.get('atelier-header')) {
         });
       });
 
-      // 5. Mobile Drawer — Open
+      // 5. Mobile Drawer Open Trigger
       this.querySelectorAll('[data-open-drawer]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -126,16 +126,15 @@ if (!customElements.get('atelier-header')) {
         });
       });
 
-      // 5b. Mobile Drawer — Close (ONLY the dedicated close button and scrim)
-      this.querySelectorAll('[data-close-drawer]').forEach((el) => {
-        el.addEventListener('click', (e) => {
+      // 6. Mobile Drawer Close Triggers (dedicated button & scrim only)
+      this.querySelectorAll('[data-close-drawer]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
           this.closeMobileDrawer();
         });
       });
 
-      // Scrim click closes drawer
       if (this.scrim) {
         this.scrim.addEventListener('click', (e) => {
           e.preventDefault();
@@ -146,7 +145,17 @@ if (!customElements.get('atelier-header')) {
         });
       }
 
-      // 6. Escape key closes everything
+      // 7. Drawer Accordion Sub-Menus — Expanding NEVER Closes Drawer!
+      this.setupDrawerAccordions();
+
+      // 8. CRITICAL: Stop clicks inside drawer from closing the drawer
+      if (this.drawer) {
+        this.drawer.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      }
+
+      // 9. Escape Key listener
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           if (this._drawerOpen) {
@@ -158,9 +167,8 @@ if (!customElements.get('atelier-header')) {
         }
       });
 
-      // 7. Outside click closes mega menus (but NOT the drawer)
+      // 10. Outside click listener (closes desktop menus, never the drawer)
       document.addEventListener('click', (e) => {
-        // Never close drawer from outside clicks — drawer has its own close button
         if (this._drawerOpen) return;
         if (!this.contains(e.target)) {
           this.closeMega();
@@ -168,16 +176,7 @@ if (!customElements.get('atelier-header')) {
         }
       });
 
-      // 8. CRITICAL: Stop clicks inside drawer from bubbling to document
-      if (this.drawer) {
-        this.drawer.addEventListener('click', (e) => {
-          // Allow default behavior (details/summary toggle, link navigation)
-          // but stop propagation so document click handler doesn't fire
-          e.stopPropagation();
-        });
-      }
-
-      // 9. Wishlist Integration
+      // 11. Wishlist Integration
       this.updateWishlistCount();
       window.addEventListener('storage', (e) => {
         if (e.key === 'graffeine-wishlist') this.updateWishlistCount();
@@ -194,7 +193,7 @@ if (!customElements.get('atelier-header')) {
         });
       });
 
-      // 10. Cart Drawer Integration
+      // 12. Cart Drawer Integration
       this.querySelectorAll('#cart-icon-bubble, [data-cart-btn]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           const cartDrawer = document.querySelector('cart-drawer');
@@ -206,6 +205,39 @@ if (!customElements.get('atelier-header')) {
       });
 
       this.renderRecentSearches();
+
+      // 13. Observe Cart Drawer to hide WhatsApp widget when cart drawer opens
+      const cartDrawerEl = document.querySelector('cart-drawer');
+      if (cartDrawerEl) {
+        const cartObserver = new MutationObserver(() => {
+          const isCartOpen = cartDrawerEl.classList.contains('active') || cartDrawerEl.hasAttribute('open');
+          document.documentElement.classList.toggle('cart-drawer-open', isCartOpen);
+          document.body.classList.toggle('cart-drawer-open', isCartOpen);
+        });
+        cartObserver.observe(cartDrawerEl, { attributes: true, attributeFilter: ['class', 'open'] });
+      }
+
+    }
+
+    setupDrawerAccordions() {
+      const drawer = this.drawer || document.getElementById('atelier-mobile-drawer');
+      if (!drawer) return;
+
+      drawer.querySelectorAll('[data-accordion-trigger]').forEach((trigger) => {
+        trigger.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const item = trigger.closest('[data-drawer-accordion]');
+          if (item) {
+            const isOpen = item.classList.contains('is-open');
+            // Optional: close other accordions at same level for clean UI
+            drawer.querySelectorAll('[data-drawer-accordion].is-open').forEach((other) => {
+              if (other !== item) other.classList.remove('is-open');
+            });
+            item.classList.toggle('is-open', !isOpen);
+          }
+        });
+      });
     }
 
     measure() {
@@ -257,16 +289,17 @@ if (!customElements.get('atelier-header')) {
       panel.classList.add('is-open');
       btn.setAttribute('aria-expanded', 'true');
       this.openMega = btn;
-      if (this.scrim) this.scrim.classList.add('is-visible');
+      const scrim = this.scrim || document.querySelector('.atelier-scrim');
+      if (scrim) scrim.classList.add('is-visible');
     }
 
     closeMega() {
       this.querySelectorAll('[data-mega-panel].is-open').forEach((p) => p.classList.remove('is-open'));
       this.querySelectorAll('[data-mega-trigger][aria-expanded="true"]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
       this.openMega = null;
-      // Only hide scrim if drawer isn't open
-      if (!this._drawerOpen && this.scrim) {
-        this.scrim.classList.remove('is-visible');
+      if (!this._drawerOpen) {
+        const scrim = this.scrim || document.querySelector('.atelier-scrim');
+        if (scrim) scrim.classList.remove('is-visible');
       }
     }
 
@@ -277,7 +310,8 @@ if (!customElements.get('atelier-header')) {
       } else {
         this.closeMega();
         this.searchPanel.classList.add('is-open');
-        if (this.scrim && !this._drawerOpen) this.scrim.classList.add('is-visible');
+        const scrim = this.scrim || document.querySelector('.atelier-scrim');
+        if (scrim && !this._drawerOpen) scrim.classList.add('is-visible');
         if (this.searchInput) {
           setTimeout(() => this.searchInput.focus(), 60);
         }
@@ -286,8 +320,9 @@ if (!customElements.get('atelier-header')) {
 
     closeSearch() {
       if (this.searchPanel) this.searchPanel.classList.remove('is-open');
-      if (!this._drawerOpen && this.scrim) {
-        this.scrim.classList.remove('is-visible');
+      if (!this._drawerOpen) {
+        const scrim = this.scrim || document.querySelector('.atelier-scrim');
+        if (scrim) scrim.classList.remove('is-visible');
       }
     }
 
@@ -303,7 +338,13 @@ if (!customElements.get('atelier-header')) {
       }
       document.body.style.overflow = 'hidden';
       document.documentElement.classList.add('atelier-drawer-open');
+      document.body.classList.add('atelier-drawer-open');
       this._drawerOpen = true;
+
+      // Ensure any floating WhatsApp widget is hidden
+      document.querySelectorAll('.atelier-whatsapp-wrapper, [class*="whatsapp"]:not(.atelier-drawer *):not(.atelier-header *)').forEach((w) => {
+        w.style.setProperty('display', 'none', 'important');
+      });
     }
 
     closeMobileDrawer() {
@@ -318,7 +359,13 @@ if (!customElements.get('atelier-header')) {
       }
       document.body.style.overflow = '';
       document.documentElement.classList.remove('atelier-drawer-open');
+      document.body.classList.remove('atelier-drawer-open');
       this._drawerOpen = false;
+
+      // Restore floating WhatsApp widget
+      document.querySelectorAll('.atelier-whatsapp-wrapper, [class*="whatsapp"]:not(.atelier-drawer *):not(.atelier-header *)').forEach((w) => {
+        w.style.removeProperty('display');
+      });
     }
 
     suggest(query) {
@@ -392,14 +439,14 @@ if (!customElements.get('atelier-header')) {
     }
   }
 
-  // Global fallback listener for hamburger buttons (in case custom element hasn't initialized)
+  // Global listener for hamburger buttons
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-open-drawer]');
     if (btn) {
+      e.preventDefault();
+      e.stopPropagation();
       const hdr = document.querySelector('atelier-header');
       if (hdr && typeof hdr.openMobileDrawer === 'function') {
-        e.preventDefault();
-        e.stopPropagation();
         hdr.openMobileDrawer();
       }
     }
