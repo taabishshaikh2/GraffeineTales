@@ -95,7 +95,7 @@
         "gap_side_mobile": 10,
         "m_style": "photos",
         "m_tiles": 6,
-        "m_show_promo": true,
+        "m_show_promo": false,
         "promo_heading": "Handcrafted with Art & Intention",
         "promo_link_label": "Shop New Arrivals",
         "promo_link": "",
