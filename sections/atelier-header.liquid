@@ -76,7 +76,7 @@
     --menu-size: {{ s.menu_font_size }}px;
     --menu-weight: {{ s.menu_font_weight }};
     --menu-transform: {{ s.menu_text_transform }};
-    --menu-letter-spacing: {{ s.menu_letter_spacing | divided_by: 100.0 }}em;
+    --menu-letter-spacing: {{ s.menu_letter_spacing | default: 1 }}px;
     --icon-size: {{ s.icon_size }}px;
   }
 {%- endstyle -%}
@@ -836,10 +836,10 @@
       "id": "menu_letter_spacing",
       "label": "Letter spacing",
       "min": 0,
-      "max": 30,
-      "step": 5,
-      "unit": "px/10",
-      "default": 10
+      "max": 6,
+      "step": 1,
+      "unit": "px",
+      "default": 1
     },
 
     {
@@ -1004,10 +1004,15 @@
       "content": "Position & Layout"
     },
     {
-      "type": "checkbox",
+      "type": "select",
       "id": "sticky",
-      "label": "Stay at top when scrolling (sticky)",
-      "default": true
+      "label": "Sticky header",
+      "default": "always",
+      "options": [
+        { "value": "always", "label": "Always sticky" },
+        { "value": "scroll_up", "label": "On scroll up only" },
+        { "value": "none", "label": "None" }
+      ]
     },
     {
       "type": "checkbox",

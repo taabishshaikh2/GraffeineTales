@@ -38,20 +38,6 @@
     },
     "header": {
       "type": "atelier-header",
-      "blocks": {
-        "promo-0": {
-          "type": "promo",
-          "settings": {
-            "menu_item": "Notebooks",
-            "heading": "Artisan Linen Notebooks",
-            "subheading": "Discover Collection",
-            "link": "shopify://collections/all"
-          }
-        }
-      },
-      "block_order": [
-        "promo-0"
-      ],
       "settings": {
         "show_announcement": true,
         "announcement_text": "Artful Things. Thoughtful Living. | Free Shipping on orders over ₹999",
@@ -66,6 +52,7 @@
         "menu_font_size": 13,
         "menu_font_weight": "600",
         "menu_text_transform": "uppercase",
+        "menu_letter_spacing": 1,
         "show_search": true,
         "search_placeholder": "Search journals, notebooks, gifts…",
         "show_account": true,
@@ -78,7 +65,7 @@
         "accent_color": "#4D351D",
         "border_color": "#C6B58E",
         "radius": 18,
-        "sticky": true,
+        "sticky": "always",
         "hide_on_scroll": false,
         "overlay_home": false
       }
