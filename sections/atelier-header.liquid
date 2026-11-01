@@ -70,12 +70,10 @@
     --gap-top-mobile: {{ s.gap_top_mobile }}px;
     --gap-side-mobile: {{ s.gap_side_mobile }}px;
 
-    --logo-width: {{ s.logo_width | default: 160 }}px;
-    --logo-font-size: {{ s.logo_font_size | default: 20 }}px;
-    --cup-size-desktop: {{ s.cup_size_desktop | default: 34 }}px;
-    --logo-width-mobile: {{ s.logo_width_mobile | default: 95 }}px;
-    --logo-font-size-mobile: {{ s.logo_font_size_mobile | default: 13 }}px;
-    --cup-size-mobile: {{ s.cup_size_mobile | default: 22 }}px;
+    --logo-width: {{ s.logo_width }}px;
+    --logo-width-mobile: {{ s.logo_width_mobile }}px;
+    --logo-font-size-mobile: {{ s.logo_font_size_mobile }}px;
+    --cup-size-mobile: {{ s.cup_size_mobile }}px;
 
     --menu-size: {{ s.menu_font_size }}px;
     --menu-weight: {{ s.menu_font_weight }};
@@ -85,50 +83,21 @@
   }
 
 /* ==========================================================================
-   GRAFFEINE TALES — ZERO-TOLERANCE BULLET & FOUC RESETS
+   Graffeine Tales — Premium Frosted Glassmorphic Header System
+   Exact reproduction of UrbanDeco Reference Architecture & Interaction Patterns
    ========================================================================== */
-#shopify-section-{{ section.id }} ul,
-#shopify-section-{{ section.id }} ol,
-#shopify-section-{{ section.id }} li,
-#shopify-section-{{ section.id }} summary,
-#shopify-section-{{ section.id }} details,
-.atelier-header,
-.atelier-header ul,
-.atelier-header ol,
-.atelier-header li,
-.atelier-header summary,
-.atelier-header details,
-.atelier-drawer,
-.atelier-drawer ul,
-.atelier-drawer ol,
-.atelier-drawer li,
-.atelier-drawer summary,
-.atelier-drawer details {
-  list-style: none !important;
-  list-style-type: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
 
-#shopify-section-{{ section.id }} summary::-webkit-details-marker,
-#shopify-section-{{ section.id }} summary::marker,
-.atelier-drawer summary::-webkit-details-marker,
-.atelier-drawer summary::marker {
-  display: none !important;
-  content: '' !important;
-}
-
-/* Anti-Blue Links Reset in Drawer */
-.atelier-drawer a,
-.atelier-drawer a:visited,
-.atelier-drawer a:hover,
-.atelier-drawer a:active {
-  color: inherit !important;
-  text-decoration: none !important;
+:root {
+  --gt-warm-paper: #F8F5ED;
+  --gt-espresso: #363638;
+  --gt-logo-cream: #E9DFC2;
+  --gt-sand: #C6B58E;
+  --gt-deep-coffee: #4D351D;
+  --gt-cream-card: #FDFBF7;
 }
 
 /* ==========================================================================
-   ANNOUNCEMENT BAR
+   Announcement Bar (Top Strip)
    ========================================================================== */
 .atelier-announcement {
   width: 100%;
@@ -137,64 +106,91 @@
   background-color: var(--ann-bg, #1E1814);
   color: var(--ann-color, #F8F5ED);
   font-family: 'Inter', -apple-system, sans-serif;
+  font-size: var(--ann-size, 12px);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 8px 16px;
   overflow: hidden;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  pointer-events: auto;
 }
+
 .atelier-announcement__inner {
+  max-width: 1400px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 36px;
-  padding: 6px 20px;
-  position: relative;
+  justify-content: space-between;
+  gap: 16px;
 }
-.atelier-announcement__track {
-  display: inline-flex;
-  align-items: center;
-  gap: 36px;
+
+.atelier-announcement__content {
+  flex: 1;
+  text-align: center;
+  overflow: hidden;
 }
-.atelier-announcement__track.has-marquee {
-  animation: atelierMarquee var(--ann-speed, 25s) linear infinite;
-}
-.atelier-announcement:hover .atelier-announcement__track.has-marquee {
-  animation-play-state: paused;
-}
-.atelier-announcement__text {
-  font-size: var(--ann-size, 11px);
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+.atelier-announcement__content--left { text-align: left; }
+.atelier-announcement__content--center { text-align: center; }
+.atelier-announcement__content--right { text-align: right; }
+
+.atelier-announcement__link {
   color: inherit;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s ease;
 }
+.atelier-announcement__link:hover { opacity: 0.85; }
+
+.atelier-announcement--marquee .atelier-announcement__content {
+  display: flex;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.atelier-announcement__track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: atelierMarquee var(--ann-speed, 25s) linear infinite;
+  gap: 40px;
+  padding-left: 100%;
+}
+@keyframes atelierMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
 .atelier-announcement__country {
-  position: absolute;
-  right: 20px;
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 11px;
-  letter-spacing: 0.05em;
-  opacity: 0.75;
+  opacity: 0.85;
+  flex-shrink: 0;
 }
-@keyframes atelierMarquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+
+.atelier-announcement--desktop-only { display: block; }
+.atelier-announcement--mobile-only { display: none; }
+@media screen and (max-width: 767px) {
+  .atelier-announcement--desktop-only { display: none; }
+  .atelier-announcement--mobile-only { display: block; }
 }
 
 /* ==========================================================================
-   FLOATING HEADER PILL BASE
+   Section & Floating Pill Container
    ========================================================================== */
 .atelier-header-section {
   position: -webkit-sticky !important;
   position: sticky !important;
   top: 0 !important;
   z-index: 40 !important;
+  width: 100% !important;
   pointer-events: none !important;
   margin-bottom: calc(-1 * var(--header-pill-height, 108px)) !important;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.atelier-header-section.is-hidden {
+  transform: translateY(-110%);
 }
 
 atelier-header {
@@ -204,13 +200,16 @@ atelier-header {
   font-family: 'Inter', -apple-system, sans-serif !important;
   color: var(--header-text, #363638) !important;
 }
-atelier-header * {
+
+atelier-header, atelier-header * {
   box-sizing: border-box !important;
 }
+
 atelier-header a {
   color: inherit !important;
   text-decoration: none !important;
 }
+
 atelier-header button {
   font: inherit !important;
   color: inherit !important;
@@ -219,6 +218,17 @@ atelier-header button {
   cursor: pointer !important;
 }
 
+atelier-header ul,
+atelier-header li,
+.atelier-header__nav-list,
+.atelier-header__nav-list li {
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Outer Bar Padding & Width */
 .atelier-header__bar {
   pointer-events: none !important;
   position: relative !important;
@@ -228,6 +238,9 @@ atelier-header button {
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
+/* ==========================================================================
+   AUTHENTIC FROSTED GLASS PILL (UrbanDeco Reference)
+   ========================================================================== */
 .atelier-header__pill {
   pointer-events: auto !important;
   position: relative !important;
@@ -265,45 +278,65 @@ atelier-header button {
 }
 
 /* ==========================================================================
-   LOGO & COFFEE CUP WITH SIZING CONTROLS
+   Header Elements (Left, Center, Right)
    ========================================================================== */
+.atelier-header__left {
+  display: flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+}
+
+.atelier-header__center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.atelier-header__right {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 4px !important;
+}
+
+/* Logo */
 .atelier-logo {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 8px !important;
-  min-height: 40px !important;
+  gap: 10px !important;
+  min-height: 44px !important;
   line-height: 1 !important;
-  text-decoration: none !important;
 }
 .atelier-logo img {
   display: block !important;
-  width: var(--logo-width, 160px) !important;
+  width: var(--logo-width, 170px) !important;
   max-width: 100% !important;
   height: auto !important;
 }
 .atelier-logo__text {
   font-family: 'DM Serif Display', Georgia, serif !important;
-  font-size: var(--logo-font-size, 20px) !important;
+  font-size: 20px !important;
   font-weight: 700 !important;
-  letter-spacing: 0.14em !important;
+  letter-spacing: 0.16em !important;
   text-transform: uppercase !important;
   white-space: nowrap !important;
   color: var(--header-text, #363638) !important;
 }
 
+/* Coffee Cup & Animated Steam */
 .atelier-cup {
   position: relative !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  height: var(--cup-size-desktop, 34px) !important;
-  width: auto !important;
+  width: 26px !important;
+  height: 38px !important;
   flex-shrink: 0 !important;
 }
 .atelier-cup img {
-  height: var(--cup-size-desktop, 34px) !important;
-  width: auto !important;
+  width: 100% !important;
+  height: auto !important;
   object-fit: contain !important;
 }
 .atelier-steam {
@@ -323,135 +356,162 @@ atelier-header button {
   animation-delay: 1.2s !important;
 }
 .atelier-cup--steam .atelier-steam {
-  animation: steamRise 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+  animation: atelierSteamRise 2.8s ease-in-out infinite !important;
 }
-@keyframes steamRise {
+@keyframes atelierSteamRise {
   0% { transform: translateY(0) scaleX(0.8); opacity: 0; }
-  35% { opacity: 0.7; }
-  70% { transform: translateY(-8px) scaleX(1.4); opacity: 0.35; }
-  100% { transform: translateY(-14px) scaleX(1.8); opacity: 0; }
+  40% { opacity: 0.7; transform: translateY(-8px) scaleX(1.1); }
+  80% { opacity: 0.2; transform: translateY(-16px) scaleX(1.4); }
+  100% { transform: translateY(-22px) scaleX(1.6); opacity: 0; }
 }
 
-/* ==========================================================================
-   BUTTONS & BADGES
-   ========================================================================== */
+/* Action Icons */
 .atelier-icon-btn {
+  position: relative !important;
   display: grid !important;
   place-items: center !important;
-  width: 40px !important;
-  height: 40px !important;
-  position: relative !important;
+  width: 42px !important;
+  height: 42px !important;
+  margin: 0 !important;
+  padding: 0 !important;
   border-radius: 50% !important;
+  background: transparent !important;
   color: var(--header-text, #363638) !important;
-  transition: background-color 0.2s ease, transform 0.2s ease !important;
   cursor: pointer !important;
-}
-.atelier-icon-btn:hover {
-  background-color: rgba(54, 54, 56, 0.05) !important;
-  transform: translateY(-1px) !important;
+  transition: background 0.25s ease, transform 0.25s ease !important;
 }
 .atelier-icon-btn svg {
-  width: var(--icon-size, 20px) !important;
-  height: var(--icon-size, 20px) !important;
-  stroke: currentColor !important;
-  fill: none !important;
+  width: 20px !important;
+  height: 20px !important;
+  transition: transform 0.3s ease !important;
 }
-.atelier-badge {
+.atelier-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.45) !important;
+}
+.atelier-icon-btn:hover svg {
+  transform: translateY(-1px) !important;
+}
+
+/* Badges (Wishlist & Cart) */
+.atelier-badge,
+.header__cart-count {
   position: absolute !important;
-  top: 4px !important;
-  right: 4px !important;
-  min-width: 17px !important;
-  height: 17px !important;
-  padding: 0 4px !important;
+  top: 3px !important;
+  right: 1px !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  padding: 0 5px !important;
   border-radius: 9px !important;
-  background: var(--header-accent, #363638) !important;
-  color: #fff !important;
+  background: var(--header-text, #363638) !important;
+  color: #FFFFFF !important;
+  font-family: 'Inter', sans-serif !important;
   font-size: 10px !important;
   font-weight: 700 !important;
-  display: grid !important;
-  place-items: center !important;
-  line-height: 1 !important;
+  line-height: 18px !important;
+  text-align: center !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7) !important;
 }
+.atelier-badge[hidden] { display: none !important; }
 
-/* ==========================================================================
-   DESKTOP SEARCH PILL (Used in Two Rows)
-   ========================================================================== */
+/* Capsule Search Pill (UrbanDeco reference) */
 .atelier-search-pill {
-  display: inline-flex !important;
+  display: none;
   align-items: center !important;
   gap: 10px !important;
+  width: min(100%, 280px) !important;
+  height: 40px !important;
+  margin: 0 !important;
   padding: 0 16px !important;
-  height: 38px !important;
+  border: 1px solid var(--header-line, rgba(54, 54, 56, 0.12)) !important;
   border-radius: 999px !important;
-  background: rgba(255, 255, 255, 0.6) !important;
-  border: 1px solid rgba(198, 181, 142, 0.3) !important;
+  background: rgba(255, 255, 255, 0.45) !important;
   color: var(--header-text, #363638) !important;
+  opacity: 0.85 !important;
   font-size: 13px !important;
+  text-align: left !important;
   cursor: pointer !important;
-  transition: all 0.25s ease !important;
+  transition: background 0.3s ease, border-color 0.3s ease, opacity 0.3s ease !important;
 }
 .atelier-search-pill:hover {
-  background: #ffffff !important;
-  border-color: rgba(198, 181, 142, 0.6) !important;
-  box-shadow: 0 4px 14px rgba(54, 54, 56, 0.08) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(54, 54, 56, 0.25) !important;
+  opacity: 1 !important;
 }
 .atelier-search-pill svg {
-  width: 15px !important;
-  height: 15px !important;
-  opacity: 0.6 !important;
+  flex: 0 0 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+.atelier-search-pill span {
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
 }
 
-/* ==========================================================================
-   DESKTOP NAV LINKS
-   ========================================================================== */
+/* Navigation Links */
 .atelier-header__nav-list {
   display: flex !important;
   align-items: center !important;
-  gap: 4px 16px !important;
   margin: 0 !important;
   padding: 0 !important;
   list-style: none !important;
 }
 .atelier-nav__link {
+  position: relative !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 5px !important;
-  padding: 8px 10px !important;
+  gap: 4px !important;
+  height: 44px !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  border: 0 !important;
+  background: none !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
   font-size: var(--menu-size, 13px) !important;
-  font-weight: var(--menu-weight, 500) !important;
+  font-weight: var(--menu-weight, 600) !important;
   letter-spacing: var(--menu-letter-spacing, 1px) !important;
   text-transform: var(--menu-transform, uppercase) !important;
   color: var(--header-text, #363638) !important;
   white-space: nowrap !important;
-  position: relative !important;
-  transition: color 0.2s ease !important;
-}
-.atelier-nav__link:hover,
-.atelier-nav__link.is-current {
-  color: var(--header-accent, #4D351D) !important;
-}
-.atelier-nav__link.is-bold {
-  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: color 0.25s ease !important;
 }
 .atelier-nav__link svg {
-  width: 11px !important;
-  height: 11px !important;
-  transition: transform 0.2s ease !important;
-  opacity: 0.6 !important;
+  width: 13px !important;
+  height: 13px !important;
+  opacity: 0.65 !important;
+  transition: transform 0.35s ease !important;
 }
+.atelier-nav__link::after {
+  content: '' !important;
+  position: absolute !important;
+  left: 12px !important;
+  right: 12px !important;
+  bottom: 8px !important;
+  height: 1.5px !important;
+  background: currentColor !important;
+  transform: scaleX(0) !important;
+  transform-origin: right !important;
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1) !important;
+}
+.atelier-nav__link:hover::after,
+.atelier-nav__link[aria-expanded="true"]::after,
+.atelier-nav__link.is-current::after {
+  transform: scaleX(1) !important;
+  transform-origin: left !important;
+}
+.atelier-nav__link[aria-expanded="true"] svg {
+  transform: rotate(180deg) !important;
+}
+.atelier-nav__link.is-bold { font-weight: 800 !important; }
 
 /* ==========================================================================
-   DESKTOP LAYOUT 1: TWO LINES (two_rows)
+   DESKTOP LAYOUT 1: TWO LINES (UrbanDeco reference)
+   Row 1: Search Pill on Left | Logo in Center | Action Icons on Right
+   DIVIDER LINE
+   Row 2: Centered Navigation Menu
    ========================================================================== */
 @media (min-width: 990px) {
-  .atelier-burger,
-  .atelier-search-btn--mobile {
-    display: none !important;
-  }
-  .atelier-search-btn--desktop {
-    display: none !important;
-  }
-
   .layout--two_rows .atelier-header__pill,
   .layout--two-rows .atelier-header__pill {
     display: grid !important;
@@ -485,6 +545,10 @@ atelier-header button {
     align-items: center !important;
     gap: 4px !important;
   }
+  .layout--two_rows .atelier-header__right .atelier-search-icon,
+  .layout--two-rows .atelier-header__right .atelier-search-icon {
+    display: none !important;
+  }
   .layout--two_rows .atelier-header__nav,
   .layout--two-rows .atelier-header__nav {
     grid-area: nav !important;
@@ -495,11 +559,19 @@ atelier-header button {
     padding-top: 4px !important;
     border-top: 1px solid var(--header-line, rgba(54, 54, 56, 0.1)) !important;
   }
+  .layout--two_rows .atelier-header__nav-list,
+  .layout--two-rows .atelier-header__nav-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px 16px !important;
+  }
 }
 
 /* ==========================================================================
-   DESKTOP LAYOUT 2: LOGO LEFT, MENU CENTRE (logo_left)
-   Logo on Left | Menu in Center | Search, Heart, Bag on Right
+   DESKTOP LAYOUT 2: LOGO LEFT, MENU CENTRE (Single Line)
+   Logo on Left | Menu in Center | Search Icon + Action Icons on Right
    ========================================================================== */
 @media (min-width: 990px) {
   .layout--logo_left .atelier-header__pill,
@@ -510,7 +582,7 @@ atelier-header button {
     align-items: center !important;
     min-height: 64px !important;
     padding: 0 20px !important;
-    gap: 16px !important;
+    gap: 12px !important;
   }
   .layout--logo_left .atelier-header__center,
   .layout--logo-left .atelier-header__center {
@@ -518,6 +590,7 @@ atelier-header button {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
+    padding-right: 16px !important;
     flex-shrink: 0 !important;
   }
   .layout--logo_left .atelier-header__left,
@@ -533,12 +606,19 @@ atelier-header button {
   .layout--logo-left .atelier-search-pill {
     display: none !important;
   }
+  .layout--logo_left .atelier-burger,
+  .layout--logo-left .atelier-burger {
+    display: none !important;
+  }
   .layout--logo_left .atelier-header__nav,
   .layout--logo-left .atelier-header__nav {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
     min-width: 0 !important;
     overflow-x: auto !important;
     scrollbar-width: none !important;
@@ -553,7 +633,7 @@ atelier-header button {
     justify-content: center !important;
     align-items: center !important;
     flex-wrap: nowrap !important;
-    gap: 2px 10px !important;
+    gap: 2px 8px !important;
     white-space: nowrap !important;
   }
   .layout--logo_left .atelier-nav__link,
@@ -572,15 +652,15 @@ atelier-header button {
     gap: 4px !important;
     flex-shrink: 0 !important;
   }
-  .layout--logo_left .atelier-search-btn--desktop,
-  .layout--logo-left .atelier-search-btn--desktop {
+  .layout--logo_left .atelier-header__right .atelier-search-icon,
+  .layout--logo-left .atelier-header__right .atelier-search-icon {
     display: grid !important;
   }
 }
 
 /* ==========================================================================
-   DESKTOP LAYOUT 3: MENU LEFT, LOGO CENTRE (logo_center)
-   Menu on Left | Logo in Center | Search, Heart, Bag on Right
+   DESKTOP LAYOUT 3: MENU LEFT, LOGO CENTRE (Single Line)
+   Menu on Left | Logo in Center | Search Icon + Action Icons on Right
    ========================================================================== */
 @media (min-width: 990px) {
   .layout--logo_center .atelier-header__pill,
@@ -591,7 +671,7 @@ atelier-header button {
     align-items: center !important;
     min-height: 64px !important;
     padding: 0 20px !important;
-    gap: 16px !important;
+    gap: 12px !important;
   }
   .layout--logo_center .atelier-header__left,
   .layout--logo-center .atelier-header__left {
@@ -606,12 +686,19 @@ atelier-header button {
   .layout--logo-center .atelier-search-pill {
     display: none !important;
   }
+  .layout--logo_center .atelier-burger,
+  .layout--logo-center .atelier-burger {
+    display: none !important;
+  }
   .layout--logo_center .atelier-header__nav,
   .layout--logo-center .atelier-header__nav {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
     width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
     min-width: 0 !important;
     overflow-x: auto !important;
     scrollbar-width: none !important;
@@ -626,7 +713,7 @@ atelier-header button {
     align-items: center !important;
     justify-content: flex-start !important;
     flex-wrap: nowrap !important;
-    gap: 2px 8px !important;
+    gap: 2px 6px !important;
     white-space: nowrap !important;
   }
   .layout--logo_center .atelier-nav__link,
@@ -654,575 +741,358 @@ atelier-header button {
     gap: 4px !important;
     flex-shrink: 0 !important;
   }
-  .layout--logo_center .atelier-search-btn--desktop,
-  .layout--logo-center .atelier-search-btn--desktop {
+  .layout--logo_center .atelier-header__right .atelier-search-icon,
+  .layout--logo-center .atelier-header__right .atelier-search-icon {
     display: grid !important;
   }
 }
 
 /* ==========================================================================
-   MOBILE HEADER (< 990px) — EXACT URBANDECO 2 - 1 - 2 LAYOUT
-   Left: [ ≡ ] [ 🔍 ] (Hamburger + Search Icon Side-by-side)
-   Center: Centered Logo with independent Mobile Sizing Controls
-   Right: [ ♡ ] [ 🛍️ ] (Wishlist + Cart ONLY, ZERO Search/Account Icons)
+   Mobile (< 990px)
    ========================================================================== */
 @media screen and (max-width: 989px) {
   .atelier-header__bar {
-    padding: var(--gap-top-mobile, 10px) var(--gap-side-mobile, 12px) 0 !important;
+    padding: var(--gap-top-mobile, 10px) var(--gap-side-mobile, 10px) 0 !important;
   }
   .atelier-header__pill {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    width: 100% !important;
-    min-height: 52px !important;
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    grid-template-areas: none !important;
+    min-height: 54px !important;
     padding: 0 12px !important;
-    gap: 8px !important;
-    border-radius: var(--header-radius, 22px) !important;
   }
-
-  /* LEFT: Hamburger + Search Icon Buttons STRICTLY SIDE-BY-SIDE */
   .atelier-header__left {
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-start !important;
-    flex: 0 0 auto !important;
-    gap: 6px !important;
-    min-width: 0 !important;
-    overflow: visible !important;
+    gap: 2px !important;
   }
-  .atelier-burger {
-    display: grid !important;
-    place-items: center !important;
-    width: 36px !important;
-    height: 36px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border: none !important;
-    background: transparent !important;
-    color: var(--header-text, #363638) !important;
-    border-radius: 50% !important;
-  }
-  .atelier-burger svg {
-    display: block !important;
-    width: 20px !important;
-    height: 20px !important;
-    stroke: currentColor !important;
-  }
-
-  .atelier-header__left .atelier-search-btn,
-  .atelier-header__left .atelier-search-btn--mobile {
-    display: grid !important;
-    place-items: center !important;
-    width: 36px !important;
-    height: 36px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border: none !important;
-    background: transparent !important;
-    color: var(--header-text, #363638) !important;
-    border-radius: 50% !important;
-  }
-  .atelier-header__left .atelier-search-btn svg,
-  .atelier-header__left .atelier-search-btn--mobile svg {
-    display: block !important;
-    width: 19px !important;
-    height: 19px !important;
-    stroke: currentColor !important;
-  }
-
-  /* HIDE Desktop Elements on Mobile */
-  .atelier-search-pill,
-  .atelier-header__nav {
-    display: none !important;
-  }
-
-  /* CRITICAL: GUARANTEE Search is NEVER on the right on mobile */
-  .atelier-header__right .atelier-search-btn,
-  .atelier-header__right .atelier-search-btn--desktop,
-  .atelier-search-btn--desktop {
-    display: none !important;
-    visibility: hidden !important;
-    width: 0 !important;
-    height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    pointer-events: none !important;
-  }
-
-  /* CENTER: Centered Logo */
   .atelier-header__center {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    flex: 1 1 auto !important;
     min-width: 0 !important;
-    padding: 0 4px !important;
-    margin: 0 !important;
-    text-align: center !important;
   }
-  .atelier-logo {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 6px !important;
-    max-width: 100% !important;
-    min-height: unset !important;
-  }
-  .atelier-logo img {
-    width: var(--logo-width-mobile, 95px) !important;
-    max-width: var(--logo-width-mobile, 95px) !important;
-    height: auto !important;
-  }
-  .atelier-logo__text {
-    font-size: var(--logo-font-size-mobile, 13px) !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.08em !important;
-    white-space: nowrap !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-  }
-  .atelier-cup {
-    height: var(--cup-size-mobile, 22px) !important;
-    width: auto !important;
-  }
-  .atelier-cup img {
-    height: var(--cup-size-mobile, 22px) !important;
-    width: auto !important;
-  }
-
-  /* RIGHT: ONLY Wishlist + Cart */
   .atelier-header__right {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    flex: 0 0 auto !important;
-    gap: 4px !important;
-    min-width: 0 !important;
+    gap: 2px !important;
   }
-  .atelier-header__right .atelier-icon-btn {
-    width: 36px !important;
-    height: 36px !important;
+  .atelier-burger {
+    display: grid !important;
   }
-  .atelier-header__right .atelier-icon-btn svg {
-    width: 19px !important;
-    height: 19px !important;
+  .atelier-search-pill {
+    display: none !important;
+  }
+  .atelier-header__nav {
+    display: none !important;
+  }
+  .atelier-desk-only {
+    display: none !important;
+  }
+  .atelier-logo img {
+    width: var(--logo-width-mobile, 120px) !important;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .atelier-burger {
+    display: none !important;
   }
 }
 
 /* ==========================================================================
-   MOBILE DRAWER NAVIGATION — EXACT URBANDECO RECREATION
+   Desktop Mega Menu Floating Panel (UrbanDeco reference)
    ========================================================================== */
-#atelier-mobile-drawer.atelier-drawer {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 88vw !important;
-  max-width: 380px !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  background: #FAF8F5 !important;
-  color: #363638 !important;
-  z-index: 100000 !important;
-  box-shadow: 12px 0 36px rgba(0, 0, 0, 0.22) !important;
-  transform: translateX(-105%) !important;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  display: flex !important;
-  flex-direction: column !important;
-  pointer-events: auto !important;
-  overflow: hidden !important;
+.atelier-mega {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: var(--gap-side, 24px);
+  right: var(--gap-side, 24px);
+  border-radius: var(--header-radius, 18px);
+  padding: 32px 40px;
+  background: rgba(248, 245, 237, 0.88);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 24px 60px -16px rgba(54, 54, 56, 0.22),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  pointer-events: auto;
+  z-index: 50;
+  animation: atelierMegaSlide 0.35s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
-#atelier-mobile-drawer.atelier-drawer.is-open {
-  transform: translateX(0) !important;
+.atelier-mega.is-open { display: block; }
+@keyframes atelierMegaSlide {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-/* 1. Header (Pinned top) */
-.atelier-drawer__head {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 18px 20px !important;
-  border-bottom: 1px solid rgba(54, 54, 56, 0.08) !important;
-  background: #FAF8F5 !important;
-  flex-shrink: 0 !important;
+.atelier-mega__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 48px;
+  align-items: start;
 }
-.atelier-drawer__brand .atelier-logo {
-  min-height: unset !important;
+.atelier-mega__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--header-text, #363638);
+  margin-bottom: 24px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(54, 54, 56, 0.1);
 }
-.atelier-drawer__close {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 50% !important;
-  background: #ffffff !important;
-  border: 1px solid rgba(54, 54, 56, 0.15) !important;
-  display: grid !important;
-  place-items: center !important;
-  cursor: pointer !important;
-  color: #363638 !important;
-  transition: background 0.2s ease !important;
-}
-.atelier-drawer__close:hover {
-  background: #f0ece3 !important;
-}
-.atelier-drawer__close svg {
-  width: 16px !important;
-  height: 16px !important;
-}
-
-/* 2. Scrollable Body Content */
-.atelier-drawer__body {
-  flex: 1 1 auto !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  padding: 16px 20px 24px !important;
-}
-
-/* Pill Search Input */
-.atelier-drawer__search {
-  position: relative !important;
-  margin-bottom: 14px !important;
-  width: 100% !important;
-}
-.atelier-drawer__search-icon {
-  position: absolute !important;
-  left: 14px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  width: 16px !important;
-  height: 16px !important;
-  opacity: 0.55 !important;
-  pointer-events: none !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-.atelier-drawer__search-icon svg {
-  width: 16px !important;
-  height: 16px !important;
-}
-.atelier-drawer__search input {
-  width: 100% !important;
-  height: 44px !important;
-  padding: 0 16px 0 42px !important;
-  border-radius: 999px !important;
-  border: 1px solid rgba(54, 54, 56, 0.18) !important;
-  background: #ffffff !important;
-  font-size: 13.5px !important;
-  color: #363638 !important;
-  outline: none !important;
-  box-shadow: 0 1px 4px rgba(54, 54, 56, 0.04) !important;
-}
-.atelier-drawer__search input:focus {
-  border-color: #4D351D !important;
-}
-
-/* Promo Banner Card (Warm brown/gold card) */
-.atelier-drawer__promo-banner {
-  display: block !important;
-  background: linear-gradient(135deg, #8C6D46 0%, #6E5332 100%) !important;
-  color: #FFFFFF !important;
-  padding: 14px 18px !important;
-  border-radius: 12px !important;
-  text-decoration: none !important;
-  margin-bottom: 16px !important;
-  box-shadow: 0 4px 14px rgba(110, 83, 50, 0.22) !important;
-  transition: transform 0.2s ease !important;
-}
-.atelier-drawer__promo-banner:hover {
-  transform: translateY(-1px) !important;
-}
-.atelier-drawer__promo-h {
-  font-family: 'DM Serif Display', Georgia, serif !important;
-  font-size: 15px !important;
-  color: #FFFFFF !important;
-  letter-spacing: 0.01em !important;
-  display: block !important;
-  margin-bottom: 4px !important;
-  line-height: 1.25 !important;
-}
-.atelier-drawer__promo-cta {
-  font-size: 11.5px !important;
-  font-weight: 600 !important;
-  color: #F8F5ED !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 4px !important;
-}
-
-/* 2-Column Photo Tiles Grid (UrbanDeco style) */
-.atelier-drawer__tiles-grid {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
-  margin-bottom: 20px !important;
-}
-.atelier-photo-tile {
-  position: relative !important;
-  border-radius: 12px !important;
-  overflow: hidden !important;
-  aspect-ratio: 1 / 1.15 !important;
-  min-height: 130px !important;
-  display: block !important;
-  text-decoration: none !important;
-  background: #E8E2D6 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
-}
-.atelier-photo-tile__media {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-}
-.atelier-photo-tile__media img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  display: block !important;
-  transition: transform 0.35s ease !important;
-}
-.atelier-photo-tile:hover .atelier-photo-tile__media img {
-  transform: scale(1.05) !important;
-}
-.atelier-photo-tile__overlay {
-  position: absolute !important;
-  inset: 0 !important;
-  background: linear-gradient(to top, rgba(20, 16, 14, 0.8) 0%, rgba(20, 16, 14, 0.2) 55%, transparent 100%) !important;
-  z-index: 1 !important;
-  pointer-events: none !important;
-}
-.atelier-photo-tile__info {
-  position: absolute !important;
-  bottom: 10px !important;
-  left: 10px !important;
-  right: 10px !important;
-  z-index: 2 !important;
-  pointer-events: none !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 2px !important;
-}
-.atelier-photo-tile__title {
-  color: #FFFFFF !important;
-  font-family: 'DM Serif Display', Georgia, serif !important;
-  font-size: 14.5px !important;
-  font-weight: 700 !important;
-  line-height: 1.2 !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
-}
-.atelier-photo-tile__count {
-  color: rgba(255, 255, 255, 0.85) !important;
-  font-size: 11px !important;
-  font-weight: 500 !important;
-  line-height: 1 !important;
-}
-
-/* Secondary Navigation Rows */
-.atelier-drawer__rows {
+.atelier-mega__title svg { width: 14px; height: 14px; transition: transform 0.25s ease; }
+.atelier-mega__title:hover svg { transform: translateX(4px); }
+.atelier-mega__cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px 32px;
   margin: 0 !important;
   padding: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
+  list-style: none !important;
 }
-.atelier-drawer__row-link {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 13px 4px !important;
-  border-bottom: 1px solid rgba(54, 54, 56, 0.08) !important;
-  font-size: 14.5px !important;
-  font-weight: 600 !important;
-  color: #363638 !important;
-  text-decoration: none !important;
-  background: transparent !important;
-  border-top: none !important;
-  border-left: none !important;
-  border-right: none !important;
-  cursor: pointer !important;
-  width: 100% !important;
-  text-align: left !important;
-  transition: color 0.2s ease !important;
+.atelier-mega__head {
+  display: block;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--header-text, #363638);
+  margin-bottom: 12px;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
-.atelier-drawer__row-link:hover {
-  color: #4D351D !important;
-}
-.atelier-drawer__row-arrow {
-  font-size: 16px !important;
-  color: rgba(54, 54, 56, 0.45) !important;
-  transition: transform 0.2s ease !important;
-}
-.atelier-drawer__row-link:hover .atelier-drawer__row-arrow {
-  color: #4D351D !important;
-  transform: translateX(3px) !important;
-}
-
-/* Accordion Item & Chevron */
-.atelier-drawer__accordion-item {
-  border-bottom: 1px solid rgba(54, 54, 56, 0.08) !important;
-}
-.atelier-drawer__accordion-item .atelier-drawer__row-link {
-  border-bottom: none !important;
-}
-.atelier-drawer__chev {
-  display: grid !important;
-  place-items: center !important;
-  width: 16px !important;
-  height: 16px !important;
-  transition: transform 0.25s ease !important;
-  color: rgba(54, 54, 56, 0.5) !important;
-}
-.atelier-drawer__chev svg {
-  width: 14px !important;
-  height: 14px !important;
-  stroke: currentColor !important;
-}
-.atelier-drawer__accordion-item.is-open .atelier-drawer__chev {
-  transform: rotate(90deg) !important;
-  color: #4D351D !important;
-}
-.atelier-drawer__accordion-body {
-  display: none !important;
-  padding: 4px 0 12px 14px !important;
-}
-.atelier-drawer__accordion-item.is-open .atelier-drawer__accordion-body {
-  display: block !important;
-}
-.atelier-drawer__sublist {
-  border-left: 2px solid rgba(54, 54, 56, 0.12) !important;
-  padding: 2px 0 2px 14px !important;
+.atelier-mega__head:hover { color: var(--header-accent, #4D351D); }
+.atelier-mega__sub {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 4px !important;
+  padding: 0 !important;
+  list-style: none !important;
 }
-.atelier-drawer__sublink {
-  display: block !important;
-  padding: 6px 0 !important;
-  font-size: 13.5px !important;
-  color: rgba(54, 54, 56, 0.75) !important;
-  text-decoration: none !important;
-  transition: color 0.2s ease !important;
+.atelier-mega__a {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  color: rgba(54, 54, 56, 0.75);
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
-.atelier-drawer__sublink:hover {
-  color: #4D351D !important;
-}
-
-/* 3. PINNED FOOTER (UrbanDeco Screenshot 2 reference) */
-.atelier-drawer__footer {
-  flex-shrink: 0 !important;
-  padding: 16px 20px 20px !important;
-  border-top: 1px solid rgba(54, 54, 56, 0.09) !important;
-  background: #F8F5ED !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 12px !important;
+.atelier-mega__a:hover {
+  color: var(--header-text, #363638);
+  transform: translateX(3px);
 }
 
-/* Action Buttons: Call us + WhatsApp */
-.atelier-drawer__footer-actions {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
+/* Promotional Card */
+.atelier-promo-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #FFFFFF;
+  box-shadow: 0 8px 24px -8px rgba(54, 54, 56, 0.12);
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.atelier-drawer__btn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  height: 44px !important;
-  border-radius: 999px !important;
-  font-size: 13.5px !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
+.atelier-promo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -12px rgba(54, 54, 56, 0.2);
 }
-.atelier-drawer__btn--call {
-  background: #ffffff !important;
-  color: #363638 !important;
-  border: 1.5px solid #363638 !important;
+.atelier-promo-card__img {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: rgba(54, 54, 56, 0.05);
 }
-.atelier-drawer__btn--call:hover {
-  background: #f5f2eb !important;
+.atelier-promo-card__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
 }
-.atelier-drawer__btn--call svg {
-  width: 16px !important;
-  height: 16px !important;
-  stroke: currentColor !important;
+.atelier-promo-card:hover .atelier-promo-card__img img { transform: scale(1.06); }
+.atelier-promo-card__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
-.atelier-drawer__btn--wa {
-  background: #1E7E4E !important;
-  color: #FFFFFF !important;
-  border: 1.5px solid #1E7E4E !important;
-  box-shadow: 0 2px 8px rgba(30, 126, 78, 0.25) !important;
+.atelier-promo-card__h {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 16px;
+  color: var(--header-text, #363638);
 }
-.atelier-drawer__btn--wa:hover {
-  background: #17653E !important;
-  border-color: #17653E !important;
+.atelier-promo-card__s {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--header-accent, #4D351D);
 }
-.atelier-drawer__btn--wa svg {
-  width: 17px !important;
-  height: 17px !important;
-  fill: currentColor !important;
+.atelier-promo-card__s svg { width: 12px; height: 12px; }
+
+/* ==========================================================================
+   Predictive Search Panel (Floating Glass Modal)
+   ========================================================================== */
+.atelier-search-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: var(--gap-side, 24px);
+  right: var(--gap-side, 24px);
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: var(--header-radius, 18px);
+  background: rgba(248, 245, 237, 0.92);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 24px 60px -16px rgba(54, 54, 56, 0.22);
+  padding: 24px;
+  z-index: 50;
+  pointer-events: auto;
+}
+.atelier-search-panel.is-open { display: block; }
+.atelier-search-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(54, 54, 56, 0.15);
+  padding-bottom: 12px;
+}
+.atelier-search-form svg {
+  width: 20px;
+  height: 20px;
+  color: var(--header-text, #363638);
+  margin-right: 12px;
+}
+.atelier-search-form input[type="search"] {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: var(--header-text, #363638);
+  outline: none;
+}
+.atelier-search-panel__close {
+  padding: 6px;
+  cursor: pointer;
+}
+.atelier-search-panel__close svg { width: 18px; height: 18px; }
+.atelier-search-idle {
+  margin-top: 18px;
+}
+.atelier-search-recents-h {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(54, 54, 56, 0.6);
+  margin-bottom: 10px;
+}
+.atelier-search-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.atelier-search-chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(54, 54, 56, 0.1);
+  font-size: 13px;
+  color: var(--header-text, #363638);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.atelier-search-chip:hover {
+  background: #FFFFFF;
+  border-color: rgba(54, 54, 56, 0.3);
 }
 
-/* Account row: Left = Log in / Register, Right = Operating Hours */
-.atelier-drawer__footer-meta {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  font-size: 12.5px !important;
-  color: rgba(54, 54, 56, 0.75) !important;
-  padding-top: 2px !important;
-}
-.atelier-drawer__footer-account {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  color: #363638 !important;
-  text-decoration: none !important;
-  font-weight: 500 !important;
-  transition: color 0.2s ease !important;
-}
-.atelier-drawer__footer-account:hover {
-  color: #4D351D !important;
-}
-.atelier-drawer__footer-account-icon svg {
-  width: 16px !important;
-  height: 16px !important;
-  stroke: currentColor !important;
-  vertical-align: middle !important;
-}
-.atelier-drawer__footer-hours {
-  font-size: 11.5px !important;
-  color: rgba(54, 54, 56, 0.55) !important;
-  letter-spacing: 0.02em !important;
-}
-
-/* Tagline */
-.atelier-drawer__footer-tagline {
-  text-align: center !important;
-  font-size: 11px !important;
-  color: rgba(54, 54, 56, 0.5) !important;
-  margin: 0 !important;
-  line-height: 1.3 !important;
-}
-
-/* Scrim Backdrop */
+/* ==========================================================================
+   Mobile Drawer & Scrim
+   ========================================================================== */
 .atelier-scrim {
-  position: fixed !important;
-  inset: 0 !important;
-  background: rgba(18, 16, 14, 0.55) !important;
-  backdrop-filter: blur(4px) !important;
-  -webkit-backdrop-filter: blur(4px) !important;
-  z-index: 99999 !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 0.35s ease !important;
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 24, 20, 0.45);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
 }
 .atelier-scrim.is-visible {
-  opacity: 1 !important;
-  pointer-events: auto !important;
+  opacity: 1;
+  pointer-events: auto;
 }
+
+.atelier-drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: min(88vw, 400px);
+  background: #F8F5ED;
+  z-index: 100;
+  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.25);
+  transform: translateX(-102%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+}
+.atelier-drawer.is-open {
+  transform: translateX(0);
+}
+.atelier-drawer__head {
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(54, 54, 56, 0.08);
+}
+.atelier-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.atelier-drawer__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.atelier-drawer__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--header-text, #363638);
+  border-radius: 8px;
+}
+.atelier-drawer__link:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* Clearances for non-banner pages */
+body:not(.template-index):not(.template-collection) #MainContent > .shopify-section:first-child:not(:has(.atelier-col-hero)):not(:has(.atelier-hero)):not(:has(.image-banner)):not(:has(.slideshow)) {
+  padding-top: calc(var(--header-height, 120px) + 24px) !important;
+}
+
 {%- endstyle -%}
 
 <section
@@ -1233,208 +1103,37 @@ atelier-header button {
   {%- comment -%} ==================== A. ANNOUNCEMENT BAR ==================== {%- endcomment -%}
   {%- if show_announcement -%}
     <aside
-    class="atelier-drawer"
-    id="atelier-mobile-drawer"
-    data-mobile-drawer
-    role="dialog"
-    aria-modal="true"
-    aria-label="Mobile navigation"
-    aria-hidden="true"
-  >
-    <!-- Top Header (UrbanDeco style: Logo + Close button) -->
-    <div class="atelier-drawer__head">
-      <div class="atelier-drawer__brand">
-        {{ logo_markup }}
-      </div>
-      <button
-        type="button"
-        class="atelier-drawer__close"
-        data-close-drawer
-        aria-label="Close mobile menu"
-      >
-        {{ icon_close }}
-      </button>
-    </div>
-
-    <!-- Scrollable Body Content -->
-    <div class="atelier-drawer__body">
-      <!-- Search Input (Pill rounded search) -->
-      <form class="atelier-drawer__search" action="{{ routes.search_url }}" method="get" role="search">
-        <span class="atelier-drawer__search-icon" aria-hidden="true">{{ icon_search }}</span>
-        <input
-          type="search"
-          name="q"
-          placeholder="{{ s.search_placeholder | default: 'Search journals, notebooks, gifts...' | escape }}"
-          autocomplete="off"
-          aria-label="Search"
-        >
-        <input type="hidden" name="type" value="product">
-      </form>
-
-      <!-- Promo Banner Card (Warm brown / gold card like UrbanDeco 'Autumn Sale – Extra 15% Off') -->
-      {%- if s.m_show_promo and s.promo_heading != blank -%}
-        <a class="atelier-drawer__promo-banner" href="{{ s.promo_link | default: routes.all_products_collection_url }}">
-          <div class="atelier-drawer__promo-content">
-            <span class="atelier-drawer__promo-h">{{ s.promo_heading | escape }}</span>
-            <span class="atelier-drawer__promo-cta">{{ s.promo_link_label | default: 'Shop now' | escape }} &rarr;</span>
-          </div>
-        </a>
-      {%- endif -%}
-
-      <!-- 2-Column Photo Tiles Grid (UrbanDeco Screenshot 2 reference) -->
-      <div class="atelier-drawer__tiles-grid">
-        {%- assign rendered_titles = ',' -%}
-        {%- assign tile_limit = s.m_tiles | default: 6 -%}
-        {%- if tile_limit == 0 -%}{%- assign tile_limit = 6 -%}{%- endif -%}
-        {%- assign tile_count = 0 -%}
-
-        {%- comment -%} 1. First priority: Check section blocks (menu_photo or promo) {%- endcomment -%}
-        {%- for block in section.blocks -%}
-          {%- if tile_count >= tile_limit -%}{%- break -%}{%- endif -%}
-          {%- liquid
-            assign b_title = block.settings.item | default: block.settings.menu_item | strip
-            assign b_img = block.settings.image
-            assign b_sub = block.settings.subtitle | default: block.settings.subheading | default: 'View collection'
-            assign b_url = block.settings.link
-          -%}
-          {%- if b_img != blank and b_title != blank -%}
-            {%- assign check_t = ',' | append: b_title | downcase | append: ',' -%}
-            {%- unless rendered_titles contains check_t -%}
-              {%- assign rendered_titles = rendered_titles | append: b_title | downcase | append: ',' -%}
-              {%- assign tile_count = tile_count | plus: 1 -%}
-              {%- if b_url == blank -%}
-                {%- for lk in mobile_menu -%}
-                  {%- assign lkt = lk.title | strip | downcase -%}
-                  {%- assign btt = b_title | strip | downcase -%}
-                  {%- if lkt == btt -%}
-                    {%- assign b_url = lk.url -%}
-                    {%- break -%}
-                  {%- endif -%}
-                {%- endfor -%}
-              {%- endif -%}
-              <a class="atelier-photo-tile" href="{{ b_url | default: routes.all_products_collection_url }}">
-                <div class="atelier-photo-tile__media">
-                  {{ b_img | image_url: width: 360 | image_tag: loading: 'lazy', widths: '160, 240, 360', sizes: '140px', alt: b_title }}
-                </div>
-                <div class="atelier-photo-tile__overlay" aria-hidden="true"></div>
-                <div class="atelier-photo-tile__info">
-                  <span class="atelier-photo-tile__title">{{ b_title | escape }}</span>
-                  <span class="atelier-photo-tile__count">{{ b_sub | escape }}</span>
-                </div>
-              </a>
-            {%- endunless -%}
-          {%- endif -%}
-        {%- endfor -%}
-
-        {%- comment -%} 2. Second priority: Menu links with collection images {%- endcomment -%}
-        {%- for link in mobile_menu -%}
-          {%- if tile_count >= tile_limit -%}{%- break -%}{%- endif -%}
-          {%- assign link_t = link.title | strip | downcase -%}
-          {%- assign check_t = ',' | append: link_t | append: ',' -%}
-          {%- if rendered_titles contains check_t -%}{%- continue -%}{%- endif -%}
-
-          {%- assign c_img = nil -%}
-          {%- if link.type == 'collection_link' and link.object -%}
-            {%- if link.object.metafields.custom.collection_tab_image != blank -%}
-              {%- assign c_img = link.object.metafields.custom.collection_tab_image -%}
-            {%- elsif link.object.featured_image != blank -%}
-              {%- assign c_img = link.object.featured_image -%}
-            {%- endif -%}
-          {%- endif -%}
-
-          {%- if c_img != blank -%}
-            {%- assign rendered_titles = rendered_titles | append: link_t | append: ',' -%}
-            {%- assign tile_count = tile_count | plus: 1 -%}
-            <a class="atelier-photo-tile" href="{{ link.url }}">
-              <div class="atelier-photo-tile__media">
-                {{ c_img | image_url: width: 360 | image_tag: loading: 'lazy', widths: '160, 240, 360', sizes: '140px', alt: link.title }}
-              </div>
-              <div class="atelier-photo-tile__overlay" aria-hidden="true"></div>
-              <div class="atelier-photo-tile__info">
-                <span class="atelier-photo-tile__title">{{ link.title | escape }}</span>
-                <span class="atelier-photo-tile__count">
-                  {%- if link.links.size > 0 -%}
-                    {{ link.links.size }} categories
-                  {%- elsif link.object and link.object.all_products_count -%}
-                    {{ link.object.all_products_count }} products
-                  {%- else -%}
-                    View collection
-                  {%- endif -%}
-                </span>
-              </div>
-            </a>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-
-      <!-- Secondary Navigation Rows (Items below photo tiles or remaining links) -->
-      <div class="atelier-drawer__rows" role="list">
-        {%- for link in mobile_menu -%}
-          {%- assign lt_check = ',' | append: link.title | strip | downcase | append: ',' -%}
-          {%- if rendered_titles contains lt_check -%}{%- continue -%}{%- endif -%}
-
-          {%- if link.links.size > 0 -%}
-            <div class="atelier-drawer__accordion-item" data-drawer-accordion>
-              <button
-                type="button"
-                class="atelier-drawer__row-link atelier-drawer__row-link--trigger"
-                data-accordion-trigger
-                aria-expanded="false"
-              >
-                <span>{{ link.title | escape }}</span>
-                <span class="atelier-drawer__chev" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-                </span>
-              </button>
-              <div class="atelier-drawer__accordion-body">
-                <ul class="atelier-drawer__sublist" role="list">
-                  {%- for child in link.links -%}
-                    <li>
-                      <a class="atelier-drawer__sublink" href="{{ child.url }}">
-                        {{ child.title | escape }}
-                      </a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              </div>
+      class="atelier-announcement atelier-announcement--{{ s.announcement_visibility }}{% if s.announcement_scroll %} atelier-announcement--marquee{% endif %}"
+      aria-label="Announcement"
+    >
+      <div class="atelier-announcement__inner">
+        <div class="atelier-announcement__content atelier-announcement__content--{{ s.announcement_align }}">
+          {%- if s.announcement_scroll -%}
+            <div class="atelier-announcement__track">
+              <span>{{ s.announcement_text | escape }}</span>
+              <span>{{ s.announcement_text | escape }}</span>
+              <span>{{ s.announcement_text | escape }}</span>
             </div>
           {%- else -%}
-            <a class="atelier-drawer__row-link" href="{{ link.url }}">
-              <span>{{ link.title | escape }}</span>
-              <span class="atelier-drawer__row-arrow" aria-hidden="true">&rarr;</span>
-            </a>
+            {%- if s.announcement_link != blank -%}
+              <a href="{{ s.announcement_link }}" class="atelier-announcement__link">
+                <span>{{ s.announcement_text | escape }}</span>
+                {{ icon_arrow }}
+              </a>
+            {%- else -%}
+              <span>{{ s.announcement_text | escape }}</span>
+            {%- endif -%}
           {%- endif -%}
-        {%- endfor -%}
-      </div>
-    </div>
+        </div>
 
-    <!-- 3. PINNED FOOTER (UrbanDeco Screenshot 2: Call us + WhatsApp, Account, Hours, Tagline) -->
-    <div class="atelier-drawer__footer">
-      <!-- Action Buttons Row: Call us & WhatsApp -->
-      <div class="atelier-drawer__footer-actions">
-        <a class="atelier-drawer__btn atelier-drawer__btn--call" href="tel:{{ phone_clean | default: '+919876543210' }}">
-          {{ icon_phone }}
-          <span>Call us</span>
-        </a>
-        <a class="atelier-drawer__btn atelier-drawer__btn--wa" href="https://wa.me/{{ whatsapp_clean | default: '919876543210' }}" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M12 2.2a9.7 9.7 0 0 0-8.4 14.6L2.3 21.8l5.1-1.3A9.7 9.7 0 1 0 12 2.2Zm0 17.7c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 19.9Zm4.4-6c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.8.9c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 4 3.5 1.5.6 2.1.7 2.8.6.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1l-.6-.4Z"/></svg>
-          <span>WhatsApp</span>
-        </a>
+        {%- if s.show_country_selector -%}
+          <div class="atelier-announcement__country">
+            <span>IN</span>
+            <span>({{ cart.currency.iso_code }})</span>
+          </div>
+        {%- endif -%}
       </div>
-
-      <!-- Account link on left, hours on right (UrbanDeco reference) -->
-      <div class="atelier-drawer__footer-meta">
-        <a class="atelier-drawer__footer-account" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">
-          <span class="atelier-drawer__footer-account-icon">{{ icon_account }}</span>
-          <span>{% if customer %}My Account ({{ customer.first_name }}){% else %}Log in / Register{% endif %}</span>
-        </a>
-        <span class="atelier-drawer__footer-hours">{{ s.m_hours | default: 'Mon–Sat 10am–7pm' | escape }}</span>
-      </div>
-
-      <!-- Centered Tagline -->
-      <p class="atelier-drawer__footer-tagline">{{ s.tagline | default: 'Loved by thousands of storytellers across India' | escape }}</p>
-    </div>
-  </aside>
+    </aside>
   {%- endif -%}
 
   {%- comment -%} ==================== B. MAIN HEADER FLOATING CONTAINER ==================== {%- endcomment -%}
@@ -1460,18 +1159,9 @@ atelier-header button {
           >
             {{ icon_burger }}
           </button>
+          <button type="button" class="atelier-icon-btn atelier-search-btn--mobile" data-open-search aria-label="Search" aria-expanded="false">{{ icon_search }}</button>
 
-          {%- comment -%} Mobile Search Icon Button (On left next to burger, mobile only) {%- endcomment -%}
-          <button
-            type="button"
-            class="atelier-icon-btn atelier-search-btn atelier-search-btn--mobile"
-            data-open-search
-            aria-label="Search"
-          >
-            {{ icon_search }}
-          </button>
-
-          {%- comment -%} Capsule Search Pill (Used in Two-Rows layout on desktop) {%- endcomment -%}
+          {%- comment -%} Capsule Search Pill (Used in Two-Rows layout) {%- endcomment -%}
           <button
             type="button"
             class="atelier-search-pill"
@@ -1483,7 +1173,7 @@ atelier-header button {
             <span>{{ s.search_placeholder | escape }}</span>
           </button>
 
-          {%- comment -%} Desktop Navigation Menu {%- endcomment -%}
+          {%- comment -%} Desktop Navigation Menu (Always in DOM; position controlled by layout CSS) {%- endcomment -%}
           <nav class="atelier-header__nav" aria-label="Main navigation">
             <ul class="atelier-header__nav-list" role="list">
               {%- for link in menu -%}
@@ -1535,17 +1225,28 @@ atelier-header button {
 
         {%- comment -%} ---------- RIGHT AREA (ACTION ICONS) ---------- {%- endcomment -%}
         <div class="atelier-header__right">
-          {%- comment -%} Desktop Search Button (ONLY on desktop single-row layouts, NEVER on mobile) {%- endcomment -%}
+          {%- comment -%} Search icon button (Used in single-row layouts) {%- endcomment -%}
           <button
             type="button"
-            class="atelier-icon-btn atelier-search-btn atelier-search-btn--desktop"
+            class="atelier-icon-btn atelier-search-icon"
             data-open-search
             aria-label="Search"
           >
             {{ icon_search }}
           </button>
 
-          {%- comment -%} Wishlist Icon Button {%- endcomment -%}
+          {%- if s.show_phone and phone_clean != blank -%}
+            <a
+              class="atelier-icon-btn atelier-desk-only"
+              href="tel:{{ phone_clean }}"
+              aria-label="Call customer support"
+            >
+              {{ icon_phone }}
+            </a>
+          {%- endif -%}
+
+
+
           {%- if s.show_wishlist -%}
             <button
               type="button"
@@ -1558,7 +1259,6 @@ atelier-header button {
             </button>
           {%- endif -%}
 
-          {%- comment -%} Cart Icon Button {%- endcomment -%}
           {%- if s.show_cart -%}
             <a
               class="atelier-icon-btn"
@@ -1579,8 +1279,8 @@ atelier-header button {
         </div>
 
       </div>
-    </div>
-    {%- comment -%} ==================== C. DESKTOP MEGA MENUS ==================== {%- endcomment -%}
+
+      {%- comment -%} ==================== C. DESKTOP MEGA MENUS ==================== {%- endcomment -%}
       {%- for link in menu -%}
         {%- if link.links.size == 0 -%}{%- continue -%}{%- endif -%}
         {%- assign lt = link.title | downcase | strip -%}
@@ -1617,9 +1317,8 @@ atelier-header button {
 
             {%- comment -%} Promotional Photo Card on Right {%- endcomment -%}
             {%- for block in section.blocks -%}
-              {%- if block.type == 'promo' or block.type == 'menu_photo' -%}
-                {%- assign b_raw = block.settings.menu_item | default: block.settings.item -%}
-                {%- assign bt = b_raw | downcase | strip -%}
+              {%- if block.type == 'promo' -%}
+                {%- assign bt = block.settings.menu_item | downcase | strip -%}
                 {%- if bt == lt -%}
                   <a
                     class="atelier-promo-card"
@@ -1698,26 +1397,25 @@ atelier-header button {
       </div>
 
     </div>
-  {%- comment -%} ==================== E. MOBILE SLIDE-OUT DRAWER (Image 3 reference) ==================== {%- endcomment -%}
+  </atelier-header>
+
+  {%- comment -%} ==================== E. MOBILE SLIDE-OUT DRAWER ==================== {%- endcomment -%}
   <div class="atelier-scrim" data-scrim aria-hidden="true"></div>
 
   <aside
     class="atelier-drawer"
     id="atelier-mobile-drawer"
     data-mobile-drawer
-    role="dialog"
-    aria-modal="true"
     aria-label="Mobile navigation"
     aria-hidden="true"
   >
-    <!-- Top Header -->
     <div class="atelier-drawer__head">
       <div class="atelier-drawer__brand">
         {{ logo_markup }}
       </div>
       <button
         type="button"
-        class="atelier-drawer__close"
+        class="atelier-icon-btn"
         data-close-drawer
         aria-label="Close mobile menu"
       >
@@ -1725,161 +1423,66 @@ atelier-header button {
       </button>
     </div>
 
-    <!-- Scrollable Body Content -->
     <div class="atelier-drawer__body">
-      <!-- Search Input -->
-      <form class="atelier-drawer__search" action="{{ routes.search_url }}" method="get" role="search">
-        {{ icon_search }}
-        <input
-          type="search"
-          name="q"
-          placeholder="{{ s.search_placeholder | default: 'Search journals, notebooks, gifts...' | escape }}"
-          autocomplete="off"
-          aria-label="Search"
-        >
-        <input type="hidden" name="type" value="product">
-      </form>
-
-      <!-- Promo Banner Card -->
       {%- if s.m_show_promo and s.promo_heading != blank -%}
         <a class="atelier-drawer__promo-banner" href="{{ s.promo_link | default: routes.all_products_collection_url }}">
           <span class="atelier-drawer__promo-h">{{ s.promo_heading | escape }}</span>
-          {%- if s.promo_link_label != blank -%}
-            <span class="atelier-drawer__promo-cta">{{ s.promo_link_label | escape }} &rarr;</span>
-          {%- endif -%}
+          {%- if s.promo_link_label != blank -%}<span class="atelier-drawer__promo-cta">{{ s.promo_link_label | escape }}{{ icon_arrow }}</span>{%- endif -%}
         </a>
       {%- endif -%}
-
-      <!-- 2-Column Photo Tiles Grid (if enabled) -->
-      {%- if s.m_tiles > 0 and s.m_style != 'text' -%}
-        <div class="atelier-drawer__tiles-grid">
-          {%- assign tile_count = 0 -%}
-          {%- assign tile_handles = ',' -%}
-          {%- for link in mobile_menu -%}
-            {%- if tile_count >= s.m_tiles -%}{%- break -%}{%- endif -%}
-            {%- liquid
-              assign tile_img = nil
-              assign lt_m = link.title | downcase | strip
-
-              for b in section.blocks
-                if b.type == 'menu_photo' and b.settings.image != blank
-                  assign bt_m = b.settings.item | downcase | strip
-                  if bt_m == lt_m
-                    assign tile_img = b.settings.image
-                    break
-                  endif
-                endif
-              endfor
-
-              if tile_img == nil and link.type == 'collection_link' and link.object
-                if link.object.metafields.custom.collection_tab_image != blank
-                  assign tile_img = link.object.metafields.custom.collection_tab_image
-                elsif link.object.featured_image != blank
-                  assign tile_img = link.object.featured_image
-                endif
-              endif
-
-              if tile_img == nil and link.type == 'catalog_link'
-                assign coll_first = collections.first
-                if coll_first and coll_first.featured_image != blank
-                  assign tile_img = coll_first.featured_image
-                endif
-              endif
-            -%}
-
-            {%- if tile_img != blank -%}
-              {%- assign tile_count = tile_count | plus: 1 -%}
-              {%- assign tile_handles = tile_handles | append: forloop.index | append: ',' -%}
-              <a class="atelier-photo-tile" href="{{ link.url }}">
-                <div class="atelier-photo-tile__media">
-                  {{ tile_img | image_url: width: 360 | image_tag: loading: 'lazy', widths: '160, 240, 360', sizes: '140px', alt: link.title }}
-                </div>
-                <div class="atelier-photo-tile__info">
-                  <span class="atelier-photo-tile__title">{{ link.title | escape }}</span>
-                  {%- if link.type == 'collection_link' and link.object -%}
-                    <span class="atelier-photo-tile__count">{{ link.object.all_products_count }} items</span>
-                  {%- else -%}
-                    <span class="atelier-photo-tile__count">View collection</span>
-                  {%- endif -%}
-                </div>
+      {%- assign drawer_tiles = section.blocks | where: 'type', 'drawer_tile' -%}
+      {%- if drawer_tiles.size > 0 -%}
+        <div class="atelier-drawer__tiles-grid" aria-label="Featured categories">
+          {%- for block in drawer_tiles -%}
+            {%- if block.settings.image != blank -%}
+              <a class="atelier-photo-tile" href="{{ block.settings.link | default: routes.all_products_collection_url }}" {{ block.shopify_attributes }}>
+                <span class="atelier-photo-tile__media">{{ block.settings.image | image_url: width: 600 | image_tag: widths: '240, 360, 480, 600', sizes: '(max-width: 749px) 42vw, 180px', loading: 'lazy', alt: block.settings.heading | default: block.settings.menu_item | escape }}</span>
+                <span class="atelier-photo-tile__overlay"></span>
+                <span class="atelier-photo-tile__info"><span class="atelier-photo-tile__title">{{ block.settings.heading | default: block.settings.menu_item | escape }}</span>{%- if block.settings.subheading != blank -%}<span class="atelier-photo-tile__count">{{ block.settings.subheading | escape }}</span>{%- endif -%}</span>
               </a>
             {%- endif -%}
           {%- endfor -%}
         </div>
       {%- endif -%}
-
-      <!-- Menu Navigation Rows (Bullet-free & Constrained Chevron) -->
-      <ul class="atelier-drawer__rows" role="list">
-        {%- for link in mobile_menu -%}
-          {%- assign check_key = ',' | append: forloop.index | append: ',' -%}
-          {%- if tile_handles contains check_key -%}{%- continue -%}{%- endif -%}
-          <li style="list-style: none !important;">
-            {%- if link.links.size > 0 -%}
-              <details class="atelier-drawer__details">
-                <summary class="atelier-drawer__row-link">
-                  <span>{{ link.title | escape }}</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-                </summary>
-                <ul class="atelier-drawer__sublist" role="list">
-                  {%- for child in link.links -%}
-                    <li style="list-style: none !important;">
-                      <a class="atelier-drawer__sublink" href="{{ child.url }}">
-                        {{ child.title | escape }}
-                      </a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              </details>
-            {%- else -%}
-              <a class="atelier-drawer__row-link" href="{{ link.url }}">
-                <span>{{ link.title | escape }}</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-              </a>
-            {%- endif -%}
-          </li>
-        {%- endfor -%}
-      </ul>
+      <nav class="atelier-drawer__nav" aria-label="Mobile main navigation">
+        <ul class="atelier-drawer__rows" role="list">
+          {%- for link in mobile_menu -%}
+            <li>
+              {%- if link.links.size > 0 -%}
+                <details class="atelier-drawer__accordion-item" data-drawer-accordion>
+                  <summary class="atelier-drawer__row-link" data-accordion-trigger><span>{{ link.title | escape }}</span><span class="atelier-drawer__chev">{{ icon_chev }}</span></summary>
+                  <div class="atelier-drawer__accordion-body"><ul class="atelier-drawer__sublist" role="list">
+                    {%- for child in link.links -%}
+                      <li><a class="atelier-drawer__sublink" href="{{ child.url }}">{{ child.title | escape }}</a></li>
+                      {%- for grandchild in child.links -%}<li><a class="atelier-drawer__sublink" href="{{ grandchild.url }}">{{ grandchild.title | escape }}</a></li>{%- endfor -%}
+                    {%- endfor -%}
+                  </ul></div>
+                </details>
+              {%- else -%}
+                <a class="atelier-drawer__row-link" href="{{ link.url }}">{{ link.title | escape }}<span class="atelier-drawer__row-arrow" aria-hidden="true">→</span></a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
     </div>
-
-    <!-- Pinned Bottom Section: Account Card & WhatsApp Button (User Explicit Request) -->
     <div class="atelier-drawer__footer">
-      <!-- Dedicated Account Card -->
-      <a class="atelier-drawer__account-card" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">
-        <div class="atelier-drawer__account-icon">
-          {{ icon_account }}
-        </div>
-        <div class="atelier-drawer__account-text">
-          <span class="atelier-drawer__account-title">
-            {% if customer %}My Account ({{ customer.first_name }}){% else %}Log in / Register{% endif %}
-          </span>
-          <span class="atelier-drawer__account-sub">
-            {% if customer %}View orders & wishlist{% else %}Access your wishlist & order history{% endif %}
-          </span>
-        </div>
-        <div class="atelier-drawer__account-arrow">&rarr;</div>
-      </a>
-
-      <!-- WhatsApp Action Button -->
-      {%- if s.m_show_contact -%}
-        <a class="atelier-drawer__wa-btn" href="https://wa.me/{{ whatsapp_clean | default: '919876543210' }}" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true"><path d="M12 2.2a9.7 9.7 0 0 0-8.4 14.6L2.3 21.8l5.1-1.3A9.7 9.7 0 1 0 12 2.2Zm0 17.7c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 19.9Zm4.4-6c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.8.9c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 4 3.5 1.5.6 2.1.7 2.8.6.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1l-.6-.4Z"/></svg>
-          <span>Chat on WhatsApp</span>
+      {%- if shop.customer_accounts_enabled -%}
+        <a class="atelier-drawer__account-card" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">
+          <span class="atelier-drawer__account-avatar" aria-hidden="true">{{ icon_account }}</span>
+          <span class="atelier-drawer__account-copy"><strong>{% if customer %}My Account ({{ customer.first_name | default: customer.name | escape }}){% else %}Log in / Register{% endif %}</strong><small>View orders &amp; wishlist</small></span>
+          <span class="atelier-drawer__account-arrow" aria-hidden="true">→</span>
         </a>
       {%- endif -%}
-
-      {%- if s.m_hours != blank -%}
-        <div class="atelier-drawer__footer-hours">{{ s.m_hours | escape }}</div>
+      {%- if whatsapp_clean != blank -%}
+        <a class="atelier-drawer__btn atelier-drawer__btn--wa" href="https://wa.me/{{ whatsapp_clean }}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">◉</span> Chat on WhatsApp</a>
       {%- endif -%}
-      <p class="atelier-drawer__footer-tagline">{{ s.tagline | default: 'Artful Things. Thoughtful Living.' }}</p>
+      {%- if s.tagline != blank -%}<p class="atelier-drawer__footer-tagline">{{ s.tagline | escape }}</p>{%- endif -%}
     </div>
   </aside>
-  </atelier-header>
-
-  
 </section>
 
-{% schema %}
-{
+{% schema %}{
   "name": "Atelier header",
   "tag": "section",
   "class": "atelier-header-section",
@@ -1997,36 +1600,12 @@ atelier-header button {
     },
     {
       "type": "header",
-      "content": "Logo Settings"
+      "content": "Logo"
     },
     {
       "type": "image_picker",
       "id": "logo",
-      "label": "Desktop & mobile logo image"
-    },
-    {
-      "type": "range",
-      "id": "logo_width",
-      "label": "Desktop logo image width",
-      "min": 60,
-      "max": 350,
-      "step": 5,
-      "unit": "px",
-      "default": 160
-    },
-    {
-      "type": "range",
-      "id": "logo_width_mobile",
-      "label": "Mobile logo image width",
-      "min": 50,
-      "max": 200,
-      "step": 5,
-      "unit": "px",
-      "default": 90
-    },
-    {
-      "type": "paragraph",
-      "content": "— Text Fallback & Cup Icon Sizes —"
+      "label": "Desktop logo"
     },
     {
       "type": "text",
@@ -2036,60 +1615,43 @@ atelier-header button {
     },
     {
       "type": "range",
-      "id": "logo_font_size",
-      "label": "Desktop text logo font size",
-      "min": 12,
-      "max": 36,
-      "step": 1,
+      "id": "logo_width",
+      "label": "Desktop logo width",
+      "min": 80,
+      "max": 320,
+      "step": 10,
       "unit": "px",
-      "default": 20
+      "default": 170
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "label": "Mobile logo width",
+      "min": 60,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 120
     },
     {
       "type": "range",
       "id": "logo_font_size_mobile",
-      "label": "Mobile text logo font size",
-      "min": 10,
+      "label": "Mobile logo font size",
+      "min": 9,
       "max": 22,
       "step": 1,
       "unit": "px",
       "default": 13
     },
     {
-      "type": "checkbox",
-      "id": "show_cup",
-      "label": "Show signature coffee cup icon",
-      "default": true
-    },
-    {
-      "type": "range",
-      "id": "cup_size_desktop",
-      "label": "Desktop cup icon height",
-      "min": 18,
-      "max": 60,
-      "step": 2,
-      "unit": "px",
-      "default": 34
-    },
-    {
       "type": "range",
       "id": "cup_size_mobile",
-      "label": "Mobile cup icon height",
+      "label": "Mobile coffee cup height",
       "min": 14,
       "max": 36,
-      "step": 2,
+      "step": 1,
       "unit": "px",
       "default": 22
-    },
-    {
-      "type": "image_picker",
-      "id": "cup_image",
-      "label": "Custom cup icon (optional)"
-    },
-    {
-      "type": "checkbox",
-      "id": "animate_steam",
-      "label": "Animate cup steam",
-      "default": true
     },
     {
       "type": "checkbox",
@@ -2101,6 +1663,23 @@ atelier-header button {
       "type": "url",
       "id": "logo_link",
       "label": "Logo link destination"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cup",
+      "label": "Show signature coffee cup icon",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "cup_image",
+      "label": "Custom cup icon (optional)"
+    },
+    {
+      "type": "checkbox",
+      "id": "animate_steam",
+      "label": "Animate cup steam",
+      "default": true
     },
     {
       "type": "header",
@@ -2537,7 +2116,8 @@ atelier-header button {
         {
           "type": "text",
           "id": "menu_item",
-          "label": "Navigation item title"
+          "label": "Navigation item title",
+          "info": "Exact title of navigation link to attach this promo card to (e.g. Journals)"
         },
         {
           "type": "image_picker",
@@ -2564,19 +2144,33 @@ atelier-header button {
       ]
     },
     {
-      "type": "menu_photo",
-      "name": "Mobile category photo tile",
+      "type": "drawer_tile",
+      "name": "Mobile drawer image tile",
       "settings": [
         {
           "type": "text",
-          "id": "item",
-          "label": "Menu item title",
-          "info": "Exact title of the menu item (e.g. Quirky Stationary, Journals, Home Décor)"
+          "id": "menu_item",
+          "label": "Category / menu item"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Photo for mobile tile"
+          "label": "Tile image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Tile heading"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Supporting text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Tile destination"
         }
       ]
     }
@@ -2586,5 +2180,4 @@ atelier-header button {
       "name": "Atelier header"
     }
   ]
-}
-{% endschema %}
+}{% endschema %}

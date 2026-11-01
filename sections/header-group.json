@@ -58,8 +58,8 @@
         "show_cup": true,
         "animate_steam": true,
         "menu": "main-menu",
-        "layout": "two_rows",
         "mobile_menu": "",
+        "layout": "two_rows",
         "bold_words": "journal, sale, new",
         "menu_font_size": 13,
         "menu_font_weight": "600",
@@ -105,11 +105,7 @@
         "whatsapp": "919876543210",
         "m_hours": "Mon–Sat 10am–7pm",
         "drawer_menu": "",
-        "tagline": "Artful Things. Thoughtful Living.",
-        "logo_font_size": 20,
-        "logo_font_size_mobile": 13,
-        "cup_size_desktop": 34,
-        "cup_size_mobile": 22
+        "tagline": "Artful Things. Thoughtful Living."
       }
     },
     "mobile_bottom_nav": {
