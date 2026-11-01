@@ -287,18 +287,34 @@ if (!customElements.get('atelier-header')) {
 
     openMobileDrawer() {
       this.closeAll();
-      if (this.drawer) this.drawer.classList.add('is-open');
-      if (this.scrim) this.scrim.classList.add('is-visible');
+      const drawer = this.querySelector('[data-mobile-drawer]') || document.querySelector('[data-mobile-drawer]');
+      const scrim = this.querySelector('[data-scrim]') || document.querySelector('[data-scrim]');
+      if (drawer) {
+        drawer.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+      }
+      if (scrim) {
+        scrim.classList.add('is-visible');
+      }
       document.body.style.overflow = 'hidden';
+      document.documentElement.classList.add('atelier-drawer-open');
     }
 
     closeAll() {
       this.querySelectorAll('[data-mega-panel].is-open').forEach((p) => p.classList.remove('is-open'));
       this.querySelectorAll('[data-mega-trigger][aria-expanded="true"]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
       if (this.searchPanel) this.searchPanel.classList.remove('is-open');
-      if (this.drawer) this.drawer.classList.remove('is-open');
-      if (this.scrim) this.scrim.classList.remove('is-visible');
+      const drawer = this.querySelector('[data-mobile-drawer]') || document.querySelector('[data-mobile-drawer]');
+      const scrim = this.querySelector('[data-scrim]') || document.querySelector('[data-scrim]');
+      if (drawer) {
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+      }
+      if (scrim) {
+        scrim.classList.remove('is-visible');
+      }
       document.body.style.overflow = '';
+      document.documentElement.classList.remove('atelier-drawer-open');
       this.openMega = null;
     }
 
@@ -328,6 +344,18 @@ if (!customElements.get('atelier-header')) {
       } catch (e) {}
     }
   }
+
+  // Global fallback listener for hamburger buttons
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-open-drawer]');
+    if (btn) {
+      e.preventDefault();
+      const hdr = document.querySelector('atelier-header');
+      if (hdr && typeof hdr.openMobileDrawer === 'function') {
+        hdr.openMobileDrawer();
+      }
+    }
+  });
 
   customElements.define('atelier-header', AtelierHeader);
 }
