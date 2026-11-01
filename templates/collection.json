@@ -20,46 +20,6 @@
     },
     "atelier_collection_banner_RnAYN4": {
       "type": "atelier-collection-banner",
-      "blocks": {
-        "subcollection_tab_AVJfHB": {
-          "type": "subcollection_tab",
-          "settings": {
-            "collection": "",
-            "custom_title": "",
-            "custom_link": ""
-          }
-        },
-        "subcollection_tab_eeNFyf": {
-          "type": "subcollection_tab",
-          "settings": {
-            "collection": "",
-            "custom_title": "",
-            "custom_link": ""
-          }
-        },
-        "subcollection_tab_MNC4KY": {
-          "type": "subcollection_tab",
-          "settings": {
-            "collection": "",
-            "custom_title": "",
-            "custom_link": ""
-          }
-        },
-        "subcollection_tab_C7DCRY": {
-          "type": "subcollection_tab",
-          "settings": {
-            "collection": "",
-            "custom_title": "",
-            "custom_link": ""
-          }
-        }
-      },
-      "block_order": [
-        "subcollection_tab_AVJfHB",
-        "subcollection_tab_eeNFyf",
-        "subcollection_tab_MNC4KY",
-        "subcollection_tab_C7DCRY"
-      ],
       "name": "Atelier Collection Banner",
       "settings": {
         "image_position": "center center",
