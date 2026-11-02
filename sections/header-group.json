@@ -38,32 +38,8 @@
     },
     "header": {
       "type": "atelier-header",
-      "blocks": {
-        "drawer_tile_jfC6Ji": {
-          "type": "drawer_tile",
-          "settings": {
-            "heading": "Stickers",
-            "image": "shopify://shop_images/CoolCatEnergy-03.png",
-            "subheading": "",
-            "link": "",
-            "menu_item": ""
-          }
-        },
-        "drawer_tile_acYJga": {
-          "type": "drawer_tile",
-          "settings": {
-            "heading": "Coasters",
-            "image": "shopify://shop_images/coaster_mojo_jojo.png",
-            "subheading": "",
-            "link": "shopify://collections/coasters",
-            "menu_item": ""
-          }
-        }
-      },
-      "block_order": [
-        "drawer_tile_jfC6Ji",
-        "drawer_tile_acYJga"
-      ],
+      "blocks": {},
+      "block_order": [],
       "settings": {
         "show_announcement": false,
         "announcement_text": "Artful Things. Thoughtful Living. | Free Shipping on orders over ₹999",
