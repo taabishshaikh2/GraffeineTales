@@ -313,12 +313,100 @@
         "border": "#e6d9c1",
         "button_background": "#4a3525"
       }
+    },
+    "sticker-customizer": {
+      "type": "gt-sticker-customizer",
+      "settings": {
+        "always_show": false,
+        "badge": "INTERACTIVE ATELIER PLAYGROUND",
+        "title": "Style Your Tech with Studio Vinyl",
+        "subtitle": "Where slow-crafted stories meet your modern everyday devices.",
+        "bg_color": "#363638",
+        "text_color": "#e9dfc2",
+        "padding_top": 70,
+        "padding_bottom": 80
+      },
+      "blocks": {
+        "sticker_bobby": {
+          "type": "sticker",
+          "settings": {
+            "title": "Bobby Deol Gupt Edition"
+          }
+        },
+        "sticker_cat": {
+          "type": "sticker",
+          "settings": {
+            "title": "Curious Bookworm Cat"
+          }
+        },
+        "sticker_chai": {
+          "type": "sticker",
+          "settings": {
+            "title": "Desi Chai Lover"
+          }
+        },
+        "sticker_uday": {
+          "type": "sticker",
+          "settings": {
+            "title": "Control Uday Control"
+          }
+        },
+        "sticker_mojo": {
+          "type": "sticker",
+          "settings": {
+            "title": "Mojo Jojo Retro Pop"
+          }
+        },
+        "sticker_chugli": {
+          "type": "sticker",
+          "settings": {
+            "title": "Chugli Chai Society"
+          }
+        },
+        "sticker_starry": {
+          "type": "sticker",
+          "settings": {
+            "title": "Starry Night Art Decal"
+          }
+        },
+        "sticker_sloth": {
+          "type": "sticker",
+          "settings": {
+            "title": "Reading Sloth Bookmark"
+          }
+        },
+        "sticker_skeleton": {
+          "type": "sticker",
+          "settings": {
+            "title": "Nerdy Boo Skeleton"
+          }
+        },
+        "sticker_daynight": {
+          "type": "sticker",
+          "settings": {
+            "title": "Day & Night Dualism"
+          }
+        }
+      },
+      "block_order": [
+        "sticker_bobby",
+        "sticker_cat",
+        "sticker_chai",
+        "sticker_uday",
+        "sticker_mojo",
+        "sticker_chugli",
+        "sticker_starry",
+        "sticker_sloth",
+        "sticker_skeleton",
+        "sticker_daynight"
+      ]
     }
   },
   "order": [
     "main",
     "pdp-features",
     "preview",
+    "sticker-customizer",
     "video-gallery",
     "disclosures",
     "faqs",

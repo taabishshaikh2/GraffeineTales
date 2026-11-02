@@ -1,0 +1,1394 @@
+{% liquid
+  assign is_sticker_product = false
+
+  if template.name == 'product'
+    assign p_type = product.type | downcase | strip
+    if p_type contains 'sticker' or p_type contains 'decal'
+      assign is_sticker_product = true
+    endif
+
+    unless is_sticker_product
+      for tag in product.tags
+        assign t = tag | downcase | strip
+        if t == 'sticker' or t == 'stickers' or t contains 'sticker' or t contains 'vinyl' or t contains 'decal'
+          assign is_sticker_product = true
+          break
+        endif
+      endfor
+    endunless
+
+    unless is_sticker_product
+      for col in product.collections
+        assign c_handle = col.handle | downcase
+        assign c_title = col.title | downcase
+        if c_handle contains 'sticker' or c_title contains 'sticker'
+          assign is_sticker_product = true
+          break
+        endif
+      endfor
+    endunless
+
+    unless is_sticker_product
+      assign p_title = product.title | downcase
+      if p_title contains 'sticker' or p_title contains 'decal'
+        assign is_sticker_product = true
+      endif
+    endunless
+
+    unless is_sticker_product
+      if product.metafields.custom.is_sticker == true or product.metafields.custom.sticker_preview != blank
+        assign is_sticker_product = true
+      endif
+    endunless
+
+    if section.settings.always_show
+      assign is_sticker_product = true
+    endif
+  else
+    assign is_sticker_product = true
+  endif
+%}
+
+{% if is_sticker_product %}
+{% comment %}
+  Graffeine Tales — Independent Multi-Device & Sticker Customizer Section
+  Compatible with: Homepage (index.json), Collection (collection.json), PDPs
+
+  Typography Hierarchy (Strict Brand Guidelines):
+    - Primary Display Serif: 'DM Serif Display', Georgia, serif
+    - Secondary Editorial Serif: 'Playfair Display', serif
+    - Clean UI Sans: 'Inter', -apple-system, sans-serif
+    - Tactile Script Accent: 'Patrick Hand', cursive
+    - Badges & Pills: 'Quicksand', sans-serif
+
+  Authentic Device Models:
+    1. MacBook Pro/Air (16:10 Laptop Lid + Display Notch Scoop + Base Lip & Hinge)
+    2. iPad Pro (Vertical 3:4 Portrait + Apple Pencil Dock + Corner Camera + Smart Connector)
+    3. iPhone 18 Pro Max (Vertical 9:19.5 + Titanium Band + Giant Triple-Lens Camera Island + LiDAR)
+{% endcomment %}
+
+<!-- Google Fonts Strict Import -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Patrick+Hand&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+{%- style -%}
+  #gt-customizer-{{ section.id }} {
+    --gt-bg: {{ section.settings.bg_color | default: '#363638' }};
+    --gt-text: {{ section.settings.text_color | default: '#E9DFC2' }};
+    --gt-sand: #C6B58E;
+    --gt-coffee: #4D351D;
+    --gt-gold: #D4AF37;
+    --gt-paper: #F8F5ED;
+    --gt-font-display: 'DM Serif Display', Georgia, serif;
+    --gt-font-editorial: 'Playfair Display', serif;
+    --gt-font-ui: 'Inter', -apple-system, sans-serif;
+    --gt-font-script: 'Patrick Hand', cursive;
+    --gt-font-pill: 'Quicksand', sans-serif;
+
+    background-color: var(--gt-bg);
+    color: var(--gt-text);
+    font-family: var(--gt-font-ui);
+    position: relative;
+    overflow: hidden;
+    padding: {{ section.settings.padding_top | default: 60 }}px 16px {{ section.settings.padding_bottom | default: 80 }}px;
+  }
+
+  #gt-customizer-{{ section.id }}::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top, rgba(77, 53, 29, 0.45) 0%, rgba(54, 54, 56, 0.95) 60%, rgba(28, 27, 26, 1) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .gt-customizer-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  /* Section Header */
+  .gt-customizer-header {
+    text-align: center;
+    max-width: 780px;
+    margin: 0 auto 2.25rem;
+  }
+
+  .gt-customizer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--gt-font-pill);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gt-text);
+    background: rgba(77, 53, 29, 0.75);
+    border: 1px solid var(--gt-sand);
+    backdrop-filter: blur(8px);
+    padding: 0.35rem 1.15rem;
+    border-radius: 9999px;
+    margin-bottom: 0.85rem;
+  }
+
+  .gt-customizer-title {
+    font-family: var(--gt-font-display);
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    line-height: 1.12;
+    color: var(--gt-text);
+    font-weight: 400;
+    margin: 0 0 0.85rem;
+  }
+
+  .gt-customizer-subtitle {
+    font-family: var(--gt-font-editorial);
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 1.6;
+    color: var(--gt-sand);
+    font-style: italic;
+    margin: 0;
+  }
+
+  .gt-customizer-script-note {
+    font-family: var(--gt-font-script);
+    font-size: 1.25rem;
+    color: var(--gt-gold);
+    display: block;
+    margin-top: 0.5rem;
+  }
+
+  /* Controls Toolbar */
+  .gt-customizer-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(198, 181, 142, 0.35);
+    backdrop-filter: blur(12px);
+    border-radius: 9999px;
+    padding: 0.5rem 0.85rem;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .gt-customizer-toolbar {
+      border-radius: 1.5rem;
+      justify-content: center;
+    }
+  }
+
+  .gt-device-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .gt-device-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--gt-font-ui);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--gt-text);
+    background: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .gt-device-tab-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .gt-device-tab-btn.is-active {
+    background: var(--gt-coffee);
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(77, 53, 29, 0.45);
+  }
+
+  .gt-color-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .gt-color-label {
+    font-family: var(--gt-font-pill);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(233, 223, 194, 0.7);
+    margin-right: 0.35rem;
+  }
+
+  .gt-color-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+
+  .gt-color-dot:hover {
+    transform: scale(1.15);
+  }
+
+  .gt-color-dot.is-active {
+    border-color: var(--gt-sand);
+    box-shadow: 0 0 0 2px var(--gt-coffee);
+    transform: scale(1.12);
+  }
+
+  .gt-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .gt-btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--gt-font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gt-text);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(198, 181, 142, 0.3);
+    padding: 0.4rem 0.85rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .gt-btn-action:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: var(--gt-sand);
+  }
+
+  /* ========================================================
+     AUTHENTIC DEVICE MOCKUP HARDWARE STAGES
+     ======================================================== */
+  .gt-stage-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2.75rem;
+    min-height: 480px;
+    position: relative;
+  }
+
+  /* --------------------------------------------------------
+     1. MACBOOK HARDWARE ARCHITECTURE (Unibody Lid + Base Lip)
+     -------------------------------------------------------- */
+  .gt-macbook-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(94%, 660px);
+  }
+
+  .gt-macbook-lid {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 20px 20px 6px 6px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), inset 0 -2px 4px rgba(0, 0, 0, 0.3), 0 35px 65px -15px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    user-select: none;
+    transition: background 0.35s ease, border-color 0.35s ease;
+  }
+
+  /* Thumb scoop opening recess */
+  .gt-macbook-thumb-scoop {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 84px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 0 0 5px 5px;
+    z-index: 10;
+    box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.15);
+  }
+
+  /* Laptop Base & Hinge */
+  .gt-macbook-hinge {
+    width: 170px;
+    height: 7px;
+    background: #18191B;
+    border-radius: 0 0 4px 4px;
+    z-index: 8;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+
+  .gt-macbook-base-lip {
+    width: 103%;
+    height: 12px;
+    margin-top: -3px;
+    background: linear-gradient(180deg, #353639 0%, #1F2022 100%);
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 35px;
+  }
+
+  .gt-macbook-foot {
+    width: 28px;
+    height: 2px;
+    background: #0A0A0A;
+    border-radius: 2px;
+    margin-top: 8px;
+    opacity: 0.6;
+  }
+
+  /* --------------------------------------------------------
+     2. IPAD PRO HARDWARE ARCHITECTURE (VERTICAL 3:4 PORTRAIT)
+     -------------------------------------------------------- */
+  .gt-ipad-wrap {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: min(84%, 370px);
+  }
+
+  .gt-ipad-chassis {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 32px;
+    border: 2px solid rgba(255, 255, 255, 0.22);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), inset 0 0 0 1px rgba(0, 0, 0, 0.25), 0 35px 70px -15px rgba(0, 0, 0, 0.65);
+    overflow: hidden;
+    user-select: none;
+    transition: background 0.35s ease;
+  }
+
+  /* Apple Pencil Magnetic Dock Strip (Right side) */
+  .gt-ipad-pencil-strip {
+    position: absolute;
+    right: 0;
+    top: 26%;
+    width: 4px;
+    height: 115px;
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: 3px 0 0 3px;
+    box-shadow: -1px 0 3px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+  }
+
+  /* Top Camera Pod */
+  .gt-ipad-camera {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #0E1012;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+  }
+
+  .gt-ipad-camera::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #212936 30%, #050608 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Smart Connector 3-Pin Dots */
+  .gt-ipad-smart-connector {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+  }
+
+  .gt-ipad-smart-connector span {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #D4AF37;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.4);
+  }
+
+  /* --------------------------------------------------------
+     3. IPHONE 18 PRO MAX HARDWARE ARCHITECTURE (VERTICAL 9:19.5)
+     -------------------------------------------------------- */
+  .gt-iphone-wrap {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: min(74%, 290px);
+    position: relative;
+  }
+
+  .gt-iphone-chassis {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 19.2;
+    border-radius: 48px;
+    border: 3.5px solid rgba(255, 255, 255, 0.28);
+    box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.5), inset 0 0 0 1px rgba(0, 0, 0, 0.35), 0 35px 70px -15px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    user-select: none;
+    transition: background 0.35s ease;
+  }
+
+  /* Left/Right Titanium Buttons */
+  .gt-iphone-action-btn {
+    position: absolute;
+    left: -4px;
+    top: 96px;
+    width: 4px;
+    height: 24px;
+    border-radius: 2px 0 0 2px;
+    background: inherit;
+    filter: brightness(0.85);
+  }
+
+  .gt-iphone-volume-up {
+    position: absolute;
+    left: -4px;
+    top: 136px;
+    width: 4px;
+    height: 46px;
+    border-radius: 2px 0 0 2px;
+    background: inherit;
+    filter: brightness(0.85);
+  }
+
+  .gt-iphone-volume-down {
+    position: absolute;
+    left: -4px;
+    top: 194px;
+    width: 4px;
+    height: 46px;
+    border-radius: 2px 0 0 2px;
+    background: inherit;
+    filter: brightness(0.85);
+  }
+
+  .gt-iphone-camera-control-btn {
+    position: absolute;
+    right: -4px;
+    bottom: 120px;
+    width: 4px;
+    height: 58px;
+    border-radius: 0 2px 2px 0;
+    background: inherit;
+    filter: brightness(0.8);
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Massive Authentic Triple-Lens Camera Island */
+  .gt-iphone-island {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 126px;
+    height: 130px;
+    border-radius: 34px;
+    background: inherit;
+    filter: brightness(0.92);
+    box-shadow: 4px 6px 18px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  /* 3 Giant Pro Max Lenses (Triangle layout) */
+  .gt-lens-ring {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #0D0F12;
+    border: 2.5px solid rgba(255, 255, 255, 0.38);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6), inset 0 1px 3px rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gt-lens-ring::after {
+    content: '';
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #1F2836 0%, #050709 100%);
+    box-shadow: inset 0 0 4px #000;
+  }
+
+  .gt-lens-top-left { top: 12px; left: 12px; }
+  .gt-lens-bottom-left { bottom: 12px; left: 12px; }
+  .gt-lens-mid-right { top: 44px; right: 12px; }
+
+  /* True Tone Flash */
+  .gt-flash-ring {
+    position: absolute;
+    top: 16px;
+    right: 22px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #FFF5D6 30%, #D4AF37 100%);
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  /* LiDAR Sensor */
+  .gt-lidar-sensor {
+    position: absolute;
+    bottom: 18px;
+    right: 22px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #08090B;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+
+  /* Shared Center Apple Mirror Logo */
+  .gt-apple-logo-wrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .gt-apple-logo-wrap svg {
+    width: 52px;
+    height: 52px;
+    filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.35));
+    transition: color 0.35s ease;
+  }
+
+  /* Reflection highlights */
+  .gt-chassis-gloss {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(0, 0, 0, 0.15) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Mount container for stickers */
+  .gt-mount-zone {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  /* Drop feedback */
+  .drop-highlight {
+    box-shadow: 0 0 0 4px var(--gt-gold), 0 35px 70px rgba(212, 175, 55, 0.4) !important;
+  }
+
+  /* ========================================================
+     STICKER TRAY (PICKUP ZONE)
+     ======================================================== */
+  .gt-tray-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(198, 181, 142, 0.25);
+    border-radius: 24px;
+    padding: 1.5rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .gt-tray-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(198, 181, 142, 0.2);
+  }
+
+  .gt-tray-title {
+    font-family: var(--gt-font-display);
+    font-size: 1.25rem;
+    color: var(--gt-text);
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .gt-tray-status {
+    font-family: var(--gt-font-ui);
+    font-size: 0.75rem;
+    color: var(--gt-sand);
+    font-weight: 500;
+  }
+
+  .gt-tray-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    min-height: 140px;
+    padding: 0.5rem;
+  }
+
+  .gt-die-cut-sticker {
+    position: relative;
+    width: 82px;
+    height: 82px;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-drag: none;
+    touch-action: none;
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), filter 0.2s ease;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+    pointer-events: auto;
+  }
+
+  @media (min-width: 640px) {
+    .gt-die-cut-sticker {
+      width: 94px;
+      height: 94px;
+    }
+  }
+
+  .gt-die-cut-sticker:hover {
+    transform: scale(1.08) rotate(3deg);
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.45));
+  }
+
+  .gt-die-cut-sticker.is-dragging {
+    cursor: grabbing;
+    position: fixed !important;
+    z-index: 99999 !important;
+    transition: none !important;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.55)) !important;
+  }
+
+  .gt-die-cut-sticker.placed-on-device {
+    position: absolute !important;
+    cursor: move;
+  }
+
+  .gt-sticker-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.85));
+  }
+
+  .gt-customizer-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100000;
+    background: #363638;
+    color: #E9DFC2;
+    border: 1px solid var(--gt-sand);
+    padding: 0.65rem 1.25rem;
+    border-radius: 9999px;
+    font-family: var(--gt-font-ui);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.25s ease;
+    pointer-events: none;
+  }
+  .gt-customizer-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .gt-current-sticker-badge {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #D4AF37;
+    color: #181614;
+    font-family: var(--gt-font-pill);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    padding: 2px 6px;
+    border-radius: 999px;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+    z-index: 10;
+  }
+
+{%- endstyle -%}
+
+<section id="gt-customizer-{{ section.id }}" aria-label="Interactive Device and Sticker Customizer">
+  <div class="gt-customizer-inner">
+
+    <!-- Section Heading -->
+    <div class="gt-customizer-header">
+      {%- if section.settings.badge != blank -%}
+        <span class="gt-customizer-badge">{{ section.settings.badge }}</span>
+      {%- endif -%}
+
+      <h2 class="gt-customizer-title">{{ section.settings.title | default: 'Style Your Tech with Studio Vinyl' }}</h2>
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="gt-customizer-subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+
+      <span class="gt-customizer-script-note">Drag, drop &amp; double-click stickers to rotate</span>
+    </div>
+
+    <!-- Controls Toolbar -->
+    <div class="gt-customizer-toolbar">
+      
+      <!-- Device Switcher Tabs -->
+      <div class="gt-device-tabs" role="tablist">
+        <button type="button" class="gt-device-tab-btn is-active" data-device="macbook" onclick="gtSwitchDevice('{{ section.id }}', 'macbook')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg>
+          <span>Laptop</span>
+        </button>
+
+        <button type="button" class="gt-device-tab-btn" data-device="ipad" onclick="gtSwitchDevice('{{ section.id }}', 'ipad')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="3"/><circle cx="12" cy="18" r="0.5"/></svg>
+          <span>Tablet</span>
+        </button>
+
+        <button type="button" class="gt-device-tab-btn" data-device="iphone" onclick="gtSwitchDevice('{{ section.id }}', 'iphone')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="4"/><path d="M12 18h.01"/></svg>
+          <span>Phone</span>
+        </button>
+      </div>
+
+      <!-- Color Variant Switcher -->
+      <div class="gt-color-switcher" id="gt-color-switcher-{{ section.id }}">
+        <span class="gt-color-label">Finish:</span>
+        <div id="gt-color-dots-{{ section.id }}" style="display:flex;gap:6px;"></div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="gt-action-buttons">
+        <button type="button" class="gt-btn-action" onclick="gtAutoCollage('{{ section.id }}')" title="Auto-arrange stickers into aesthetic composition">
+          <span>✨ Auto-Collage</span>
+        </button>
+        <button type="button" class="gt-btn-action" onclick="gtResetTray('{{ section.id }}')" title="Return all stickers back to tray">
+          <span>🔄 Reset</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Authentic Device Hardware Stage -->
+    <div class="gt-stage-wrapper">
+      
+      <!-- 1. AUTHENTIC MACBOOK (16:10 Laptop with Notch Scoop & Base) -->
+      <div class="gt-macbook-wrap" id="gt-macbook-wrap-{{ section.id }}">
+        <div class="gt-macbook-lid" id="gt-macbook-lid-{{ section.id }}">
+          <div class="gt-macbook-thumb-scoop"></div>
+          <div class="gt-chassis-gloss"></div>
+          
+          <div class="gt-apple-logo-wrap">
+            <svg viewBox="0 0 24 24" fill="currentColor" id="gt-macbook-logo-{{ section.id }}">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.15c.66-.8 1.11-1.92.99-3.04-1 .04-2.14.65-2.82 1.45-.6.69-1.12 1.83-.98 2.94 1.12.09 2.15-.55 2.81-1.35z"/>
+            </svg>
+          </div>
+
+          <div class="gt-mount-zone" id="gt-mount-macbook-{{ section.id }}"></div>
+        </div>
+
+        <div class="gt-macbook-hinge" id="gt-macbook-hinge-{{ section.id }}"></div>
+        <div class="gt-macbook-base-lip">
+          <div class="gt-macbook-foot"></div>
+          <div class="gt-macbook-foot"></div>
+        </div>
+      </div>
+
+      <!-- 2. AUTHENTIC IPAD PRO (VERTICAL 3:4 PORTRAIT + PENCIL DOCK) -->
+      <div class="gt-ipad-wrap" id="gt-ipad-wrap-{{ section.id }}">
+        <div class="gt-ipad-chassis" id="gt-ipad-chassis-{{ section.id }}">
+          <div class="gt-ipad-pencil-strip"></div>
+          <div class="gt-ipad-camera"></div>
+          <div class="gt-ipad-smart-connector"><span></span><span></span><span></span></div>
+          <div class="gt-chassis-gloss"></div>
+
+          <div class="gt-apple-logo-wrap">
+            <svg viewBox="0 0 24 24" fill="currentColor" id="gt-ipad-logo-{{ section.id }}">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.15c.66-.8 1.11-1.92.99-3.04-1 .04-2.14.65-2.82 1.45-.6.69-1.12 1.83-.98 2.94 1.12.09 2.15-.55 2.81-1.35z"/>
+            </svg>
+          </div>
+
+          <div class="gt-mount-zone" id="gt-mount-ipad-{{ section.id }}"></div>
+        </div>
+      </div>
+
+      <!-- 3. AUTHENTIC IPHONE 18 PRO MAX (VERTICAL 9:19.2 + GIANT TRIPLE LENS ISLAND) -->
+      <div class="gt-iphone-wrap" id="gt-iphone-wrap-{{ section.id }}">
+        <!-- Hardware buttons -->
+        <div class="gt-iphone-action-btn"></div>
+        <div class="gt-iphone-volume-up"></div>
+        <div class="gt-iphone-volume-down"></div>
+        <div class="gt-iphone-camera-control-btn"></div>
+
+        <div class="gt-iphone-chassis" id="gt-iphone-chassis-{{ section.id }}">
+          
+          <!-- Iconic Frosted Glass Camera Island -->
+          <div class="gt-iphone-island" id="gt-iphone-island-{{ section.id }}">
+            <div class="gt-lens-ring gt-lens-top-left"></div>
+            <div class="gt-lens-ring gt-lens-bottom-left"></div>
+            <div class="gt-lens-ring gt-lens-mid-right"></div>
+            <div class="gt-flash-ring"></div>
+            <div class="gt-lidar-sensor"></div>
+          </div>
+
+          <div class="gt-chassis-gloss"></div>
+
+          <div class="gt-apple-logo-wrap">
+            <svg viewBox="0 0 24 24" fill="currentColor" id="gt-iphone-logo-{{ section.id }}">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.15c.66-.8 1.11-1.92.99-3.04-1 .04-2.14.65-2.82 1.45-.6.69-1.12 1.83-.98 2.94 1.12.09 2.15-.55 2.81-1.35z"/>
+            </svg>
+          </div>
+
+          <div class="gt-mount-zone" id="gt-mount-iphone-{{ section.id }}"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sticker Tray (Pickup Zone) -->
+    <div class="gt-tray-card">
+      <div class="gt-tray-header">
+        <h3 class="gt-tray-title">Studio Die-Cut Vinyl Tray</h3>
+        <span class="gt-tray-status" id="gt-tray-count-{{ section.id }}">
+          {{ section.blocks.size }} Vinyl Stickers Ready
+        </span>
+      </div>
+
+      <div class="gt-tray-grid" id="gt-tray-{{ section.id }}">
+        {%- if template.name == 'product' and product != blank and product.featured_image != blank -%}
+          <div class="gt-die-cut-sticker is-current-product" 
+               id="gt-stk-current-{{ section.id }}" 
+               data-title="{{ product.title | escape }}"
+               data-block-id="current-product"
+               data-rot="0">
+            {{ product.featured_image | image_url: width: 240, height: 240 | image_tag: 
+              loading: 'eager', 
+              class: 'gt-sticker-img',
+              alt: product.title | escape 
+            }}
+            <span class="gt-current-sticker-badge">THIS STICKER</span>
+          </div>
+        {%- endif -%}
+
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign sticker_img = block.settings.sticker_image
+              assign sticker_title = block.settings.title | default: 'Studio Sticker'
+            -%}
+            <div class="gt-die-cut-sticker" 
+                 id="gt-stk-{{ block.id }}" 
+                 data-title="{{ sticker_title | escape }}"
+                 data-block-id="{{ block.id }}"
+                 data-rot="0"
+                 {{ block.shopify_attributes }}>
+              {%- if sticker_img != blank -%}
+                {{ sticker_img | image_url: width: 240, height: 240 | image_tag: 
+                  loading: 'lazy', 
+                  class: 'gt-sticker-img',
+                  alt: sticker_title | escape 
+                }}
+              {%- else -%}
+                <div style="width:100%;height:100%;border-radius:12px;background:#E9DFC2;display:flex;align-items:center;justify-content:center;color:#4D351D;font-weight:700;font-size:11px;text-align:center;padding:4px;border:2px dashed #C6B58E;">
+                  {{ sticker_title }}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..10) -%}
+            <div class="gt-die-cut-sticker" id="gt-stk-fallback-{{ i }}" data-title="Artisan Sticker #{{ i }}" data-rot="0">
+              <div style="width:100%;height:100%;border-radius:12px;background:#E9DFC2;display:flex;align-items:center;justify-content:center;color:#4D351D;font-weight:700;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,0.2);">
+                ✦ #{{ i }}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="gt-customizer-toast" id="gt-toast-{{ section.id }}"></div>
+</section>
+
+<script>
+  (function() {
+    const sId = '{{ section.id }}';
+
+    const deviceConfigs = {
+      macbook: {
+        name: 'Laptop',
+        wrapId: 'gt-macbook-wrap-' + sId,
+        chassisId: 'gt-macbook-lid-' + sId,
+        mountId: 'gt-mount-macbook-' + sId,
+        logoId: 'gt-macbook-logo-' + sId,
+        hingeId: 'gt-macbook-hinge-' + sId,
+        colors: [
+          { id: 'spacegray', name: 'Space Gray', hex: '#585A60', logo: '#989BA3', hinge: '#222325' },
+          { id: 'silver', name: 'Silver', hex: '#E3E5E8', logo: '#8E9094', hinge: '#38393D' },
+          { id: 'midnight', name: 'Midnight Navy', hex: '#171E28', logo: '#333E4F', hinge: '#0F1318' },
+          { id: 'starlight', name: 'Starlight Champagne', hex: '#E5DFD2', logo: '#A69E8E', hinge: '#2C2B29' }
+        ]
+      },
+      ipad: {
+        name: 'Tablet',
+        wrapId: 'gt-ipad-wrap-' + sId,
+        chassisId: 'gt-ipad-chassis-' + sId,
+        mountId: 'gt-mount-ipad-' + sId,
+        logoId: 'gt-ipad-logo-' + sId,
+        colors: [
+          { id: 'spacegray', name: 'Space Gray', hex: '#4B4D52', logo: '#989BA3' },
+          { id: 'silver', name: 'Silver', hex: '#E3E4E6', logo: '#8E9094' },
+          { id: 'starlight', name: 'Starlight', hex: '#E6E0D6', logo: '#A8A093' },
+          { id: 'skyblue', name: 'Sky Blue', hex: '#A8BDCD', logo: '#688296' }
+        ]
+      },
+      iphone: {
+        name: 'Phone',
+        wrapId: 'gt-iphone-wrap-' + sId,
+        chassisId: 'gt-iphone-chassis-' + sId,
+        mountId: 'gt-mount-iphone-' + sId,
+        logoId: 'gt-iphone-logo-' + sId,
+        islandId: 'gt-iphone-island-' + sId,
+        colors: [
+          { id: 'desert', name: 'Desert Titanium', hex: '#C5B5A5', logo: '#8F7E6D' },
+          { id: 'natural', name: 'Natural Titanium', hex: '#9E9992', logo: '#69645E' },
+          { id: 'white', name: 'White Titanium', hex: '#ECEAE6', logo: '#B3B0AB' },
+          { id: 'black', name: 'Black Titanium', hex: '#2C2B29', logo: '#1A1918' }
+        ]
+      }
+    };
+
+    let currentDevice = 'macbook';
+    let currentColorIndex = 0;
+    let activeDragEl = null;
+    let dragOffset = { x: 0, y: 0 };
+    let isDragging = false;
+
+    function showToast(msg) {
+      const toast = document.getElementById('gt-toast-' + sId);
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    window.gtSwitchDevice = function(sectionId, deviceKey) {
+      if (sectionId !== sId || !deviceConfigs[deviceKey]) return;
+      currentDevice = deviceKey;
+      currentColorIndex = 0;
+
+      // Update Tab Buttons
+      const root = document.getElementById('gt-customizer-' + sId);
+      root.querySelectorAll('.gt-device-tab-btn').forEach(btn => {
+        btn.classList.toggle('is-active', btn.getAttribute('data-device') === deviceKey);
+      });
+
+      // Show/Hide Hardware Mockups
+      ['macbook', 'ipad', 'iphone'].forEach(k => {
+        const wrap = document.getElementById(deviceConfigs[k].wrapId);
+        if (wrap) wrap.style.display = (k === deviceKey) ? 'flex' : 'none';
+      });
+
+      renderColorDots();
+      applyColor(0);
+      showToast(`Switched to ${deviceConfigs[deviceKey].name}`);
+    };
+
+    function renderColorDots() {
+      const container = document.getElementById('gt-color-dots-' + sId);
+      if (!container) return;
+      container.innerHTML = '';
+
+      const colors = deviceConfigs[currentDevice].colors;
+      colors.forEach((col, idx) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'gt-color-dot' + (idx === currentColorIndex ? ' is-active' : '');
+        dot.style.backgroundColor = col.hex;
+        dot.title = col.name;
+        dot.onclick = () => applyColor(idx);
+        container.appendChild(dot);
+      });
+    }
+
+    function applyColor(idx) {
+      currentColorIndex = idx;
+      const conf = deviceConfigs[currentDevice];
+      const col = conf.colors[idx];
+      const chassis = document.getElementById(conf.chassisId);
+      const logo = document.getElementById(conf.logoId);
+
+      if (chassis) chassis.style.backgroundColor = col.hex;
+      if (logo) logo.style.color = col.logo;
+
+      if (currentDevice === 'macbook') {
+        const hinge = document.getElementById(conf.hingeId);
+        if (hinge && col.hinge) hinge.style.backgroundColor = col.hinge;
+      }
+
+      if (currentDevice === 'iphone') {
+        const island = document.getElementById(conf.islandId);
+        if (island) island.style.backgroundColor = col.hex;
+      }
+
+      const dots = document.querySelectorAll('#gt-color-dots-' + sId + ' .gt-color-dot');
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    }
+
+    function getCurrentMount() {
+      return document.getElementById(deviceConfigs[currentDevice].mountId);
+    }
+
+    function getCurrentChassis() {
+      return document.getElementById(deviceConfigs[currentDevice].chassisId);
+    }
+
+    function initDragEngine() {
+      const stickers = document.querySelectorAll('#gt-customizer-' + sId + ' .gt-die-cut-sticker');
+      stickers.forEach(el => {
+        el.addEventListener('pointerdown', (e) => startDrag(e, el));
+      });
+
+      document.addEventListener('dblclick', (e) => {
+        const currentMount = getCurrentMount();
+        const sticker = e.target.closest('.gt-die-cut-sticker');
+        if (sticker && currentMount && currentMount.contains(sticker)) {
+          let rot = (parseFloat(sticker.getAttribute('data-rot') || '0') + 15) % 360;
+          sticker.setAttribute('data-rot', rot);
+          sticker.style.transform = `rotate(${rot}deg) scale(1)`;
+        }
+      });
+    }
+
+    function startDrag(e, element) {
+      if (e.button && e.button !== 0) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      activeDragEl = element;
+      isDragging = true;
+
+      const rect = element.getBoundingClientRect();
+      dragOffset.x = e.clientX - rect.left;
+      dragOffset.y = e.clientY - rect.top;
+
+      element.classList.add('is-dragging');
+      element.style.left = (e.clientX - dragOffset.x) + 'px';
+      element.style.top = (e.clientY - dragOffset.y) + 'px';
+      document.body.appendChild(element);
+
+      window.addEventListener('pointermove', onPointerMove, { passive: false });
+      window.addEventListener('pointerup', onPointerUp, { once: true });
+      window.addEventListener('pointercancel', onPointerUp, { once: true });
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging || !activeDragEl) return;
+      e.preventDefault();
+
+      activeDragEl.style.left = (e.clientX - dragOffset.x) + 'px';
+      activeDragEl.style.top = (e.clientY - dragOffset.y) + 'px';
+
+      const chassis = getCurrentChassis();
+      if (chassis) {
+        const r = chassis.getBoundingClientRect();
+        const isOver = (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom);
+        chassis.classList.toggle('drop-highlight', isOver);
+      }
+    }
+
+    function onPointerUp(e) {
+      if (!isDragging || !activeDragEl) return;
+      isDragging = false;
+      window.removeEventListener('pointermove', onPointerMove);
+
+      const chassis = getCurrentChassis();
+      const mount = getCurrentMount();
+      const tray = document.getElementById('gt-tray-' + sId);
+
+      if (chassis) chassis.classList.remove('drop-highlight');
+      activeDragEl.classList.remove('is-dragging');
+
+      const r = chassis.getBoundingClientRect();
+      const dropX = e.clientX;
+      const dropY = e.clientY;
+
+      const isInside = (dropX >= r.left && dropX <= r.right && dropY >= r.top && dropY <= r.bottom);
+
+      if (isInside && mount) {
+        mount.appendChild(activeDragEl);
+        activeDragEl.classList.add('placed-on-device');
+
+        const relX = ((dropX - dragOffset.x - r.left) / r.width) * 100;
+        const relY = ((dropY - dragOffset.y - r.top) / r.height) * 100;
+
+        activeDragEl.style.position = 'absolute';
+        activeDragEl.style.left = Math.max(2, Math.min(78, relX)) + '%';
+        activeDragEl.style.top = Math.max(2, Math.min(78, relY)) + '%';
+
+        let rot = parseFloat(activeDragEl.getAttribute('data-rot') || '0');
+        if (rot === 0) {
+          rot = Math.round(Math.random() * 24 - 12);
+          activeDragEl.setAttribute('data-rot', rot);
+        }
+        activeDragEl.style.transform = `rotate(${rot}deg) scale(1)`;
+
+        showToast(`Stuck to ${deviceConfigs[currentDevice].name}`);
+      } else {
+        tray.appendChild(activeDragEl);
+        activeDragEl.classList.remove('placed-on-device');
+        activeDragEl.style.position = 'relative';
+        activeDragEl.style.left = 'auto';
+        activeDragEl.style.top = 'auto';
+        activeDragEl.style.transform = 'none';
+        activeDragEl.setAttribute('data-rot', '0');
+      }
+
+      updateTrayCounter();
+      activeDragEl = null;
+    }
+
+    window.gtAutoCollage = function(sectionId) {
+      if (sectionId !== sId) return;
+      const mount = getCurrentMount();
+      const tray = document.getElementById('gt-tray-' + sId);
+      const allStickers = Array.from(document.querySelectorAll('#gt-customizer-' + sId + ' .gt-die-cut-sticker'));
+
+      const layouts = currentDevice === 'iphone' ? [
+        { left: '16%', top: '35%', rot: -8 },
+        { left: '50%', top: '42%', rot: 12 },
+        { left: '20%', top: '65%', rot: -6 },
+        { left: '48%', top: '74%', rot: 10 }
+      ] : [
+        { left: '14%', top: '16%', rot: -9 },
+        { left: '62%', top: '18%', rot: 12 },
+        { left: '38%', top: '55%', rot: -6 },
+        { left: '16%', top: '64%', rot: 14 },
+        { left: '68%', top: '62%', rot: -11 },
+        { left: '42%', top: '15%', rot: 7 }
+      ];
+
+      allStickers.forEach((stk, i) => {
+        if (i < layouts.length) {
+          mount.appendChild(stk);
+          stk.classList.add('placed-on-device');
+          stk.style.position = 'absolute';
+          stk.style.left = layouts[i].left;
+          stk.style.top = layouts[i].top;
+          stk.setAttribute('data-rot', layouts[i].rot);
+          stk.style.transform = `rotate(${layouts[i].rot}deg) scale(1)`;
+        } else {
+          tray.appendChild(stk);
+          stk.classList.remove('placed-on-device');
+          stk.style.position = 'relative';
+          stk.style.left = 'auto';
+          stk.style.top = 'auto';
+          stk.style.transform = 'none';
+          stk.setAttribute('data-rot', '0');
+        }
+      });
+
+      updateTrayCounter();
+      showToast('✨ Auto-Collaged with studio aesthetics');
+    };
+
+    window.gtResetTray = function(sectionId) {
+      if (sectionId !== sId) return;
+      const tray = document.getElementById('gt-tray-' + sId);
+      const placed = document.querySelectorAll('#gt-customizer-' + sId + ' .gt-mount-zone .gt-die-cut-sticker');
+      placed.forEach(stk => {
+        tray.appendChild(stk);
+        stk.classList.remove('placed-on-device');
+        stk.style.position = 'relative';
+        stk.style.left = 'auto';
+        stk.style.top = 'auto';
+        stk.style.transform = 'none';
+        stk.setAttribute('data-rot', '0');
+      });
+      updateTrayCounter();
+      showToast('Returned all stickers to tray');
+    };
+
+    function updateTrayCounter() {
+      const counter = document.getElementById('gt-tray-count-' + sId);
+      const remaining = document.querySelectorAll('#gt-tray-' + sId + ' .gt-die-cut-sticker').length;
+      if (counter) counter.textContent = `${remaining} Stickers in Tray`;
+    }
+
+    function gtBoot() {
+      renderColorDots();
+      applyColor(0);
+      initDragEngine();
+      updateTrayCounter();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', gtBoot);
+    } else {
+      gtBoot();
+    }
+
+    document.addEventListener('shopify:section:load', (e) => {
+      if (e.detail.sectionId === sId) {
+        gtBoot();
+      }
+    });
+  })();
+</script>
+
+
+{% else %}
+  {% style %}#shopify-section-{{ section.id }} { display: none !important; }{% endstyle %}
+{% endif %}
+{% schema %}
+{
+  "name": "GT Tech Sticker Customizer",
+  "tag": "section",
+  "class": "gt-section-customizer",
+  "enabled_on": {
+    "templates": ["product", "index", "collection", "page"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "always_show",
+      "label": "Always show on all products",
+      "default": false,
+      "info": "By default on product pages, this section appears exclusively for sticker products (matching 'sticker' in type, tags, collections, or title), similar to the journal flipbook."
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge Pill Text",
+      "default": "INTERACTIVE ATELIER PLAYGROUND"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Style Your Tech with Studio Vinyl"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Editorial Subtitle",
+      "default": "Where slow-crafted stories meet your modern everyday devices."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "#363638"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#E9DFC2"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 40,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 40,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "sticker",
+      "name": "Vinyl Sticker",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "sticker_image",
+          "label": "Sticker PNG (Transparent)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Sticker Name",
+          "default": "Desi Chai Vinyl Decal"
+        },
+        {
+          "type": "product",
+          "id": "product_ref",
+          "label": "Linked Product (Optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GT Tech Sticker Customizer",
+      "blocks": [
+        { "type": "sticker", "settings": { "title": "Bobby Deol Gupt Edition" } },
+        { "type": "sticker", "settings": { "title": "Curious Bookworm Cat" } },
+        { "type": "sticker", "settings": { "title": "Desi Chai Lover" } },
+        { "type": "sticker", "settings": { "title": "Control Uday Control" } },
+        { "type": "sticker", "settings": { "title": "Mojo Jojo Retro Pop" } },
+        { "type": "sticker", "settings": { "title": "Chugli Chai Society" } },
+        { "type": "sticker", "settings": { "title": "Starry Night Art Decal" } },
+        { "type": "sticker", "settings": { "title": "Reading Sloth Bookmark" } },
+        { "type": "sticker", "settings": { "title": "Nerdy Boo Skeleton" } },
+        { "type": "sticker", "settings": { "title": "Day & Night Dualism" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
