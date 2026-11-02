@@ -26,13 +26,11 @@
     endif
   endfor
 
-  assign total_reel_count = 0
+    assign total_reel_count = 0
   if has_meta_reels
     assign total_reel_count = meta_count
-  elsif block_count > 0
-    assign total_reel_count = block_count
   else
-    assign total_reel_count = 5
+    assign total_reel_count = block_count
   endif
 %}
 {% if total_reel_count > 0 %}
@@ -87,7 +85,7 @@
                   </video>
                 {% endif %}
               </div>
-              <button type="button" class="atelier-reel__open" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ card_title | escape }}"><span class="atelier-reel__play-mark" aria-hidden="true">{% render 'reel-icon', name: 'play' %}</span></button>
+              <button type="button" class="atelier-reel__open" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ card_title | escape }}"><span class="atelier-reel__play-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></button>
               <div class="atelier-reel__top">
                 <span class="atelier-reel__duration" data-card-duration hidden></span>
                 {% if has_video %}<button type="button" class="atelier-reels__control" data-card-sound aria-label="{{ section.settings.unmute_label | escape }}" aria-pressed="false"><span data-icon-muted>{% render 'reel-icon', name: 'muted' %}</span><span data-icon-sound hidden>{% render 'reel-icon', name: 'sound' %}</span></button>{% endif %}
@@ -100,8 +98,8 @@
             </article>
           {% endfor %}
         
-        {% elsif block_count > 0 %}
-{% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless reel_entries contains entry_token %}{% continue %}{% endunless %}
+        {% else %}
+          {% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless reel_entries contains entry_token %}{% continue %}{% endunless %}
             {% liquid
               assign reel_product = block.settings.product
               if section.settings.use_current_product
@@ -134,7 +132,7 @@
                   </video>
                 {% endif %}
               </div>
-              <button type="button" class="atelier-reel__open" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ block.settings.title | escape }}"><span class="atelier-reel__play-mark" aria-hidden="true">{% render 'reel-icon', name: 'play' %}</span></button>
+              <button type="button" class="atelier-reel__open" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ block.settings.title | escape }}"><span class="atelier-reel__play-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></button>
               <div class="atelier-reel__top">
                 <span class="atelier-reel__duration" data-card-duration hidden></span>
                 {% if has_video %}<button type="button" class="atelier-reels__control" data-card-sound aria-label="{{ section.settings.unmute_label | escape }}" aria-pressed="false"><span data-icon-muted>{% render 'reel-icon', name: 'muted' %}</span><span data-icon-sound hidden>{% render 'reel-icon', name: 'sound' %}</span></button>{% endif %}
@@ -153,44 +151,6 @@
               </div>
             </article>
         {% endfor %}
-        {% else %}
-          {%- assign studio_titles = "Carving Teakwood Easels|Midnight Thread Art Portrait|Crafting Sunflower Bookmarks|Unboxing 2026 Artist Calendar|Botanical Wall Hoop Process" | split: "|" -%}
-          {%- assign studio_captions = "Behind the scenes in the atelier: precision-grooving solid teakwood easels to cradle optical acrylic coasters.|Over 8,000 geometric thread intersections to bring portrait art to life. Hand-stitched with archival silk.|Laser-carved from sustainable birchwood and hand-finished with silky amber tassels.|12 months of hand-drawn studio art on 350 GSM archival textured matte paper with a wooden display easel.|From raw embroidery hoop to finished cherry blossom wall decor. Each delicate petal is hand-dyed in our studio." | split: "|" -%}
-          {%- assign studio_posters = "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/lady_teatrip.jpg?v=1792924261|https://cdn.shopify.com/s/files/1/0834/8142/8191/files/photo_thread_art_portrait.png?v=1792925514|https://cdn.shopify.com/s/files/1/0834/8142/8191/files/wood_flower_bookmark.jpg?v=1792924280|https://cdn.shopify.com/s/files/1/0834/8142/8191/files/artist_calendar.jpg?v=1792923636|https://cdn.shopify.com/s/files/1/0834/8142/8191/files/cherry_blossom.png?v=1792925522" | split: "|" -%}
-          {%- for t in studio_titles -%}
-            {%- liquid
-              assign reel_product = product
-              assign card_title = t
-              assign card_caption = studio_captions[forloop.index0]
-              assign cover_url = studio_posters[forloop.index0]
-              assign card_id = 'Studio-' | append: forloop.index
-              assign form_id = 'ReelProduct-' | append: section.id | append: '-' | append: card_id
-            -%}
-            <article class="atelier-reel" id="Reel-{{ section.id }}-{{ card_id }}" data-reel-card data-reel-id="{{ card_id }}" data-title="{{ card_title | escape }}" data-caption="{{ card_caption | escape }}">
-              <div class="atelier-reel__media">
-                <img class="atelier-reel__poster" src="{{ cover_url }}" alt="{{ card_title | escape }}" width="580" height="1032" loading="lazy">
-              </div>
-              <button type="button" class="atelier-reel__open" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ card_title | escape }}"><span class="atelier-reel__play-mark" aria-hidden="true">{% render 'reel-icon', name: 'play' %}</span></button>
-              <div class="atelier-reel__bottom">
-                {% assign reel_variant = reel_product.selected_or_first_available_variant %}
-                <div class="journal-reel-pill" data-reel-product>
-                  <div>
-                    <h3>{{ card_title | escape }}</h3>
-                    <p>{{ card_caption | escape }}</p>
-                  </div>
-                  {% if reel_product != blank and reel_product.available and reel_product.requires_selling_plan == false %}
-                    {% form 'product', reel_product, id: form_id, data-atelier-product-form: '' %}
-                      <input type="hidden" name="id" value="{{ reel_variant.id }}">
-                      <input type="hidden" name="quantity" value="1">
-                      <button type="submit" data-preserve-button-content aria-label="{{ section.settings.add_label | escape }}: {{ reel_product.title | escape }}">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-                      </button>
-                    {% endform %}
-                  {% endif %}
-                </div>
-              </div>
-            </article>
-          {%- endfor -%}
         {% endif %}
       </div>
     </div>
@@ -207,7 +167,7 @@
       <div class="atelier-reels__embed" data-instagram-container hidden></div>
       <button type="button" class="atelier-reels__instagram-button" data-load-instagram hidden>{{ section.settings.instagram_label | escape }}</button>
       <div class="atelier-reels__stage-actions">
-        <button type="button" class="atelier-reels__control" data-stage-play aria-label="{{ section.settings.play_label | escape }}" hidden><span data-icon-play>{% render 'reel-icon', name: 'play' %}</span><span data-icon-pause hidden>{% render 'reel-icon', name: 'pause' %}</span></button>
+        <button type="button" class="atelier-reels__control" data-stage-play aria-label="{{ section.settings.play_label | escape }}" hidden><span data-icon-play><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span data-icon-pause hidden>{% render 'reel-icon', name: 'pause' %}</span></button>
         <button type="button" class="atelier-reels__control" data-stage-sound aria-label="{{ section.settings.unmute_label | escape }}" hidden><span data-icon-muted>{% render 'reel-icon', name: 'muted' %}</span><span data-icon-sound hidden>{% render 'reel-icon', name: 'sound' %}</span></button>
         {% if section.settings.show_like %}<button type="button" class="atelier-reels__control" data-save-reel aria-label="{{ section.settings.save_label | escape }}" aria-pressed="false">{% render 'header-icon', name: 'heart' %}</button>{% endif %}
         {% if section.settings.show_share %}<button type="button" class="atelier-reels__control" data-share-reel aria-label="{{ section.settings.share_label | escape }}">{% render 'reel-icon', name: 'share' %}</button>{% endif %}

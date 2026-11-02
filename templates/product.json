@@ -254,86 +254,7 @@
         "show_compare_price": true,
         "show_like": true,
         "show_share": true
-      },
-      "blocks": {
-        "story_1": {
-          "type": "story",
-          "settings": {
-            "title": "Carving Teakwood Easels",
-            "caption": "Behind the scenes in the atelier: precision-grooving solid teakwood easels to cradle our high-gloss optical acrylic coasters.",
-            "source": "shopify",
-            "mp4_url": "",
-            "instagram_url": "",
-            "poster_url": "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/lady_teatrip.jpg?v=1792924261",
-            "captions_url": "",
-            "captions_language": "en",
-            "captions_label": "English"
-          }
-        },
-        "story_2": {
-          "type": "story",
-          "settings": {
-            "title": "Midnight Thread Art Portrait",
-            "caption": "Over 8,000 geometric thread intersections to bring a couple’s anniversary portrait to life. Hand-stitched with archival silk.",
-            "source": "shopify",
-            "mp4_url": "",
-            "instagram_url": "",
-            "poster_url": "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/photo_thread_art_portrait.png?v=1792925514",
-            "captions_url": "",
-            "captions_language": "en",
-            "captions_label": "English"
-          }
-        },
-        "story_3": {
-          "type": "story",
-          "settings": {
-            "title": "Crafting Sunflower Bookmarks",
-            "caption": "Laser-carved from sustainable birchwood and hand-finished with silky amber tassels. For readers who cherish tactile page-markers.",
-            "source": "shopify",
-            "mp4_url": "",
-            "instagram_url": "",
-            "poster_url": "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/wood_flower_bookmark.jpg?v=1792924280",
-            "captions_url": "",
-            "captions_language": "en",
-            "captions_label": "English"
-          }
-        },
-        "story_4": {
-          "type": "story",
-          "settings": {
-            "title": "Unboxing 2026 Artist Calendar",
-            "caption": "12 months of hand-drawn studio art on 350 GSM archival textured matte paper with a bespoke wooden display easel.",
-            "source": "shopify",
-            "mp4_url": "",
-            "instagram_url": "",
-            "poster_url": "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/artist_calendar.jpg?v=1792923636",
-            "captions_url": "",
-            "captions_language": "en",
-            "captions_label": "English"
-          }
-        },
-        "story_5": {
-          "type": "story",
-          "settings": {
-            "title": "Botanical Wall Hoop Process",
-            "caption": "From raw embroidery hoop to finished cherry blossom wall decor. Each delicate petal is hand-dyed and secured in our studio.",
-            "source": "shopify",
-            "mp4_url": "",
-            "instagram_url": "",
-            "poster_url": "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/cherry_blossom.png?v=1792925522",
-            "captions_url": "",
-            "captions_language": "en",
-            "captions_label": "English"
-          }
-        }
-      },
-      "block_order": [
-        "story_1",
-        "story_2",
-        "story_3",
-        "story_4",
-        "story_5"
-      ]
+      }
     },
     "disclosures": {
       "type": "disclosures",
@@ -354,47 +275,7 @@
         "panel_background": "#faf8f2",
         "text": "#363638",
         "width": 900
-      },
-      "blocks": {
-        "faq_1": {
-          "type": "faq",
-          "settings": {
-            "question": "What makes Graffeine Tales products unique?",
-            "answer": "<p>Each piece is slow-crafted with intention in our Indian studio — from archival 120–350 GSM textured papers and vegan leather book bindings to die-cut weatherproof vinyl stickers and solid teakwood desk accessories.</p>",
-            "open": true
-          }
-        },
-        "faq_2": {
-          "type": "faq",
-          "settings": {
-            "question": "How long does shipping & delivery take?",
-            "answer": "<p>Orders are dispatched within 2–3 business days. Delivery across major Indian cities typically takes 4–7 business days with end-to-end tracking provided via email and WhatsApp.</p>",
-            "open": false
-          }
-        },
-        "faq_3": {
-          "type": "faq",
-          "settings": {
-            "question": "Are the stickers waterproof & scratch-resistant?",
-            "answer": "<p>Yes! All our stickers are precision die-cut on premium matte vinyl with UV-resistant inks. They are 100% waterproof, scratch-proof, and safe for laptops, water bottles, and journals.</p>",
-            "open": false
-          }
-        },
-        "faq_4": {
-          "type": "faq",
-          "settings": {
-            "question": "What is your return & exchange policy?",
-            "answer": "<p>We take immense pride in our craftsmanship. If your item arrives damaged or defective, please contact our support team within 48 hours for an instant replacement or full refund.</p>",
-            "open": false
-          }
-        }
-      },
-      "block_order": [
-        "faq_1",
-        "faq_2",
-        "faq_3",
-        "faq_4"
-      ]
+      }
     },
     "related-products": {
       "type": "atelier-related-products",
@@ -435,81 +316,7 @@
         "text_color": "#e9dfc2",
         "padding_top": 70,
         "padding_bottom": 80
-      },
-      "blocks": {
-        "sticker_bobby": {
-          "type": "sticker",
-          "settings": {
-            "title": "Bobby Deol Gupt Edition"
-          }
-        },
-        "sticker_cat": {
-          "type": "sticker",
-          "settings": {
-            "title": "Curious Bookworm Cat"
-          }
-        },
-        "sticker_chai": {
-          "type": "sticker",
-          "settings": {
-            "title": "Desi Chai Lover"
-          }
-        },
-        "sticker_uday": {
-          "type": "sticker",
-          "settings": {
-            "title": "Control Uday Control"
-          }
-        },
-        "sticker_mojo": {
-          "type": "sticker",
-          "settings": {
-            "title": "Mojo Jojo Retro Pop"
-          }
-        },
-        "sticker_chugli": {
-          "type": "sticker",
-          "settings": {
-            "title": "Chugli Chai Society"
-          }
-        },
-        "sticker_starry": {
-          "type": "sticker",
-          "settings": {
-            "title": "Starry Night Art Decal"
-          }
-        },
-        "sticker_sloth": {
-          "type": "sticker",
-          "settings": {
-            "title": "Reading Sloth Bookmark"
-          }
-        },
-        "sticker_skeleton": {
-          "type": "sticker",
-          "settings": {
-            "title": "Nerdy Boo Skeleton"
-          }
-        },
-        "sticker_daynight": {
-          "type": "sticker",
-          "settings": {
-            "title": "Day & Night Dualism"
-          }
-        }
-      },
-      "block_order": [
-        "sticker_bobby",
-        "sticker_cat",
-        "sticker_chai",
-        "sticker_uday",
-        "sticker_mojo",
-        "sticker_chugli",
-        "sticker_starry",
-        "sticker_sloth",
-        "sticker_skeleton",
-        "sticker_daynight"
-      ]
+      }
     }
   },
   "order": [

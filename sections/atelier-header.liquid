@@ -189,19 +189,28 @@
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* On Product Detail Pages, PDP must start cleanly below the floating header, not behind it */
+/* On Product Detail Pages, keep less space below the floating header */
+body.template-product,
+.template-product #MainContent {
+  background: #F8F5ED !important;
+}
+
 body.template-product .atelier-header-section,
 body[data-template="product"] .atelier-header-section,
 .template-product .atelier-header-section {
-  margin-bottom: 14px !important;
+  margin-bottom: -18px !important;
 }
 
 @media (min-width: 768px) {
   body.template-product .atelier-header-section,
   body[data-template="product"] .atelier-header-section,
   .template-product .atelier-header-section {
-    margin-bottom: 22px !important;
+    margin-bottom: -24px !important;
   }
+}
+
+.template-product .atelier-pdp {
+  padding-top: 10px !important;
 }
 
 .atelier-header-section.is-hidden {
