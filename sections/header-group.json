@@ -144,7 +144,7 @@
         "categories_label": "Categories",
         "account_label": "Account",
         "account_link": "",
-        "height": 64,
+        "height": 56,
         "background": "#ffffff",
         "text": "#363638",
         "active": "#927b53"
