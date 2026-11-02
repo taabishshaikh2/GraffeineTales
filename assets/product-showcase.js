@@ -29,7 +29,8 @@ if (!customElements.get('atelier-product-showcase')) {
         this.addToCart(form);
       });
       on(document, 'atelier:wishlist:update', () => this.updateWishlist());
-      on(window, 'storage', event => {if (event.key === 'graffeine-wishlist') this.updateWishlist();});
+      on(window, 'storage', event => {if (event.key === 'graffeine-wishlist') this.updateWishlist();
+      this.updateGridAlignment();});
       on(this.dialog, 'close', () => {
         this.quickViewRequest?.abort();
         document.body.classList.remove('atelier-quick-view-open');
@@ -56,6 +57,15 @@ if (!customElements.get('atelier-product-showcase')) {
       try {localStorage.setItem('graffeine-wishlist', JSON.stringify([...saved]));}
       catch {this.announce(this.dataset.errorLabel); return;}
       document.dispatchEvent(new CustomEvent('atelier:wishlist:update'));
+    }
+    updateGridAlignment() {
+      const grid = this.querySelector('.atelier-showcase__grid');
+      if (!grid) return;
+      const count = grid.querySelectorAll('.atelier-product-card').length;
+      const columns = parseInt(this.dataset.showcaseColumns || '4', 10);
+      const isFew = count < columns;
+      grid.classList.toggle('is-centered', isFew);
+      grid.dataset.fewProducts = isFew ? 'true' : 'false';
     }
     updateWishlist() {
       const saved = new Set(this.savedHandles());

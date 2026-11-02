@@ -26,8 +26,10 @@
         <button type="button" class="atelier-catalogue__filter" data-catalogue-filter="all" aria-pressed="true" aria-controls="CatalogueGrid-{{ section.id }}">{{ section.settings.all_label | default: 'All' | escape }}</button>
         {% for block in section.blocks %}{% if block.settings.collection.products.size > 0 %}<button type="button" class="atelier-catalogue__filter" data-catalogue-filter="{{ block.id }}" data-block-id="{{ block.id }}" aria-pressed="false" aria-controls="CatalogueGrid-{{ section.id }}" {{ block.shopify_attributes }}>{{ block.settings.label | default: block.settings.collection.title | escape }}</button>{% endif %}{% endfor %}
       </div>
+      {% assign col_num = section.settings.columns | default: 4 | plus: 0 %}
+      {% if col_num == 0 %}{% assign col_num = 4 %}{% endif %}
       {% assign product_count = catalogue_collection.products.size | at_most: section.settings.product_limit %}
-      <div class="atelier-showcase__grid{% if product_count < section.settings.columns %} is-centered{% endif %}" id="CatalogueGrid-{{ section.id }}" data-catalogue-grid data-few-products="{% if product_count < section.settings.columns %}true{% else %}false{% endif %}">
+      <div class="atelier-showcase__grid{% if product_count < col_num %} is-centered{% endif %}" id="CatalogueGrid-{{ section.id }}" data-catalogue-grid data-few-products="{% if product_count < col_num %}true{% else %}false{% endif %}">
         {% for card_product in catalogue_collection.products limit: section.settings.product_limit %}{% render 'product-card', card_product: card_product, section: section %}{% endfor %}
       </div>
       <p class="visually-hidden" data-catalogue-status role="status" aria-live="polite"></p>
