@@ -7,10 +7,22 @@ if(!customElements.get('mobile-bottom-nav')){
       on(this,'click',event=>{
         const panel=event.target.closest('[data-dock-panel]');
         const cart=event.target.closest('[data-dock-cart]');
+        const wishlist=event.target.closest('[data-open-wishlist]');
         if(panel)document.dispatchEvent(new CustomEvent('atelier:navigation:open',{detail:{panel:panel.dataset.dockPanel,trigger:panel}}));
         if(cart){
           const drawer=document.querySelector('cart-drawer');
           if(drawer){event.preventDefault();drawer.open(cart);}
+        }
+        if(wishlist){
+          event.preventDefault();
+          const dialog=document.querySelector('[data-wishlist-dialog]');
+          if(dialog&&typeof dialog.showModal==='function'){
+            dialog.showModal();
+          }else if(dialog){
+            dialog.setAttribute('open','');
+          }else{
+            window.location.href='/pages/wishlist';
+          }
         }
       });
       on(document,'atelier:wishlist:update',()=>this.updateWishlist());
@@ -24,8 +36,10 @@ if(!customElements.get('mobile-bottom-nav')){
       let count=0;
       try{const values=JSON.parse(localStorage.getItem('graffeine-wishlist')||'[]');if(Array.isArray(values))count=new Set(values.filter(value=>typeof value==='string'&&/^[a-z0-9-]+$/.test(value))).size;}catch{}
       const badge=this.querySelector('[data-dock-wishlist-count]');
-      badge.textContent=String(count);
-      badge.hidden=count===0;
+      if(badge){
+        badge.textContent=String(count);
+        badge.hidden=count===0;
+      }
     }
     queueCartRefresh(){
       clearTimeout(this.refreshTimer);

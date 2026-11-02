@@ -780,15 +780,13 @@ atelier-header button {
     object-fit: contain !important;
   }
 
-  /* RIGHT: Exactly 2 icons (Wishlist + Cart) locked to 76px */
+  /* RIGHT: Cart icon on mobile (Wishlist moved to bottom navigation) */
   .atelier-header__right {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    flex: 0 0 76px !important;
-    width: 76px !important;
-    min-width: 76px !important;
-    max-width: 76px !important;
+    flex: 0 0 auto !important;
+    min-width: 36px !important;
     gap: 4px !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -1089,9 +1087,9 @@ atelier-header button {
 .atelier-drawer__chev {
   display: grid !important;
   place-items: center !important;
-  width: 16px !important;
-  height: 16px !important;
-  transition: transform 0.25s ease !important;
+  width: 20px !important;
+  height: 20px !important;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.25s ease !important;
   color: rgba(54, 54, 56, 0.5) !important;
 }
 .atelier-drawer__chev svg {
@@ -1099,26 +1097,35 @@ atelier-header button {
   height: 14px !important;
   stroke: currentColor !important;
 }
-.atelier-drawer__accordion-item.is-open .atelier-drawer__chev,
-.atelier-drawer__accordion-item[open] .atelier-drawer__chev {
+.atelier-drawer__accordion-item.is-open .atelier-drawer__chev {
   transform: rotate(180deg) !important;
   color: #4D351D !important;
 }
+
+/* Superkicks-style smooth CSS Grid Accordion Dropdown */
 .atelier-drawer__accordion-body {
-  display: none !important;
-  padding: 4px 0 12px 14px !important;
+  display: grid !important;
+  grid-template-rows: 0fr !important;
+  transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
 }
-.atelier-drawer__accordion-item.is-open > .atelier-drawer__accordion-body,
-.atelier-drawer__accordion-item[open] > .atelier-drawer__accordion-body {
-  display: block !important;
+.atelier-drawer__accordion-inner {
+  min-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  transform: translateY(-8px) scale(0.99) !important;
+  transition: opacity 0.26s cubic-bezier(0.22, 1, 0.36, 1), transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), padding 0.35s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  padding: 0 4px 0 4px !important;
 }
-.atelier-drawer__accordion-body {
-  display: none !important;
-  padding: 4px 10px 12px 10px !important;
+.atelier-drawer__accordion-item.is-open > .atelier-drawer__accordion-body {
+  grid-template-rows: 1fr !important;
 }
-.atelier-drawer__accordion-item.is-open > .atelier-drawer__accordion-body,
-.atelier-drawer__accordion-item[open] > .atelier-drawer__accordion-body {
-  display: block !important;
+.atelier-drawer__accordion-item.is-open > .atelier-drawer__accordion-body > .atelier-drawer__accordion-inner {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+  padding: 4px 4px 14px 4px !important;
 }
 .atelier-drawer__sublist {
   border-left: none !important;
@@ -1131,6 +1138,7 @@ atelier-header button {
   flex-direction: column !important;
   gap: 2px !important;
   list-style: none !important;
+  box-shadow: inset 0 1px 3px rgba(77, 53, 29, 0.03) !important;
 }
 .atelier-drawer__sublist li {
   list-style: none !important;
@@ -1152,15 +1160,16 @@ atelier-header button {
   color: #382A1D !important;
   text-decoration: none !important;
   border-radius: 8px !important;
-  transition: all 0.2s ease !important;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), padding-left 0.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 .atelier-drawer__sublink:hover,
 .atelier-drawer__sublink:focus,
 .atelier-drawer__sublink:active {
-  background: rgba(255, 255, 255, 0.88) !important;
+  background: rgba(255, 255, 255, 0.92) !important;
   color: #1A120B !important;
   font-weight: 600 !important;
-  padding-left: 15px !important;
+  padding-left: 16px !important;
+  transform: translateX(2px) !important;
 }
 
 /* 3. PINNED FOOTER (UrbanDeco Screenshot 2 reference) */

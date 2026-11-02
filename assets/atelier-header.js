@@ -284,21 +284,35 @@ if (!customElements.get('atelier-header')) {
           e.preventDefault();
           e.stopPropagation();
           const item = trigger.closest('[data-drawer-accordion], .atelier-drawer__accordion-item, details');
-          if (item) {
-            const isOpen = item.classList.contains('is-open') || item.hasAttribute('open');
-            drawer.querySelectorAll('[data-drawer-accordion], .atelier-drawer__accordion-item, details').forEach((other) => {
-              if (other !== item) {
-                other.classList.remove('is-open');
-                other.removeAttribute('open');
-              }
-            });
-            if (isOpen) {
-              item.classList.remove('is-open');
-              item.removeAttribute('open');
-            } else {
-              item.classList.add('is-open');
-              item.setAttribute('open', '');
+          if (!item) return;
+
+          const isAlreadyOpen = item.classList.contains('is-open');
+
+          // Smoothly close any other open accordions
+          drawer.querySelectorAll('[data-drawer-accordion], .atelier-drawer__accordion-item, details').forEach((other) => {
+            if (other !== item && (other.classList.contains('is-open') || other.hasAttribute('open'))) {
+              other.classList.remove('is-open');
+              setTimeout(() => {
+                if (!other.classList.contains('is-open')) {
+                  other.removeAttribute('open');
+                }
+              }, 360);
             }
+          });
+
+          if (isAlreadyOpen) {
+            item.classList.remove('is-open');
+            setTimeout(() => {
+              if (!item.classList.contains('is-open')) {
+                item.removeAttribute('open');
+              }
+            }, 360);
+          } else {
+            item.setAttribute('open', '');
+            void item.offsetHeight;
+            requestAnimationFrame(() => {
+              item.classList.add('is-open');
+            });
           }
         });
       });
@@ -523,22 +537,33 @@ if (!customElements.get('atelier-header')) {
       e.stopPropagation();
       const item = accordionTrigger.closest('[data-drawer-accordion], .atelier-drawer__accordion-item, details');
       if (item) {
-        const isOpen = item.classList.contains('is-open') || item.hasAttribute('open');
+        const isAlreadyOpen = item.classList.contains('is-open');
         const drawer = document.getElementById('atelier-mobile-drawer');
         if (drawer) {
           drawer.querySelectorAll('[data-drawer-accordion], .atelier-drawer__accordion-item, details').forEach((other) => {
-            if (other !== item) {
+            if (other !== item && (other.classList.contains('is-open') || other.hasAttribute('open'))) {
               other.classList.remove('is-open');
-              other.removeAttribute('open');
+              setTimeout(() => {
+                if (!other.classList.contains('is-open')) {
+                  other.removeAttribute('open');
+                }
+              }, 360);
             }
           });
         }
-        if (isOpen) {
+        if (isAlreadyOpen) {
           item.classList.remove('is-open');
-          item.removeAttribute('open');
+          setTimeout(() => {
+            if (!item.classList.contains('is-open')) {
+              item.removeAttribute('open');
+            }
+          }, 360);
         } else {
-          item.classList.add('is-open');
           item.setAttribute('open', '');
+          void item.offsetHeight;
+          requestAnimationFrame(() => {
+            item.classList.add('is-open');
+          });
         }
       }
       return;

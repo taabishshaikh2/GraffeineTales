@@ -23,7 +23,7 @@
     </header>
     <catalogue-filters data-results-label="{{ section.settings.results_label | escape }}">
       <div class="atelier-catalogue__filters" data-catalogue-filter-controls hidden role="group" aria-label="{{ section.settings.filter_label | escape }}">
-        <button type="button" class="atelier-catalogue__filter" data-catalogue-filter="all" aria-pressed="true" aria-controls="CatalogueGrid-{{ section.id }}">{{ section.settings.all_label | escape }}</button>
+        <button type="button" class="atelier-catalogue__filter" data-catalogue-filter="all" aria-pressed="true" aria-controls="CatalogueGrid-{{ section.id }}">{{ section.settings.all_label | default: 'All' | escape }}</button>
         {% for block in section.blocks %}{% if block.settings.collection.products.size > 0 %}<button type="button" class="atelier-catalogue__filter" data-catalogue-filter="{{ block.id }}" data-block-id="{{ block.id }}" aria-pressed="false" aria-controls="CatalogueGrid-{{ section.id }}" {{ block.shopify_attributes }}>{{ block.settings.label | default: block.settings.collection.title | escape }}</button>{% endif %}{% endfor %}
       </div>
       <div class="atelier-showcase__grid" id="CatalogueGrid-{{ section.id }}" data-catalogue-grid>
@@ -101,6 +101,12 @@
       "type": "textarea",
       "id": "description",
       "label": "Optional introduction"
+    },
+    {
+      "type": "text",
+      "id": "all_label",
+      "label": "All filter pill label",
+      "default": "All"
     },
     {
       "type": "collection",

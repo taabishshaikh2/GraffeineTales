@@ -391,6 +391,7 @@
       "settings": {
         "eyebrow": "Full Studio Archive",
         "heading": "The Complete Collection",
+        "all_label": "All",
         "description": "",
         "collection": "",
         "product_limit": 20,
