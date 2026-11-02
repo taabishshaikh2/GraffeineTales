@@ -38,8 +38,6 @@
     },
     "header": {
       "type": "atelier-header",
-      "blocks": {},
-      "block_order": [],
       "settings": {
         "show_announcement": false,
         "announcement_text": "Artful Things. Thoughtful Living. | Free Shipping on orders over ₹999",
