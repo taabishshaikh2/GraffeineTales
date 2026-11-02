@@ -665,6 +665,7 @@ atelier-header button {
     padding: var(--gap-top-mobile, 8px) var(--gap-side-mobile, 10px) 0 !important;
   }
   .atelier-header__pill {
+    position: relative !important;
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
@@ -680,6 +681,8 @@ atelier-header button {
 
   /* LEFT: Exactly 2 icons (Hamburger + Search) locked to 76px */
   .atelier-header__left {
+    position: relative !important;
+    z-index: 3 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
@@ -726,14 +729,19 @@ atelier-header button {
     stroke: currentColor !important;
   }
 
-  /* CENTER: Centered Logo */
+  /* CENTER: Centered Logo - Mathematically dead center in mobile pill */
   .atelier-header__center {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    padding: 0 4px !important;
+    max-width: calc(100% - 156px) !important;
+    pointer-events: auto !important;
+    z-index: 2 !important;
+    padding: 0 !important;
     margin: 0 !important;
     text-align: center !important;
     overflow: visible !important;
@@ -782,6 +790,8 @@ atelier-header button {
 
   /* RIGHT: Cart icon on mobile (Wishlist moved to bottom navigation) */
   .atelier-header__right {
+    position: relative !important;
+    z-index: 3 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
