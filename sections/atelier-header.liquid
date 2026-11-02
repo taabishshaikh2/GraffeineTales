@@ -189,7 +189,7 @@
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* On Product Detail Pages, keep less space below the floating header */
+/* On Product Detail Pages, header sits cleanly above PDP with no excessive gap */
 body.template-product,
 .template-product #MainContent {
   background: #F8F5ED !important;
@@ -198,19 +198,12 @@ body.template-product,
 body.template-product .atelier-header-section,
 body[data-template="product"] .atelier-header-section,
 .template-product .atelier-header-section {
-  margin-bottom: -18px !important;
+  margin-bottom: 0 !important;
 }
 
-@media (min-width: 768px) {
-  body.template-product .atelier-header-section,
-  body[data-template="product"] .atelier-header-section,
-  .template-product .atelier-header-section {
-    margin-bottom: -24px !important;
-  }
-}
-
-.template-product .atelier-pdp {
-  padding-top: 10px !important;
+body.template-product #MainContent > .shopify-section:first-child,
+.template-product #MainContent > .shopify-section:first-child {
+  padding-top: 0 !important;
 }
 
 .atelier-header-section.is-hidden {
@@ -1387,36 +1380,24 @@ atelier-header li,
   display: none !important;
   content: "" !important;
 }
-.atelier-drawer__row-arrow {
-  font-size: 16px !important;
-  color: rgba(54, 54, 56, 0.45) !important;
-  transition: transform 0.2s ease, color 0.2s ease !important;
-}
-.atelier-drawer__row-link:hover .atelier-drawer__row-arrow {
-  color: #4D351D !important;
-  transform: translateX(3px) !important;
-}
-
-/* Accordion Item & Chevron */
-.atelier-drawer__accordion-item {
-  border-bottom: none !important;
-  list-style: none !important;
-}
-.atelier-drawer__accordion-item .atelier-drawer__row-link {
-  border-bottom: 1px solid rgba(54, 54, 56, 0.12) !important;
-}
+.atelier-drawer__row-arrow,
 .atelier-drawer__chev {
   display: grid !important;
   place-items: center !important;
   width: 20px !important;
   height: 20px !important;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.25s ease !important;
   color: rgba(54, 54, 56, 0.45) !important;
+  transition: transform 0.2s ease, color 0.2s ease !important;
 }
+.atelier-drawer__row-arrow svg,
 .atelier-drawer__chev svg {
   width: 14px !important;
   height: 14px !important;
   stroke: currentColor !important;
+}
+.atelier-drawer__row-link:hover .atelier-drawer__row-arrow,
+.atelier-drawer__row-link:hover .atelier-drawer__chev {
+  color: #4D351D !important;
 }
 .atelier-drawer__accordion-item.is-open .atelier-drawer__chev {
   transform: rotate(180deg) !important;
@@ -1625,8 +1606,8 @@ atelier-header li,
   line-height: 1.3 !important;
 }
 
-/* Clearances for non-banner pages */
-body:not(.template-index):not(.template-collection) #MainContent > .shopify-section:first-child:not(:has(.atelier-col-hero)):not(:has(.atelier-hero)):not(:has(.image-banner)):not(:has(.slideshow)) {
+/* Clearances for non-banner pages (exclude product pages) */
+body:not(.template-index):not(.template-collection):not(.template-product):not([data-template="product"]) #MainContent > .shopify-section:first-child:not(:has(.atelier-col-hero)):not(:has(.atelier-hero)):not(:has(.image-banner)):not(:has(.slideshow)) {
   padding-top: calc(var(--header-height, 120px) + 24px) !important;
 }
 
@@ -2032,7 +2013,7 @@ body:not(.template-index):not(.template-collection) #MainContent > .shopify-sect
               {%- else -%}
                 <a class="atelier-drawer__row-link" href="{{ link.url }}">
                   <span class="atelier-drawer__row-title">{{ link.title | escape }}</span>
-                  <span class="atelier-drawer__row-arrow" aria-hidden="true">→</span>
+                  <span class="atelier-drawer__chev" aria-hidden="true">{{ icon_chev }}</span>
                 </a>
               {%- endif -%}
             </li>

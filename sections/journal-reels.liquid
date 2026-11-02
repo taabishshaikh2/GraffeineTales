@@ -76,7 +76,7 @@
               assign card_id = 'Card-' | append: forloop.index
               assign form_id = 'ReelProduct-' | append: section.id | append: '-' | append: card_id
             %}
-            <article class="atelier-reel" id="Reel-{{ section.id }}-{{ card_id }}" data-reel-card data-reel-id="{{ card_id }}" data-title="{{ card_title | escape }}" data-caption="{{ card_caption | escape }}">
+                        <article class="atelier-reel" id="Reel-{{ section.id }}-{{ card_id }}" data-reel-card data-reel-id="{{ card_id }}" data-title="{{ card_title | escape }}" data-caption="{{ card_caption | escape }}">
               <div class="atelier-reel__media">
                 {% if cover_url != blank %}<img class="atelier-reel__poster" src="{{ cover_url }}" alt="{{ card_title | escape }}" width="580" height="1032" loading="lazy">{% else %}{{ 'product-1' | placeholder_svg_tag: 'atelier-reel__poster' }}{% endif %}
                 {% if has_video %}
@@ -85,15 +85,28 @@
                   </video>
                 {% endif %}
               </div>
-              <button type="button" class="atelier-reel__open" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ card_title | escape }}"><span class="atelier-reel__play-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></button>
-              <div class="atelier-reel__top">
-                <span class="atelier-reel__duration" data-card-duration hidden></span>
-                {% if has_video %}<button type="button" class="atelier-reels__control" data-card-sound aria-label="{{ section.settings.unmute_label | escape }}" aria-pressed="false"><span data-icon-muted>{% render 'reel-icon', name: 'muted' %}</span><span data-icon-sound hidden>{% render 'reel-icon', name: 'sound' %}</span></button>{% endif %}
+              <div class="atelier-reel__side-actions">
+                <button type="button" class="atelier-reel__side-btn atelier-reel__side-btn--expand" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | default: 'Expand' | escape }}: {{ card_title | escape }}">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </button>
+                {% if has_video %}
+                  <button type="button" class="atelier-reel__side-btn atelier-reel__side-btn--play" data-card-play aria-label="{{ section.settings.play_label | default: 'Play/Pause' | escape }}" aria-pressed="false">
+                    <span data-icon-play><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5C518" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+                    <span data-icon-pause hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5C518" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></span>
+                  </button>
+                  <button type="button" class="atelier-reel__side-btn atelier-reel__side-btn--sound" data-card-sound aria-label="{{ section.settings.unmute_label | default: 'Unmute' | escape }}" aria-pressed="false">
+                    <span data-icon-muted><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></span>
+                    <span data-icon-sound hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span>
+                  </button>
+                {% endif %}
               </div>
               <div class="atelier-reel__bottom">
-                {% if card_title != blank %}<h3>{{ card_title | escape }}</h3>{% endif %}
-                {% if section.settings.show_captions and card_caption != blank %}<p class="atelier-reel__caption">{{ card_caption | escape }}</p>{% endif %}
-                {% render 'reel-product', product: reel_product, section: section, form_id: form_id %}
+                {% if reel_product != blank %}
+                  {% render 'reel-product', product: reel_product, section: section, form_id: form_id %}
+                {% else %}
+                  {% if card_title != blank %}<h3>{{ card_title | escape }}</h3>{% endif %}
+                  {% if section.settings.show_captions and card_caption != blank %}<p class="atelier-reel__caption">{{ card_caption | escape }}</p>{% endif %}
+                {% endif %}
               </div>
             </article>
           {% endfor %}
@@ -121,10 +134,14 @@
                 assign has_video = true
               endif
               assign form_id = 'ReelProduct-' | append: section.id | append: '-' | append: block.id
+              assign card_title = block.settings.title
+              if card_title == blank and reel_product != blank
+                assign card_title = reel_product.title
+              endif
             %}
-            <article class="atelier-reel" id="Reel-{{ section.id }}-{{ block.id }}" data-reel-card data-reel-id="{{ block.id }}" data-title="{{ block.settings.title | escape }}" data-caption="{{ block.settings.caption | escape }}" data-instagram="{% if block.settings.source == 'instagram' %}{{ block.settings.instagram_url | escape }}{% endif %}" {{ block.shopify_attributes }}>
+                        <article class="atelier-reel" id="Reel-{{ section.id }}-{{ block.id }}" data-reel-card data-reel-id="{{ block.id }}" data-title="{{ card_title | escape }}" data-caption="{{ block.settings.caption | escape }}" data-instagram="{% if block.settings.source == 'instagram' %}{{ block.settings.instagram_url | escape }}{% endif %}" {{ block.shopify_attributes }}>
               <div class="atelier-reel__media">
-                {% if cover_url != blank %}<img class="atelier-reel__poster" src="{{ cover_url }}" alt="" width="580" height="1032" loading="lazy">{% else %}{{ 'product-1' | placeholder_svg_tag: 'atelier-reel__poster' }}{% endif %}
+                {% if cover_url != blank %}<img class="atelier-reel__poster" src="{{ cover_url }}" alt="{{ card_title | escape }}" width="580" height="1032" loading="lazy">{% else %}{{ 'product-1' | placeholder_svg_tag: 'atelier-reel__poster' }}{% endif %}
                 {% if has_video %}
                   <video class="atelier-reel__video" data-card-video muted playsinline loop preload="none"{% if block.settings.captions_url != blank %} crossorigin="anonymous"{% endif %}{% if cover_url != blank %} poster="{{ cover_url }}"{% endif %} aria-hidden="true" tabindex="-1" disablepictureinpicture>
                     {% if block.settings.source == 'shopify' %}{% for video_source in block.settings.video.sources %}<source src="{{ video_source.url | escape }}" type="{{ video_source.mime_type | escape }}">{% endfor %}{% else %}<source src="{{ block.settings.mp4_url | escape }}" type="video/mp4">{% endif %}
@@ -132,22 +149,28 @@
                   </video>
                 {% endif %}
               </div>
-              <button type="button" class="atelier-reel__open" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | escape }}: {{ block.settings.title | escape }}"><span class="atelier-reel__play-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></button>
-              <div class="atelier-reel__top">
-                <span class="atelier-reel__duration" data-card-duration hidden></span>
-                {% if has_video %}<button type="button" class="atelier-reels__control" data-card-sound aria-label="{{ section.settings.unmute_label | escape }}" aria-pressed="false"><span data-icon-muted>{% render 'reel-icon', name: 'muted' %}</span><span data-icon-sound hidden>{% render 'reel-icon', name: 'sound' %}</span></button>{% endif %}
+              <div class="atelier-reel__side-actions">
+                <button type="button" class="atelier-reel__side-btn atelier-reel__side-btn--expand" data-open-reel="{{ forloop.index0 }}" aria-label="{{ section.settings.watch_label | default: 'Expand' | escape }}: {{ card_title | escape }}">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                </button>
+                {% if has_video %}
+                  <button type="button" class="atelier-reel__side-btn atelier-reel__side-btn--play" data-card-play aria-label="{{ section.settings.play_label | default: 'Play/Pause' | escape }}" aria-pressed="false">
+                    <span data-icon-play><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5C518" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+                    <span data-icon-pause hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5C518" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></span>
+                  </button>
+                  <button type="button" class="atelier-reel__side-btn atelier-reel__side-btn--sound" data-card-sound aria-label="{{ section.settings.unmute_label | default: 'Unmute' | escape }}" aria-pressed="false">
+                    <span data-icon-muted><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></span>
+                    <span data-icon-sound hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span>
+                  </button>
+                {% endif %}
               </div>
               <div class="atelier-reel__bottom">
-               {% assign reel_variant = reel_product.selected_or_first_available_variant %}<div class="journal-reel-pill" data-reel-product>
-                <div>{% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}{% if block.settings.caption != blank %}<p>{% if block.settings.show_price %}{{ section.settings.currency_symbol | escape }}{{ reel_variant.price | money_without_currency | remove: '.00' }} • {% endif %}{{ block.settings.caption | escape }}</p>{% endif %}</div>
-                {% assign reel_variant = reel_product.selected_or_first_available_variant %}
-                {% if reel_product.available and reel_product.requires_selling_plan == false %}
-                 {% if reel_product.has_only_default_variant or reel_product.id == product.id %}
-                  {% form 'product', reel_product, id: form_id, data-atelier-product-form: '' %}<input type="hidden" name="id" value="{{ reel_variant.id }}"{% if reel_product.id == product.id %} data-journal-product="{{ product.id }}"{% endif %}><input type="hidden" name="quantity" value="1"><button type="submit" data-preserve-button-content aria-label="{{ section.settings.add_label | escape }}: {{ reel_product.title | escape }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>{% endform %}
-                 {% else %}<a href="{{ reel_product.url }}" aria-label="{{ section.settings.product_label | escape }}: {{ reel_product.title | escape }}">+</a>{% endif %}
-                {% else %}<button type="button" disabled aria-label="{{ section.settings.sold_out_label | escape }}">+</button>{% endif %}
-                <p data-cart-error role="alert" hidden></p>
-               </div>
+                {% if reel_product != blank %}
+                  {% render 'reel-product', product: reel_product, section: section, form_id: form_id %}
+                {% else %}
+                  {% if card_title != blank %}<h3>{{ card_title | escape }}</h3>{% endif %}
+                  {% if section.settings.show_captions and block.settings.caption != blank %}<p class="atelier-reel__caption">{{ block.settings.caption | escape }}</p>{% endif %}
+                {% endif %}
               </div>
             </article>
         {% endfor %}

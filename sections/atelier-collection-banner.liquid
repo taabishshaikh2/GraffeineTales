@@ -33,9 +33,21 @@
       assign render_tabs = true
     endif
   endif
+
+  assign is_sticker_col = false
+  assign c_h = collection.handle | downcase
+  assign c_t = collection.title | downcase
+  if c_h contains 'sticker' or c_t contains 'sticker' or c_h contains 'decal' or c_t contains 'decal' or c_h contains 'vinyl' or c_t contains 'vinyl'
+    assign is_sticker_col = true
+  endif
 -%}
 
 {%- style -%}
+  {%- if is_sticker_col -%}
+    #shopify-section-{{ section.id }} {
+      display: none !important;
+    }
+  {%- endif -%}
   #shopify-section-{{ section.id }} {
     --hero-min-height-desktop: {{ section.settings.hero_height_desktop }}px;
     --hero-min-height-mobile: {{ section.settings.hero_height_mobile }}px;

@@ -276,7 +276,91 @@
         "show_compare_price": true,
         "show_like": true,
         "show_share": true
-      }
+      },
+      "blocks": {
+        "story_1": {
+          "type": "story",
+          "settings": {
+            "title": "Carving Teakwood Easels",
+            "caption": "Behind the scenes in the atelier: precision-grooving solid teakwood easels to cradle our high-gloss optical acrylic coasters.",
+            "source": "shopify",
+            "mp4_url": "",
+            "instagram_url": "",
+            "poster_url": "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/lady_teatrip.jpg?v=1792924261",
+            "product": "its-book-oclock-laser-engraved-bookmark",
+            "captions_url": "",
+            "captions_language": "en",
+            "captions_label": "English"
+          }
+        },
+        "story_2": {
+          "type": "story",
+          "settings": {
+            "title": "Midnight Thread Art Portrait",
+            "caption": "Over 8,000 geometric thread intersections to bring a couple’s anniversary portrait to life. Hand-stitched with archival silk.",
+            "source": "shopify",
+            "mp4_url": "",
+            "instagram_url": "",
+            "poster_url": "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/photo_thread_art_portrait.png?v=1792925514",
+            "product": "bespoke-photo-thread-art-keepsake-frame",
+            "captions_url": "",
+            "captions_language": "en",
+            "captions_label": "English"
+          }
+        },
+        "story_3": {
+          "type": "story",
+          "settings": {
+            "title": "Crafting Sunflower Bookmarks",
+            "caption": "Laser-carved from sustainable birchwood and hand-finished with silky amber tassels. For readers who cherish tactile page-markers.",
+            "source": "shopify",
+            "mp4_url": "",
+            "instagram_url": "",
+            "poster_url": "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/wood_flower_bookmark.jpg?v=1792924280",
+            "product": "handcrafted-wooden-sunflower-bookmark-with-tassel",
+            "captions_url": "",
+            "captions_language": "en",
+            "captions_label": "English"
+          }
+        },
+        "story_4": {
+          "type": "story",
+          "settings": {
+            "title": "Unboxing 2026 Artist Calendar",
+            "caption": "12 months of hand-drawn studio art on 350 GSM archival textured matte paper with a bespoke wooden display easel.",
+            "source": "shopify",
+            "mp4_url": "",
+            "instagram_url": "",
+            "poster_url": "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/artist_calendar.jpg?v=1792923636",
+            "product": "progress-not-perfection-2026-desk-calender",
+            "captions_url": "",
+            "captions_language": "en",
+            "captions_label": "English"
+          }
+        },
+        "story_5": {
+          "type": "story",
+          "settings": {
+            "title": "Botanical Wall Hoop Process",
+            "caption": "From raw embroidery hoop to finished cherry blossom wall decor. Each delicate petal is hand-dyed and secured in our studio.",
+            "source": "shopify",
+            "mp4_url": "",
+            "instagram_url": "",
+            "poster_url": "https://cdn.shopify.com/s/files/1/0834/8142/8191/files/cherry_blossom.png?v=1792925522",
+            "product": "cherry-blossom-botanical-wooden-wall-decor",
+            "captions_url": "",
+            "captions_language": "en",
+            "captions_label": "English"
+          }
+        }
+      },
+      "block_order": [
+        "story_1",
+        "story_2",
+        "story_3",
+        "story_4",
+        "story_5"
+      ]
     },
     "disclosures": {
       "type": "disclosures",
@@ -332,7 +416,6 @@
     "main",
     "pdp-features",
     "preview",
-    "sticker-customizer",
     "video-gallery",
     "disclosures",
     "faqs",

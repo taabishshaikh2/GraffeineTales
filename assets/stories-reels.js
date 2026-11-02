@@ -18,9 +18,16 @@ if (!customElements.get('atelier-reels')) {
       on(this,'click',event => {
         const opener = event.target.closest('[data-open-reel]');
         const sound = event.target.closest('[data-card-sound]');
+        const play = event.target.closest('[data-card-play]');
+        const cardVideo = event.target.closest('[data-card-video]');
         const track = event.target.closest('[data-track-direction]');
         const dot = event.target.closest('[data-reel-dot]');
         if (opener) this.open(Number(opener.dataset.openReel),opener);
+        else if (play) this.toggleCardPlay(play);
+        else if (cardVideo) {
+          const pBtn = cardVideo.closest('[data-reel-card]')?.querySelector('[data-card-play]');
+          if (pBtn) this.toggleCardPlay(pBtn);
+        }
         else if (sound) this.toggleCardSound(sound);
         else if (track) this.viewport.scrollBy({left:Number(track.dataset.trackDirection)*(this.cards[0]?.offsetWidth+22||300),behavior:this.motion.matches?'instant':'smooth'});
         else if (dot) this.cards[Number(dot.dataset.reelDot)]?.scrollIntoView({block:'nearest',inline:'center',behavior:this.motion.matches?'instant':'smooth'});
@@ -40,8 +47,28 @@ if (!customElements.get('atelier-reels')) {
           if (Number.isFinite(video.duration)) {label.textContent=this.time(video.duration);label.hidden=false;}
         });
         on(video,'volumechange',() => {const button=card.querySelector('[data-card-sound]');if(button)this.setSoundButton(button,video.muted);});
-        on(video,'play',() => card.classList.add('is-playing'));
-        on(video,'pause',() => card.classList.remove('is-playing'));
+        on(video,'play',() => {
+          card.classList.add('is-playing');
+          const pBtn = card.querySelector('[data-card-play]');
+          if (pBtn) {
+            pBtn.setAttribute('aria-pressed', 'true');
+            const pIcon = pBtn.querySelector('[data-icon-play]');
+            const paIcon = pBtn.querySelector('[data-icon-pause]');
+            if (pIcon) pIcon.hidden = true;
+            if (paIcon) paIcon.hidden = false;
+          }
+        });
+        on(video,'pause',() => {
+          card.classList.remove('is-playing');
+          const pBtn = card.querySelector('[data-card-play]');
+          if (pBtn) {
+            pBtn.setAttribute('aria-pressed', 'false');
+            const pIcon = pBtn.querySelector('[data-icon-play]');
+            const paIcon = pBtn.querySelector('[data-icon-pause]');
+            if (pIcon) pIcon.hidden = false;
+            if (paIcon) paIcon.hidden = true;
+          }
+        });
         on(video,'error',() => {video.hidden=true;card.classList.remove('is-playing');});
       });
       this.observer=new IntersectionObserver(entries => {
@@ -125,6 +152,18 @@ if (!customElements.get('atelier-reels')) {
       const video=card?.querySelector('video');
       this.pausePreviews(video);
       if(video){if(this.preview!==video)video.muted=true;this.preview=video;video.play().catch(()=>{});}
+    }
+        toggleCardPlay(button) {
+      const card = button.closest('[data-reel-card]');
+      const video = card?.querySelector('video');
+      if (!video) return;
+      if (video.paused) {
+        this.pausePreviews(video);
+        this.preview = video;
+        video.play().catch(()=>{});
+      } else {
+        video.pause();
+      }
     }
     toggleCardSound(button) {
       const video=button.closest('[data-reel-card]').querySelector('video');

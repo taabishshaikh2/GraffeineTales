@@ -8,7 +8,33 @@
   endfor
 %}
 {% if related_count > 0 %}
+{{ 'product-showcase.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-showcase.js' | asset_url }}" defer></script>
   {% style %}
+    .atelier-related__slide {
+      box-sizing: border-box;
+      min-width: 0;
+      flex: 0 0 calc((100% - 3 * var(--related-gap, 28px)) / 4);
+      display: flex;
+      scroll-snap-align: start;
+    }
+    .atelier-related__slide .atelier-product-card {
+      width: 100% !important;
+      flex: 1 1 auto !important;
+      height: 100% !important;
+    }
+    @media (min-width: 750px) and (max-width: 989px) {
+      .atelier-related__slide {
+        flex: 0 0 calc((100% - 2 * var(--related-gap, 28px)) / 2.5);
+      }
+    }
+    @media (max-width: 749px) {
+      .atelier-related__slide {
+        flex: 0 0 76%;
+        max-width: 290px;
+      }
+    }
+
     .atelier-related {
       display: block;
       background: var(--related-background, #F8F5ED);
@@ -262,6 +288,7 @@
     }
   {% endstyle %}
 
+  <atelier-product-showcase class="atelier-related-showcase" data-currency="{{ cart.currency.iso_code | escape }}">
   <atelier-related-carousel class="atelier-related" style="--related-width:{{ section.settings.width }}px;--related-gap:{{ section.settings.gap }}px;--related-mobile-gap:{{ section.settings.mobile_gap | default: 16 }}px;--related-radius:{{ section.settings.radius }}px;--related-heading:{{ section.settings.heading_size }}px;--related-mobile-heading:{{ section.settings.mobile_heading_size | default: 26 }}px;--related-top:{{ section.settings.padding_top }}px;--related-bottom:{{ section.settings.padding_bottom }}px;--related-mobile-top:{{ section.settings.mobile_padding_top | default: 28 }}px;--related-mobile-bottom:{{ section.settings.mobile_padding_bottom | default: 28 }}px;--related-background:{{ section.settings.background }};--related-card:{{ section.settings.card_background }};--related-text:{{ section.settings.text }};--related-accent:{{ section.settings.accent }};--related-border:{{ section.settings.border }};--related-button:{{ section.settings.button_background }};--related-fit:{{ section.settings.image_fit }}">
     <div class="atelier-related__inner{% if section.settings.show_divider %} atelier-related__inner--divider{% endif %}">
       <header class="atelier-related__header">
@@ -285,51 +312,9 @@
         {% for related_product in related_entries limit: 24 %}
           {% unless related_product.id == product.id %}
             {% assign variant = related_product.selected_or_first_available_variant %}
-            <article class="atelier-related-card">
-              <div style="position:relative;width:100%;">
-              <a class="atelier-related-card__image" href="{{ related_product.url }}" aria-label="{{ related_product.title | escape }}">
-                {% if related_product.featured_image %}
-                  {{ related_product.featured_image | image_url: width: 720 | image_tag: widths: '240,360,540,720', sizes: '(min-width: 990px) 25vw, (min-width: 750px) 40vw, 75vw', loading: 'lazy' }}
-                {% else %}
-                  {{ 'product-1' | placeholder_svg_tag }}
-                {% endif %}
-              </a>
-                <button type="button" class="atelier-product-card__wishlist" data-wishlist-toggle="{{ related_product.handle | escape }}" aria-pressed="false" aria-label="Add to wishlist: {{ related_product.title | escape }}">{% render "header-icon", name: "heart" %}</button>
-              </div>
-              <div class="atelier-related-card__body">
-                {% if section.settings.show_category and related_product.type != blank %}
-                  <p class="atelier-related-card__category">{{ related_product.type | escape }}</p>
-                {% endif %}
-                <h3><a href="{{ related_product.url }}">{{ related_product.title | escape }}</a></h3>
-                <div class="atelier-related-card__footer">
-                  <div class="atelier-related-card__prices">
-                    <span>
-                      {% if section.settings.store_money_format %}
-                        {{ variant.price | money_without_trailing_zeros }}
-                      {% else %}
-                        {{ section.settings.currency_symbol | escape }}{{ variant.price | money_without_currency | remove: '.00' }}
-                      {% endif %}
-                    </span>
-                    {% if section.settings.show_compare and variant.compare_at_price > variant.price %}
-                      <s>
-                        {% if section.settings.store_money_format %}
-                          {{ variant.compare_at_price | money_without_trailing_zeros }}
-                        {% else %}
-                          {{ section.settings.currency_symbol | escape }}{{ variant.compare_at_price | money_without_currency | remove: '.00' }}
-                        {% endif %}
-                      </s>
-                    {% endif %}
-                  </div>
-                  {% if related_product.available == false %}
-                    <button class="atelier-related-card__button" type="button" disabled>{{ 'products.product.sold_out' | t | default: 'Sold out' }}</button>
-                  {% elsif related_product.has_only_default_variant and related_product.requires_selling_plan == false %}
-                    <button class="atelier-related-card__button" type="button" data-quick-add="{{ variant.id }}">{{ section.settings.button_label | default: 'Add to Cart' | escape }}</button>
-                  {% else %}
-                    <button class="atelier-related-card__button" type="button" data-quick-add="{{ variant.id }}">{{ section.settings.button_label | default: "Add to Cart" | escape }}</button>
-                  {% endif %}
-                </div>
-              </div>
-            </article>
+            <div class="atelier-related__slide">
+              {% render 'product-card', card_product: related_product, section: section %}
+            </div>
             {% assign displayed = displayed | plus: 1 %}
             {% if displayed >= section.settings.limit %}{% break %}{% endif %}
           {% endunless %}
@@ -337,6 +322,7 @@
       </div>
     </div>
   </atelier-related-carousel>
+  </atelier-product-showcase>
 
   <script>
     if (!customElements.get('atelier-related-carousel')) {
@@ -488,6 +474,18 @@
       "type": "checkbox",
       "id": "show_category",
       "label": "Show product type above title",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show wishlist icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show badges",
       "default": true
     },
     {
