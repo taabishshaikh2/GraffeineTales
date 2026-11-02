@@ -394,22 +394,31 @@ atelier-header li,
 
 /* Badges (Wishlist & Cart) */
 .atelier-badge,
+.cart-count-bubble,
 .header__cart-count {
   position: absolute !important;
-  top: 3px !important;
-  right: 1px !important;
-  min-width: 18px !important;
-  height: 18px !important;
-  padding: 0 5px !important;
+  top: 4px !important;
+  right: 4px !important;
+  min-width: 17px !important;
+  height: 17px !important;
+  padding: 0 4px !important;
   border-radius: 9px !important;
-  background: var(--header-text, #363638) !important;
+  background: var(--header-accent, #363638) !important;
   color: #FFFFFF !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 10px !important;
   font-weight: 700 !important;
-  line-height: 18px !important;
-  text-align: center !important;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7) !important;
+  display: grid !important;
+  place-items: center !important;
+  line-height: 1 !important;
+  border: none !important;
+  box-sizing: border-box !important;
+}
+#cart-icon-bubble {
+  position: relative !important;
+}
+#cart-icon-bubble .svg-wrapper {
+  display: contents !important;
 }
 .atelier-badge[hidden] { display: none !important; }
 
@@ -936,7 +945,9 @@ atelier-header li,
     margin: 0 !important;
     padding: 0 !important;
   }
-  .atelier-header__right .atelier-icon-btn {
+  .atelier-header__right .atelier-icon-btn,
+  .atelier-header__right #cart-icon-bubble {
+    position: relative !important;
     display: grid !important;
     place-items: center !important;
     width: 36px !important;
@@ -951,11 +962,40 @@ atelier-header li,
     border: none !important;
     border-radius: 50% !important;
   }
-  .atelier-header__right .atelier-icon-btn svg {
+  .atelier-header__right .atelier-icon-btn svg,
+  .atelier-header__right #cart-icon-bubble svg {
     display: block !important;
     width: 19px !important;
     height: 19px !important;
+    min-width: 19px !important;
+    min-height: 19px !important;
+    max-width: 19px !important;
+    max-height: 19px !important;
     stroke: currentColor !important;
+    fill: none !important;
+    transform: none !important;
+  }
+  .atelier-header__right #cart-icon-bubble .svg-wrapper {
+    display: contents !important;
+  }
+  .atelier-header__right #cart-icon-bubble .cart-count-bubble,
+  .atelier-header__right #cart-icon-bubble .atelier-badge {
+    position: absolute !important;
+    top: 4px !important;
+    right: 4px !important;
+    min-width: 17px !important;
+    height: 17px !important;
+    padding: 0 4px !important;
+    border-radius: 9px !important;
+    background: var(--header-accent, #363638) !important;
+    color: #fff !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    display: grid !important;
+    place-items: center !important;
+    line-height: 1 !important;
+    border: none !important;
+    box-sizing: border-box !important;
   }
 
   /* HIDE ALL NON-MOBILE / EXTRA ICONS */

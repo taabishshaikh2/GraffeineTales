@@ -305,7 +305,8 @@ atelier-header button {
   stroke: currentColor !important;
   fill: none !important;
 }
-.atelier-badge {
+.atelier-badge,
+.cart-count-bubble {
   position: absolute !important;
   top: 4px !important;
   right: 4px !important;
@@ -320,6 +321,14 @@ atelier-header button {
   display: grid !important;
   place-items: center !important;
   line-height: 1 !important;
+  border: none !important;
+  box-sizing: border-box !important;
+}
+#cart-icon-bubble {
+  position: relative !important;
+}
+#cart-icon-bubble .svg-wrapper {
+  display: contents !important;
 }
 
 /* ==========================================================================
@@ -801,7 +810,9 @@ atelier-header button {
     margin: 0 !important;
     padding: 0 !important;
   }
-  .atelier-header__right .atelier-icon-btn {
+  .atelier-header__right .atelier-icon-btn,
+  .atelier-header__right #cart-icon-bubble {
+    position: relative !important;
     display: grid !important;
     place-items: center !important;
     width: 36px !important;
@@ -816,11 +827,40 @@ atelier-header button {
     color: var(--header-text, #363638) !important;
     border: none !important;
   }
-  .atelier-header__right .atelier-icon-btn svg {
+  .atelier-header__right .atelier-icon-btn svg,
+  .atelier-header__right #cart-icon-bubble svg {
     display: block !important;
     width: 19px !important;
     height: 19px !important;
+    min-width: 19px !important;
+    min-height: 19px !important;
+    max-width: 19px !important;
+    max-height: 19px !important;
     stroke: currentColor !important;
+    fill: none !important;
+    transform: none !important;
+  }
+  .atelier-header__right #cart-icon-bubble .svg-wrapper {
+    display: contents !important;
+  }
+  .atelier-header__right #cart-icon-bubble .cart-count-bubble,
+  .atelier-header__right #cart-icon-bubble .atelier-badge {
+    position: absolute !important;
+    top: 4px !important;
+    right: 4px !important;
+    min-width: 17px !important;
+    height: 17px !important;
+    padding: 0 4px !important;
+    border-radius: 9px !important;
+    background: var(--header-accent, #363638) !important;
+    color: #fff !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    display: grid !important;
+    place-items: center !important;
+    line-height: 1 !important;
+    border: none !important;
+    box-sizing: border-box !important;
   }
 
   /* HIDE ALL NON-MOBILE / EXTRA ICONS */

@@ -4,30 +4,33 @@
   // High-Performance Festive Confetti Engine
 class CartConfetti {
   constructor(canvas) {
-    this.ensureCanvas(canvas);
     this.particles = [];
     this.animationFrame = null;
     this.palette = [
       '#5A3825', // Atelier Warm Brown
+      '#4D351D', // Deep Espresso
       '#D4AF37', // Wax Seal Gold
-      '#C85A32', // Terracotta Clay
-      '#2D6A4F', // Botanical Sage
+      '#F59E0B', // Rich Amber Gold
       '#FACC15', // Radiant Yellow
-      '#E6DCCB', // Parchment Bone
-      '#FF6B6B', // Coral Pink
-      '#4ECDC4', // Tiffany Mint
-      '#FFFFFF'  // White
+      '#FFE082', // Shimmer Gold
+      '#C85A32', // Terracotta Clay
+      '#E07A5F', // Warm Terracotta Coral
+      '#2D6A4F', // Botanical Sage
+      '#10B981', // Emerald Mint
+      '#FF6B6B', // Festive Rose
+      '#F43F5E', // Vivid Coral
+      '#FFFFFF'  // Sparkling White
     ];
+    this.ensureCanvas(canvas);
     this.resize();
     window.addEventListener('resize', () => this.resize(), { passive: true });
   }
 
   ensureCanvas(canvas) {
     if (!canvas) {
-      canvas = document.querySelector('[data-cart-confetti]');
+      canvas = document.querySelector('canvas.atelier-cart-confetti-canvas');
     }
-    // If canvas doesn't exist or is not a direct child of body, attach directly to body
-    // so no ancestor transform or overflow:hidden can ever clip or shift particles!
+    // Canvas must always attach directly to body so no overflow:hidden or transform can ever clip it
     if (!canvas) {
       canvas = document.createElement('canvas');
       canvas.className = 'atelier-cart-confetti-canvas';
@@ -58,46 +61,106 @@ class CartConfetti {
     }
   }
 
+  createParticle(originX, originY, minAngle, maxAngle, minSpeed, maxSpeed, minSize, maxSize) {
+    const angle = minAngle + Math.random() * (maxAngle - minAngle);
+    const speed = minSpeed + Math.random() * (maxSpeed - minSpeed);
+    const size = minSize + Math.random() * (maxSize - minSize);
+    const color = this.palette[Math.floor(Math.random() * this.palette.length)];
+    const shapeRoll = Math.random();
+    let shape = 'rect';
+    if (shapeRoll < 0.28) shape = 'star';
+    else if (shapeRoll < 0.58) shape = 'ribbon';
+    else if (shapeRoll < 0.82) shape = 'rect';
+    else shape = 'circle';
+
+    return {
+      x: originX,
+      y: originY,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      size,
+      color,
+      shape,
+      rotation: Math.random() * 360,
+      rotationSpeed: (Math.random() - 0.5) * 16,
+      tilt: Math.random() * Math.PI,
+      tiltSpeed: 0.08 + Math.random() * 0.14,
+      wobble: Math.random() * 10,
+      wobbleSpeed: 0.09 + Math.random() * 0.09,
+      wobbleDistance: 2 + Math.random() * 3.5,
+      gravity: 0.22 + Math.random() * 0.12,
+      drag: 0.965,
+      opacity: 1,
+      fadeSpeed: 0.0035 + Math.random() * 0.0035
+    };
+  }
+
+  spawnCannons(originX, originY, dir, count) {
+    // dir: 1 = shoot towards right-upward (e.g. angle -75° to -35°)
+    // dir: -1 = shoot towards left-upward (e.g. angle -145° to -105°)
+    const minAngle = dir > 0 ? (-75 * Math.PI / 180) : (-145 * Math.PI / 180);
+    const maxAngle = dir > 0 ? (-35 * Math.PI / 180) : (-105 * Math.PI / 180);
+
+    for (let i = 0; i < count; i++) {
+      this.particles.push(
+        this.createParticle(originX + (Math.random() - 0.5) * 50, originY, minAngle, maxAngle, 10, 24, 7, 14)
+      );
+    }
+  }
+
+  spawnCluster(originX, originY, count) {
+    for (let i = 0; i < count; i++) {
+      this.particles.push(
+        this.createParticle(originX + (Math.random() - 0.5) * 60, originY + (Math.random() - 0.5) * 20, 0, Math.PI * 2, 4, 18, 6, 13)
+      );
+    }
+  }
+
+  spawnShower(minX, maxX, startY, count) {
+    for (let i = 0; i < count; i++) {
+      const p = this.createParticle(minX + Math.random() * (maxX - minX), startY, (Math.PI / 4), (3 * Math.PI / 4), 2, 7, 7, 15);
+      p.gravity = 0.16 + Math.random() * 0.08;
+      this.particles.push(p);
+    }
+  }
+
   burst(tier = 1) {
-    this.ensureCanvas(this.canvas);
+    this.ensureCanvas();
     this.resize();
     if (!this.ctx) return;
 
-    const count = tier >= 3 ? 180 : tier === 2 ? 140 : 100;
-    const milestoneEl = document.querySelector('.milestone-track-section') ||
-                        document.querySelector('.milestone-nodes-row') ||
-                        document.querySelector('.reference-milestone-card') ||
-                        document.querySelector('#CartDrawer');
-    const rect = milestoneEl ? milestoneEl.getBoundingClientRect() : null;
+    const drawer = document.querySelector('#CartDrawer');
+    const drawerRect = drawer ? drawer.getBoundingClientRect() : null;
 
-    const originX = rect ? (rect.left + rect.width / 2) : (window.innerWidth - 240);
-    const originY = rect ? (rect.top + (rect.height ? rect.height / 2 : 40)) : 120;
+    const minX = drawerRect ? Math.max(0, drawerRect.left) : Math.max(0, window.innerWidth - 440);
+    const maxX = drawerRect ? Math.min(window.innerWidth, drawerRect.right) : window.innerWidth;
+    const width = maxX - minX;
+    const midX = minX + width / 2;
+    const midY = drawerRect ? drawerRect.top + Math.min(180, drawerRect.height * 0.22) : 140;
+    const bottomY = drawerRect ? Math.min(window.innerHeight - 30, drawerRect.bottom - 30) : (window.innerHeight - 60);
 
-    for (let i = 0; i < count; i++) {
-      const angle = (Math.PI / 2) + ((Math.random() - 0.5) * Math.PI * 1.7);
-      const speed = 7 + Math.random() * 16;
-      const size = 6 + Math.random() * 8;
-      const color = this.palette[Math.floor(Math.random() * this.palette.length)];
-      const spreadX = (Math.random() - 0.5) * (rect ? Math.min(rect.width * 0.95, 420) : 240);
+    const milestoneNode = document.querySelector(`.m-node-col[data-threshold]:nth-child(${tier})`) ||
+                          document.querySelector('.milestone-nodes-row') ||
+                          document.querySelector('.reference-milestone-card');
+    const nodeRect = milestoneNode ? milestoneNode.getBoundingClientRect() : null;
+    const targetX = nodeRect ? (nodeRect.left + nodeRect.width / 2) : midX;
+    const targetY = nodeRect ? (nodeRect.top + nodeRect.height / 2) : midY;
 
-      this.particles.push({
-        x: originX + spreadX,
-        y: originY,
-        vx: Math.cos(angle) * speed,
-        vy: -Math.abs(Math.sin(angle) * speed) - 5,
-        size,
-        color,
-        rotation: Math.random() * 360,
-        rotationSpeed: (Math.random() - 0.5) * 18,
-        wobble: Math.random() * 10,
-        wobbleSpeed: 0.12 + Math.random() * 0.12,
-        gravity: 0.24 + Math.random() * 0.08,
-        drag: 0.962,
-        opacity: 1,
-        fadeSpeed: 0.005 + Math.random() * 0.004,
-        shape: Math.random() > 0.35 ? (Math.random() > 0.5 ? 'ribbon' : 'rect') : 'circle'
-      });
-    }
+    // Wave 1: Immediate Twin Cannons + Milestone Cluster (over 300 particles)
+    const cannonCount = tier >= 3 ? 160 : tier === 2 ? 140 : 120;
+    this.spawnCannons(minX + width * 0.15, bottomY, 1, cannonCount);
+    this.spawnCannons(maxX - width * 0.15, bottomY, -1, cannonCount);
+    this.spawnCluster(targetX, targetY, 90);
+
+    // Wave 2 (after 140ms): Cascade shower across the cart drawer (130 particles)
+    setTimeout(() => {
+      this.spawnShower(minX, maxX, Math.max(10, (drawerRect ? drawerRect.top : 20) + 10), 130);
+    }, 140);
+
+    // Wave 3 (after 280ms): Second celebratory pop centered over the milestone (80 particles)
+    setTimeout(() => {
+      this.spawnCluster(targetX, targetY + 20, 80);
+    }, 280);
 
     if (!this.animationFrame) {
       this.animate();
@@ -115,28 +178,39 @@ class CartConfetti {
       p.vy += p.gravity;
       p.vx *= p.drag;
       p.rotation += p.rotationSpeed;
+      p.tilt += p.tiltSpeed;
       p.wobble += p.wobbleSpeed;
       p.opacity -= p.fadeSpeed;
 
-      if (p.opacity <= 0 || p.y > window.innerHeight + 40) {
+      if (p.opacity <= 0 || p.y > window.innerHeight + 50) {
         this.particles.splice(i, 1);
         continue;
       }
 
       this.ctx.save();
       this.ctx.globalAlpha = Math.max(0, p.opacity);
-      this.ctx.translate(p.x + Math.sin(p.wobble) * 3, p.y);
+      this.ctx.translate(p.x + Math.sin(p.wobble) * p.wobbleDistance, p.y);
       this.ctx.rotate((p.rotation * Math.PI) / 180);
+      this.ctx.scale(Math.cos(p.tilt), 1);
       this.ctx.fillStyle = p.color;
 
-      if (p.shape === 'rect') {
-        this.ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      if (p.shape === 'star') {
+        const r = p.size;
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, -r);
+        this.ctx.quadraticCurveTo(0, 0, r, 0);
+        this.ctx.quadraticCurveTo(0, 0, 0, r);
+        this.ctx.quadraticCurveTo(0, 0, -r, 0);
+        this.ctx.quadraticCurveTo(0, 0, 0, -r);
+        this.ctx.fill();
       } else if (p.shape === 'ribbon') {
-        this.ctx.fillRect(-p.size / 2, -p.size * 0.2, p.size * 1.5, p.size * 0.4);
-      } else {
+        this.ctx.fillRect(-p.size * 0.35, -p.size * 1.2, p.size * 0.7, p.size * 2.4);
+      } else if (p.shape === 'circle') {
         this.ctx.beginPath();
         this.ctx.arc(0, 0, p.size / 2.2, 0, Math.PI * 2);
         this.ctx.fill();
+      } else {
+        this.ctx.fillRect(-p.size / 2, -p.size * 0.35, p.size, p.size * 0.7);
       }
       this.ctx.restore();
     }
@@ -283,14 +357,16 @@ class CartConfetti {
       this.closeSheet(false);
       this.querySelector('#CartDrawer').innerHTML = next.innerHTML;
       this.readState();
-      if (this.confetti) { this.confetti.canvas = this.querySelector('[data-cart-confetti]'); this.confetti.ctx = this.confetti.canvas ? this.confetti.canvas.getContext('2d') : null; }
+      if (this.confetti) { this.confetti.ensureCanvas(); }
       this.classList.toggle('is-empty', !this.cart.item_count);
       const scroller = this.querySelector('[data-cart-scroll]'); if (scroller) scroller.scrollTop = scroll;
       const bubble = result.sections?.['cart-icon-bubble'];
       if (bubble) {
         const bubbleDoc = new DOMParser().parseFromString(bubble, 'text/html');
         const target = document.getElementById('cart-icon-bubble');
-        if (target) target.innerHTML = bubbleDoc.querySelector('.shopify-section')?.innerHTML || bubble;
+        if (target) {
+          target.innerHTML = bubbleDoc.querySelector('.shopify-section')?.innerHTML || bubbleDoc.body?.innerHTML || bubble;
+        }
       }
       this.decorate();
       if (hadFocus) {
@@ -749,6 +825,17 @@ class CartConfetti {
         }
       });
 
+      // Allow clicking the milestone track or banner to trigger celebratory confetti
+      const milestoneSection = this.querySelector('.reference-milestone-card');
+      if (milestoneSection && unlockedCount > 0) {
+        milestoneSection.style.cursor = 'pointer';
+        milestoneSection.onclick = (e) => {
+          if (!e.target.closest('a, button, select, input')) {
+            this.celebrate(unlockedCount);
+          }
+        };
+      }
+
       // Trigger celebratory confetti when a new milestone is unlocked
       const storedTier = Number(sessionStorage.getItem('graffeine_cart_celebrated_tier') || 0);
       const isNewTier = this.previousUnlocked !== undefined
@@ -756,7 +843,8 @@ class CartConfetti {
         : (unlockedCount > 0 && unlockedCount > storedTier);
 
       if (isNewTier && !this.reducedMotion && unlockedCount > 0) {
-        setTimeout(() => this.celebrate(unlockedCount), 180);
+        const delay = this.classList.contains('active') ? 160 : 420;
+        setTimeout(() => this.celebrate(unlockedCount), delay);
       }
       this.previousUnlocked = unlockedCount;
       if (unlockedCount > storedTier) {
