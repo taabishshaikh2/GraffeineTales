@@ -42,15 +42,27 @@
         "drawer_tile_jfC6Ji": {
           "type": "drawer_tile",
           "settings": {
-            "menu_item": "",
-            "heading": "",
+            "heading": "Stickers",
+            "image": "shopify://shop_images/CoolCatEnergy-03.png",
             "subheading": "",
-            "link": ""
+            "link": "",
+            "menu_item": ""
+          }
+        },
+        "drawer_tile_acYJga": {
+          "type": "drawer_tile",
+          "settings": {
+            "heading": "Quirky Stationary",
+            "image": "shopify://shop_images/DreamYourWay-01.png",
+            "subheading": "",
+            "link": "",
+            "menu_item": ""
           }
         }
       },
       "block_order": [
-        "drawer_tile_jfC6Ji"
+        "drawer_tile_jfC6Ji",
+        "drawer_tile_acYJga"
       ],
       "settings": {
         "show_announcement": false,
@@ -67,6 +79,8 @@
         "logo_text": "GRAFFEINE TALES",
         "logo_width": 160,
         "logo_width_mobile": 90,
+        "logo_font_size_mobile": 13,
+        "cup_size_mobile": 22,
         "logo_h1": false,
         "logo_link": "",
         "show_cup": true,
