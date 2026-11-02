@@ -37,7 +37,8 @@
     font-family: var(--gt-font-ui);
     position: relative;
     overflow: hidden;
-    padding: {{ section.settings.padding_top | default: 60 }}px 0 {{ section.settings.padding_bottom | default: 60 }}px;
+    padding-top: {{ section.settings.padding_top | default: 60 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | default: 60 }}px;
     border-top: 1px solid rgba(198, 181, 142, 0.15);
     border-bottom: 1px solid rgba(198, 181, 142, 0.15);
   }
@@ -631,9 +632,127 @@
     color: rgba(233, 223, 194, 0.6);
     font-size: 13px;
   }
+
+  /* Header clearance on collection page and when customizer is at the top */
+  body.template-collection #gt-customizer-{{ section.id }},
+  .template-collection #gt-customizer-{{ section.id }},
+  #shopify-section-sticker_customizer #gt-customizer-{{ section.id }},
+  .gt-customizer-section.has-header-clearance,
+  #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }} {
+    padding-top: 160px !important;
+  }
+
+  @media (max-width: 768px) {
+    body.template-collection #gt-customizer-{{ section.id }},
+    .template-collection #gt-customizer-{{ section.id }},
+    #shopify-section-sticker_customizer #gt-customizer-{{ section.id }},
+    .gt-customizer-section.has-header-clearance,
+    #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }} {
+      padding-top: 120px !important;
+    }
+  }
+
+
+  /* Mobile spacing optimizations: tightly hug device preview and remove all excess blank space */
+  @media (max-width: 768px) {
+    .gt-customizer-toolbar {
+      margin-bottom: 12px !important;
+      padding: 10px 14px !important;
+      gap: 10px !important;
+      border-radius: 20px !important;
+    }
+    .gt-stage-wrapper {
+      min-height: unset !important;
+      height: auto !important;
+      margin-bottom: 12px !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow: hidden !important;
+    }
+    .gt-macbook-wrap {
+      transform: scale(0.50) !important;
+      transform-origin: center center !important;
+      margin: -95px 0 !important;
+    }
+    .gt-ipad-wrap {
+      transform: scale(0.60) !important;
+      transform-origin: center center !important;
+      margin: -115px 0 !important;
+    }
+    .gt-iphone-wrap {
+      transform: scale(0.68) !important;
+      transform-origin: center center !important;
+      margin: -100px 0 !important;
+    }
+    .gt-tray-card {
+      margin-top: 0 !important;
+      padding: 14px 12px !important;
+      border-radius: 20px !important;
+    }
+    .gt-tray-header {
+      margin-bottom: 10px !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .gt-customizer-toolbar {
+      margin-bottom: 8px !important;
+      padding: 8px 10px !important;
+    }
+    .gt-stage-wrapper {
+      margin-bottom: 8px !important;
+    }
+    .gt-macbook-wrap {
+      transform: scale(0.44) !important;
+      margin: -110px 0 !important;
+    }
+    .gt-ipad-wrap {
+      transform: scale(0.52) !important;
+      margin: -138px 0 !important;
+    }
+    .gt-iphone-wrap {
+      transform: scale(0.62) !important;
+      margin: -120px 0 !important;
+    }
+    .gt-tray-card {
+      padding: 12px 10px !important;
+      border-radius: 18px !important;
+    }
+  }
+
+
+  /* Ultra-photorealistic iPhone 18 Pro Max Styling */
+  .gt-iphone-island {
+    position: absolute !important;
+    top: 14px !important;
+    left: 14px !important;
+    width: 134px !important;
+    height: 140px !important;
+    border-radius: 36px !important;
+    z-index: 10 !important;
+    pointer-events: none !important;
+  }
+  .gt-iphone-island-svg {
+    display: block !important;
+    width: 134px !important;
+    height: 140px !important;
+  }
+  .gt-iphone-camera-control-btn {
+    position: absolute !important;
+    right: -5px !important;
+    top: 440px !important;
+    width: 4px !important;
+    height: 48px !important;
+    border-radius: 0 2px 2px 0 !important;
+    background: rgba(255, 255, 255, 0.42) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+  }
+
 {%- endstyle -%}
 
-<section id="gt-customizer-{{ section.id }}" aria-label="Interactive Device and Sticker Customizer">
+<section id="gt-customizer-{{ section.id }}" class="gt-customizer-section has-header-clearance" aria-label="Interactive Device and Sticker Customizer">
   <div class="gt-customizer-inner">
 
     <!-- Section Heading -->
@@ -753,17 +872,96 @@
         <div class="gt-iphone-volume-up"></div>
         <div class="gt-iphone-volume-down"></div>
         <div class="gt-iphone-power-btn"></div>
-        <div class="gt-iphone-camera-control-btn"></div>
+        <div class="gt-iphone-camera-control-btn" title="Camera Control"></div>
 
         <div class="gt-iphone-chassis" id="gt-iphone-chassis-{{ section.id }}">
-          <!-- Authentic Pro Max Triple Lens Island -->
+          <!-- Authentic iPhone 18 Pro Max Triple Lens Island -->
           <div class="gt-iphone-island">
-            <div class="gt-lens-ring gt-lens-top-left"></div>
-            <div class="gt-lens-ring gt-lens-bottom-left"></div>
-            <div class="gt-lens-ring gt-lens-mid-right"></div>
-            <div class="gt-flash-ring"></div>
-            <div class="gt-lidar-sensor"></div>
-            <div class="gt-mic-hole"></div>
+            <svg class="gt-iphone-island-svg" viewBox="0 0 134 140" width="134" height="140" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="islandShadow-{{ section.id }}" x="-15%" y="-15%" width="135%" height="135%">
+                  <feDropShadow dx="3" dy="5" stdDeviation="5" flood-color="#000000" flood-opacity="0.45"/>
+                </filter>
+                <linearGradient id="plateauGrad-{{ section.id }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"/>
+                  <stop offset="50%" stop-color="#ffffff" stop-opacity="0.08"/>
+                  <stop offset="100%" stop-color="#000000" stop-opacity="0.18"/>
+                </linearGradient>
+                <linearGradient id="titaniumRing-{{ section.id }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#d1d5db"/>
+                  <stop offset="40%" stop-color="#6b7280"/>
+                  <stop offset="70%" stop-color="#374151"/>
+                  <stop offset="100%" stop-color="#9ca3af"/>
+                </linearGradient>
+                <radialGradient id="sapphireLens-{{ section.id }}" cx="35%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#1e3247"/>
+                  <stop offset="40%" stop-color="#0f1924"/>
+                  <stop offset="75%" stop-color="#05090e"/>
+                  <stop offset="100%" stop-color="#000000"/>
+                </radialGradient>
+                <radialGradient id="flashGrad-{{ section.id }}" cx="40%" cy="40%" r="60%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="25%" stop-color="#fff5cc"/>
+                  <stop offset="70%" stop-color="#eab308"/>
+                  <stop offset="100%" stop-color="#854d0e"/>
+                </radialGradient>
+                <radialGradient id="lidarGrad-{{ section.id }}" cx="35%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#18181b"/>
+                  <stop offset="60%" stop-color="#09090b"/>
+                  <stop offset="100%" stop-color="#000000"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Raised Beveled Glass Island Plateau -->
+              <rect x="2" y="2" width="130" height="136" rx="36" fill="url(#plateauGrad-{{ section.id }})" stroke="rgba(255,255,255,0.38)" stroke-width="1.5" filter="url(#islandShadow-{{ section.id }})"/>
+
+              <!-- Lens 1: Top-Left (Main 48MP Sapphire Fusion Lens) -->
+              <g class="gt-camera-lens gt-lens-top-left">
+                <circle cx="36" cy="36" r="23" fill="url(#titaniumRing-{{ section.id }})" stroke="rgba(0,0,0,0.5)" stroke-width="0.8"/>
+                <circle cx="36" cy="36" r="20" fill="#0d1117" stroke="#1f2937" stroke-width="1"/>
+                <circle cx="36" cy="36" r="16.5" fill="url(#sapphireLens-{{ section.id }})"/>
+                <circle cx="36" cy="36" r="9.5" fill="#020406" stroke="#0e1722" stroke-width="0.5"/>
+                <ellipse cx="32" cy="31" rx="3" ry="2" transform="rotate(-30 32 31)" fill="#ffffff" opacity="0.75"/>
+                <circle cx="39" cy="40" r="1.2" fill="#38bdf8" opacity="0.6"/>
+              </g>
+
+              <!-- Lens 2: Bottom-Left (Ultra-Wide 48MP Sapphire Lens) -->
+              <g class="gt-camera-lens gt-lens-bottom-left">
+                <circle cx="36" cy="102" r="23" fill="url(#titaniumRing-{{ section.id }})" stroke="rgba(0,0,0,0.5)" stroke-width="0.8"/>
+                <circle cx="36" cy="102" r="20" fill="#0d1117" stroke="#1f2937" stroke-width="1"/>
+                <circle cx="36" cy="102" r="16.5" fill="url(#sapphireLens-{{ section.id }})"/>
+                <circle cx="36" cy="102" r="9.5" fill="#020406" stroke="#0e1722" stroke-width="0.5"/>
+                <ellipse cx="32" cy="97" rx="3" ry="2" transform="rotate(-30 32 97)" fill="#ffffff" opacity="0.75"/>
+                <circle cx="39" cy="106" r="1.2" fill="#38bdf8" opacity="0.6"/>
+              </g>
+
+              <!-- Lens 3: Mid-Right (Periscope 10x Telephoto Sapphire Lens) -->
+              <g class="gt-camera-lens gt-lens-mid-right">
+                <circle cx="98" cy="69" r="23" fill="url(#titaniumRing-{{ section.id }})" stroke="rgba(0,0,0,0.5)" stroke-width="0.8"/>
+                <circle cx="98" cy="69" r="20" fill="#0d1117" stroke="#1f2937" stroke-width="1"/>
+                <circle cx="98" cy="69" r="16.5" fill="url(#sapphireLens-{{ section.id }})"/>
+                <circle cx="98" cy="69" r="9.5" fill="#020406" stroke="#0e1722" stroke-width="0.5"/>
+                <ellipse cx="94" cy="64" rx="3" ry="2" transform="rotate(-30 94 64)" fill="#ffffff" opacity="0.75"/>
+                <circle cx="101" cy="73" r="1.2" fill="#38bdf8" opacity="0.6"/>
+              </g>
+
+              <!-- True Tone Dual Flash (Top-Right) -->
+              <g class="gt-camera-flash">
+                <circle cx="98" cy="27" r="9.5" fill="url(#titaniumRing-{{ section.id }})"/>
+                <circle cx="98" cy="27" r="8" fill="url(#flashGrad-{{ section.id }})" stroke="rgba(0,0,0,0.4)" stroke-width="0.8"/>
+                <circle cx="98" cy="27" r="4" fill="#ffffff" opacity="0.4"/>
+              </g>
+
+              <!-- LiDAR Scanner (Bottom-Right) -->
+              <g class="gt-camera-lidar">
+                <circle cx="98" cy="111" r="9" fill="url(#titaniumRing-{{ section.id }})"/>
+                <circle cx="98" cy="111" r="7.8" fill="url(#lidarGrad-{{ section.id }})" stroke="#27272a" stroke-width="0.8"/>
+                <ellipse cx="96" cy="109" rx="2" ry="1.2" fill="#ffffff" opacity="0.3"/>
+              </g>
+
+              <!-- Rear Microphone Port -->
+              <circle cx="116" cy="69" r="2.2" fill="#050505" stroke="#27272a" stroke-width="0.6"/>
+            </svg>
           </div>
 
           <div class="gt-apple-logo-wrap" id="gt-iphone-logo-{{ section.id }}">
