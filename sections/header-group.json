@@ -52,10 +52,10 @@
         "drawer_tile_acYJga": {
           "type": "drawer_tile",
           "settings": {
-            "heading": "Quirky Stationary",
-            "image": "shopify://shop_images/DreamYourWay-01.png",
+            "heading": "Coasters",
+            "image": "shopify://shop_images/coaster_mojo_jojo.png",
             "subheading": "",
-            "link": "",
+            "link": "shopify://collections/coasters",
             "menu_item": ""
           }
         }
