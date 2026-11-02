@@ -88,6 +88,10 @@ if (!customElements.get('catalogue-filters')) {
       if (link) link.href = template.dataset.collectionUrl;
       this.closest('atelier-product-showcase')?.updateWishlist?.();
       const count = this.grid.querySelectorAll('.atelier-product-card').length;
+      const columns = parseInt(this.closest('atelier-product-showcase')?.dataset?.showcaseColumns || '4', 10);
+      const isFew = count < columns;
+      this.grid.classList.toggle('is-centered', isFew);
+      this.grid.dataset.fewProducts = isFew ? 'true' : 'false';
       this.querySelector('[data-catalogue-status]').textContent = this.dataset.resultsLabel + ': ' + count;
     }
 

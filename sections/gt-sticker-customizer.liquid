@@ -12,6 +12,11 @@
       assign is_visible = true
     endif
   endif
+
+  assign is_collection_page = false
+  if template.name == 'collection'
+    assign is_collection_page = true
+  endif
 %}
 
 {% if is_visible %}
@@ -315,45 +320,15 @@
     position: absolute;
     top: 14px;
     left: 14px;
-    width: 48px;
-    height: 84px;
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.4);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    padding: 4px 0;
+    width: 54px;
+    height: 94px;
     z-index: 10;
     pointer-events: none;
   }
-  .gt-ipad-lens {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #2A313D 0%, #080A0D 70%, #000 100%);
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
-  }
-  .gt-ipad-lens::after {
-    content: '';
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 40% 35%, #183050 0%, #07101A 60%, #000205 100%);
-  }
-  .gt-ipad-flash {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #FFF6D8 25%, #E5B338 75%, #8B6508 100%);
-    border: 1px solid rgba(0, 0, 0, 0.3);
+  .gt-ipad-camera-svg {
+    display: block;
+    width: 54px;
+    height: 94px;
   }
   .gt-ipad-pencil-strip {
     position: absolute;
@@ -637,18 +612,28 @@
   body.template-collection #gt-customizer-{{ section.id }},
   .template-collection #gt-customizer-{{ section.id }},
   #shopify-section-sticker_customizer #gt-customizer-{{ section.id }},
-  .gt-customizer-section.has-header-clearance,
+  .gt-customizer-section.gt-customizer--on-collection,
   #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }} {
-    padding-top: 160px !important;
+    padding-top: 240px !important;
+  }
+
+  @media (max-width: 1024px) {
+    body.template-collection #gt-customizer-{{ section.id }},
+    .template-collection #gt-customizer-{{ section.id }},
+    #shopify-section-sticker_customizer #gt-customizer-{{ section.id }},
+    .gt-customizer-section.gt-customizer--on-collection,
+    #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }} {
+      padding-top: 200px !important;
+    }
   }
 
   @media (max-width: 768px) {
     body.template-collection #gt-customizer-{{ section.id }},
     .template-collection #gt-customizer-{{ section.id }},
     #shopify-section-sticker_customizer #gt-customizer-{{ section.id }},
-    .gt-customizer-section.has-header-clearance,
+    .gt-customizer-section.gt-customizer--on-collection,
     #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }} {
-      padding-top: 120px !important;
+      padding-top: 150px !important;
     }
   }
 
@@ -752,7 +737,7 @@
 
 {%- endstyle -%}
 
-<section id="gt-customizer-{{ section.id }}" class="gt-customizer-section has-header-clearance" aria-label="Interactive Device and Sticker Customizer">
+<section id="gt-customizer-{{ section.id }}" class="gt-customizer-section{% if is_collection_page %} gt-customizer--on-collection{% endif %}" aria-label="Interactive Device and Sticker Customizer">
   <div class="gt-customizer-inner">
 
     <!-- Section Heading -->
@@ -846,12 +831,67 @@
         </div>
       </div>
 
-      <!-- 2. iPad Pro Mockup -->
+      <!-- 2. iPad Pro Mockup (Latest Generation iPad Pro M4 Style) -->
       <div class="gt-ipad-wrap" id="gt-ipad-wrap-{{ section.id }}">
         <div class="gt-ipad-chassis" id="gt-ipad-chassis-{{ section.id }}">
+          <!-- Authentic iPad Pro M4 Vector Camera Module -->
           <div class="gt-ipad-camera">
-            <div class="gt-ipad-lens"></div>
-            <div class="gt-ipad-flash"></div>
+            <svg class="gt-ipad-camera-svg" viewBox="0 0 54 94" width="54" height="94" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="ipadShadow-{{ section.id }}" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.5"/>
+                </filter>
+                <linearGradient id="ipadPlateau-{{ section.id }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
+                  <stop offset="50%" stop-color="#ffffff" stop-opacity="0.10"/>
+                  <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+                </linearGradient>
+                <linearGradient id="ipadTitanium-{{ section.id }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#e5e7eb"/>
+                  <stop offset="35%" stop-color="#9ca3af"/>
+                  <stop offset="70%" stop-color="#4b5563"/>
+                  <stop offset="100%" stop-color="#9ca3af"/>
+                </linearGradient>
+                <radialGradient id="ipadLensGrad-{{ section.id }}" cx="35%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#1e3247"/>
+                  <stop offset="40%" stop-color="#0e1722"/>
+                  <stop offset="75%" stop-color="#05080c"/>
+                  <stop offset="100%" stop-color="#000000"/>
+                </radialGradient>
+                <radialGradient id="ipadFlashGrad-{{ section.id }}" cx="40%" cy="40%" r="60%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="25%" stop-color="#fff5cc"/>
+                  <stop offset="70%" stop-color="#eab308"/>
+                  <stop offset="100%" stop-color="#854d0e"/>
+                </radialGradient>
+                <radialGradient id="ipadLidarGrad-{{ section.id }}" cx="35%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#18181b"/>
+                  <stop offset="60%" stop-color="#09090b"/>
+                  <stop offset="100%" stop-color="#000000"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Raised Beveled Pill Island -->
+              <rect x="2" y="2" width="50" height="90" rx="25" fill="url(#ipadPlateau-{{ section.id }})" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" filter="url(#ipadShadow-{{ section.id }})"/>
+
+              <!-- Main 12MP Sapphire Camera Lens -->
+              <g class="gt-ipad-lens-group">
+                <circle cx="27" cy="27" r="19" fill="url(#ipadTitanium-{{ section.id }})" stroke="rgba(0,0,0,0.5)" stroke-width="0.8"/>
+                <circle cx="27" cy="27" r="16.5" fill="#0d1117" stroke="#1f2937" stroke-width="0.8"/>
+                <circle cx="27" cy="27" r="13.5" fill="url(#ipadLensGrad-{{ section.id }})"/>
+                <circle cx="27" cy="27" r="7.5" fill="#020406" stroke="#0e1722" stroke-width="0.5"/>
+                <ellipse cx="23.5" cy="23" rx="2.8" ry="1.8" transform="rotate(-30 23.5 23)" fill="#ffffff" opacity="0.8"/>
+                <circle cx="29.5" cy="30" r="1" fill="#38bdf8" opacity="0.6"/>
+              </g>
+
+              <!-- True Tone LED Flash -->
+              <circle cx="27" cy="56" r="7.5" fill="url(#ipadFlashGrad-{{ section.id }})" stroke="rgba(0,0,0,0.4)" stroke-width="0.8"/>
+              <circle cx="27" cy="56" r="3" fill="#ffffff" opacity="0.65"/>
+
+              <!-- LiDAR Scanner Sensor & Rear Mic -->
+              <circle cx="21" cy="74" r="4.8" fill="url(#ipadLidarGrad-{{ section.id }})" stroke="#27272a" stroke-width="0.6"/>
+              <circle cx="33" cy="74" r="2.2" fill="#09090b" stroke="rgba(255,255,255,0.25)" stroke-width="0.5"/>
+            </svg>
           </div>
           <div class="gt-ipad-pencil-strip"></div>
           <div class="gt-ipad-smart-connector"><span></span><span></span><span></span></div>
