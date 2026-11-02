@@ -307,7 +307,14 @@
           </div>
         </div>
       </header>
-      <div class="atelier-related__grid" data-related-track>
+      {% assign displayed_count = 0 %}
+      {% for check_p in related_entries limit: 24 %}
+        {% unless check_p.id == product.id %}
+          {% assign displayed_count = displayed_count | plus: 1 %}
+          {% if displayed_count >= section.settings.limit %}{% break %}{% endif %}
+        {% endunless %}
+      {% endfor %}
+      <div class="atelier-related__grid{% if displayed_count < 4 %} is-centered{% endif %}" data-related-track data-few-products="{% if displayed_count < 4 %}true{% else %}false{% endif %}">
         {% assign displayed = 0 %}
         {% for related_product in related_entries limit: 24 %}
           {% unless related_product.id == product.id %}

@@ -9,7 +9,8 @@
       {% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}
       {% if section.settings.description != blank %}<div class="atelier-showcase__intro">{{ section.settings.description | escape }}</div>{% endif %}
     </header>
-    <div class="atelier-showcase__grid">
+    {% assign product_count = section.settings.collection.products.size | at_most: section.settings.product_limit %}
+    <div class="atelier-showcase__grid{% if product_count < section.settings.columns %} is-centered{% endif %}" data-few-products="{% if product_count < section.settings.columns %}true{% else %}false{% endif %}">
       {% for card_product in section.settings.collection.products limit: section.settings.product_limit %}
         {% render 'product-card', card_product: card_product, section: section %}
       

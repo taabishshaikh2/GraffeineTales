@@ -3635,3 +3635,9 @@ details-disclosure > details {
     transform: translateX(100%) scaleX(0);
   }
 }
+
+
+/* Center product cards in collections/search when fewer items */
+.product-grid {
+  justify-content: center !important;
+}
