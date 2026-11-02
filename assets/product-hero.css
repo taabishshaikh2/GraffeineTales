@@ -48,6 +48,13 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+/* Ensure PDP starts cleanly below floating header */
+body.template-product #MainContent,
+.template-product #MainContent {
+  padding-top: 0 !important;
+}
   min-width: 0;
   flex: 1 1 auto;
 }

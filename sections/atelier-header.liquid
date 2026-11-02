@@ -189,6 +189,21 @@
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
+/* On Product Detail Pages, PDP must start cleanly below the floating header, not behind it */
+body.template-product .atelier-header-section,
+body[data-template="product"] .atelier-header-section,
+.template-product .atelier-header-section {
+  margin-bottom: 14px !important;
+}
+
+@media (min-width: 768px) {
+  body.template-product .atelier-header-section,
+  body[data-template="product"] .atelier-header-section,
+  .template-product .atelier-header-section {
+    margin-bottom: 22px !important;
+  }
+}
+
 .atelier-header-section.is-hidden {
   transform: translateY(-110%);
 }

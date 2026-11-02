@@ -3,14 +3,14 @@
 
   if template.name == 'product'
     assign p_type = product.type | downcase | strip
-    if p_type contains 'sticker' or p_type contains 'decal'
+    if p_type == 'sticker' or p_type == 'stickers' or p_type contains 'sticker' or p_type contains 'stickers' or p_type contains 'decal' or p_type contains 'decals'
       assign is_sticker_product = true
     endif
 
     unless is_sticker_product
       for tag in product.tags
         assign t = tag | downcase | strip
-        if t == 'sticker' or t == 'stickers' or t contains 'sticker' or t contains 'vinyl' or t contains 'decal'
+        if t == 'sticker' or t == 'stickers' or t contains 'sticker' or t contains 'stickers' or t contains 'vinyl' or t contains 'decal' or t contains 'decals'
           assign is_sticker_product = true
           break
         endif
@@ -21,7 +21,7 @@
       for col in product.collections
         assign c_handle = col.handle | downcase
         assign c_title = col.title | downcase
-        if c_handle contains 'sticker' or c_title contains 'sticker'
+        if c_handle contains 'sticker' or c_title contains 'sticker' or c_handle contains 'stickers' or c_title contains 'stickers'
           assign is_sticker_product = true
           break
         endif
@@ -30,7 +30,14 @@
 
     unless is_sticker_product
       assign p_title = product.title | downcase
-      if p_title contains 'sticker' or p_title contains 'decal'
+      if p_title contains 'sticker' or p_title contains 'stickers' or p_title contains 'decal' or p_title contains 'decals'
+        assign is_sticker_product = true
+      endif
+    endunless
+
+    unless is_sticker_product
+      assign p_handle = product.handle | downcase
+      if p_handle contains 'sticker' or p_handle contains 'stickers'
         assign is_sticker_product = true
       endif
     endunless
@@ -41,7 +48,7 @@
       endif
     endunless
 
-    if section.settings.always_show
+    if section.settings.always_show or request.design_mode
       assign is_sticker_product = true
     endif
   else
