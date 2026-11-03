@@ -36,8 +36,68 @@
         "avatar_size_mobile": 68
       }
     },
-    "sticker_customizer": {
+    "gt_sticker_customizer_GG93z8": {
       "type": "gt-sticker-customizer",
+      "blocks": {
+        "sticker_DKU7c6": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/BangaloreChaos-04.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_WzULxd": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/TravelFrick-04.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_zq9mtR": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/PlantLover-04.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_atxkUX": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/ScooterDiaries-01_5f19a45b-e2da-42fd-9f91-56e547688bfb.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_rjFU8a": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/BangaloreChaos-04.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_c8zNHr": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/Dramaticcat-01.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_44TXFb": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/BunnyonaSkateboard-01.png",
+            "title": "Vinyl Sticker"
+          }
+        }
+      },
+      "block_order": [
+        "sticker_DKU7c6",
+        "sticker_WzULxd",
+        "sticker_zq9mtR",
+        "sticker_atxkUX",
+        "sticker_rjFU8a",
+        "sticker_c8zNHr",
+        "sticker_44TXFb"
+      ],
       "settings": {
         "header_clearance": true,
         "badge": "Interactive Studio",
@@ -90,7 +150,7 @@
   "order": [
     "banner",
     "atelier_collection_banner_RnAYN4",
-    "sticker_customizer",
+    "gt_sticker_customizer_GG93z8",
     "product-grid"
   ]
 }
