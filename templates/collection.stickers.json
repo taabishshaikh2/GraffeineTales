@@ -11,7 +11,68 @@
   "sections": {
     "sticker_customizer": {
       "type": "gt-sticker-customizer",
+      "blocks": {
+        "sticker_PzaXBF": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/BangaloreChaos-04.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_Cka9Kz": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/TravelFrick-04.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_UUNXTx": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/PlantLover-04.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_c3FDEH": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/ScooterDiaries-01_5f19a45b-e2da-42fd-9f91-56e547688bfb.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_Jebt7k": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/BangaloreChaos-04.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_QCHqPp": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/Dramaticcat-01.png",
+            "title": "Vinyl Sticker"
+          }
+        },
+        "sticker_Uthj8k": {
+          "type": "sticker",
+          "settings": {
+            "sticker_image": "shopify://shop_images/BunnyonaSkateboard-01.png",
+            "title": "Vinyl Sticker"
+          }
+        }
+      },
+      "block_order": [
+        "sticker_PzaXBF",
+        "sticker_Cka9Kz",
+        "sticker_UUNXTx",
+        "sticker_c3FDEH",
+        "sticker_Jebt7k",
+        "sticker_QCHqPp",
+        "sticker_Uthj8k"
+      ],
       "settings": {
+        "header_clearance": true,
         "badge": "Interactive Studio",
         "title": "Style Your Tech with Studio Vinyl",
         "subtitle": "Where slow-crafted stories meet your modern everyday devices.",
@@ -19,20 +80,21 @@
         "device_label_tablet": "Tablet",
         "device_label_phone": "Phone",
         "finish_label": "FINISH:",
-        "finish_1_color": "#4A4D52",
+        "finish_1_color": "#4a4d52",
         "finish_1_name": "Space Gray",
-        "finish_2_color": "#E3E4E6",
+        "finish_2_color": "#e3e4e6",
         "finish_2_name": "Silver",
-        "finish_3_color": "#1D2127",
+        "finish_3_color": "#1d2127",
         "finish_3_name": "Midnight",
-        "finish_4_color": "#D4CBBD",
+        "finish_4_color": "#d4cbbd",
         "finish_4_name": "Starlight / Titanium",
         "show_logo_toggle": true,
         "show_auto_collage": true,
         "show_reset": true,
         "tray_title": "Studio Die-Cut Vinyl Tray",
+        "sticker_collection": "",
         "bg_color": "#363638",
-        "text_color": "#E9DFC2",
+        "text_color": "#e9dfc2",
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -49,6 +111,7 @@
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": true,
+        "quick_add": "none",
         "enable_filtering": true,
         "filter_type": "horizontal",
         "enable_sorting": true,
