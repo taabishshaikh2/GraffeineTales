@@ -27,11 +27,36 @@
           <div class="atelier-category-strip__media">
             {% if category_image != blank %}{{ category_image | image_url: width: 600 | image_tag: widths: '180,300,450,600', sizes: '(max-width: 749px) 33vw, 155px', loading: 'lazy', alt: '' }}{% else %}<img src="{{ block.settings.reference_image | asset_url }}" width="300" height="400" loading="lazy" decoding="async" alt="">{% endif %}
           </div>
-          <div class="atelier-category-strip__info"><span>{{ block.settings.title | default: category_collection.title | escape }}</span><span class="atelier-category-strip__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span></div>
+          <div class="atelier-category-strip__info"><span>{{ block.settings.title | default: category_collection.title | escape }}</span><span class="atelier-category-strip__arrow" aria-hidden="true">{% render 'header-icon', name: 'chevron-right' %}</span></div>
         </a>
       {% endfor %}
     </div>
-    {% if section.settings.show_button and section.settings.button_label != blank %}<a class="atelier-category-strip__all" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}{% render 'header-icon', name: 'arrow' %}</a>{% endif %}
+    {% if section.settings.show_button and section.settings.button_label != blank %}
+    {% liquid
+      assign btn_radius_desktop = section.settings.button_radius_desktop | default: 'subtle'
+      if btn_radius_desktop == 'round'
+        assign btn_radius_d_val = '999px'
+      elsif btn_radius_desktop == 'square'
+        assign btn_radius_d_val = '0px'
+      elsif btn_radius_desktop == 'custom'
+        assign btn_radius_d_val = section.settings.button_radius_desktop_custom | default: 8 | append: 'px'
+      else
+        assign btn_radius_d_val = '8px'
+      endif
+
+      assign btn_radius_mobile = section.settings.button_radius_mobile | default: 'subtle'
+      if btn_radius_mobile == 'round'
+        assign btn_radius_m_val = '999px'
+      elsif btn_radius_mobile == 'square'
+        assign btn_radius_m_val = '0px'
+      elsif btn_radius_mobile == 'custom'
+        assign btn_radius_m_val = section.settings.button_radius_mobile_custom | default: 8 | append: 'px'
+      else
+        assign btn_radius_m_val = '8px'
+      endif
+    %}
+    <a class="atelier-category-strip__all atelier-category-strip__all--{{ section.settings.button_style | default: 'primary' }}" style="--btn-radius-d: {{ btn_radius_d_val }}; --btn-radius-m: {{ btn_radius_m_val }};" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}{% render 'header-icon', name: 'arrow' %}</a>
+  {% endif %}
   </div>
 </div>
 
@@ -179,6 +204,60 @@
       "type": "url",
       "id": "button_link",
       "label": "Button destination"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "primary", "label": "Primary" },
+        { "value": "secondary", "label": "Secondary" }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "select",
+      "id": "button_radius_desktop",
+      "label": "Desktop corner rounding",
+      "options": [
+        { "value": "round", "label": "Pill / Fully round" },
+        { "value": "subtle", "label": "Subtle round (8px)" },
+        { "value": "square", "label": "Square (0px)" },
+        { "value": "custom", "label": "Custom pixel size" }
+      ],
+      "default": "subtle"
+    },
+    {
+      "type": "range",
+      "id": "button_radius_desktop_custom",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop custom corner radius",
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "button_radius_mobile",
+      "label": "Mobile corner rounding",
+      "options": [
+        { "value": "round", "label": "Pill / Fully round" },
+        { "value": "subtle", "label": "Subtle round (8px)" },
+        { "value": "square", "label": "Square (0px)" },
+        { "value": "custom", "label": "Custom pixel size" }
+      ],
+      "default": "subtle"
+    },
+    {
+      "type": "range",
+      "id": "button_radius_mobile_custom",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile custom corner radius",
+      "default": 8
     },
     {
       "type": "range",

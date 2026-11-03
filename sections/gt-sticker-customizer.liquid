@@ -611,65 +611,73 @@
   /* Header clearance on collection page and when customizer is at the top */
   body.template-collection #gt-customizer-{{ section.id }},
   .template-collection #gt-customizer-{{ section.id }},
-  #shopify-section-sticker_customizer #gt-customizer-{{ section.id }},
   .gt-customizer-section.gt-customizer--on-collection,
-  #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }} {
-    padding-top: 240px !important;
+  .shopify-section:first-child #gt-customizer-{{ section.id }},
+  #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }},
+  div[id*="sticker_customizer"] #gt-customizer-{{ section.id }},
+  div[id*="gt_sticker_customizer"] #gt-customizer-{{ section.id }} {
+    padding-top: max(290px, calc(var(--header-height, 140px) + 120px)) !important;
   }
 
   @media (max-width: 1024px) {
     body.template-collection #gt-customizer-{{ section.id }},
     .template-collection #gt-customizer-{{ section.id }},
-    #shopify-section-sticker_customizer #gt-customizer-{{ section.id }},
     .gt-customizer-section.gt-customizer--on-collection,
-    #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }} {
-      padding-top: 200px !important;
+    .shopify-section:first-child #gt-customizer-{{ section.id }},
+    #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }},
+    div[id*="sticker_customizer"] #gt-customizer-{{ section.id }},
+    div[id*="gt_sticker_customizer"] #gt-customizer-{{ section.id }} {
+      padding-top: max(230px, calc(var(--header-height, 120px) + 80px)) !important;
     }
   }
 
   @media (max-width: 768px) {
     body.template-collection #gt-customizer-{{ section.id }},
     .template-collection #gt-customizer-{{ section.id }},
-    #shopify-section-sticker_customizer #gt-customizer-{{ section.id }},
     .gt-customizer-section.gt-customizer--on-collection,
-    #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }} {
-      padding-top: 150px !important;
+    .shopify-section:first-child #gt-customizer-{{ section.id }},
+    #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }},
+    div[id*="sticker_customizer"] #gt-customizer-{{ section.id }},
+    div[id*="gt_sticker_customizer"] #gt-customizer-{{ section.id }} {
+      padding-top: max(170px, calc(var(--header-height, 100px) + 60px)) !important;
     }
   }
 
-
   /* Mobile spacing optimizations: tightly hug device preview and remove all excess blank space */
   @media (max-width: 768px) {
+    .gt-customizer-header {
+      margin-bottom: 16px !important;
+    }
     .gt-customizer-toolbar {
-      margin-bottom: 12px !important;
+      margin-bottom: 10px !important;
       padding: 10px 14px !important;
       gap: 10px !important;
       border-radius: 20px !important;
     }
     .gt-stage-wrapper {
-      min-height: unset !important;
-      height: auto !important;
-      margin-bottom: 12px !important;
+      min-height: 0 !important;
+      height: 240px !important;
+      margin-bottom: 8px !important;
       padding: 0 !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      overflow: hidden !important;
+      overflow: visible !important;
     }
     .gt-macbook-wrap {
-      transform: scale(0.50) !important;
+      transform: scale(0.48) !important;
       transform-origin: center center !important;
-      margin: -95px 0 !important;
+      margin: 0 auto !important;
     }
     .gt-ipad-wrap {
-      transform: scale(0.60) !important;
+      transform: scale(0.55) !important;
       transform-origin: center center !important;
-      margin: -115px 0 !important;
+      margin: 0 auto !important;
     }
     .gt-iphone-wrap {
-      transform: scale(0.68) !important;
+      transform: scale(0.65) !important;
       transform-origin: center center !important;
-      margin: -100px 0 !important;
+      margin: 0 auto !important;
     }
     .gt-tray-card {
       margin-top: 0 !important;
@@ -682,24 +690,29 @@
   }
 
   @media (max-width: 480px) {
+    .gt-customizer-header {
+      margin-bottom: 12px !important;
+    }
     .gt-customizer-toolbar {
-      margin-bottom: 8px !important;
+      margin-bottom: 6px !important;
       padding: 8px 10px !important;
     }
     .gt-stage-wrapper {
-      margin-bottom: 8px !important;
+      min-height: 0 !important;
+      height: 205px !important;
+      margin-bottom: 6px !important;
     }
     .gt-macbook-wrap {
-      transform: scale(0.44) !important;
-      margin: -110px 0 !important;
+      transform: scale(0.42) !important;
+      margin: 0 auto !important;
     }
     .gt-ipad-wrap {
-      transform: scale(0.52) !important;
-      margin: -138px 0 !important;
+      transform: scale(0.48) !important;
+      margin: 0 auto !important;
     }
     .gt-iphone-wrap {
-      transform: scale(0.62) !important;
-      margin: -120px 0 !important;
+      transform: scale(0.58) !important;
+      margin: 0 auto !important;
     }
     .gt-tray-card {
       padding: 12px 10px !important;
@@ -707,8 +720,7 @@
     }
   }
 
-
-  /* Ultra-photorealistic iPhone 18 Pro Max Styling */
+  /* Ultra-photorealistic iPhone 18 Pro Max and iPad Pro M4 Styling */
   .gt-iphone-island {
     position: absolute !important;
     top: 14px !important;
@@ -716,6 +728,11 @@
     width: 134px !important;
     height: 140px !important;
     border-radius: 36px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     z-index: 10 !important;
     pointer-events: none !important;
   }
@@ -723,6 +740,28 @@
     display: block !important;
     width: 134px !important;
     height: 140px !important;
+    overflow: visible !important;
+  }
+  .gt-ipad-camera {
+    position: absolute !important;
+    top: 14px !important;
+    left: 14px !important;
+    width: 54px !important;
+    height: 94px !important;
+    border-radius: 26px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    z-index: 10 !important;
+    pointer-events: none !important;
+  }
+  .gt-ipad-camera-svg {
+    display: block !important;
+    width: 54px !important;
+    height: 94px !important;
+    overflow: visible !important;
   }
   .gt-iphone-camera-control-btn {
     position: absolute !important;
@@ -734,7 +773,6 @@
     background: rgba(255, 255, 255, 0.42) !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
   }
-
 {%- endstyle -%}
 
 <section id="gt-customizer-{{ section.id }}" class="gt-customizer-section{% if is_collection_page %} gt-customizer--on-collection{% endif %}" aria-label="Interactive Device and Sticker Customizer">

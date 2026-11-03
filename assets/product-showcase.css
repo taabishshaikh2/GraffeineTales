@@ -372,3 +372,14 @@ atelier-product-showcase[data-showcase-columns="2"] .atelier-product-card {
     scroll-snap-align: start !important;
   }
 }
+
+/* Button style settings (Rule 4) */
+.atelier-product-card__add.atelier-btn--secondary {
+  background: transparent !important;
+  color: var(--showcase-text, #4D351D) !important;
+  border: 1.5px solid currentColor !important;
+  box-shadow: none !important;
+}
+.atelier-product-card__add.atelier-btn--secondary:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+}

@@ -1536,5 +1536,176 @@
         "default": "100% Secured Payments"
       }
     ]
+  },
+  {
+    "name": "Product Card Defaults",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Labels & Text"
+      },
+      {
+        "type": "text",
+        "id": "card_add_to_cart_text",
+        "label": "Add to cart button text",
+        "default": "Add to Cart"
+      },
+      {
+        "type": "text",
+        "id": "card_sold_out_text",
+        "label": "Sold out button text",
+        "default": "Sold out"
+      },
+      {
+        "type": "text",
+        "id": "card_choose_options_text",
+        "label": "Choose options button text",
+        "default": "Choose options"
+      },
+      {
+        "type": "text",
+        "id": "card_wishlist_text",
+        "label": "Wishlist button label",
+        "default": "Add to wishlist"
+      },
+      {
+        "type": "select",
+        "id": "card_default_badge_style",
+        "label": "Default badge style",
+        "options": [
+          {
+            "value": "sage",
+            "label": "Sage green"
+          },
+          {
+            "value": "gold",
+            "label": "Gold"
+          }
+        ],
+        "default": "sage"
+      },
+      {
+        "type": "header",
+        "content": "Photos (Rule 6)"
+      },
+      {
+        "type": "select",
+        "id": "card_image_fit",
+        "label": "Photo fit",
+        "options": [
+          {
+            "value": "contain",
+            "label": "Show whole photo (contain)"
+          },
+          {
+            "value": "cover",
+            "label": "Fill the frame (cover)"
+          }
+        ],
+        "default": "contain"
+      },
+      {
+        "type": "header",
+        "content": "Buttons (Rule 4)"
+      },
+      {
+        "type": "select",
+        "id": "card_button_style",
+        "label": "Button style",
+        "options": [
+          {
+            "value": "primary",
+            "label": "Primary"
+          },
+          {
+            "value": "secondary",
+            "label": "Secondary"
+          }
+        ],
+        "default": "primary"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_button_radius_match",
+        "label": "Match button curve to card corner curve",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "card_button_radius_desktop",
+        "label": "Desktop corner rounding (when not matching)",
+        "options": [
+          {
+            "value": "match",
+            "label": "Match cards"
+          },
+          {
+            "value": "round",
+            "label": "Pill / Fully round"
+          },
+          {
+            "value": "subtle",
+            "label": "Subtle round (8px)"
+          },
+          {
+            "value": "square",
+            "label": "Square (0px)"
+          },
+          {
+            "value": "custom",
+            "label": "Custom pixel size"
+          }
+        ],
+        "default": "match"
+      },
+      {
+        "type": "range",
+        "id": "card_button_radius_desktop_custom",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "Desktop custom corner radius",
+        "default": 8
+      },
+      {
+        "type": "select",
+        "id": "card_button_radius_mobile",
+        "label": "Mobile corner rounding (when not matching)",
+        "options": [
+          {
+            "value": "match",
+            "label": "Match cards"
+          },
+          {
+            "value": "round",
+            "label": "Pill / Fully round"
+          },
+          {
+            "value": "subtle",
+            "label": "Subtle round (8px)"
+          },
+          {
+            "value": "square",
+            "label": "Square (0px)"
+          },
+          {
+            "value": "custom",
+            "label": "Custom pixel size"
+          }
+        ],
+        "default": "match"
+      },
+      {
+        "type": "range",
+        "id": "card_button_radius_mobile_custom",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "Mobile custom corner radius",
+        "default": 8
+      }
+    ]
   }
 ]

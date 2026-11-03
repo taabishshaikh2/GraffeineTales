@@ -23,7 +23,7 @@
         {% if block.settings.heading != blank or block_content != blank %}
           <details{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
             <summary>
-              {{ block.settings.heading | default: 'Details' | escape }}
+              {{ block.settings.heading | escape }}
               <span class="atelier-pdp__accordion-chevron" aria-hidden="true">{% render 'header-icon', name: 'chevron' %}</span>
             </summary>
             <div class="atelier-pdp__accordion-content">

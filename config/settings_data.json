@@ -357,7 +357,19 @@
           "shadow": "#121212"
         }
       }
-    }
+    },
+    "card_add_to_cart_text": "Add to Cart",
+    "card_sold_out_text": "Sold out",
+    "card_choose_options_text": "Choose options",
+    "card_wishlist_text": "Add to wishlist",
+    "card_default_badge_style": "sage",
+    "card_image_fit": "contain",
+    "card_button_style": "primary",
+    "card_button_radius_match": true,
+    "card_button_radius_desktop": "match",
+    "card_button_radius_desktop_custom": 8,
+    "card_button_radius_mobile": "match",
+    "card_button_radius_mobile_custom": 8
   },
   "presets": {
     "Dawn": {

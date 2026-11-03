@@ -42,7 +42,36 @@
             {% if block.settings.heading != blank %}{% if hero_position == 0 and section.settings.show_content %}<h1>{{ block.settings.heading | escape }}</h1>{% else %}<h2>{{ block.settings.heading | escape }}</h2>{% endif %}{% endif %}
             {% if block.settings.description != blank %}<div class="atelier-hero__description">{{ block.settings.description }}</div>{% endif %}
             <div class="atelier-hero__actions">
-              {% if block.settings.primary_label != blank %}<a class="button" href="{{ block.settings.primary_link | default: routes.all_products_collection_url }}">{{ block.settings.primary_label | escape }} <span aria-hidden="true">&rarr;</span></a>{% endif %}
+              {% if block.settings.primary_label != blank %}
+    {% liquid
+      assign btn_radius_desktop = section.settings.button_radius_desktop | default: 'round'
+      if btn_radius_desktop == 'round'
+        assign btn_radius_d_val = '999px'
+      elsif btn_radius_desktop == 'square'
+        assign btn_radius_d_val = '0px'
+      elsif btn_radius_desktop == 'subtle'
+        assign btn_radius_d_val = '8px'
+      elsif btn_radius_desktop == 'custom'
+        assign btn_radius_d_val = section.settings.button_radius_desktop_custom | default: 999 | append: 'px'
+      else
+        assign btn_radius_d_val = '999px'
+      endif
+
+      assign btn_radius_mobile = section.settings.button_radius_mobile | default: 'round'
+      if btn_radius_mobile == 'round'
+        assign btn_radius_m_val = '999px'
+      elsif btn_radius_mobile == 'square'
+        assign btn_radius_m_val = '0px'
+      elsif btn_radius_mobile == 'subtle'
+        assign btn_radius_m_val = '8px'
+      elsif btn_radius_mobile == 'custom'
+        assign btn_radius_m_val = section.settings.button_radius_mobile_custom | default: 999 | append: 'px'
+      else
+        assign btn_radius_m_val = '999px'
+      endif
+    %}
+    <a class="button button--{{ block.settings.primary_style | default: 'primary' }}" style="--hero-btn-radius-d: {{ btn_radius_d_val }}; --hero-btn-radius-m: {{ btn_radius_m_val }};" href="{{ block.settings.primary_link | default: routes.all_products_collection_url }}">{{ block.settings.primary_label | escape }} <span aria-hidden="true">&rarr;</span></a>
+  {% endif %}
               {% if block.settings.secondary_label != blank and block.settings.secondary_link != blank %}<a class="atelier-hero__secondary" href="{{ block.settings.secondary_link }}">{{ block.settings.secondary_label | escape }}</a>{% endif %}
             </div>
             {% if block.settings.note != blank %}<p class="atelier-hero__note">{{ block.settings.note | escape }}</p>{% endif %}
@@ -53,8 +82,8 @@
   </div>
   {% if hero_count > 1 %}
     {% if section.settings.show_arrows %}
-      <button type="button" class="atelier-hero__arrow atelier-hero__arrow--previous" data-hero-previous aria-label="{{ section.settings.previous_label | escape }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg></button>
-      <button type="button" class="atelier-hero__arrow atelier-hero__arrow--next" data-hero-next aria-label="{{ section.settings.next_label | escape }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></button>
+      <button type="button" class="atelier-hero__arrow atelier-hero__arrow--previous" data-hero-previous aria-label="{{ section.settings.previous_label | escape }}">{% render 'header-icon', name: 'chevron' %}</button>
+      <button type="button" class="atelier-hero__arrow atelier-hero__arrow--next" data-hero-next aria-label="{{ section.settings.next_label | escape }}">{% render 'header-icon', name: 'chevron-right' %}</button>
     {% endif %}
     <div class="atelier-hero__controls">
       <div class="atelier-hero__pagination" aria-label="{{ 'atelier.hero.pagination' | t }}">
@@ -150,6 +179,50 @@
       "default": true
     },
     {
+      "type": "select",
+      "id": "button_radius_desktop",
+      "label": "Button desktop corner rounding",
+      "options": [
+        { "value": "round", "label": "Pill / Fully round" },
+        { "value": "subtle", "label": "Subtle round (8px)" },
+        { "value": "square", "label": "Square (0px)" },
+        { "value": "custom", "label": "Custom pixel size" }
+      ],
+      "default": "round"
+    },
+    {
+      "type": "range",
+      "id": "button_radius_desktop_custom",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop custom corner radius",
+      "default": 999
+    },
+    {
+      "type": "select",
+      "id": "button_radius_mobile",
+      "label": "Button mobile corner rounding",
+      "options": [
+        { "value": "round", "label": "Pill / Fully round" },
+        { "value": "subtle", "label": "Subtle round (8px)" },
+        { "value": "square", "label": "Square (0px)" },
+        { "value": "custom", "label": "Custom pixel size" }
+      ],
+      "default": "round"
+    },
+    {
+      "type": "range",
+      "id": "button_radius_mobile_custom",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile custom corner radius",
+      "default": 999
+    },
+    {
       "type": "checkbox",
       "id": "responsive_height",
       "label": "Scale desktop height with screen width",
@@ -218,6 +291,16 @@
           "type": "url",
           "id": "primary_link",
           "label": "Primary button link"
+        },
+        {
+          "type": "select",
+          "id": "primary_style",
+          "label": "Primary button style",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" }
+          ],
+          "default": "primary"
         },
         {
           "type": "text",

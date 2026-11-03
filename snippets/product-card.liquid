@@ -8,7 +8,7 @@
   assign selected_variant = card_product.selected_or_first_available_variant
   assign card_image = block.settings.image | default: card_product.featured_image
   assign badge = block.settings.badge | default: section.settings.default_badge
-  assign badge_style = block.settings.badge_style | default: section.settings.default_badge_style | default: 'sage'
+  assign badge_style = block.settings.badge_style | default: section.settings.default_badge_style | default: settings.card_default_badge_style
   if section.settings.use_product_badges
     for product_tag in card_product.tags
       assign tag_prefix = product_tag | slice: 0, 6
@@ -24,14 +24,45 @@
     endfor
   endif
   assign form_id = 'ShowcaseProduct-' | append: section.id | append: '-' | append: card_product.id | append: '-' | append: block.id
+
+  assign add_to_cart_text = section.settings.add_label | default: settings.card_add_to_cart_text
+  assign sold_out_text = section.settings.sold_out_label | default: settings.card_sold_out_text
+  assign choose_text = section.settings.choose_label | default: settings.card_choose_options_text
+  assign wishlist_text = section.settings.wishlist_label | default: settings.card_wishlist_text
+  assign image_fit = section.settings.card_image_fit | default: settings.card_image_fit
+  assign btn_style = section.settings.card_button_style | default: settings.card_button_style
+
+  assign card_radius = section.settings.radius | default: 14
+  assign btn_radius_match = settings.card_button_radius_match
+  if btn_radius_match == nil
+    assign btn_radius_match = true
+  endif
+  if btn_radius_match
+    assign btn_radius = card_radius
+  elsif settings.card_button_radius_desktop == 'round'
+    assign btn_radius = 999
+  elsif settings.card_button_radius_desktop == 'subtle'
+    assign btn_radius = 8
+  elsif settings.card_button_radius_desktop == 'square'
+    assign btn_radius = 0
+  elsif settings.card_button_radius_desktop == 'custom'
+    assign btn_radius = settings.card_button_radius_desktop_custom | default: 8
+  else
+    assign btn_radius = card_radius
+  endif
 %}
-<article class="atelier-product-card" data-product-handle="{{ card_product.handle | escape }}"{% if block != blank %} {{ block.shopify_attributes }}{% endif %}>
+<article class="atelier-product-card" data-product-handle="{{ card_product.handle | escape }}" style="--card-btn-radius: {{ btn_radius }}px;"{% if block != blank %} {{ block.shopify_attributes }}{% endif %}>
   <div class="atelier-product-card__media">
     <a class="atelier-product-card__image-link" href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}">
-      {% if card_image != blank %}{{ card_image | image_url: width: 900 | image_tag: class: 'atelier-product-card__image', widths: '300,450,600,900', sizes: '(max-width: 749px) 275px, (max-width: 1023px) 45vw, 30vw', loading: 'lazy' }}{% else %}{{ 'product-1' | placeholder_svg_tag: 'atelier-product-card__placeholder' }}{% endif %}
+      {% if card_image != blank %}
+        {%- capture fit_style -%}{% if image_fit == 'cover' %}object-fit: cover; width: 100%; height: 100%; max-width: 100%; max-height: 100%;{% else %}object-fit: contain;{% endif %}{%- endcapture -%}
+        {{ card_image | image_url: width: 900 | image_tag: class: 'atelier-product-card__image', style: fit_style, widths: '300,450,600,900', sizes: '(max-width: 749px) 275px, (max-width: 1023px) 45vw, 30vw', loading: 'lazy' }}
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'atelier-product-card__placeholder' }}
+      {% endif %}
     </a>
     {% if section.settings.show_badges and badge != blank %}<span class="atelier-product-card__badge atelier-product-card__badge--{{ badge_style }}">{{ badge | escape }}</span>{% endif %}
-    {% if section.settings.show_wishlist != false %}<button type="button" class="atelier-product-card__wishlist" data-wishlist-toggle="{{ card_product.handle | escape }}" aria-pressed="false" aria-label="{{ section.settings.wishlist_label | default: 'Add to wishlist' | escape }}: {{ card_product.title | escape }}">{% render 'header-icon', name: 'heart' %}</button>{% endif %}
+    {% if section.settings.show_wishlist != false %}<button type="button" class="atelier-product-card__wishlist" data-wishlist-toggle="{{ card_product.handle | escape }}" aria-pressed="false" aria-label="{% if wishlist_text != blank %}{{ wishlist_text | escape }}: {% endif %}{{ card_product.title | escape }}">{% render 'header-icon', name: 'heart' %}</button>{% endif %}
   </div>
   <div class="atelier-product-card__details">
     {% if section.settings.show_category and card_product.type != blank %}<p class="atelier-product-card__category">{{ card_product.type | escape }}</p>{% endif %}
@@ -44,15 +75,21 @@
         {% endif %}
       </div>
       {% if card_product.available == false %}
-        <button class="atelier-product-card__add" type="button" disabled>{{ section.settings.sold_out_label | default: 'Sold out' | escape }}</button>
+        {% if sold_out_text != blank %}
+          <button class="atelier-product-card__add atelier-btn--{{ btn_style }}" type="button" disabled style="border-radius: var(--card-btn-radius, 8px) !important;">{{ sold_out_text | escape }}</button>
+        {% endif %}
       {% elsif card_product.has_only_default_variant and card_product.requires_selling_plan == false %}
         {% form 'product', card_product, id: form_id, class: 'atelier-product-card__form', data-atelier-product-form: '' %}
           <input type="hidden" name="id" value="{{ selected_variant.id }}">
           <input type="hidden" name="quantity" value="1">
-          <button class="atelier-product-card__add" type="submit">{{ section.settings.add_label | default: 'Add to Cart' | escape }}</button>
+          {% if add_to_cart_text != blank %}
+            <button class="atelier-product-card__add atelier-btn--{{ btn_style }}" type="submit" style="border-radius: var(--card-btn-radius, 8px) !important;">{{ add_to_cart_text | escape }}</button>
+          {% endif %}
         {% endform %}
       {% else %}
-        <a class="atelier-product-card__add" href="{{ card_product.url }}">{{ section.settings.choose_label | default: 'Add to Cart' | escape }}</a>
+        {% if choose_text != blank %}
+          <a class="atelier-product-card__add atelier-btn--{{ btn_style }}" href="{{ card_product.url }}" style="border-radius: var(--card-btn-radius, 8px) !important;">{{ choose_text | escape }}</a>
+        {% endif %}
       {% endif %}
     </div>
     <p class="atelier-product-card__error" role="alert" hidden></p>

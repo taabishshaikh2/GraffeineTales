@@ -6,7 +6,7 @@
   <div class="atelier-showcase__inner">
     <header class="atelier-showcase__heading">
       {% if section.settings.eyebrow != blank %}<p>{{ section.settings.eyebrow | escape }}</p>{% endif %}
-      {% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}{% if section.settings.show_heading_heart %}<svg class="atelier-showcase__heading-heart" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>{% endif %}</h2>{% endif %}
+      {% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}{% if section.settings.show_heading_heart %}<span class="atelier-showcase__heading-heart">{% render 'header-icon', name: 'heart' %}</span>{% endif %}</h2>{% endif %}
       {% if section.settings.description != blank %}<div class="atelier-showcase__intro">{{ section.settings.description | escape }}</div>{% endif %}
     </header>
     {% assign col_num = section.settings.columns | default: 4 | plus: 0 %}

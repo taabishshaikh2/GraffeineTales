@@ -43,6 +43,7 @@ if (!customElements.get('atelier-product-showcase')) {
       });
       on(this.dialog?.querySelector('[data-quick-view-variants]'), 'change', () => this.updateQuickViewVariant());
       this.updateWishlist();
+      this.updateGridAlignment();
     }
     savedHandles() {
       try {

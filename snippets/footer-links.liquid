@@ -31,5 +31,5 @@
   {% endfor %}
 {% endif %}
 {% if block.settings.include_policies %}{% for policy in shop.policies %}{% if policy.url != blank and policy.body != blank %}<li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>{% endif %}{% endfor %}{% endif %}
-{% if block.settings.include_account and shop.customer_accounts_enabled %}<li><a href="{{ routes.account_url }}">{{ section.settings.account_label | default: 'Track Your Order' | escape }}</a></li>{% endif %}
+{% if block.settings.include_account and shop.customer_accounts_enabled and section.settings.account_label != blank %}<li><a href="{{ routes.account_url }}">{{ section.settings.account_label | escape }}</a></li>{% endif %}
 </ul>
