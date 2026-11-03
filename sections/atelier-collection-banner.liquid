@@ -519,7 +519,7 @@
 
   {%- comment -%} ==================== CIRCULAR SUB-COLLECTION TABS ==================== {%- endcomment -%}
   {%- if render_tabs -%}
-    <nav class="atelier-col-nav" aria-label="Sub-collection filters">
+    <nav class="atelier-col-nav" aria-label="Sub-collection filters" data-parent-url="{{ collection.url }}">
       <div class="atelier-col-nav__inner">
         {%- if section.settings.nav_heading != blank -%}
           <div class="atelier-col-nav__header">
@@ -649,6 +649,156 @@
         </ul>
       </div>
     </nav>
+
+    <script>
+      (function() {
+        const bannerSection = document.querySelector('[data-section-id="{{ section.id }}"]');
+        if (!bannerSection) return;
+
+        const nav = bannerSection.querySelector('.atelier-col-nav');
+        if (!nav) return;
+
+        const parentUrl = nav.dataset.parentUrl || '{{ collection.url }}';
+
+        function normalizePath(url) {
+          try {
+            const parsed = new URL(url, window.location.origin);
+            return parsed.pathname.replace(/\/+$/, '');
+          } catch(e) {
+            return (url || '').split('?')[0].replace(/\/+$/, '');
+          }
+        }
+
+        const fetchCache = new Map();
+
+        async function loadCollectionGrid(targetUrl, updateHistory = true) {
+          const gridContainer = document.getElementById('ProductGridContainer');
+          if (!gridContainer) {
+            window.location.href = targetUrl;
+            return;
+          }
+
+          // Subtle loading transition
+          gridContainer.style.transition = 'opacity 0.22s ease';
+          gridContainer.style.opacity = '0.45';
+          gridContainer.classList.add('is-loading');
+
+          try {
+            let htmlText = fetchCache.get(targetUrl);
+            if (!htmlText) {
+              const res = await fetch(targetUrl);
+              if (!res.ok) throw new Error('Fetch status: ' + res.status);
+              htmlText = await res.text();
+              fetchCache.set(targetUrl, htmlText);
+            }
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlText, 'text/html');
+
+            const newGrid = doc.getElementById('ProductGridContainer');
+            if (!newGrid) {
+              window.location.href = targetUrl;
+              return;
+            }
+
+            // 1. Update Product Grid
+            gridContainer.innerHTML = newGrid.innerHTML;
+
+            // 2. Clear scroll trigger delays so new products appear immediately
+            gridContainer.querySelectorAll('.scroll-trigger').forEach(function(el) {
+              el.classList.add('scroll-trigger--cancel');
+            });
+
+            // 3. Update Filters / Facets Form if present
+            const oldFilters = document.getElementById('main-collection-filters');
+            const newFilters = doc.getElementById('main-collection-filters');
+            if (oldFilters && newFilters) {
+              oldFilters.innerHTML = newFilters.innerHTML;
+            }
+
+            // 4. Update Product Counts
+            const newCount = doc.getElementById('ProductCount');
+            const oldCount = document.getElementById('ProductCount');
+            if (oldCount && newCount) {
+              oldCount.innerHTML = newCount.innerHTML;
+            }
+            const newCountDesktop = doc.getElementById('ProductCountDesktop');
+            const oldCountDesktop = document.getElementById('ProductCountDesktop');
+            if (oldCountDesktop && newCountDesktop) {
+              oldCountDesktop.innerHTML = newCountDesktop.innerHTML;
+            }
+
+            // 5. Update browser address bar
+            if (updateHistory) {
+              window.history.pushState({ targetUrl: targetUrl }, '', targetUrl);
+            }
+
+            // 6. Notify wishlist and Shopify theme observers
+            document.dispatchEvent(new CustomEvent('atelier:wishlist:update'));
+            document.dispatchEvent(new CustomEvent('shopify:section:load'));
+
+            // Smooth scroll into view if scrolled past
+            const gridRect = gridContainer.getBoundingClientRect();
+            if (gridRect.top < -100) {
+              const topTarget = window.scrollY + gridRect.top - 140;
+              window.scrollTo({ top: Math.max(0, topTarget), behavior: 'smooth' });
+            }
+          } catch(err) {
+            console.warn('[Atelier SubTabs] In-page filter error, fallback to full page:', err);
+            window.location.href = targetUrl;
+          } finally {
+            gridContainer.style.opacity = '1';
+            gridContainer.classList.remove('is-loading');
+          }
+        }
+
+        nav.addEventListener('click', function(e) {
+          const tab = e.target.closest('.atelier-col-tab');
+          if (!tab) return;
+
+          const href = tab.getAttribute('href');
+          if (!href || href === '#' || href.startsWith('javascript:')) return;
+
+          e.preventDefault();
+
+          const isCurrentlyActive = tab.classList.contains('is-active');
+          let targetUrl = href;
+
+          if (isCurrentlyActive) {
+            // Deselecting active sub-collection -> restore parent collection
+            tab.classList.remove('is-active');
+            tab.removeAttribute('aria-current');
+            targetUrl = parentUrl;
+          } else {
+            // Selecting this sub-collection -> mark active
+            nav.querySelectorAll('.atelier-col-tab').forEach(function(t) {
+              t.classList.remove('is-active');
+              t.removeAttribute('aria-current');
+            });
+            tab.classList.add('is-active');
+            tab.setAttribute('aria-current', 'page');
+          }
+
+          loadCollectionGrid(targetUrl, true);
+        });
+
+        // Handle Browser Back & Forward buttons
+        window.addEventListener('popstate', function() {
+          const currentPath = normalizePath(window.location.pathname);
+          nav.querySelectorAll('.atelier-col-tab').forEach(function(t) {
+            const tabPath = normalizePath(t.getAttribute('href'));
+            if (tabPath && tabPath === currentPath) {
+              t.classList.add('is-active');
+              t.setAttribute('aria-current', 'page');
+            } else {
+              t.classList.remove('is-active');
+              t.removeAttribute('aria-current');
+            }
+          });
+          loadCollectionGrid(window.location.href, false);
+        });
+      })();
+    </script>
   {%- elsif request.design_mode and show_tabs -%}
     <div style="padding: 24px 20px; text-align: center; background: #F8F5ED; border-bottom: 1px dashed #C6B58E; font-family: 'Inter', -apple-system, sans-serif; color: #4D351D; font-size: 13px;">
       <strong>Circular Sub-Collection Tabs:</strong> Click <em>"+ Add"</em> next to <code>Collection Tabs</code> in Shopify Admin for this collection, or add <em>"Sub-Collection Tab"</em> blocks in the sidebar to preview tabs immediately.

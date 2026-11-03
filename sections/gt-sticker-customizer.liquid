@@ -42,10 +42,24 @@
     font-family: var(--gt-font-ui);
     position: relative;
     overflow: hidden;
-    padding-top: {{ section.settings.padding_top | default: 60 }}px;
+    {%- if section.settings.header_clearance or is_collection_page -%}
+      padding-top: calc(var(--header-pill-height, 120px) + {{ section.settings.padding_top | default: 60 }}px + 36px);
+    {%- else -%}
+      padding-top: {{ section.settings.padding_top | default: 60 }}px;
+    {%- endif -%}
     padding-bottom: {{ section.settings.padding_bottom | default: 60 }}px;
     border-top: 1px solid rgba(198, 181, 142, 0.15);
     border-bottom: 1px solid rgba(198, 181, 142, 0.15);
+  }
+
+  @media (max-width: 768px) {
+    #gt-customizer-{{ section.id }} {
+      {%- if section.settings.header_clearance or is_collection_page -%}
+        padding-top: calc(var(--header-pill-height, 100px) + 36px);
+      {%- else -%}
+        padding-top: 36px;
+      {%- endif -%}
+    }
   }
 
   #gt-customizer-{{ section.id }} * {
@@ -204,6 +218,13 @@
     cursor: pointer;
     transition: all 0.2s ease;
   }
+    .gt-btn-action:disabled,
+  .gt-btn-action.is-disabled {
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    filter: grayscale(0.5);
+  }
   .gt-btn-action:hover {
     background: rgba(255, 255, 255, 0.14);
     border-color: rgba(255, 255, 255, 0.28);
@@ -213,11 +234,29 @@
   .gt-stage-wrapper {
     position: relative;
     width: 100%;
-    min-height: 480px;
+    min-height: 440px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 680px) {
+    .gt-customizer-header {
+      margin-bottom: 20px;
+    }
+    .gt-customizer-toolbar {
+      margin-bottom: 16px;
+    }
+    .gt-stage-wrapper {
+      min-height: 250px;
+      margin-bottom: 14px;
+    }
+  }
+  @media (max-width: 420px) {
+    .gt-stage-wrapper {
+      min-height: 220px;
+      margin-bottom: 10px;
+    }
   }
 
   /* 1. MacBook Pro Mockup */
@@ -230,8 +269,15 @@
   }
   @media (max-width: 680px) {
     .gt-macbook-wrap {
-      transform: scale(0.55);
-      margin: -60px 0;
+      transform: scale(0.52);
+      transform-origin: center center;
+      margin: -95px 0;
+    }
+  }
+  @media (max-width: 420px) {
+    .gt-macbook-wrap {
+      transform: scale(0.48);
+      margin: -105px 0;
     }
   }
   .gt-macbook-lid {
@@ -834,12 +880,12 @@
           </button>
         {%- endif -%}
         {%- if section.settings.show_auto_collage -%}
-          <button type="button" class="gt-btn-action" onclick="gtAutoCollage('{{ section.id }}')" title="Auto-arrange stickers">
+          <button type="button" class="gt-btn-action" id="gt-btn-collage-{{ section.id }}" onclick="gtAutoCollage('{{ section.id }}')" title="Auto-arrange stickers">
             <span>✨ Auto-Collage</span>
           </button>
         {%- endif -%}
         {%- if section.settings.show_reset -%}
-          <button type="button" class="gt-btn-action" onclick="gtResetTray('{{ section.id }}')" title="Reset stickers">
+          <button type="button" class="gt-btn-action" id="gt-btn-reset-{{ section.id }}" onclick="gtResetTray('{{ section.id }}')" title="Reset stickers">
             <span>🔄 Reset</span>
           </button>
         {%- endif -%}
@@ -1113,9 +1159,20 @@
     function updateTrayCount() {
       const counter = document.getElementById('gt-tray-count-' + sId);
       const tray = document.getElementById('gt-tray-' + sId);
+      const btnCollage = document.getElementById('gt-btn-collage-' + sId);
       if (counter && tray) {
-        const count = tray.querySelectorAll('.gt-tray-item').length;
-        counter.textContent = count > 0 ? count + ' Available in Tray' : '';
+        const availableItems = Array.from(tray.querySelectorAll('.gt-tray-item')).filter(el => el.style.display !== 'none');
+        const count = availableItems.length;
+        if (count > 0) {
+          counter.textContent = count + ' Available in Tray';
+        } else {
+          counter.textContent = 'All Placed on Device';
+          if (btnCollage) {
+            btnCollage.disabled = true;
+            btnCollage.setAttribute('disabled', 'disabled');
+            btnCollage.classList.add('is-disabled');
+          }
+        }
       }
     }
 
@@ -1130,6 +1187,18 @@
       if (wrapMac) wrapMac.style.display = device === 'macbook' ? 'block' : 'none';
       if (wrapIpad) wrapIpad.style.display = device === 'ipad' ? 'block' : 'none';
       if (wrapIphone) wrapIphone.style.display = device === 'iphone' ? 'block' : 'none';
+
+      // Return stickers to tray on device switch so user can collage on new device
+      document.querySelectorAll('#gt-customizer-' + sId + ' .gt-placed-sticker').forEach(el => {
+        returnStickerToTray(el);
+      });
+
+      const btnCollage = document.getElementById('gt-btn-collage-' + sId);
+      if (btnCollage) {
+        btnCollage.disabled = false;
+        btnCollage.removeAttribute('disabled');
+        btnCollage.classList.remove('is-disabled');
+      }
 
       document.querySelectorAll('#gt-customizer-' + sId + ' .gt-device-tab-btn').forEach(btn => {
         btn.classList.toggle('is-active', btn.dataset.device === device);
@@ -1172,35 +1241,105 @@
       document.querySelectorAll('#gt-customizer-' + sId + ' .gt-placed-sticker').forEach(el => {
         returnStickerToTray(el);
       });
+      const btnCollage = document.getElementById('gt-btn-collage-' + sId);
+      if (btnCollage) {
+        btnCollage.disabled = false;
+        btnCollage.removeAttribute('disabled');
+        btnCollage.classList.remove('is-disabled');
+      }
+      updateTrayCount();
     };
+
+    function getCollageSpreadSlots(device, count, w, h, size) {
+      if (device === 'iphone') {
+        const baseSlots = [
+          { x: 190, y: 40,  rot: 8 },
+          { x: 22,  y: 170, rot: -8, minY: 165 },
+          { x: 195, y: 170, rot: 7,  minY: 165 },
+          { x: 108, y: 245, rot: -6, minY: 165 },
+          { x: 20,  y: 320, rot: 9,  minY: 165 },
+          { x: 195, y: 335, rot: -8, minY: 165 },
+          { x: 110, y: 405, rot: 5,  minY: 165 },
+          { x: 24,  y: 480, rot: -7, minY: 165 },
+          { x: 192, y: 485, rot: 9,  minY: 165 },
+          { x: 30,  y: 545, rot: -6, minY: 165 },
+          { x: 112, y: 550, rot: 8,  minY: 165 },
+          { x: 190, y: 545, rot: -5, minY: 165 }
+        ];
+        return baseSlots;
+      }
+
+      if (device === 'ipad') {
+        return [
+          { x: 320, y: 35,  rot: 8 },
+          { x: 180, y: 35,  rot: -6 },
+          { x: 35,  y: 140, rot: 9, minY: 125 },
+          { x: 325, y: 165, rot: -10 },
+          { x: 45,  y: 265, rot: -7 },
+          { x: 320, y: 285, rot: 8 },
+          { x: 45,  y: 395, rot: 10 },
+          { x: 320, y: 410, rot: -9 },
+          { x: 55,  y: 490, rot: -6 },
+          { x: 180, y: 495, rot: 7 },
+          { x: 305, y: 490, rot: 8 },
+          { x: 180, y: 175, rot: -5 },
+          { x: 180, y: 345, rot: 6 }
+        ];
+      }
+
+      // MacBook Pro: Wide 620 x 388 surface
+      return [
+        { x: 35,  y: 30,  rot: -8 },
+        { x: 255, y: 24,  rot: 5 },
+        { x: 475, y: 30,  rot: 9 },
+        { x: 30,  y: 150, rot: 8 },
+        { x: 480, y: 150, rot: -7 },
+        { x: 95,  y: 250, rot: -6 },
+        { x: 410, y: 250, rot: 8 },
+        { x: 255, y: 255, rot: -4 },
+        { x: 145, y: 90,  rot: 6 },
+        { x: 365, y: 90,  rot: -7 },
+        { x: 145, y: 200, rot: 5 },
+        { x: 365, y: 200, rot: -5 }
+      ];
+    }
 
     window.gtAutoCollage = function(id) {
       if (id !== sId) return;
       const tray = document.getElementById('gt-tray-' + sId);
       const zone = document.getElementById('gt-mount-' + currentDevice + '-' + sId);
+      const btnCollage = document.getElementById('gt-btn-collage-' + sId);
       if (!tray || !zone) return;
 
-      const items = Array.from(tray.querySelectorAll('.gt-tray-item'));
+      const items = Array.from(tray.querySelectorAll('.gt-tray-item')).filter(el => el.style.display !== 'none');
       if (items.length === 0) return;
 
-      const rect = zone.getBoundingClientRect();
-      const numToPlace = Math.min(items.length, currentDevice === 'iphone' ? 3 : 5);
+      // Disable collage button immediately after one collage
+      if (btnCollage) {
+        btnCollage.disabled = true;
+        btnCollage.setAttribute('disabled', 'disabled');
+        btnCollage.classList.add('is-disabled');
+      }
 
-      for (let i = 0; i < numToPlace; i++) {
-        const item = items[i];
+      const surfW = zone.offsetWidth || (currentDevice === 'macbook' ? 620 : (currentDevice === 'ipad' ? 460 : 310));
+      const surfH = zone.offsetHeight || (currentDevice === 'macbook' ? 388 : (currentDevice === 'ipad' ? 600 : 640));
+      const stickerSize = currentDevice === 'iphone' ? 84 : (currentDevice === 'ipad' ? 96 : 104);
+
+      const slots = getCollageSpreadSlots(currentDevice, items.length, surfW, surfH, stickerSize);
+
+      items.forEach((item, index) => {
         const src = item.dataset.stickerSrc;
         const title = item.dataset.title;
-        const width = currentDevice === 'iphone' ? 84 : 100;
-        const height = width;
+        const slot = slots[index % slots.length];
 
-        const maxL = Math.max(20, rect.width - width - 20);
-        const maxT = Math.max(20, rect.height - height - 20);
-        const l = 20 + Math.random() * (maxL - 20);
-        const t = 20 + Math.random() * (maxT - 20);
-        const rot = (Math.random() - 0.5) * 36;
+        const jitterX = (Math.random() - 0.5) * 8;
+        const jitterY = (Math.random() - 0.5) * 8;
+        const l = Math.max(12, Math.min(surfW - stickerSize - 12, slot.x + jitterX));
+        const t = Math.max(slot.minY || 14, Math.min(surfH - stickerSize - 14, slot.y + jitterY));
+        const rot = slot.rot || ((Math.random() - 0.5) * 20);
 
         placeStickerOnDevice(item, src, title, l, t, rot, zone);
-      }
+      });
     };
 
     function placeStickerOnDevice(trayItem, src, title, left, top, rot, zone) {
@@ -1208,7 +1347,7 @@
 
       const placed = document.createElement('div');
       placed.className = 'gt-placed-sticker';
-      const size = currentDevice === 'iphone' ? 88 : 108;
+      const size = currentDevice === 'iphone' ? 84 : (currentDevice === 'ipad' ? 96 : 104);
       placed.style.width = size + 'px';
       placed.style.height = size + 'px';
       placed.style.left = left + 'px';
@@ -1254,6 +1393,7 @@
       let isDragging = false;
       let startX = 0, startY = 0;
       let initL = 0, initT = 0;
+      let scale = 1;
 
       function onDown(e) {
         if (e.target.closest('.gt-sticker-del')) return;
@@ -1265,6 +1405,10 @@
         initL = parseFloat(el.style.left) || 0;
         initT = parseFloat(el.style.top) || 0;
 
+        const zoneRect = zone.getBoundingClientRect();
+        scale = zone.offsetWidth > 0 ? (zoneRect.width / zone.offsetWidth) : 1;
+        if (!scale || scale <= 0) scale = 1;
+
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onUp);
         document.addEventListener('touchmove', onMove, { passive: false });
@@ -1275,15 +1419,16 @@
         if (!isDragging) return;
         if (e.cancelable) e.preventDefault();
         const evt = e.touches ? e.touches[0] : e;
-        const dx = evt.clientX - startX;
-        const dy = evt.clientY - startY;
+        const dx = (evt.clientX - startX) / scale;
+        const dy = (evt.clientY - startY) / scale;
 
-        const zoneRect = zone.getBoundingClientRect();
+        const zoneW = zone.offsetWidth;
+        const zoneH = zone.offsetHeight;
         const w = el.offsetWidth;
         const h = el.offsetHeight;
 
-        let newL = Math.max(-w/2, Math.min(zoneRect.width - w/2, initL + dx));
-        let newT = Math.max(-h/2, Math.min(zoneRect.height - h/2, initT + dy));
+        let newL = Math.max(-w/3, Math.min(zoneW - w * (2/3), initL + dx));
+        let newT = Math.max(-h/3, Math.min(zoneH - h * (2/3), initT + dy));
 
         el.style.left = newL + 'px';
         el.style.top = newT + 'px';
@@ -1291,6 +1436,7 @@
 
       function onUp() {
         isDragging = false;
+        el.classList.remove('is-selected');
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onUp);
         document.removeEventListener('touchmove', onMove);
@@ -1327,13 +1473,14 @@
         const zone = document.getElementById('gt-mount-' + currentDevice + '-' + sId);
         if (!zone) return;
 
-        const rect = zone.getBoundingClientRect();
+        const surfW = zone.offsetWidth || (currentDevice === 'macbook' ? 620 : (currentDevice === 'ipad' ? 460 : 310));
+        const surfH = zone.offsetHeight || (currentDevice === 'macbook' ? 388 : (currentDevice === 'ipad' ? 600 : 640));
         const src = item.dataset.stickerSrc;
         const title = item.dataset.title;
-        const size = currentDevice === 'iphone' ? 88 : 108;
+        const size = currentDevice === 'iphone' ? 84 : (currentDevice === 'ipad' ? 96 : 104);
 
-        const l = Math.max(20, (rect.width - size) / 2 + (Math.random() - 0.5) * 60);
-        const t = Math.max(20, (rect.height - size) / 2 + (Math.random() - 0.5) * 60);
+        const l = Math.max(20, (surfW - size) / 2 + (Math.random() - 0.5) * 60);
+        const t = Math.max(currentDevice === 'iphone' ? 180 : 30, (surfH - size) / 2 + (Math.random() - 0.5) * 60);
         const rot = (Math.random() - 0.5) * 20;
 
         placeStickerOnDevice(item, src, title, l, t, rot, zone);
