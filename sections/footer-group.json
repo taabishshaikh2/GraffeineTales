@@ -14,11 +14,20 @@
     "footer": {
       "type": "atelier-footer",
       "blocks": {
+        "help": {
+          "type": "links",
+          "settings": {
+            "heading": "Information",
+            "menu": "information",
+            "include_policies": false,
+            "include_account": false
+          }
+        },
         "shop": {
           "type": "links",
           "settings": {
-            "heading": "Shop",
-            "menu": "footer-shop",
+            "heading": "Important Links",
+            "menu": "important-links",
             "include_policies": false,
             "include_account": false
           }
@@ -26,19 +35,10 @@
         "about": {
           "type": "links",
           "settings": {
-            "heading": "About",
-            "menu": "footer-about",
+            "heading": "Personalised & Corporate",
+            "menu": "personalised-corporate",
             "include_policies": false,
             "include_account": false
-          }
-        },
-        "help": {
-          "type": "links",
-          "settings": {
-            "heading": "Help",
-            "menu": "footer-help",
-            "include_policies": true,
-            "include_account": true
           }
         },
         "shipping": {
@@ -66,9 +66,9 @@
         }
       },
       "block_order": [
+        "help",
         "shop",
         "about",
-        "help",
         "shipping",
         "payments",
         "packaging"
