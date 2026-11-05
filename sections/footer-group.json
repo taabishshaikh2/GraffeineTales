@@ -59,18 +59,9 @@
         },
         "packaging": {
           "type": "benefit",
-          "disabled": true,
           "settings": {
             "label": "Thoughtful Packaging",
             "icon": "gift"
-          }
-        },
-        "small_business": {
-          "type": "benefit",
-          "disabled": true,
-          "settings": {
-            "label": "Supporting Small Business",
-            "icon": "leaf"
           }
         }
       },
@@ -80,8 +71,7 @@
         "help",
         "shipping",
         "payments",
-        "packaging",
-        "small_business"
+        "packaging"
       ],
       "settings": {
         "brand_name": "Graffeine Tales",
