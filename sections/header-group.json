@@ -48,7 +48,7 @@
         "announcement_font_size": 12,
         "announcement_scroll": false,
         "announcement_speed": 25,
-        "show_country_selector": true,
+        "show_country_selector": false,
         "announcement_visibility": "all",
         "logo_text": "GRAFFEINE TALES",
         "logo_width": 160,
