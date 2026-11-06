@@ -1288,19 +1288,19 @@
 
       if (device === 'ipad') {
         return [
-          { x: 320, y: 35,  rot: 8 },
-          { x: 180, y: 35,  rot: -6 },
-          { x: 35,  y: 140, rot: 9, minY: 125 },
-          { x: 325, y: 165, rot: -10 },
-          { x: 45,  y: 265, rot: -7 },
-          { x: 320, y: 285, rot: 8 },
-          { x: 45,  y: 395, rot: 10 },
-          { x: 320, y: 410, rot: -9 },
-          { x: 55,  y: 490, rot: -6 },
-          { x: 180, y: 495, rot: 7 },
-          { x: 305, y: 490, rot: 8 },
-          { x: 180, y: 175, rot: -5 },
-          { x: 180, y: 345, rot: 6 }
+          { x: 265, y: 30,  rot: 7 },
+          { x: 135, y: 38,  rot: -6 },
+          { x: 28,  y: 135, rot: 8, minY: 120 },
+          { x: 275, y: 155, rot: -8 },
+          { x: 152, y: 235, rot: 5 },
+          { x: 38,  y: 335, rot: -7 },
+          { x: 268, y: 340, rot: 8 },
+          { x: 155, y: 415, rot: -5 },
+          { x: 42,  y: 475, rot: 7 },
+          { x: 265, y: 475, rot: -8 },
+          { x: 150, y: 495, rot: 6 },
+          { x: 185, y: 140, rot: -6 },
+          { x: 130, y: 325, rot: 8 }
         ];
       }
 
@@ -1340,7 +1340,7 @@
 
       const surfW = zone.offsetWidth || (currentDevice === 'macbook' ? 620 : (currentDevice === 'ipad' ? 460 : 310));
       const surfH = zone.offsetHeight || (currentDevice === 'macbook' ? 388 : (currentDevice === 'ipad' ? 600 : 640));
-      const stickerSize = currentDevice === 'iphone' ? 84 : (currentDevice === 'ipad' ? 96 : 104);
+      const stickerSize = currentDevice === 'iphone' ? 84 : (currentDevice === 'ipad' ? 92 : 104);
 
       const slots = getCollageSpreadSlots(currentDevice, items.length, surfW, surfH, stickerSize);
 
@@ -1351,8 +1351,8 @@
 
         const jitterX = (Math.random() - 0.5) * 8;
         const jitterY = (Math.random() - 0.5) * 8;
-        const l = Math.max(12, Math.min(surfW - stickerSize - 12, slot.x + jitterX));
-        const t = Math.max(slot.minY || 14, Math.min(surfH - stickerSize - 14, slot.y + jitterY));
+        const l = Math.max(16, Math.min(surfW - stickerSize - 16, slot.x + jitterX));
+        const t = Math.max(slot.minY || 16, Math.min(surfH - stickerSize - 16, slot.y + jitterY));
         const rot = slot.rot || ((Math.random() - 0.5) * 20);
 
         placeStickerOnDevice(item, src, title, l, t, rot, zone);
@@ -1364,7 +1364,7 @@
 
       const placed = document.createElement('div');
       placed.className = 'gt-placed-sticker';
-      const size = currentDevice === 'iphone' ? 84 : (currentDevice === 'ipad' ? 96 : 104);
+      const size = currentDevice === 'iphone' ? 84 : (currentDevice === 'ipad' ? 92 : 104);
       placed.style.width = size + 'px';
       placed.style.height = size + 'px';
       placed.style.left = left + 'px';
@@ -1494,7 +1494,7 @@
         const surfH = zone.offsetHeight || (currentDevice === 'macbook' ? 388 : (currentDevice === 'ipad' ? 600 : 640));
         const src = item.dataset.stickerSrc;
         const title = item.dataset.title;
-        const size = currentDevice === 'iphone' ? 84 : (currentDevice === 'ipad' ? 96 : 104);
+        const size = currentDevice === 'iphone' ? 84 : (currentDevice === 'ipad' ? 92 : 104);
 
         const l = Math.max(20, (surfW - size) / 2 + (Math.random() - 0.5) * 60);
         const t = Math.max(currentDevice === 'iphone' ? 180 : 30, (surfH - size) / 2 + (Math.random() - 0.5) * 60);

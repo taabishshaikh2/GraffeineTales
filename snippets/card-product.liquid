@@ -110,6 +110,15 @@
               </div>
             </div>
           {%- endif -%}
+          <button
+            type="button"
+            class="atelier-product-card__wishlist"
+            data-wishlist-toggle="{{ card_product.handle | escape }}"
+            aria-pressed="false"
+            aria-label="Add to wishlist: {{ card_product.title | escape }}"
+          >
+            {% render 'header-icon', name: 'heart' %}
+          </button>
           <div class="card__content">
             <div class="card__information">
               <h3
@@ -149,6 +158,9 @@
         </div>
         <div class="card__content">
           <div class="card__information">
+            {%- if card_product.type != blank -%}
+              <p class="atelier-product-card__category">{{ card_product.type | escape }}</p>
+            {%- endif -%}
             <h3
               class="card__heading{% if card_product.featured_media or settings.card_style == 'standard' %} h5{% endif %}"
               {% if card_product.featured_media or settings.card_style == 'card' %}

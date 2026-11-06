@@ -1438,3 +1438,64 @@ class CartPerformance {
     );
   }
 }
+
+
+// Global Wishlist Support for all cards across the store
+(function initGlobalWishlist() {
+  function getSaved() {
+    try {
+      const data = JSON.parse(localStorage.getItem('graffeine-wishlist') || '[]');
+      return new Set(Array.isArray(data) ? data.filter(h => typeof h === 'string' && /^[a-z0-9-]+$/.test(h)) : []);
+    } catch {
+      return new Set();
+    }
+  }
+
+  function syncButtons() {
+    const saved = getSaved();
+    document.querySelectorAll('[data-wishlist-toggle]').forEach(btn => {
+      const handle = btn.dataset.wishlistToggle;
+      btn.setAttribute('aria-pressed', String(saved.has(handle)));
+    });
+  }
+
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('[data-wishlist-toggle]');
+    if (!btn) return;
+    // Let atelier-product-showcase handle its own internal cards to avoid double-triggering
+    if (btn.closest('atelier-product-showcase')) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const handle = btn.dataset.wishlistToggle;
+    if (!handle) return;
+
+    const saved = getSaved();
+    if (saved.has(handle)) {
+      saved.delete(handle);
+    } else {
+      saved.add(handle);
+    }
+
+    try {
+      localStorage.setItem('graffeine-wishlist', JSON.stringify([...saved]));
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+
+    syncButtons();
+    document.dispatchEvent(new CustomEvent('atelier:wishlist:update'));
+  });
+
+  document.addEventListener('atelier:wishlist:update', syncButtons);
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'graffeine-wishlist') syncButtons();
+  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncButtons);
+  } else {
+    syncButtons();
+  }
+})();
