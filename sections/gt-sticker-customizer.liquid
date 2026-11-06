@@ -239,24 +239,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 32px;
-  }
-  @media (max-width: 680px) {
-    .gt-customizer-header {
-      margin-bottom: 20px;
-    }
-    .gt-customizer-toolbar {
-      margin-bottom: 16px;
-    }
-    .gt-stage-wrapper {
-      min-height: 250px;
-      margin-bottom: 14px;
-    }
-  }
-  @media (max-width: 420px) {
-    .gt-stage-wrapper {
-      min-height: 220px;
-      margin-bottom: 10px;
-    }
+    overflow: visible;
   }
 
   /* 1. MacBook Pro Mockup */
@@ -266,19 +249,7 @@
     width: 620px;
     height: 400px;
     filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.6));
-  }
-  @media (max-width: 680px) {
-    .gt-macbook-wrap {
-      transform: scale(0.52);
-      transform-origin: center center;
-      margin: -95px 0;
-    }
-  }
-  @media (max-width: 420px) {
-    .gt-macbook-wrap {
-      transform: scale(0.48);
-      margin: -105px 0;
-    }
+    transform-origin: center center;
   }
   .gt-macbook-lid {
     position: relative;
@@ -344,12 +315,7 @@
     width: 460px;
     height: 600px;
     filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.55));
-  }
-  @media (max-width: 520px) {
-    .gt-ipad-wrap {
-      transform: scale(0.65);
-      margin: -60px 0;
-    }
+    transform-origin: center center;
   }
   .gt-ipad-chassis {
     position: relative;
@@ -410,12 +376,7 @@
     width: 310px;
     height: 640px;
     filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.55));
-  }
-  @media (max-width: 400px) {
-    .gt-iphone-wrap {
-      transform: scale(0.85);
-      margin: -30px 0;
-    }
+    transform-origin: center center;
   }
   .gt-iphone-chassis {
     position: relative;
@@ -689,21 +650,42 @@
     }
   }
 
-  /* Mobile spacing optimizations: tightly hug device preview and remove all excess blank space */
+  /* Mobile Spacing Optimizations & Hardware Stage Device Layout */
   @media (max-width: 768px) {
     .gt-customizer-header {
       margin-bottom: 16px !important;
     }
     .gt-customizer-toolbar {
-      margin-bottom: 10px !important;
-      padding: 10px 14px !important;
-      gap: 10px !important;
+      flex-direction: column !important;
       border-radius: 20px !important;
+      padding: 12px 14px !important;
+      gap: 10px !important;
+      margin-bottom: 16px !important;
+    }
+    .gt-device-tabs {
+      display: flex !important;
+      justify-content: center !important;
+      width: 100% !important;
+      gap: 6px !important;
+    }
+    .gt-color-switcher {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100% !important;
+      gap: 10px !important;
+    }
+    .gt-action-buttons {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100% !important;
+      gap: 8px !important;
     }
     .gt-stage-wrapper {
       min-height: 0 !important;
-      height: 240px !important;
-      margin-bottom: 8px !important;
+      height: auto !important;
+      margin-bottom: 16px !important;
       padding: 0 !important;
       display: flex !important;
       align-items: center !important;
@@ -713,17 +695,17 @@
     .gt-macbook-wrap {
       transform: scale(0.48) !important;
       transform-origin: center center !important;
-      margin: 0 auto !important;
+      margin: -96px auto !important;
     }
     .gt-ipad-wrap {
       transform: scale(0.55) !important;
       transform-origin: center center !important;
-      margin: 0 auto !important;
+      margin: -125px auto !important;
     }
     .gt-iphone-wrap {
-      transform: scale(0.65) !important;
+      transform: scale(0.60) !important;
       transform-origin: center center !important;
-      margin: 0 auto !important;
+      margin: -118px auto !important;
     }
     .gt-tray-card {
       margin-top: 0 !important;
@@ -737,32 +719,64 @@
 
   @media (max-width: 480px) {
     .gt-customizer-header {
-      margin-bottom: 12px !important;
+      margin-bottom: 14px !important;
     }
     .gt-customizer-toolbar {
-      margin-bottom: 6px !important;
-      padding: 8px 10px !important;
+      margin-bottom: 12px !important;
+      padding: 10px 10px !important;
+      gap: 8px !important;
+      border-radius: 18px !important;
+    }
+    .gt-device-tab-btn {
+      padding: 6px 12px !important;
+      font-size: 12px !important;
     }
     .gt-stage-wrapper {
       min-height: 0 !important;
-      height: 205px !important;
-      margin-bottom: 6px !important;
+      height: auto !important;
+      margin-bottom: 14px !important;
     }
     .gt-macbook-wrap {
       transform: scale(0.42) !important;
-      margin: 0 auto !important;
+      transform-origin: center center !important;
+      margin: -108px auto !important;
     }
     .gt-ipad-wrap {
       transform: scale(0.48) !important;
-      margin: 0 auto !important;
+      transform-origin: center center !important;
+      margin: -148px auto !important;
     }
     .gt-iphone-wrap {
-      transform: scale(0.58) !important;
-      margin: 0 auto !important;
+      transform: scale(0.54) !important;
+      transform-origin: center center !important;
+      margin: -138px auto !important;
     }
     .gt-tray-card {
       padding: 12px 10px !important;
       border-radius: 18px !important;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .gt-device-tab-btn {
+      padding: 5px 10px !important;
+      font-size: 11px !important;
+      gap: 4px !important;
+    }
+    .gt-macbook-wrap {
+      transform: scale(0.38) !important;
+      transform-origin: center center !important;
+      margin: -116px auto !important;
+    }
+    .gt-ipad-wrap {
+      transform: scale(0.44) !important;
+      transform-origin: center center !important;
+      margin: -160px auto !important;
+    }
+    .gt-iphone-wrap {
+      transform: scale(0.50) !important;
+      transform-origin: center center !important;
+      margin: -150px auto !important;
     }
   }
 
@@ -893,7 +907,7 @@
     </div>
 
     <!-- Hardware Stage -->
-    <div class="gt-stage-wrapper">
+    <div class="gt-stage-wrapper" id="gt-stage-wrapper-{{ section.id }}" data-active-device="macbook">
       
       <!-- 1. MacBook Pro Mockup -->
       <div class="gt-macbook-wrap" id="gt-macbook-wrap-{{ section.id }}">
@@ -1180,6 +1194,9 @@
       if (id !== sId) return;
       currentDevice = device;
       
+      const stageWrap = document.getElementById('gt-stage-wrapper-' + sId);
+      if (stageWrap) stageWrap.setAttribute('data-active-device', device);
+
       const wrapMac = document.getElementById('gt-macbook-wrap-' + sId);
       const wrapIpad = document.getElementById('gt-ipad-wrap-' + sId);
       const wrapIphone = document.getElementById('gt-iphone-wrap-' + sId);
