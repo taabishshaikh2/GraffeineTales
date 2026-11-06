@@ -123,3 +123,12 @@ catalogue-filters {
     transition: none !important;
   }
 }
+
+@media (max-width: 749px) {
+  #catalogue-section .atelier-showcase__grid,
+  atelier-product-showcase[data-catalogue] .atelier-showcase__grid {
+    padding-left: 24px !important;
+    padding-right: 20px !important;
+    scroll-padding-left: 24px !important;
+  }
+}

@@ -219,7 +219,10 @@
                   </span>
                 </p>
               {%- endif -%}
-
+            </div>
+          </div>
+          <div class="card__footer atelier-card__footer">
+            <div class="atelier-card__pricing">
               {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
               {%- if card_product.quantity_price_breaks_configured? -%}
                 {% if card_product.variants_count == 1 and quick_add == 'bulk' %}
@@ -303,8 +306,7 @@
                 {% endif %}
               {%- endif -%}
             </div>
-          </div>
-          {% assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id %}
+            {% assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id %}
           {% if quick_add == 'standard' %}
             <div class="quick-add no-js-hidden">
               {%- liquid
@@ -564,6 +566,7 @@
               </div>
             {% endif %}
           {% endif %}
+          </div>
           <div class="card__badge {{ settings.badge_position }}">
             {%- if card_product.available == false -%}
               <span
