@@ -194,6 +194,11 @@
         "show_button": true,
         "button_label": "View all products",
         "button_link": "shopify://collections/all-products",
+        "button_style": "primary",
+        "button_radius_desktop": "subtle",
+        "button_radius_desktop_custom": 8,
+        "button_radius_mobile": "subtle",
+        "button_radius_mobile_custom": 8,
         "padding_top": 24,
         "padding_bottom": 16
       }
@@ -471,19 +476,20 @@
         "paragraph_1": {
           "type": "paragraph",
           "settings": {
-            "text": "<p><em>It started with events. Then came design. And eventually, design became something you could hold.</em></p>",
+            "text": "<p>Born from events. Brewed with coffee. Made with a little creative chaos.</p>",
             "style": "body"
           }
         },
         "paragraph_2": {
           "type": "paragraph",
           "settings": {
-            "text": "<p>My journey began in event planning, amidst tight deadlines, endless checklists, and the beautiful chaos of bringing ideas to life. Somewhere along the way, I found myself drawn to the art of designing experiences and creating moments worth remembering.</p>",
+            "text": "<p>It all began with events — big ideas, little details, tight deadlines, and a whole lot of hustle.</p>",
             "style": "body"
           }
         },
         "paragraph_3": {
           "type": "paragraph",
+          "disabled": true,
           "settings": {
             "text": "<p>The days were hectic, the coffee was endless, and creativity kept brewing. What began as event planning slowly evolved into event design, graphic design, and a desire to create something more personal.</p>",
             "style": "body"
@@ -552,6 +558,12 @@
         "show_button": true,
         "button_label": "Read More",
         "button_link": "",
+        "button_style": "primary",
+        "button_radius_desktop": "subtle",
+        "button_radius_desktop_custom": 8,
+        "button_radius_mobile": "subtle",
+        "button_radius_mobile_custom": 8,
+        "founder_image_fit": "cover",
         "dialog_heading": "The Story Behind Graffeine Tales",
         "dialog_intro": "",
         "close_label": "Close story"
