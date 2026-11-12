@@ -149,9 +149,9 @@
         "bulk": {
           "type": "category",
           "settings": {
-            "title": "Personalised",
+            "title": "Personalised Gifting",
             "image": "shopify://shop_images/photo_thread_art_portrait.png",
-            "collection": "personalised",
+            "collection": "personalised-gifting",
             "link": "",
             "reference_image": "cat_bulk.jpg",
             "image_position": "center"
@@ -162,7 +162,7 @@
           "settings": {
             "title": "Bulk Orders",
             "collection": "",
-            "link": "",
+            "link": "https://tally.io",
             "reference_image": "cat_events.jpg",
             "image_position": "center"
           }
@@ -471,45 +471,49 @@
         "paragraph_1": {
           "type": "paragraph",
           "settings": {
-            "text": "<p><em>It started with events. Then came design. And eventually, design became something you could hold.</em></p>",
+            "text": "<p><em>It all began with events big ideas, little details, and a whole lot of hustle.</em></p>",
             "style": "body"
           }
         },
         "paragraph_2": {
           "type": "paragraph",
           "settings": {
-            "text": "<p>My journey began in event planning, amidst tight deadlines, endless checklists, and the beautiful chaos of bringing ideas to life. Somewhere along the way, I found myself drawn to the art of designing experiences and creating moments worth remembering.</p>",
+            "text": "<p>From planning experiences to designing them, creativity slowly found a home beyond event spaces. Somewhere between the last-minute changes, late-night deadlines, and endless cups of coffee, a new idea began to brew.</p>",
             "style": "body"
           }
         },
         "paragraph_3": {
           "type": "paragraph",
           "settings": {
-            "text": "<p>The days were hectic, the coffee was endless, and creativity kept brewing. What began as event planning slowly evolved into event design, graphic design, and a desire to create something more personal.</p>",
+            "text": "<p>What if design could be more than something to look at? What if it could be something to hold, gift, use, and keep?</p>",
             "style": "body"
           }
         },
         "paragraph_4": {
           "type": "paragraph",
-          "disabled": true,
           "settings": {
-            "text": "<p>I wanted my designs to live beyond screens and event spaces — to become things people could hold, gift, use, and cherish.</p>",
+            "text": "<p>And that's how <em>Graffeine Tales</em> came to life.</p>",
             "style": "body"
           }
         },
         "paragraph_5": {
           "type": "paragraph",
-          "disabled": true,
           "settings": {
-            "text": "<p>And so, <em>Graffeine Tales</em> was born: a blend of graphics and caffeine, fuelled by a love for art, handmade details, and the little things that bring joy.</p>",
+            "text": "<p>A little graphics, a little caffeine, and a whole lot of creativity bringing together thoughtful design, handmade charm, and joyful little details.</p>",
             "style": "body"
           }
         },
         "paragraph_6": {
           "type": "paragraph",
-          "disabled": true,
           "settings": {
-            "text": "<p>Today, from illustrated stationery and personalised gifts to thread art and handmade keepsakes, every creation is a mix of thoughtful design and a little creative magic.</p>",
+            "text": "<p>From quirky stationery and personalised gifts to thread art and handmade keepsakes, every creation is made to add a little more colour, character, and meaning to everyday moments.</p>",
+            "style": "body"
+          }
+        },
+        "paragraph_7": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Some ideas are sketched. Some are stitched. Some are brewed over coffee. But all are made with the belief that the little things can make the biggest difference.</p>",
             "style": "body"
           }
         }
@@ -520,7 +524,8 @@
         "paragraph_3",
         "paragraph_4",
         "paragraph_5",
-        "paragraph_6"
+        "paragraph_6",
+        "paragraph_7"
       ],
       "settings": {
         "heading": "The Story Behind Graffeine Tales",

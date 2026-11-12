@@ -44,7 +44,7 @@
     {%- if s.logo != blank -%}
       {{ s.logo | image_url: width: 600 | image_tag: widths: '200, 300, 400, 600', sizes: '240px', loading: 'eager', fetchpriority: 'high', alt: logo_alt }}
     {%- else -%}
-      <span class="atelier-logo__text">{{ s.logo_text | default: shop.name | escape }}</span>
+      <img class="atelier-logo__wordmark" src="{{ 'brand-wordmark.png' | asset_url }}" width="170" height="54" loading="eager" fetchpriority="high" alt="{{ shop.name | escape }}">
     {%- endif -%}
   </a>
 {%- endcapture -%}
@@ -187,6 +187,18 @@
   pointer-events: none !important;
   margin-bottom: calc(-1 * var(--header-pill-height, 108px)) !important;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* On standard non-index pages, never pull content under floating header */
+body:not(.template-index) .atelier-header-section {
+  margin-bottom: 0 !important;
+}
+
+/* Ensure page headings have ample clearance and never cut off */
+body.template-page #MainContent,
+body[class*="template-page"] #MainContent,
+.template-page #MainContent {
+  padding-top: 24px !important;
 }
 
 /* On Product Detail Pages, header sits cleanly above PDP with no excessive gap */
@@ -448,7 +460,8 @@ atelier-header li,
   height: 40px !important;
   margin: 0 !important;
   padding: 0 16px !important;
-  border: 1px solid var(--header-line, rgba(54, 54, 56, 0.12)) !important;
+  border: none !important;
+  box-shadow: none !important;
   border-radius: 999px !important;
   background: rgba(255, 255, 255, 0.45) !important;
   color: var(--header-text, #363638) !important;
@@ -456,11 +469,11 @@ atelier-header li,
   font-size: 13px !important;
   text-align: left !important;
   cursor: pointer !important;
-  transition: background 0.3s ease, border-color 0.3s ease, opacity 0.3s ease !important;
+  transition: background 0.3s ease, opacity 0.3s ease !important;
 }
 .atelier-search-pill:hover {
   background: rgba(255, 255, 255, 0.8) !important;
-  border-color: rgba(54, 54, 56, 0.25) !important;
+  border: none !important;
   opacity: 1 !important;
 }
 .atelier-search-pill svg {
@@ -1216,7 +1229,9 @@ atelier-header li,
   position: relative;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(54, 54, 56, 0.15);
+  border: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
   padding-bottom: 12px;
 }
 .atelier-search-form svg {
@@ -1228,11 +1243,17 @@ atelier-header li,
 .atelier-search-form input[type="search"] {
   flex: 1;
   background: transparent;
-  border: none;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
   font-family: 'Inter', sans-serif;
   font-size: 16px;
   color: var(--header-text, #363638);
-  outline: none;
+}
+.atelier-search-form input[type="search"]:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 .atelier-search-panel__close {
   padding: 6px;

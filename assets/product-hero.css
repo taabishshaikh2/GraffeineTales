@@ -268,3 +268,119 @@ body.template-product #MainContent,
     margin-top: var(--pdp-mobile-desc-top, 20px) !important;
   }
 }
+
+/* ==========================================================================
+   Viewport Fit Layout (Pointer 4): Thumbnails on Left, Compact Viewport Stage
+   ========================================================================== */
+@media (min-width: 990px) {
+  .atelier-pdp {
+    padding-top: 12px !important;
+    padding-bottom: 24px !important;
+    max-width: 1240px !important;
+  }
+  .atelier-pdp__breadcrumb {
+    margin-bottom: 12px !important;
+  }
+  .atelier-pdp__columns {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) !important;
+    gap: 36px !important;
+    align-items: start !important;
+  }
+  .atelier-pdp__visual {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    align-items: flex-start !important;
+    justify-content: flex-end !important;
+    gap: 14px !important;
+    position: sticky !important;
+    top: 80px !important;
+  }
+  .atelier-pdp__stage {
+    flex: 1 1 0% !important;
+    width: 100% !important;
+    max-width: 480px !important;
+    max-height: min(65vh, 480px) !important;
+    aspect-ratio: 1 !important;
+    margin: 0 !important;
+    border-radius: 14px !important;
+    background: var(--pdp-sand, #F8F5ED) !important;
+  }
+  .atelier-pdp__slide img {
+    max-height: min(65vh, 480px) !important;
+    object-fit: contain !important;
+    image-rendering: auto !important;
+  }
+  .atelier-pdp__thumbnails {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 68px !important;
+    flex-shrink: 0 !important;
+    max-height: min(65vh, 480px) !important;
+    overflow-y: auto !important;
+    scrollbar-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .atelier-pdp__thumbnails::-webkit-scrollbar {
+    display: none !important;
+  }
+  .atelier-pdp__thumbnails button {
+    width: 64px !important;
+    height: 64px !important;
+    aspect-ratio: 1 !important;
+    flex-shrink: 0 !important;
+    padding: 3px !important;
+    border-radius: 8px !important;
+    background: var(--pdp-sand, #F8F5ED) !important;
+  }
+  .atelier-pdp h1 {
+    font-size: clamp(24px, 2.2vw, 32px) !important;
+    margin-bottom: 10px !important;
+  }
+  .atelier-pdp__price-block {
+    margin-top: 10px !important;
+    margin-bottom: 12px !important;
+    padding: 8px 0 !important;
+  }
+  .atelier-pdp__buy-row {
+    margin-top: 14px !important;
+  }
+}
+
+/* WhatsApp Upsell & Personalised Buttons */
+.atelier-pdp__upsell-wa {
+  margin-top: 12px;
+  width: 100%;
+}
+.atelier-pdp__wa-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-height: 48px !important;
+  padding: 12px 20px !important;
+  border-radius: var(--pdp-button-radius, 12px) !important;
+  background: #25D366 !important;
+  color: #FFFFFF !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.25) !important;
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease !important;
+  cursor: pointer !important;
+}
+.atelier-pdp__wa-btn:hover {
+  transform: translateY(-2px) !important;
+  filter: brightness(0.95) !important;
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35) !important;
+}
+.atelier-pdp__wa-btn svg {
+  flex-shrink: 0 !important;
+  width: 18px !important;
+  height: 18px !important;
+}

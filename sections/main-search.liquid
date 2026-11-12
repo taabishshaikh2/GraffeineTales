@@ -166,6 +166,9 @@
                     aria-describedby="a11y-refresh-page-message"
                   >
                     {%- for option in search.sort_options -%}
+                      {%- if option.value == 'title-ascending' or option.value == 'title-descending' or option.value == 'created-ascending' -%}
+                        {%- continue -%}
+                      {%- endif -%}
                       <option
                         value="{{ option.value | escape }}"
                         {% if option.value == sort_by %}
