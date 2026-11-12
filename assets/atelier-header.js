@@ -340,6 +340,7 @@ if (!customElements.get('atelier-header')) {
         this.section.style.marginBottom = '0px';
       }
 
+      const mainFirst = document.querySelector('#MainContent > .shopify-section:first-child');
       if (mainFirst) {
         mainFirst.style.paddingTop = '';
       }

@@ -40,23 +40,23 @@
   align-items: center;
   justify-content: flex-start;
   background-color: #2b231d;
-  min-height: clamp(230px, 28vh, 290px);
+  min-height: clamp(340px, 40vh, 420px) !important;
 }
 
 @media screen and (max-width: 767px) {
   .atelier-col-hero {
-    min-height: clamp(180px, 22vh, 220px);
+    min-height: clamp(260px, 32vh, 300px) !important;
   }
 }
 
 /* When no banner image is present: increase hero height so collection title sits gracefully right below the header */
 .atelier-col-hero--no-image {
-  min-height: clamp(330px, 38vh, 400px) !important;
+  min-height: clamp(360px, 42vh, 440px) !important;
 }
 
 @media screen and (max-width: 767px) {
   .atelier-col-hero--no-image {
-    min-height: clamp(250px, 30vh, 290px) !important;
+    min-height: clamp(270px, 34vh, 310px) !important;
   }
 }
 
@@ -107,7 +107,7 @@
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: calc(var(--header-height, 136px) + 20px) 24px 32px !important;
+  padding: calc(var(--header-height, 135px) + 20px) 24px 36px !important;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
@@ -115,19 +115,19 @@
 
 @media screen and (max-width: 767px) {
   .atelier-col-hero__inner {
-    padding: calc(var(--header-height, 100px) + 14px) 16px 22px !important;
+    padding: calc(var(--header-height, 96px) + 16px) 16px 24px !important;
   }
 }
 
 .atelier-col-hero--no-image .atelier-col-hero__inner {
-  padding-top: calc(var(--header-height, 136px) + 24px) !important;
-  padding-bottom: 40px !important;
+  padding-top: calc(var(--header-height, 135px) + 22px) !important;
+  padding-bottom: 36px !important;
 }
 
 @media screen and (max-width: 767px) {
   .atelier-col-hero--no-image .atelier-col-hero__inner {
-    padding-top: calc(var(--header-height, 100px) + 16px) !important;
-    padding-bottom: 28px !important;
+    padding-top: calc(var(--header-height, 96px) + 16px) !important;
+    padding-bottom: 24px !important;
   }
 }
 

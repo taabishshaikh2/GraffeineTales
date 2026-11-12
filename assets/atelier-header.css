@@ -142,7 +142,7 @@
   top: 0 !important;
   z-index: 40 !important;
   pointer-events: none !important;
-  margin-bottom: calc(-1 * var(--header-pill-height, 108px)) !important;
+  margin-bottom: 0 !important;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
@@ -150,7 +150,15 @@
 body.template-index .atelier-header-section,
 body.template-collection .atelier-header-section,
 body[class*="template-collection"] .atelier-header-section {
-  margin-bottom: calc(-1 * var(--header-pill-height, 108px)) !important;
+  margin-bottom: calc(-1 * var(--header-pill-height, 135px)) !important;
+}
+
+@media screen and (max-width: 767px) {
+  body.template-index .atelier-header-section,
+  body.template-collection .atelier-header-section,
+  body[class*="template-collection"] .atelier-header-section {
+    margin-bottom: calc(-1 * var(--header-pill-height, 96px)) !important;
+  }
 }
 
 /* On standard interior pages, keep normal flow so title isn't covered */
