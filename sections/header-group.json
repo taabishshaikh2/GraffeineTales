@@ -50,6 +50,7 @@
         "announcement_speed": 25,
         "show_country_selector": false,
         "announcement_visibility": "all",
+        "logo": "shopify://shop_images/LOGO-04.png",
         "logo_text": "GRAFFEINE TALES",
         "logo_width": 160,
         "logo_width_mobile": 90,
