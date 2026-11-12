@@ -349,7 +349,7 @@
     "sticker_customizer": {
       "type": "gt-sticker-customizer",
       "settings": {
-        "header_clearance": true,
+        "header_clearance": false,
         "badge": "Interactive Studio",
         "title": "Style Your Tech with Studio Vinyl",
         "subtitle": "Where slow-crafted stories meet your modern everyday devices.",
