@@ -96,7 +96,7 @@
         "mobile_height": 600,
         "overlay": 0,
         "show_content": false,
-        "show_arrows": true,
+        "show_arrows": false,
         "responsive_height": true,
         "arrow_background": "#7d6a6a",
         "arrow_color": "#ffffff"
