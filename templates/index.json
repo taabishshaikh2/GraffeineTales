@@ -194,6 +194,11 @@
         "show_button": true,
         "button_label": "View all products",
         "button_link": "shopify://collections/all-products",
+        "button_style": "primary",
+        "button_radius_desktop": "subtle",
+        "button_radius_desktop_custom": 8,
+        "button_radius_mobile": "subtle",
+        "button_radius_mobile_custom": 8,
         "padding_top": 24,
         "padding_bottom": 16
       }
@@ -529,7 +534,7 @@
       ],
       "settings": {
         "heading": "The Story Behind Graffeine Tales",
-        "subheading": "Born from events. Brewed with coffee. Made with art.",
+        "subheading": "",
         "accessible_label": "About Graffeine Tales",
         "enable_highlight": true,
         "enable_glow": true,
@@ -556,7 +561,13 @@
         "glow_color": "#e2bc7a",
         "show_button": true,
         "button_label": "Read More",
-        "button_link": "",
+        "button_link": "shopify://pages/the-story-behind-graffeine-tales",
+        "button_style": "primary",
+        "button_radius_desktop": "subtle",
+        "button_radius_desktop_custom": 8,
+        "button_radius_mobile": "subtle",
+        "button_radius_mobile_custom": 8,
+        "founder_image_fit": "cover",
         "dialog_heading": "The Story Behind Graffeine Tales",
         "dialog_intro": "",
         "close_label": "Close story"

@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "logo": "shopify://shop_images/LOGO-04.png",
     "logo_width": 90,
     "type_header_font": "assistant_n4",
     "heading_scale": 100,
@@ -135,6 +136,18 @@
     "cart_show_payment_icons": true,
     "cart_payment_icons": "visa,master,upi,rupay",
     "cart_secure_label": "100% Secured Payments",
+    "card_add_to_cart_text": "Add to Cart",
+    "card_sold_out_text": "Sold out",
+    "card_choose_options_text": "Choose options",
+    "card_wishlist_text": "Add to wishlist",
+    "card_default_badge_style": "sage",
+    "card_image_fit": "contain",
+    "card_button_style": "primary",
+    "card_button_radius_match": true,
+    "card_button_radius_desktop": "match",
+    "card_button_radius_desktop_custom": 8,
+    "card_button_radius_mobile": "match",
+    "card_button_radius_mobile_custom": 8,
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
@@ -357,19 +370,7 @@
           "shadow": "#121212"
         }
       }
-    },
-    "card_add_to_cart_text": "Add to Cart",
-    "card_sold_out_text": "Sold out",
-    "card_choose_options_text": "Choose options",
-    "card_wishlist_text": "Add to wishlist",
-    "card_default_badge_style": "sage",
-    "card_image_fit": "contain",
-    "card_button_style": "primary",
-    "card_button_radius_match": true,
-    "card_button_radius_desktop": "match",
-    "card_button_radius_desktop_custom": 8,
-    "card_button_radius_mobile": "match",
-    "card_button_radius_mobile_custom": 8
+    }
   },
   "presets": {
     "Dawn": {
