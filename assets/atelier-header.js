@@ -330,18 +330,17 @@ if (!customElements.get('atelier-header')) {
       document.documentElement.style.setProperty('--header-height', totalH + 'px');
       document.documentElement.style.setProperty('--header-pill-height', pillH + 'px');
 
-      const mainFirst = document.querySelector('#MainContent > .shopify-section:first-child');
-      const isBanner = mainFirst && (
-        mainFirst.querySelector('.atelier-col-hero, .atelier-hero, .image-banner, .slideshow, .hero-carousel, [data-hero-banner]')
-        || document.body.classList.contains('template-index')
+      const isOverlayPage = document.body.classList.contains('template-index')
         || document.body.classList.contains('template-collection')
-      );
+        || (document.body.className && document.body.className.indexOf('template-collection') !== -1);
 
-      this.section.style.marginBottom = '-' + pillH + 'px';
+      if (isOverlayPage) {
+        this.section.style.marginBottom = '-' + pillH + 'px';
+      } else {
+        this.section.style.marginBottom = '0px';
+      }
 
-      if (!isBanner && mainFirst) {
-        mainFirst.style.paddingTop = (totalH + 20) + 'px';
-      } else if (mainFirst) {
+      if (mainFirst) {
         mainFirst.style.paddingTop = '';
       }
     }
