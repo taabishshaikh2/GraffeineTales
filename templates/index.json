@@ -521,7 +521,7 @@
         "glow_color": "#e2bc7a",
         "show_button": true,
         "button_label": "Read More",
-        "button_link": "",
+        "button_link": "shopify://pages/the-story-behind-graffeine-tales",
         "button_style": "primary",
         "button_radius_desktop": "subtle",
         "button_radius_desktop_custom": 8,
