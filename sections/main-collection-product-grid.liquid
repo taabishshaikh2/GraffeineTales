@@ -53,6 +53,12 @@
                 </h2>
                 <div class="select">
                   {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                  {%- if sort_by == 'relevance' or sort_by == blank -%}
+                    {%- assign sort_by = collection.default_sort_by | default: 'manual' -%}
+                  {%- endif -%}
+                  {%- if sort_by == 'relevance' -%}
+                    {%- assign sort_by = 'manual' -%}
+                  {%- endif -%}
                   <select
                     name="sort_by"
                     class="facet-filters__sort select__select caption-large"

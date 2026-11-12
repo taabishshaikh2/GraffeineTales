@@ -189,8 +189,15 @@
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* On standard non-index pages, never pull content under floating header */
-body:not(.template-index) .atelier-header-section {
+/* Header overlay on Index and Collection pages so hero banner goes behind the header */
+body.template-index .atelier-header-section,
+body.template-collection .atelier-header-section,
+body[class*="template-collection"] .atelier-header-section {
+  margin-bottom: calc(-1 * var(--header-pill-height, 108px)) !important;
+}
+
+/* On standard non-index and non-collection interior pages, never pull content under floating header */
+body:not(.template-index):not([class*="template-collection"]):not(.template-collection) .atelier-header-section {
   margin-bottom: 0 !important;
 }
 

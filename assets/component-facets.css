@@ -74,25 +74,102 @@
   display: flex;
   flex-grow: 1;
   justify-content: flex-end;
+  gap: 10px;
 }
 
-.facet-filters__field .select {
-  width: auto;
+.facet-filters__label {
+  display: block;
+  color: #363638 !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+}
+
+.facet-filters__field .select,
+.mobile-facets__sort .select {
+  position: relative !important;
+  width: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  background-color: #FAF7F2 !important;
+  border: 1px solid rgba(54, 54, 56, 0.22) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease !important;
+}
+
+.facet-filters__field .select:hover,
+.mobile-facets__sort .select:hover {
+  border-color: #363638 !important;
+  background-color: #FFFFFF !important;
+}
+
+.facet-filters__field .select:focus-within,
+.mobile-facets__sort .select:focus-within {
+  border-color: #363638 !important;
+  background-color: #FFFFFF !important;
+  box-shadow: 0 0 0 2px rgba(54, 54, 56, 0.12) !important;
 }
 
 .facet-filters__field .select:after,
 .facet-filters__field .select:before,
 .mobile-facets__sort .select:after,
 .mobile-facets__sort .select:before {
-  content: none;
+  content: none !important;
 }
 
+.facet-filters__sort,
 .facet-filters__field .select__select,
 .mobile-facets__sort .select__select {
-  border-radius: 0;
-  min-width: auto;
-  min-height: auto;
-  transition: none;
+  border: none !important;
+  border-radius: 8px !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #363638 !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  line-height: 38px !important;
+  margin: 0 !important;
+  padding: 0 34px 0 12px !important;
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+.facet-filters__sort:focus,
+.facet-filters__sort:focus-visible,
+.facet-filters__sort.focused,
+.mobile-facets__sort .select__select:focus-visible,
+.mobile-facets__sort .select__select.focused {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.facet-filters__field .select .svg-wrapper,
+.mobile-facets__sort .select .svg-wrapper {
+  position: absolute !important;
+  right: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  pointer-events: none !important;
+  width: 10px !important;
+  height: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.facet-filters__field .select .svg-wrapper svg,
+.mobile-facets__sort .select .svg-wrapper svg {
+  width: 10px !important;
+  height: 6px !important;
+  fill: #363638 !important;
 }
 
 .select .icon-caret {
@@ -101,59 +178,6 @@
 
 .facet-filters button {
   margin-left: 2.5rem;
-}
-
-.facet-filters__sort {
-  background-color: transparent;
-  border: 0;
-  border-radius: 0;
-  font-size: 1.4rem;
-  height: auto;
-  line-height: calc(1 + 0.5 / var(--font-body-scale));
-  margin: 0;
-  padding-left: 0;
-  padding-right: 1.75rem;
-}
-
-.facet-filters__sort + .icon-caret {
-  right: 0;
-}
-
-@media screen and (forced-colors: active) {
-  .facet-filters__sort {
-    border: none;
-  }
-}
-
-.facet-filters__sort,
-.facet-filters__sort:hover {
-  box-shadow: none;
-  filter: none;
-  transition: none;
-}
-
-.mobile-facets__sort .select__select:focus-visible {
-  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
-  outline-offset: 0.3rem;
-  box-shadow: 0 0 0 0.3rem rgb(var(--color-background)), 0 0 0.5rem 0.4rem rgba(var(--color-foreground), 0.3);
-}
-
-.mobile-facets__sort .select__select.focused {
-  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
-  outline-offset: 0.3rem;
-  box-shadow: 0 0 0 0.3rem rgb(var(--color-background)), 0 0 0.5rem 0.4rem rgba(var(--color-foreground), 0.3);
-}
-
-.facet-filters__sort:focus-visible {
-  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
-  outline-offset: 1rem;
-  box-shadow: 0 0 0 1rem rgb(var(--color-background)), 0 0 0.2rem 1.2rem rgba(var(--color-foreground), 0.3);
-}
-
-.facet-filters__sort.focused {
-  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
-  outline-offset: 1rem;
-  box-shadow: 0 0 0 1rem rgb(var(--color-background)), 0 0 0.2rem 1.2rem rgba(var(--color-foreground), 0.3);
 }
 
 .facets {

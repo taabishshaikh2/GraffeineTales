@@ -5,10 +5,7 @@
     assign is_visible = false
     assign col_h = collection.handle | downcase
     assign col_t = collection.title | downcase
-    if col_h contains 'sticker' or col_t contains 'sticker' or col_h contains 'decal' or col_t contains 'decal' or col_h contains 'vinyl' or col_t contains 'vinyl'
-      assign is_visible = true
-    endif
-    if request.design_mode
+    if col_h contains 'sticker' or col_t contains 'sticker' or col_h contains 'decal' or col_t contains 'decal' or col_h contains 'vinyl' or col_t contains 'vinyl' or template.suffix == 'stickers'
       assign is_visible = true
     endif
   endif
