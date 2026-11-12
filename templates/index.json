@@ -486,47 +486,11 @@
             "text": "<p>It all began with events &nbsp;big ideas, little details, tight deadlines, and a whole lot of hustle.</p>",
             "style": "body"
           }
-        },
-        "paragraph_3": {
-          "type": "paragraph",
-          "disabled": true,
-          "settings": {
-            "text": "<p>The days were hectic, the coffee was endless, and creativity kept brewing. What began as event planning slowly evolved into event design, graphic design, and a desire to create something more personal.</p>",
-            "style": "body"
-          }
-        },
-        "paragraph_4": {
-          "type": "paragraph",
-          "disabled": true,
-          "settings": {
-            "text": "<p>I wanted my designs to live beyond screens and event spaces — to become things people could hold, gift, use, and cherish.</p>",
-            "style": "body"
-          }
-        },
-        "paragraph_5": {
-          "type": "paragraph",
-          "disabled": true,
-          "settings": {
-            "text": "<p>And so, <em>Graffeine Tales</em> was born: a blend of graphics and caffeine, fuelled by a love for art, handmade details, and the little things that bring joy.</p>",
-            "style": "body"
-          }
-        },
-        "paragraph_6": {
-          "type": "paragraph",
-          "disabled": true,
-          "settings": {
-            "text": "<p>Today, from illustrated stationery and personalised gifts to thread art and handmade keepsakes, every creation is a mix of thoughtful design and a little creative magic.</p>",
-            "style": "body"
-          }
         }
       },
       "block_order": [
         "paragraph_1",
-        "paragraph_2",
-        "paragraph_3",
-        "paragraph_4",
-        "paragraph_5",
-        "paragraph_6"
+        "paragraph_2"
       ],
       "settings": {
         "heading": "The Story Behind Graffeine Tales",
