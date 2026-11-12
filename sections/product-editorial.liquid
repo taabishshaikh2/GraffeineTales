@@ -235,7 +235,7 @@
        endif
      endfor
 
-     assign wa_target_phone = section.settings.whatsapp_number | default: settings.whatsapp_number | default: '919609583434' | remove: '+' | remove: ' ' | remove: '-'
+     assign wa_target_phone = settings.whatsapp_number | default: section.settings.whatsapp_number | default: '919609583434' | remove: '+' | remove: ' ' | remove: '-'
    %}
    {% if is_home_decor %}
      {% assign decor_msg = 'Hi Graffeine Tales! I am interested in custom home decor for ' | append: product.title | append: ' (' | append: canonical_url | append: ')' | url_encode %}

@@ -1,31 +1,34 @@
 {% liquid
   assign wa_enabled = true
-  if section.settings.show_whatsapp != nil
-    assign wa_enabled = section.settings.show_whatsapp
-  elsif settings.enable_whatsapp != nil
+  if settings.enable_whatsapp != nil
     assign wa_enabled = settings.enable_whatsapp
+  elsif section.settings.show_whatsapp != nil
+    assign wa_enabled = section.settings.show_whatsapp
   endif
 
-  assign raw_phone = section.settings.whatsapp_number
+  assign wa_pos = settings.whatsapp_position
+  if wa_pos == blank
+    assign wa_pos = section.settings.whatsapp_position
+  endif
+  if wa_pos == blank
+    assign wa_pos = 'bottom-left'
+  endif
+
+  assign raw_phone = settings.whatsapp_number
   if raw_phone == blank
-    assign raw_phone = settings.whatsapp_number
+    assign raw_phone = section.settings.whatsapp_number
   endif
   assign wa_phone = raw_phone | remove: '+' | remove: ' ' | remove: '-'
 
-  assign raw_msg = section.settings.whatsapp_message
+  assign raw_msg = settings.whatsapp_message
   if raw_msg == blank
-    assign raw_msg = settings.whatsapp_message
+    assign raw_msg = section.settings.whatsapp_message
   endif
   assign wa_message = raw_msg | url_encode
 
-  assign wa_tooltip = section.settings.whatsapp_tooltip
+  assign wa_tooltip = settings.whatsapp_tooltip
   if wa_tooltip == blank
-    assign wa_tooltip = settings.whatsapp_tooltip
-  endif
-
-  assign wa_pos = section.settings.whatsapp_position | default: settings.whatsapp_position
-  if wa_pos == blank
-    assign wa_pos = 'bottom-left'
+    assign wa_tooltip = section.settings.whatsapp_tooltip
   endif
 %}
 {% if wa_enabled and wa_phone != blank %}

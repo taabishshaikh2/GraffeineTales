@@ -70,7 +70,7 @@
       {% if section.settings.show_payment_icons %}<ul class="atelier-footer__payments" role="list">{% for payment_type in shop.enabled_payment_types %}<li>{{ payment_type | payment_type_svg_tag }}</li>{% endfor %}</ul>{% endif %}
     </div>
   </div>
-  {% render 'whatsapp-widget', section: section %}
+  {% render 'whatsapp-widget' %}
 </div>
 {% schema %}
 {
@@ -290,55 +290,6 @@
       "type": "image_picker",
       "id": "flourish_right",
       "label": "Bottom right artwork"
-    },
-    {
-      "type": "header",
-      "content": "WhatsApp chat widget"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_whatsapp",
-      "label": "Show WhatsApp floating button",
-      "default": true,
-      "info": "Displays the floating WhatsApp button across the storefront."
-    },
-    {
-      "type": "select",
-      "id": "whatsapp_position",
-      "label": "Widget position",
-      "options": [
-        {
-          "value": "bottom-left",
-          "label": "Bottom left (recommended)"
-        },
-        {
-          "value": "bottom-right",
-          "label": "Bottom right"
-        }
-      ],
-      "default": "bottom-left",
-      "info": "Choose whether the button floats at the bottom-left or bottom-right."
-    },
-    {
-      "type": "text",
-      "id": "whatsapp_number",
-      "label": "WhatsApp phone number",
-      "default": "919876543210",
-      "info": "Enter number with country code, without + or spaces (e.g. 919876543210)."
-    },
-    {
-      "type": "textarea",
-      "id": "whatsapp_message",
-      "label": "Pre-filled chat message",
-      "default": "Hi Graffeine Tales! I have a question about your collection.",
-      "info": "Customize the pre-filled message that customers see when opening WhatsApp chat."
-    },
-    {
-      "type": "text",
-      "id": "whatsapp_tooltip",
-      "label": "Hover tooltip text",
-      "default": "Chat with us",
-      "info": "Text displayed in the tooltip on hover (desktop)."
     },
     {
       "type": "header",

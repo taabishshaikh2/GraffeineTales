@@ -7,7 +7,7 @@
   assign mobile_menu = s.mobile_menu.links | default: menu
   assign glass_alpha = s.glass_opacity | default: 50 | divided_by: 100.0
   assign phone_clean = s.phone | remove: ' ' | remove: '-' | remove: '(' | remove: ')'
-  assign whatsapp_clean = s.whatsapp | remove: ' ' | remove: '+' | remove: '-'
+  assign whatsapp_clean = s.whatsapp | default: settings.whatsapp_number | remove: ' ' | remove: '+' | remove: '-'
   assign logo_alt = s.logo.alt | default: shop.name
 
   # Announcement Bar Logic
