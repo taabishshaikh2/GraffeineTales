@@ -58,7 +58,7 @@
         "cup_size_mobile": 22,
         "logo_h1": false,
         "logo_link": "",
-        "show_cup": true,
+        "show_cup": false,
         "animate_steam": true,
         "menu": "main-menu",
         "mobile_menu": "",
