@@ -1644,9 +1644,8 @@ atelier-header li,
 
 {%- endstyle -%}
 
-<section
-  id="shopify-section-{{ section.id }}"
-  class="atelier-header-section{% if s.sticky %} is-sticky{% endif %}"
+<div
+  class="atelier-header-inner{% if s.sticky %} is-sticky{% endif %}"
   data-section-id="{{ section.id }}"
 >
   {%- comment -%} ==================== A. ANNOUNCEMENT BAR ==================== {%- endcomment -%}
@@ -2075,7 +2074,7 @@ atelier-header li,
       {%- endif -%}
     </div>
   </aside>
-</section>
+</div>
 
 {% schema %}
 {
