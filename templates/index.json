@@ -477,7 +477,7 @@
         "paragraph_1": {
           "type": "paragraph",
           "settings": {
-            "text": "<p><em>It all began with events big ideas, little details, and a whole lot of hustle.</em></p>",
+            "text": "<p>It all began with events — big ideas, little details, tight deadlines, and a whole lot of hustle.</p>",
             "style": "body"
           }
         },
@@ -487,55 +487,15 @@
             "text": "<p>From planning experiences to designing them, creativity slowly found a home beyond event spaces. Somewhere between the last-minute changes, late-night deadlines, and endless cups of coffee, a new idea began to brew.</p>",
             "style": "body"
           }
-        },
-        "paragraph_3": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p>What if design could be more than something to look at? What if it could be something to hold, gift, use, and keep?</p>",
-            "style": "body"
-          }
-        },
-        "paragraph_4": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p>And that's how <em>Graffeine Tales</em> came to life.</p>",
-            "style": "body"
-          }
-        },
-        "paragraph_5": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p>A little graphics, a little caffeine, and a whole lot of creativity bringing together thoughtful design, handmade charm, and joyful little details.</p>",
-            "style": "body"
-          }
-        },
-        "paragraph_6": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p>From quirky stationery and personalised gifts to thread art and handmade keepsakes, every creation is made to add a little more colour, character, and meaning to everyday moments.</p>",
-            "style": "body"
-          }
-        },
-        "paragraph_7": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p>Some ideas are sketched. Some are stitched. Some are brewed over coffee. But all are made with the belief that the little things can make the biggest difference.</p>",
-            "style": "body"
-          }
         }
       },
       "block_order": [
         "paragraph_1",
-        "paragraph_2",
-        "paragraph_3",
-        "paragraph_4",
-        "paragraph_5",
-        "paragraph_6",
-        "paragraph_7"
+        "paragraph_2"
       ],
       "settings": {
         "heading": "The Story Behind Graffeine Tales",
-        "subheading": "",
+        "subheading": "Born from events. Brewed with coffee. Made with a little creative chaos.",
         "accessible_label": "About Graffeine Tales",
         "enable_highlight": true,
         "enable_glow": true,
