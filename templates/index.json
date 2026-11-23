@@ -348,6 +348,7 @@
     },
     "sticker_customizer": {
       "type": "gt-sticker-customizer",
+      "disabled": true,
       "settings": {
         "header_clearance": false,
         "badge": "Interactive Studio",
