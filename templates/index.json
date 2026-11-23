@@ -16,6 +16,7 @@
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/1.jpg",
+            "mobile_image": "shopify://shop_images/1_4328b9f9-d8f0-47a8-8388-d3719b07bec3.jpg",
             "image_description": "",
             "eyebrow": "",
             "heading": "",
@@ -32,6 +33,7 @@
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/4.jpg",
+            "mobile_image": "shopify://shop_images/4_48f6956f-ba0b-45b6-8936-c3497a294147.jpg",
             "image_description": "",
             "eyebrow": "",
             "heading": "",
@@ -48,6 +50,7 @@
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/2.jpg",
+            "mobile_image": "shopify://shop_images/2_a60d4d29-dd8f-451f-90d3-a7b58a086c49.jpg",
             "image_description": "",
             "eyebrow": "",
             "heading": "",
@@ -64,6 +67,7 @@
           "type": "banner",
           "settings": {
             "image": "shopify://shop_images/3.jpg",
+            "mobile_image": "shopify://shop_images/3_255d840b-d688-4c41-bd3f-0f4a57a0fb40.jpg",
             "image_description": "",
             "eyebrow": "",
             "heading": "",
