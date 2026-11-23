@@ -15,8 +15,7 @@
         "banner_WzeTmV": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/Home_Page_Banner___1_21x9_0d692268-8491-40f9-8cf3-b12d8c46270b.png",
-            "mobile_image": "shopify://shop_images/1_jpg.jpg",
+            "image": "shopify://shop_images/1.jpg",
             "image_description": "",
             "eyebrow": "",
             "heading": "",
@@ -32,8 +31,7 @@
         "banner_HiJTBh": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/Home_Page_Banner___2_21x9_4d559d93-b06a-4dd9-9a97-3d7fa9498844.png",
-            "mobile_image": "shopify://shop_images/4_jpg.jpg",
+            "image": "shopify://shop_images/4.jpg",
             "image_description": "",
             "eyebrow": "",
             "heading": "",
@@ -49,8 +47,7 @@
         "banner_QU6BFD": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/Home_Page_Banner___3__21x9_63e3f080-7a13-4677-9097-59010cffefd9.png",
-            "mobile_image": "shopify://shop_images/2_jpg.jpg",
+            "image": "shopify://shop_images/2.jpg",
             "image_description": "",
             "eyebrow": "",
             "heading": "",
@@ -66,8 +63,7 @@
         "banner_wfEDaG": {
           "type": "banner",
           "settings": {
-            "image": "shopify://shop_images/Home_Page_Banner___4_21x9_a4ddd2f5-c709-4ce5-8e9a-27e4a3266eba.png",
-            "mobile_image": "shopify://shop_images/3_jpg.jpg",
+            "image": "shopify://shop_images/3.jpg",
             "image_description": "",
             "eyebrow": "",
             "heading": "",
