@@ -293,6 +293,33 @@
          {% endif %}
        {% endfor %}
      </div>
+   {% else %}
+     <div class="atelier-perks-card atelier-perks-card--inline" style="margin-top: 14px; margin-bottom: 20px;">
+       <div class="atelier-perks-card__item" style="--icon-bg: #fdece8; --icon-color: #c0392b;">
+         <div class="atelier-perks-card__icon-bubble">
+           {% render 'atelier-icon-render', icon: 'heart' %}
+         </div>
+         <div class="atelier-perks-card__text">Quirky, feel-good design</div>
+       </div>
+       <div class="atelier-perks-card__item" style="--icon-bg: #fef8e7; --icon-color: #d4a017;">
+         <div class="atelier-perks-card__icon-bubble">
+           {% render 'atelier-icon-render', icon: 'sparkles' %}
+         </div>
+         <div class="atelier-perks-card__text">Premium print quality</div>
+       </div>
+       <div class="atelier-perks-card__item" style="--icon-bg: #faeceb; --icon-color: #9e3b2b;">
+         <div class="atelier-perks-card__icon-bubble">
+           {% render 'atelier-icon-render', icon: 'gift' %}
+         </div>
+         <div class="atelier-perks-card__text">Perfect for gifting</div>
+       </div>
+       <div class="atelier-perks-card__item" style="--icon-bg: #eaf7ee; --icon-color: #2e7d32;">
+         <div class="atelier-perks-card__icon-bubble">
+           {% render 'atelier-icon-render', icon: 'leaf' %}
+         </div>
+         <div class="atelier-perks-card__text">Designed with love</div>
+       </div>
+     </div>
    {% endif %}
   </div>
  </div>
