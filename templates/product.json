@@ -81,56 +81,16 @@
             "page": "",
             "open": false
           }
-        },
-        "pdp_feature_1": {
-          "type": "feature",
-          "settings": {
-            "icon": "heart",
-            "text": "Quirky, feel-good design",
-            "icon_bg": "#fdece8",
-            "icon_color": "#c0392b"
-          }
-        },
-        "pdp_feature_2": {
-          "type": "feature",
-          "settings": {
-            "icon": "sparkles",
-            "text": "Premium print quality",
-            "icon_bg": "#fef7e6",
-            "icon_color": "#d4a017"
-          }
-        },
-        "pdp_feature_3": {
-          "type": "feature",
-          "settings": {
-            "icon": "gift",
-            "text": "Perfect for gifting",
-            "icon_bg": "#fdf0ed",
-            "icon_color": "#9e3b2b"
-          }
-        },
-        "pdp_feature_4": {
-          "type": "feature",
-          "settings": {
-            "icon": "leaf",
-            "text": "Designed with love",
-            "icon_bg": "#edf7ee",
-            "icon_color": "#2d7a3e"
-          }
         }
       },
       "block_order": [
-        "accordion_bG7qH7",
-        "accordion_F4UEh4",
-        "accordion_36en6E",
-        "accordion_xKf4Dh",
         "trust_badge_1",
         "trust_badge_2",
         "trust_badge_3",
-        "pdp_feature_1",
-        "pdp_feature_2",
-        "pdp_feature_3",
-        "pdp_feature_4"
+        "accordion_bG7qH7",
+        "accordion_F4UEh4",
+        "accordion_36en6E",
+        "accordion_xKf4Dh"
       ],
       "settings": {
         "show_arrows": false,
@@ -448,6 +408,7 @@
   },
   "order": [
     "main",
+    "pdp-features",
     "preview",
     "video-gallery",
     "disclosures",
