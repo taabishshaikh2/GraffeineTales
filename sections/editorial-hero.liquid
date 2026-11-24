@@ -138,35 +138,8 @@
             {% if block.settings.description != blank %}<div class="atelier-hero__description">{{ block.settings.description }}</div>{% endif %}
             <div class="atelier-hero__actions">
               {% if block.settings.primary_label != blank %}
-    {% liquid
-      assign btn_radius_desktop = section.settings.button_radius_desktop | default: 'round'
-      if btn_radius_desktop == 'round'
-        assign btn_radius_d_val = '999px'
-      elsif btn_radius_desktop == 'square'
-        assign btn_radius_d_val = '0px'
-      elsif btn_radius_desktop == 'subtle'
-        assign btn_radius_d_val = '8px'
-      elsif btn_radius_desktop == 'custom'
-        assign btn_radius_d_val = section.settings.button_radius_desktop_custom | default: 999 | append: 'px'
-      else
-        assign btn_radius_d_val = '999px'
-      endif
-
-      assign btn_radius_mobile = section.settings.button_radius_mobile | default: 'round'
-      if btn_radius_mobile == 'round'
-        assign btn_radius_m_val = '999px'
-      elsif btn_radius_mobile == 'square'
-        assign btn_radius_m_val = '0px'
-      elsif btn_radius_mobile == 'subtle'
-        assign btn_radius_m_val = '8px'
-      elsif btn_radius_mobile == 'custom'
-        assign btn_radius_m_val = section.settings.button_radius_mobile_custom | default: 999 | append: 'px'
-      else
-        assign btn_radius_m_val = '999px'
-      endif
-    %}
-    <a class="button button--{{ block.settings.primary_style | default: 'primary' }}" style="--hero-btn-radius-d: {{ btn_radius_d_val }}; --hero-btn-radius-m: {{ btn_radius_m_val }};" href="{{ block.settings.primary_link | default: routes.all_products_collection_url }}">{{ block.settings.primary_label | escape }} <span aria-hidden="true">&rarr;</span></a>
-  {% endif %}
+                <a class="button button--{{ block.settings.primary_style | default: 'primary' }}" href="{{ block.settings.primary_link | default: routes.all_products_collection_url }}">{{ block.settings.primary_label | escape }} <span aria-hidden="true">&rarr;</span></a>
+              {% endif %}
               {% if block.settings.secondary_label != blank and block.settings.secondary_link != blank %}<a class="atelier-hero__secondary" href="{{ block.settings.secondary_link }}">{{ block.settings.secondary_label | escape }}</a>{% endif %}
             </div>
             {% if block.settings.note != blank %}<p class="atelier-hero__note">{{ block.settings.note | escape }}</p>{% endif %}
@@ -277,50 +250,6 @@
       "id": "show_arrows",
       "label": "Show navigation arrows",
       "default": true
-    },
-    {
-      "type": "select",
-      "id": "button_radius_desktop",
-      "label": "Button desktop corner rounding",
-      "options": [
-        { "value": "round", "label": "Pill / Fully round" },
-        { "value": "subtle", "label": "Subtle round (8px)" },
-        { "value": "square", "label": "Square (0px)" },
-        { "value": "custom", "label": "Custom pixel size" }
-      ],
-      "default": "round"
-    },
-    {
-      "type": "range",
-      "id": "button_radius_desktop_custom",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "px",
-      "label": "Desktop custom corner radius",
-      "default": 999
-    },
-    {
-      "type": "select",
-      "id": "button_radius_mobile",
-      "label": "Button mobile corner rounding",
-      "options": [
-        { "value": "round", "label": "Pill / Fully round" },
-        { "value": "subtle", "label": "Subtle round (8px)" },
-        { "value": "square", "label": "Square (0px)" },
-        { "value": "custom", "label": "Custom pixel size" }
-      ],
-      "default": "round"
-    },
-    {
-      "type": "range",
-      "id": "button_radius_mobile_custom",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "px",
-      "label": "Mobile custom corner radius",
-      "default": 999
     },
     {
       "type": "color",
