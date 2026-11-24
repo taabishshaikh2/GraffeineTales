@@ -268,3 +268,45 @@
     font-size: 11.5px;
   }
 }
+
+
+/* Inline Perks Card (rendered in right product details column below trust-bar) */
+.atelier-perks-card--inline {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 12px 8px !important;
+  padding: 14px 12px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #EFECE6 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02) !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+.atelier-perks-card--inline .atelier-perks-card__item {
+  gap: 6px !important;
+}
+
+.atelier-perks-card--inline .atelier-perks-card__icon-bubble {
+  width: 28px !important;
+  height: 28px !important;
+}
+
+.atelier-perks-card--inline .atelier-perks-card__icon-bubble svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.atelier-perks-card--inline .atelier-perks-card__text {
+  font-size: 10.5px !important;
+  line-height: 1.25 !important;
+}
+
+@media (max-width: 640px) {
+  .atelier-perks-card--inline {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px 8px !important;
+    padding: 12px 10px !important;
+  }
+}

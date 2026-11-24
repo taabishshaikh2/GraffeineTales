@@ -246,8 +246,8 @@ atelier-product-showcase[data-showcase-columns="2"] .atelier-product-card {
   min-height: 32px !important;
   border: 0 !important;
   border-radius: 999px !important;
-  background: #4D351D !important;
-  color: #FFFFFF !important;
+  background: #333333 !important;
+  color: #e2d8bf !important;
   text-decoration: none !important;
   font: 600 11.5px/1 Inter, sans-serif !important;
   padding: 7px 8px !important;
@@ -271,7 +271,8 @@ atelier-product-showcase[data-showcase-columns="2"] .atelier-product-card {
 
 .atelier-product-card__add:hover {
   filter: brightness(1.15) !important;
-  background: #4D351D !important;
+  background: #242424 !important;
+  color: #ffffff !important;
 }
 
 .atelier-product-card__add:active {

@@ -836,51 +836,83 @@
   }
   @media (min-width: 992px) {
     .gt-workspace-layout {
-      display: grid !important;
-      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 1fr) !important;
-      gap: 32px !important;
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: center !important;
       align-items: center !important;
+      gap: 40px !important;
       width: 100% !important;
-      max-width: 1280px !important;
+      max-width: 1200px !important;
       margin: 0 auto !important;
     }
     .gt-workspace-stage {
+      flex: 0 0 auto !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      min-height: 440px !important;
-      width: 100% !important;
+      min-height: 420px !important;
+      width: auto !important;
+      max-width: 620px !important;
     }
     .gt-workspace-stage .gt-stage-wrapper {
       margin-bottom: 0 !important;
+      width: 100% !important;
     }
     .gt-workspace-sidebar {
-      width: 100% !important;
+      flex: 0 0 360px !important;
+      width: 360px !important;
+      max-width: 380px !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: center !important;
     }
     .gt-workspace-sidebar .gt-tray-card {
+      width: 100% !important;
       max-width: 100% !important;
-      max-height: 460px !important;
+      height: 420px !important;
+      max-height: 420px !important;
       display: flex !important;
       flex-direction: column !important;
+      padding: 18px 18px !important;
+      box-sizing: border-box !important;
+    }
+    .gt-workspace-sidebar .gt-tray-header {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 8px !important;
+      margin-bottom: 14px !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+    .gt-workspace-sidebar .gt-tray-title {
+      font-size: 12px !important;
+      letter-spacing: 0.08em !important;
+      white-space: nowrap !important;
+    }
+    .gt-workspace-sidebar .gt-tray-status {
+      font-size: 11px !important;
+      white-space: nowrap !important;
     }
     .gt-workspace-sidebar .gt-tray-grid {
       display: grid !important;
-      grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)) !important;
+      grid-template-columns: repeat(3, 1fr) !important;
       gap: 12px !important;
       overflow-y: auto !important;
       overflow-x: hidden !important;
-      max-height: 380px !important;
-      padding-right: 6px !important;
-      padding-bottom: 6px !important;
+      flex: 1 1 auto !important;
+      padding-right: 4px !important;
+      padding-bottom: 4px !important;
     }
     .gt-workspace-sidebar .gt-tray-item {
       flex: unset !important;
       width: 100% !important;
       aspect-ratio: 1 / 1 !important;
       height: auto !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
     .gt-customizer-header {
       margin-bottom: 14px !important;
@@ -1171,6 +1203,7 @@
         </div>
       </div>
 
+        </div><!-- /.gt-stage-wrapper -->
       </div><!-- /.gt-workspace-stage -->
 
       <div class="gt-workspace-sidebar">

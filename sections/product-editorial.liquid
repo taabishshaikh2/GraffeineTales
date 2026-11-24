@@ -277,6 +277,23 @@
        {% endfor %}
      </div>
    {% endif %}
+   {% assign feature_blocks = section.blocks | where: 'type', 'feature' %}
+   {% if feature_blocks.size > 0 %}
+     <div class="atelier-perks-card atelier-perks-card--inline" style="margin-top: 14px; margin-bottom: 20px;">
+       {% for block in feature_blocks %}
+         {% if block.settings.text != blank %}
+           <div class="atelier-perks-card__item" {{ block.shopify_attributes }} style="--icon-bg: {{ block.settings.icon_bg }}; --icon-color: {{ block.settings.icon_color }};">
+             <div class="atelier-perks-card__icon-bubble">
+               {% render 'atelier-icon-render', icon: block.settings.icon, custom_icon: block.settings.custom_icon %}
+             </div>
+             <div class="atelier-perks-card__text">
+               {{ block.settings.text }}
+             </div>
+           </div>
+         {% endif %}
+       {% endfor %}
+     </div>
+   {% endif %}
   </div>
  </div>
  <p class="visually-hidden" data-showcase-status role="status" aria-live="polite"></p>
@@ -775,6 +792,56 @@
           "id": "icon_color",
           "label": "Icon symbol color",
           "default": "#9E3B2B"
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "PDP Feature (Image 3)",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "heart", "label": "Heart" },
+            { "value": "sparkles", "label": "Sparkles / Quality" },
+            { "value": "gift", "label": "Gift box" },
+            { "value": "leaf", "label": "Leaf / Eco" },
+            { "value": "bag", "label": "Shopping bag / Package" },
+            { "value": "shield", "label": "Security shield" },
+            { "value": "truck", "label": "Delivery truck" },
+            { "value": "clock", "label": "Clock / Fast dispatch" },
+            { "value": "check", "label": "Checkmark" },
+            { "value": "lock", "label": "Secure lock" },
+            { "value": "return", "label": "Easy return" },
+            { "value": "award", "label": "Award / Guarantee" },
+            { "value": "smile", "label": "Smile / Friendly" }
+          ],
+          "default": "heart"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon image (optional)"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "Quirky, feel-good design"
+        },
+        {
+          "type": "color",
+          "id": "icon_bg",
+          "label": "Icon circle background",
+          "default": "#FDECE8"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon symbol color",
+          "default": "#C0392B"
         }
       ]
     },
