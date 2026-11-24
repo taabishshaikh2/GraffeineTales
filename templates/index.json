@@ -94,7 +94,7 @@
       "settings": {
         "autoplay": true,
         "interval": 5,
-        "image_height": "medium",
+        "image_height": "large",
         "desktop_heading_size": 56,
         "mobile_heading_size": 32,
         "overlay": 0,
