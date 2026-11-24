@@ -633,7 +633,6 @@ atelier-header li,
   .layout--two-rows .atelier-header__nav {
     grid-area: nav !important;
     display: flex !important;
-    justify-content: center !important;
     width: 100% !important;
     margin-top: 4px !important;
     padding-top: 2px !important;
@@ -643,18 +642,21 @@ atelier-header li,
   .layout--two-rows .atelier-header__nav-list {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: center !important;
+    justify-content: space-between !important;
     align-items: center !important;
-    width: auto !important;
-    gap: clamp(14px, 2.2vw, 28px) !important;
-    padding: 0 !important;
-    margin: 0 auto !important;
+    width: 100% !important;
+    padding: 0 16px !important;
+    margin: 0 !important;
     list-style: none !important;
+    box-sizing: border-box !important;
   }
   .layout--two_rows .atelier-header__nav-list > li,
   .layout--two-rows .atelier-header__nav-list > li {
     display: inline-flex !important;
     align-items: center !important;
+    justify-content: center !important;
+    flex: 1 1 0 !important;
+    text-align: center !important;
     margin: 0 !important;
     padding: 0 !important;
   }

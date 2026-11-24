@@ -72,12 +72,12 @@
   .gt-customizer-header {
     text-align: center;
     max-width: 760px;
-    margin-bottom: 10px;
+    margin-bottom: 32px;
   }
   .gt-customizer-badge {
     display: inline-block;
     font-family: var(--gt-font-pill);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -85,20 +85,20 @@
     background: rgba(198, 181, 142, 0.12);
     border: 1px solid rgba(198, 181, 142, 0.28);
     border-radius: 999px;
-    padding: 4px 12px;
-    margin-bottom: 6px;
+    padding: 6px 14px;
+    margin-bottom: 12px;
   }
   .gt-customizer-title {
     font-family: var(--gt-font-display);
-    font-size: clamp(22px, 2.5vw, 32px);
+    font-size: clamp(28px, 4vw, 44px);
     line-height: 1.15;
     color: var(--gt-text);
-    margin: 0 0 4px;
+    margin: 0 0 10px;
     letter-spacing: -0.01em;
   }
   .gt-customizer-subtitle {
-    font-size: 13px;
-    line-height: 1.4;
+    font-size: 14px;
+    line-height: 1.6;
     color: var(--gt-sand);
     margin: 0;
     opacity: 0.88;
@@ -111,14 +111,14 @@
     justify-content: space-between;
     gap: 16px;
     width: 100%;
-    max-width: 960px;
+    max-width: 980px;
     background: rgba(24, 22, 20, 0.72);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 999px;
-    padding: 6px 14px;
-    margin-bottom: 14px;
+    padding: 8px 14px;
+    margin-bottom: 36px;
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
   }
   @media (max-width: 768px) {
@@ -616,7 +616,7 @@
   #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }},
   div[id*="sticker_customizer"] #gt-customizer-{{ section.id }},
   div[id*="gt_sticker_customizer"] #gt-customizer-{{ section.id }} {
-    padding-top: 104px !important;
+    padding-top: calc(var(--header-pill-height, var(--header-height, 90px)) + 14px) !important;
   }
 
   @media (max-width: 1024px) {
@@ -627,7 +627,7 @@
     #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }},
     div[id*="sticker_customizer"] #gt-customizer-{{ section.id }},
     div[id*="gt_sticker_customizer"] #gt-customizer-{{ section.id }} {
-      padding-top: 92px !important;
+      padding-top: calc(var(--header-height, 80px) + 12px) !important;
     }
   }
 
@@ -639,7 +639,7 @@
     #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }},
     div[id*="sticker_customizer"] #gt-customizer-{{ section.id }},
     div[id*="gt_sticker_customizer"] #gt-customizer-{{ section.id }} {
-      padding-top: 80px !important;
+      padding-top: calc(var(--header-height, 70px) + 10px) !important;
     }
   }
 
@@ -840,76 +840,28 @@
       flex-direction: row !important;
       justify-content: center !important;
       align-items: center !important;
-      gap: 32px !important;
+      gap: 40px !important;
       width: 100% !important;
-      max-width: 960px !important;
+      max-width: 1200px !important;
       margin: 0 auto !important;
     }
     .gt-workspace-stage {
-      flex: 0 0 520px !important;
-      width: 520px !important;
-      max-width: 520px !important;
-      height: 335px !important;
+      flex: 0 0 auto !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      position: relative !important;
+      min-height: 420px !important;
+      width: auto !important;
+      max-width: 620px !important;
     }
-    .gt-stage-wrapper {
-      width: 100% !important;
-      height: 100% !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
+    .gt-workspace-stage .gt-stage-wrapper {
       margin-bottom: 0 !important;
-    }
-    .gt-macbook-wrap {
-      width: 510px !important;
-      height: 330px !important;
-      transform: none !important;
-      margin: 0 auto !important;
-    }
-    .gt-macbook-lid {
       width: 100% !important;
-      height: 322px !important;
-    }
-    .gt-mount-zone[data-drop-zone="macbook"] {
-      width: 494px !important;
-      height: 308px !important;
-    }
-    .gt-ipad-wrap {
-      width: 250px !important;
-      height: 330px !important;
-      transform: none !important;
-      margin: 0 auto !important;
-    }
-    .gt-ipad-chassis {
-      width: 100% !important;
-      height: 100% !important;
-    }
-    .gt-mount-zone[data-drop-zone="ipad"] {
-      width: 242px !important;
-      height: 322px !important;
-    }
-    .gt-iphone-wrap {
-      width: 160px !important;
-      height: 330px !important;
-      transform: none !important;
-      margin: 0 auto !important;
-    }
-    .gt-iphone-body {
-      width: 100% !important;
-      height: 100% !important;
-    }
-    .gt-mount-zone[data-drop-zone="iphone"] {
-      width: 152px !important;
-      height: 322px !important;
     }
     .gt-workspace-sidebar {
-      flex: 0 0 340px !important;
-      width: 340px !important;
-      max-width: 340px !important;
-      height: 335px !important;
+      flex: 0 0 360px !important;
+      width: 360px !important;
+      max-width: 380px !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: center !important;
@@ -917,25 +869,24 @@
     .gt-workspace-sidebar .gt-tray-card {
       width: 100% !important;
       max-width: 100% !important;
-      height: 335px !important;
-      max-height: 335px !important;
+      height: 420px !important;
+      max-height: 420px !important;
       display: flex !important;
       flex-direction: column !important;
-      padding: 14px 14px !important;
+      padding: 18px 18px !important;
       box-sizing: border-box !important;
-      border-radius: 20px !important;
     }
     .gt-workspace-sidebar .gt-tray-header {
       display: flex !important;
       align-items: center !important;
       justify-content: space-between !important;
       gap: 8px !important;
-      margin-bottom: 10px !important;
+      margin-bottom: 14px !important;
       white-space: nowrap !important;
       flex-shrink: 0 !important;
     }
     .gt-workspace-sidebar .gt-tray-title {
-      font-size: 11px !important;
+      font-size: 12px !important;
       letter-spacing: 0.08em !important;
       white-space: nowrap !important;
     }
@@ -946,34 +897,28 @@
     .gt-workspace-sidebar .gt-tray-grid {
       display: grid !important;
       grid-template-columns: repeat(3, 1fr) !important;
-      gap: 10px !important;
+      gap: 12px !important;
       overflow-y: auto !important;
       overflow-x: hidden !important;
       flex: 1 1 auto !important;
-      max-height: 270px !important;
       padding-right: 4px !important;
       padding-bottom: 4px !important;
     }
     .gt-workspace-sidebar .gt-tray-item {
       flex: unset !important;
       width: 100% !important;
-      height: 78px !important;
       aspect-ratio: 1 / 1 !important;
+      height: auto !important;
       box-sizing: border-box !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      border-radius: 12px !important;
-    }
-    .gt-workspace-sidebar .gt-tray-item img {
-      max-width: 82% !important;
-      max-height: 82% !important;
     }
     .gt-customizer-header {
-      margin-bottom: 8px !important;
+      margin-bottom: 14px !important;
     }
     .gt-customizer-toolbar {
-      margin-bottom: 12px !important;
+      margin-bottom: 16px !important;
     }
   }
 {%- endstyle -%}
