@@ -200,8 +200,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: var(--icon-bg, #FDECE8);
   color: var(--icon-color, #C0392B);
@@ -214,15 +214,15 @@
 }
 
 .atelier-perks-card__icon-bubble svg {
-  width: 25px;
-  height: 25px;
+  width: 18px;
+  height: 18px;
   stroke: currentColor;
   display: block;
 }
 
 .atelier-perks-card__icon-bubble img {
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
   display: block;
 }
@@ -257,12 +257,12 @@
     gap: 16px 12px;
   }
   .atelier-perks-card__icon-bubble {
-    width: 44px;
-    height: 44px;
+    width: 32px;
+    height: 32px;
   }
   .atelier-perks-card__icon-bubble svg {
-    width: 22px;
-    height: 22px;
+    width: 16px;
+    height: 16px;
   }
   .atelier-perks-card__text {
     font-size: 11.5px;

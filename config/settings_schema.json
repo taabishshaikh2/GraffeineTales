@@ -106,6 +106,31 @@
     "settings": [
       {
         "type": "header",
+        "content": "Global Store Typography"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_global_font",
+        "label": "Use single unified font for the entire store",
+        "info": "When enabled, all headings, body text, navigation, and buttons across the store will share this same font.",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "global_font_choice",
+        "label": "Global font selection",
+        "options": [
+          { "value": "inter", "label": "Inter (Modern Clean Sans-Serif)" },
+          { "value": "dm_serif", "label": "DM Serif Display (Editorial / Atelier Serif)" },
+          { "value": "quicksand", "label": "Quicksand (Artisan / Geometric)" },
+          { "value": "playfair", "label": "Playfair Display (Luxury Serif)" },
+          { "value": "poppins", "label": "Poppins (Geometric Sans-Serif)" },
+          { "value": "custom_picker", "label": "Custom (Use Body Font Picker Below)" }
+        ],
+        "default": "inter"
+      },
+      {
+        "type": "header",
         "content": "t:settings_schema.typography.settings.header__1.content"
       },
       {

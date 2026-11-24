@@ -420,7 +420,7 @@
                     aria-describedby="a11y-refresh-page-message"
                   >
                     {%- for option in results.sort_options -%}
-                      {%- if option.value == 'title-ascending' or option.value == 'title-descending' or option.value == 'created-ascending' -%}
+                      {%- if option.value == 'title-ascending' or option.value == 'title-descending' or option.value == 'created-ascending' or option.value == 'created-descending' -%}
                         {%- continue -%}
                       {%- endif -%}
                       {%- if option.value == 'relevance' -%}
@@ -761,7 +761,7 @@
                           aria-describedby="a11y-refresh-page-message"
                         >
                           {%- for option in results.sort_options -%}
-                            {%- if option.value == 'title-ascending' or option.value == 'title-descending' or option.value == 'created-ascending' -%}
+                            {%- if option.value == 'title-ascending' or option.value == 'title-descending' or option.value == 'created-ascending' or option.value == 'created-descending' -%}
                               {%- continue -%}
                             {%- endif -%}
                             {%- if option.value == 'relevance' -%}
@@ -884,7 +884,7 @@
                 aria-describedby="a11y-refresh-page-message"
               >
                 {%- for option in results.sort_options -%}
-                  {%- if option.value == 'title-ascending' or option.value == 'title-descending' or option.value == 'created-ascending' -%}
+                  {%- if option.value == 'title-ascending' or option.value == 'title-descending' or option.value == 'created-ascending' or option.value == 'created-descending' -%}
                     {%- continue -%}
                   {%- endif -%}
                   {%- if option.value == 'relevance' -%}

@@ -616,12 +616,12 @@
 .card-wrapper .card__inner {
   border-radius: 12px !important;
   overflow: hidden !important;
-  background: #F8F5ED !important;
+  background: #e2d8bf !important;
   position: relative !important;
 }
 
 .card-wrapper .card__media {
-  background: #F8F5ED !important;
+  background: #e2d8bf !important;
   border-radius: 12px !important;
   overflow: hidden !important;
 }

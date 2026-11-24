@@ -105,7 +105,7 @@
         "text": "#1e1814",
         "muted_text": "#2b201a",
         "social_background": "#efa19c",
-        "bottom_background": "#382239",
+        "bottom_background": "#333333",
         "bottom_text": "#ffffff",
         "input_background": "#faf7f2",
         "show_policies": false,

@@ -633,7 +633,7 @@ atelier-header li,
   .layout--two-rows .atelier-header__nav {
     grid-area: nav !important;
     display: flex !important;
-    justify-content: center !important;
+    justify-content: stretch !important;
     width: 100% !important;
     margin-top: 4px !important;
     padding-top: 2px !important;
@@ -642,15 +642,30 @@ atelier-header li,
   .layout--two_rows .atelier-header__nav-list,
   .layout--two-rows .atelier-header__nav-list {
     display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
     align-items: center !important;
-    gap: 2px 14px !important;
+    width: 100% !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
-  .layout--two_rows .atelier-nav__link {
+  .layout--two_rows .atelier-nav__link,
+  .layout--two-rows .atelier-nav__link {
     padding-top: 4px !important;
     padding-bottom: 4px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
     line-height: 1.15 !important;
+    white-space: nowrap !important;
+  }
+  .layout--two_rows .atelier-header__nav-list > li:first-child .atelier-nav__link,
+  .layout--two-rows .atelier-header__nav-list > li:first-child .atelier-nav__link {
+    padding-left: 0 !important;
+  }
+  .layout--two_rows .atelier-header__nav-list > li:last-child .atelier-nav__link,
+  .layout--two-rows .atelier-header__nav-list > li:last-child .atelier-nav__link {
+    padding-right: 0 !important;
   }
   .atelier-header__pill .atelier-icon-btn {
     width: 36px !important;
@@ -1375,11 +1390,15 @@ atelier-header li,
 }
 
 /* Drawer Accordions & Navigation Rows */
-.atelier-drawer__row-link {
+.atelier-drawer__row-link,
+summary.atelier-drawer__row-link {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  padding: 16px 2px 14px 2px !important;
+  min-height: 48px !important;
+  height: 48px !important;
+  padding: 0 2px !important;
+  box-sizing: border-box !important;
   border-bottom: 1px solid rgba(54, 54, 56, 0.12) !important;
   font-size: 15px !important;
   font-weight: 700 !important;
@@ -1396,6 +1415,7 @@ atelier-header li,
   text-align: left !important;
   list-style: none !important;
   user-select: none !important;
+  outline: none !important;
   transition: color 0.2s ease !important;
 }
 .atelier-drawer__row-link:hover {
@@ -1448,7 +1468,7 @@ atelier-header li,
   padding: 0 !important;
   margin: 0 !important;
   overflow: hidden !important;
-  border-bottom: 1px solid rgba(54, 54, 56, 0.12) !important;
+  border-bottom: none !important;
 }
 .atelier-drawer__accordion-inner {
   min-height: 0 !important;
@@ -1458,8 +1478,10 @@ atelier-header li,
   transition: opacity 0.26s cubic-bezier(0.22, 1, 0.36, 1), transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), padding 0.35s cubic-bezier(0.22, 1, 0.36, 1) !important;
   padding: 0 2px 0 2px !important;
 }
-.atelier-drawer__accordion-item.is-open > .atelier-drawer__accordion-body {
+.atelier-drawer__accordion-item.is-open > .atelier-drawer__accordion-body,
+.atelier-drawer__accordion-item[open] > .atelier-drawer__accordion-body {
   grid-template-rows: 1fr !important;
+  border-bottom: 1px solid rgba(54, 54, 56, 0.12) !important;
 }
 .atelier-drawer__accordion-item.is-open > .atelier-drawer__accordion-body > .atelier-drawer__accordion-inner {
   opacity: 1 !important;

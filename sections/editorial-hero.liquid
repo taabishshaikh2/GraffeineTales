@@ -1,17 +1,33 @@
 {% liquid
  assign hero_entries = '|'
  assign hero_count = 0
+ assign first_image = nil
+ assign first_mobile_image = nil
  for entry in section.blocks
   if entry.settings.image != blank or entry.settings.mobile_image != blank or entry.settings.reference_image != blank
    assign hero_entries = hero_entries | append:entry.id | append:'|'
    assign hero_count = hero_count | plus:1
+   if first_image == nil and entry.settings.image != blank
+     assign first_image = entry.settings.image
+   endif
+   if first_mobile_image == nil and entry.settings.mobile_image != blank
+     assign first_mobile_image = entry.settings.mobile_image
+   endif
   endif
  endfor
+ assign hero_desktop_aspect_ratio = 16.0 | divided_by: 9.0
+ if first_image != blank and first_image.aspect_ratio != blank and first_image.aspect_ratio > 0
+   assign hero_desktop_aspect_ratio = first_image.aspect_ratio
+ endif
+ assign hero_mobile_aspect_ratio = hero_desktop_aspect_ratio
+ if first_mobile_image != blank and first_mobile_image.aspect_ratio != blank and first_mobile_image.aspect_ratio > 0
+   assign hero_mobile_aspect_ratio = first_mobile_image.aspect_ratio
+ endif
 %}
 {% if hero_count > 0 %}
 {{ 'hero-carousel.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'hero-carousel.js' | asset_url }}" defer></script>
-<hero-banner-slider class="atelier-hero" data-autoplay="{{ section.settings.autoplay }}" data-interval="{{ section.settings.interval | times: 1000 }}" data-content="{{ section.settings.show_content }}" data-responsive-height="{{ section.settings.responsive_height }}" style="--hero-arrow-background:{{ section.settings.arrow_background }};--hero-arrow-color:{{ section.settings.arrow_color }};--hero-desktop-height:{{ section.settings.desktop_height }}px;--hero-mobile-height:{{ section.settings.mobile_height }}px;--hero-overlay:{{ section.settings.overlay | divided_by: 100.0 }};--hero-desktop-heading:{{ section.settings.desktop_heading_size | default: 56 }}px;--hero-mobile-heading:{{ section.settings.mobile_heading_size | default: 32 }}px" role="region" aria-roledescription="carousel" aria-label="{{ 'atelier.hero.label' | t }}">
+<hero-banner-slider class="atelier-hero" data-autoplay="{{ section.settings.autoplay }}" data-interval="{{ section.settings.interval | times: 1000 }}" data-content="{{ section.settings.show_content }}" data-responsive-height="{{ section.settings.responsive_height }}" data-adapt-height="{{ section.settings.adapt_height_to_image | default: true }}" style="--hero-arrow-background:{{ section.settings.arrow_background }};--hero-arrow-color:{{ section.settings.arrow_color }};--hero-desktop-height:{{ section.settings.desktop_height }}px;--hero-mobile-height:{{ section.settings.mobile_height }}px;--hero-aspect-ratio:{{ hero_desktop_aspect_ratio }};--hero-mobile-aspect-ratio:{{ hero_mobile_aspect_ratio }};--hero-overlay:{{ section.settings.overlay | divided_by: 100.0 }};--hero-desktop-heading:{{ section.settings.desktop_heading_size | default: 56 }}px;--hero-mobile-heading:{{ section.settings.mobile_heading_size | default: 32 }}px" role="region" aria-roledescription="carousel" aria-label="{{ 'atelier.hero.label' | t }}">
   <div class="atelier-hero__viewport">
     <div class="atelier-hero__track" id="HeroTrack-{{ section.id }}">
       {% assign hero_position = 0 %}{% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless hero_entries contains entry_token %}{% continue %}{% endunless %}
@@ -221,6 +237,12 @@
       "unit": "px",
       "label": "Mobile custom corner radius",
       "default": 999
+    },
+    {
+      "type": "checkbox",
+      "id": "adapt_height_to_image",
+      "label": "Adapt banner height to images",
+      "default": true
     },
     {
       "type": "checkbox",

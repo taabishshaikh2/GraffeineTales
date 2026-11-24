@@ -13,7 +13,8 @@
 %}
 {% if category_count > 0 %}
 {{ 'categories-grid.css' | asset_url | stylesheet_tag }}
-<div class="atelier-category-strip" id="category-section" style="--category-width:{{ section.settings.width }}px;--category-title-size:{{ section.settings.heading_size }}px;--category-mobile-title-size:{{ section.settings.mobile_heading_size | default: 24 }}px;--category-mobile-top:{{ section.settings.mobile_padding_top | default: 18 }}px;--category-mobile-bottom:{{ section.settings.mobile_padding_bottom | default: 14 }}px;--category-radius:{{ section.settings.card_radius }}px;--category-gap:{{ section.settings.card_gap }}px;--category-mobile-columns:{{ section.settings.mobile_columns }};--category-background:{{ section.settings.background }};--category-heading:{{ section.settings.heading_color }};--category-button:{{ section.settings.button_background }};--category-button-text:{{ section.settings.button_text }};--category-top:{{ section.settings.padding_top }}px;--category-bottom:{{ section.settings.padding_bottom }}px">
+{%- assign card_shape = section.settings.card_shape | default: 'circular' -%}
+<div class="atelier-category-strip atelier-category-strip--{{ card_shape }}" id="category-section" style="--category-width:{{ section.settings.width }}px;--category-title-size:{{ section.settings.heading_size }}px;--category-mobile-title-size:{{ section.settings.mobile_heading_size | default: 24 }}px;--category-mobile-top:{{ section.settings.mobile_padding_top | default: 18 }}px;--category-mobile-bottom:{{ section.settings.mobile_padding_bottom | default: 14 }}px;--category-radius:{{ section.settings.card_radius }}px;--category-gap:{{ section.settings.card_gap }}px;--category-mobile-columns:{{ section.settings.mobile_columns }};--category-background:{{ section.settings.background }};--category-heading:{{ section.settings.heading_color }};--category-button:{{ section.settings.button_background }};--category-button-text:{{ section.settings.button_text }};--category-top:{{ section.settings.padding_top }}px;--category-bottom:{{ section.settings.padding_bottom }}px">
   <div class="atelier-category-strip__inner">
     {% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}
     <div class="atelier-category-strip__track">
@@ -68,6 +69,22 @@
   "class": "category-strip-section",
   "max_blocks": 12,
   "settings": [
+    {
+      "type": "select",
+      "id": "card_shape",
+      "label": "Card shape",
+      "options": [
+        {
+          "value": "circular",
+          "label": "Circular (Circle icon with label below)"
+        },
+        {
+          "value": "card",
+          "label": "Card (Standard rectangular card)"
+        }
+      ],
+      "default": "circular"
+    },
     {
       "type": "text",
       "id": "heading",

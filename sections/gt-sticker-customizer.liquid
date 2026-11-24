@@ -1,8 +1,7 @@
 {% liquid
-  assign is_visible = true
+  assign is_visible = false
 
   if template.name == 'collection'
-    assign is_visible = false
     assign col_h = collection.handle | downcase
     assign col_t = collection.title | downcase
     if col_h contains 'sticker' or col_t contains 'sticker' or col_h contains 'decal' or col_t contains 'decal' or col_h contains 'vinyl' or col_t contains 'vinyl' or template.suffix == 'stickers'
@@ -10,10 +9,7 @@
     endif
   endif
 
-  assign is_collection_page = false
-  if template.name == 'collection'
-    assign is_collection_page = true
-  endif
+  assign is_collection_page = true
 %}
 
 {% if is_visible %}
@@ -30,9 +26,9 @@
     --gt-coffee: #4D351D;
     --gt-gold: #D4AF37;
     --gt-paper: #F8F5ED;
-    --gt-font-display: 'DM Serif Display', Georgia, serif;
-    --gt-font-ui: 'Inter', -apple-system, sans-serif;
-    --gt-font-pill: 'Quicksand', sans-serif;
+    --gt-font-display: var(--font-heading-family, 'Inter', -apple-system, sans-serif);
+    --gt-font-ui: var(--font-body-family, 'Inter', -apple-system, sans-serif);
+    --gt-font-pill: var(--font-body-family, 'Inter', -apple-system, sans-serif);
 
     background-color: var(--gt-bg);
     color: var(--gt-text);
@@ -40,11 +36,11 @@
     position: relative;
     overflow: hidden;
     {%- if section.settings.header_clearance or is_collection_page -%}
-      padding-top: calc(var(--header-pill-height, 120px) + {{ section.settings.padding_top | default: 60 }}px + 36px);
+      padding-top: calc(var(--header-height, 90px) + 16px);
     {%- else -%}
-      padding-top: {{ section.settings.padding_top | default: 60 }}px;
+      padding-top: {{ section.settings.padding_top | default: 24 }}px;
     {%- endif -%}
-    padding-bottom: {{ section.settings.padding_bottom | default: 60 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | default: 24 }}px;
     border-top: 1px solid rgba(198, 181, 142, 0.15);
     border-bottom: 1px solid rgba(198, 181, 142, 0.15);
   }
@@ -52,9 +48,9 @@
   @media (max-width: 768px) {
     #gt-customizer-{{ section.id }} {
       {%- if section.settings.header_clearance or is_collection_page -%}
-        padding-top: calc(var(--header-pill-height, 100px) + 36px);
+        padding-top: calc(var(--header-height, 70px) + 12px);
       {%- else -%}
-        padding-top: 36px;
+        padding-top: 20px;
       {%- endif -%}
     }
   }
@@ -620,7 +616,7 @@
   #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }},
   div[id*="sticker_customizer"] #gt-customizer-{{ section.id }},
   div[id*="gt_sticker_customizer"] #gt-customizer-{{ section.id }} {
-    padding-top: max(290px, calc(var(--header-height, 140px) + 120px)) !important;
+    padding-top: calc(var(--header-height, 90px) + 16px) !important;
   }
 
   @media (max-width: 1024px) {
@@ -631,7 +627,7 @@
     #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }},
     div[id*="sticker_customizer"] #gt-customizer-{{ section.id }},
     div[id*="gt_sticker_customizer"] #gt-customizer-{{ section.id }} {
-      padding-top: max(230px, calc(var(--header-height, 120px) + 80px)) !important;
+      padding-top: calc(var(--header-height, 80px) + 12px) !important;
     }
   }
 
@@ -643,7 +639,7 @@
     #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }},
     div[id*="sticker_customizer"] #gt-customizer-{{ section.id }},
     div[id*="gt_sticker_customizer"] #gt-customizer-{{ section.id }} {
-      padding-top: max(170px, calc(var(--header-height, 100px) + 60px)) !important;
+      padding-top: calc(var(--header-height, 70px) + 10px) !important;
     }
   }
 
@@ -830,6 +826,69 @@
     background: rgba(255, 255, 255, 0.42) !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
   }
+
+  /* Single Viewport Desktop Two-Column Layout (Device on Left, Sticker Tray on Right) */
+  .gt-workspace-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+  @media (min-width: 992px) {
+    .gt-workspace-layout {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 1fr) !important;
+      gap: 32px !important;
+      align-items: center !important;
+      width: 100% !important;
+      max-width: 1280px !important;
+      margin: 0 auto !important;
+    }
+    .gt-workspace-stage {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      min-height: 440px !important;
+      width: 100% !important;
+    }
+    .gt-workspace-stage .gt-stage-wrapper {
+      margin-bottom: 0 !important;
+    }
+    .gt-workspace-sidebar {
+      width: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+    }
+    .gt-workspace-sidebar .gt-tray-card {
+      max-width: 100% !important;
+      max-height: 460px !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .gt-workspace-sidebar .gt-tray-grid {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)) !important;
+      gap: 12px !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      max-height: 380px !important;
+      padding-right: 6px !important;
+      padding-bottom: 6px !important;
+    }
+    .gt-workspace-sidebar .gt-tray-item {
+      flex: unset !important;
+      width: 100% !important;
+      aspect-ratio: 1 / 1 !important;
+      height: auto !important;
+    }
+    .gt-customizer-header {
+      margin-bottom: 20px !important;
+    }
+    .gt-customizer-toolbar {
+      margin-bottom: 24px !important;
+    }
+  }
 {%- endstyle -%}
 
 <section id="gt-customizer-{{ section.id }}" class="gt-customizer-section{% if is_collection_page %} gt-customizer--on-collection{% endif %}" aria-label="Interactive Device and Sticker Customizer">
@@ -903,8 +962,11 @@
       </div>
     </div>
 
-    <!-- Hardware Stage -->
-    <div class="gt-stage-wrapper" id="gt-stage-wrapper-{{ section.id }}" data-active-device="macbook">
+    <!-- Interactive Workspace (Stage on Left, Tray on Right on Desktop) -->
+    <div class="gt-workspace-layout">
+      <div class="gt-workspace-stage">
+        <!-- Hardware Stage -->
+        <div class="gt-stage-wrapper" id="gt-stage-wrapper-{{ section.id }}" data-active-device="macbook">
       
       <!-- 1. MacBook Pro Mockup -->
       <div class="gt-macbook-wrap" id="gt-macbook-wrap-{{ section.id }}">
@@ -1109,10 +1171,11 @@
         </div>
       </div>
 
-    </div>
+      </div><!-- /.gt-workspace-stage -->
 
-    <!-- Sticker Tray -->
-    <div class="gt-tray-card">
+      <div class="gt-workspace-sidebar">
+        <!-- Sticker Tray -->
+        <div class="gt-tray-card">
       <div class="gt-tray-header">
         {%- if section.settings.tray_title != blank -%}
           <h3 class="gt-tray-title">{{ section.settings.tray_title | escape }}</h3>
@@ -1156,7 +1219,9 @@
           </div>
         {%- endif -%}
       </div>
-    </div>
+    </div><!-- /.gt-tray-card -->
+    </div><!-- /.gt-workspace-sidebar -->
+    </div><!-- /.gt-workspace-layout -->
 
   </div>
 </section>
