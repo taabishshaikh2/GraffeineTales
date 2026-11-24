@@ -136,11 +136,11 @@
         "review_label": "reviews",
         "background": "#f8f5ed",
         "sand": "#f8f5f0",
-        "coffee": "#4d351d",
+        "coffee": "#333333",
         "clay": "#a34325",
         "text_color": "#363638",
-        "button_background": "#4d351d",
-        "button_text": "#ffffff",
+        "button_background": "#333333",
+        "button_text": "#e2d8bf",
         "show_breadcrumb": false
       }
     },
@@ -402,7 +402,7 @@
         "text": "#242424",
         "accent": "#8a6b40",
         "border": "#e6d9c1",
-        "button_background": "#4a3525"
+        "button_background": "#333333"
       }
     }
   },

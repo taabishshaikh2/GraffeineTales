@@ -92,7 +92,7 @@
         "interval": 5,
         "desktop_heading_size": 56,
         "mobile_heading_size": 32,
-        "adapt_height_to_image": true,
+        "image_height": "adapt",
         "desktop_height": 640,
         "mobile_height": 600,
         "overlay": 0,

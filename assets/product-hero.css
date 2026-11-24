@@ -179,7 +179,7 @@ body.template-product #MainContent,
 
 .atelier-pdp__sticky-price {
   font: 600 22px/1 'DM Serif Display', Georgia, serif;
-  color: var(--pdp-coffee, #4d351d);
+  color: var(--pdp-coffee, #333333);
   letter-spacing: -0.01em;
 }
 
@@ -198,13 +198,13 @@ body.template-product #MainContent,
   gap: 8px;
   min-height: 44px;
   padding: 10px 24px;
-  background: var(--pdp-button, #4d351d);
-  color: var(--pdp-button-text, #ffffff);
+  background: var(--pdp-button, #333333);
+  color: var(--pdp-button-text, #e2d8bf);
   border: 0;
   border-radius: var(--pdp-button-radius, 12px);
   font: 600 13px Inter, sans-serif;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(77, 53, 29, 0.16);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transition: filter 0.2s ease, transform 0.15s ease;
   white-space: nowrap;
 }

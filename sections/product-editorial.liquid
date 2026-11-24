@@ -255,9 +255,14 @@
      </div>
    {% endif %}
    <p data-cart-error role="alert" hidden></p>
+   {% if product.description != blank %}<div class="atelier-pdp__description">{{ product.description }}</div>{% endif %}
+   {% if section.settings.show_delivery %}
+    <div class="atelier-pdp__delivery">{% render 'product-detail-icon', name: 'truck' %}<div><label for="Pincode-{{ section.id }}">{{ section.settings.delivery_heading | escape }}{% if section.settings.delivery_extra != blank %}<span>{{ section.settings.delivery_extra | escape }}</span>{% endif %}</label><div class="atelier-pdp__pincode"><input id="Pincode-{{ section.id }}" data-pincode inputmode="numeric" autocomplete="postal-code" maxlength="6" pattern="[1-9][0-9]{5}" placeholder="{{ section.settings.pincode_placeholder | escape }}"><button type="button" data-check-pincode>{{ section.settings.check_label | escape }}</button></div><p data-delivery-result role="status">{{ section.settings.delivery_note | escape }}</p></div></div>
+   {% endif %}
+   {% render 'product-information', product: product, section: section %}
    {% assign trust_badge_blocks = section.blocks | where: 'type', 'trust_badge' %}
    {% if trust_badge_blocks.size > 0 %}
-     <div class="atelier-trust-bar" style="margin-top: 18px; margin-bottom: 18px;">
+     <div class="atelier-trust-bar" style="margin-top: 20px; margin-bottom: 20px;">
        {% for block in trust_badge_blocks %}
          {% if block.settings.text != blank %}
            <div class="atelier-trust-bar__item" {{ block.shopify_attributes }} style="--icon-bg: {{ block.settings.icon_bg }}; --icon-color: {{ block.settings.icon_color }};">
@@ -272,11 +277,6 @@
        {% endfor %}
      </div>
    {% endif %}
-   {% if product.description != blank %}<div class="atelier-pdp__description">{{ product.description }}</div>{% endif %}
-   {% if section.settings.show_delivery %}
-    <div class="atelier-pdp__delivery">{% render 'product-detail-icon', name: 'truck' %}<div><label for="Pincode-{{ section.id }}">{{ section.settings.delivery_heading | escape }}{% if section.settings.delivery_extra != blank %}<span>{{ section.settings.delivery_extra | escape }}</span>{% endif %}</label><div class="atelier-pdp__pincode"><input id="Pincode-{{ section.id }}" data-pincode inputmode="numeric" autocomplete="postal-code" maxlength="6" pattern="[1-9][0-9]{5}" placeholder="{{ section.settings.pincode_placeholder | escape }}"><button type="button" data-check-pincode>{{ section.settings.check_label | escape }}</button></div><p data-delivery-result role="status">{{ section.settings.delivery_note | escape }}</p></div></div>
-   {% endif %}
-   {% render 'product-information', product: product, section: section %}
   </div>
  </div>
  <p class="visually-hidden" data-showcase-status role="status" aria-live="polite"></p>
@@ -689,8 +689,8 @@
     {
       "type": "color",
       "id": "coffee",
-      "label": "Deep coffee",
-      "default": "#4D351D"
+      "label": "Deep coffee / Primary dark",
+      "default": "#333333"
     },
     {
       "type": "color",
@@ -708,13 +708,13 @@
       "type": "color",
       "id": "button_background",
       "label": "Add to cart background",
-      "default": "#4D351D"
+      "default": "#333333"
     },
     {
       "type": "color",
       "id": "button_text",
       "label": "Add to cart text",
-      "default": "#FFFFFF"
+      "default": "#e2d8bf"
     },
     {
       "type": "header",

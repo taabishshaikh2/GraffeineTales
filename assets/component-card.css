@@ -753,13 +753,13 @@
 .card-wrapper .card__badge .badge,
 .card-wrapper .badge {
   border-radius: 999px !important;
-  background: #4D351D !important;
-  color: #FFFFFF !important;
+  background: #333333 !important;
+  color: #e2d8bf !important;
   font: 700 11px/1.2 'Quicksand', sans-serif !important;
   text-transform: uppercase !important;
   padding: 5px 10px !important;
   border: 0 !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
   letter-spacing: 0.04em !important;
 }
 
@@ -777,7 +777,7 @@
   background: rgba(255, 255, 255, 0.65) !important;
   backdrop-filter: blur(14px) saturate(160%) !important;
   -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
-  color: #4D351D !important;
+  color: #333333 !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
   cursor: pointer !important;
   transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease !important;
@@ -810,7 +810,7 @@
   stroke: #D94A60 !important;
 }
 
-/* Espresso Brown Solid Pill Button */
+/* Dark Grey Solid Pill Button */
 .card-wrapper .atelier-card__footer .quick-add {
   flex: 0 0 auto !important;
   margin: 0 !important;
@@ -824,22 +824,22 @@
 
 .card-wrapper .quick-add__submit.button,
 .card-wrapper .quick-add .button {
-  background: #4D351D !important;
-  color: #FFFFFF !important;
+  background: #333333 !important;
+  color: #e2d8bf !important;
   border: 0 !important;
   border-radius: 999px !important;
   font-family: 'Inter', sans-serif !important;
   font-weight: 600 !important;
   font-size: 11.5px !important;
   min-height: 32px !important;
-  box-shadow: 0 2px 6px rgba(77, 53, 29, 0.15) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18) !important;
   padding: 7px 14px !important;
   width: auto !important;
   min-width: 96px !important;
   text-decoration: none !important;
   letter-spacing: 0.02em !important;
   white-space: nowrap !important;
-  transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease !important;
+  transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease, background 180ms ease !important;
 }
 
 .card-wrapper .quick-add__submit.button:after,
@@ -849,10 +849,11 @@
 
 .card-wrapper .quick-add__submit.button:hover,
 .card-wrapper .quick-add .button:hover {
-  background: #4D351D !important;
-  filter: brightness(1.15) !important;
+  background: #242424 !important;
+  color: #ffffff !important;
+  filter: brightness(1.1) !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 10px rgba(77, 53, 29, 0.25) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25) !important;
 }
 
 .card-wrapper .quick-add__submit.button:active,
@@ -863,6 +864,7 @@
 .card-wrapper .quick-add__submit.button:disabled,
 .card-wrapper .quick-add .button:disabled {
   opacity: 0.5 !important;
+}
   cursor: not-allowed !important;
   transform: none !important;
 }

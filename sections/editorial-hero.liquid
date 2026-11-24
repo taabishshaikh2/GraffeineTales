@@ -15,6 +15,12 @@
    endif
   endif
  endfor
+
+ assign image_height_setting = section.settings.image_height | default: 'adapt'
+ if section.settings.image_height == blank and section.settings.adapt_height_to_image == false
+   assign image_height_setting = 'medium'
+ endif
+
  assign hero_desktop_aspect_ratio = 16.0 | divided_by: 9.0
  if first_image != blank and first_image.aspect_ratio != blank and first_image.aspect_ratio > 0
    assign hero_desktop_aspect_ratio = first_image.aspect_ratio
@@ -26,8 +32,31 @@
 %}
 {% if hero_count > 0 %}
 {{ 'hero-carousel.css' | asset_url | stylesheet_tag }}
+{%- if image_height_setting == 'adapt' and first_image != blank -%}
+  {%- style -%}
+    @media screen and (max-width: 749px) {
+      #Hero-{{ section.id }}::before,
+      #Hero-{{ section.id }} .atelier-hero__slide::before {
+        padding-bottom: {{ 1 | divided_by: hero_mobile_aspect_ratio | times: 100 }}%;
+        content: '';
+        display: block;
+        width: 100%;
+      }
+    }
+
+    @media screen and (min-width: 750px) {
+      #Hero-{{ section.id }}::before,
+      #Hero-{{ section.id }} .atelier-hero__slide::before {
+        padding-bottom: {{ 1 | divided_by: hero_desktop_aspect_ratio | times: 100 }}%;
+        content: '';
+        display: block;
+        width: 100%;
+      }
+    }
+  {%- endstyle -%}
+{%- endif -%}
 <script src="{{ 'hero-carousel.js' | asset_url }}" defer></script>
-<hero-banner-slider class="atelier-hero" data-autoplay="{{ section.settings.autoplay }}" data-interval="{{ section.settings.interval | times: 1000 }}" data-content="{{ section.settings.show_content }}" data-responsive-height="{{ section.settings.responsive_height }}" data-adapt-height="{{ section.settings.adapt_height_to_image | default: true }}" style="--hero-arrow-background:{{ section.settings.arrow_background }};--hero-arrow-color:{{ section.settings.arrow_color }};--hero-desktop-height:{{ section.settings.desktop_height }}px;--hero-mobile-height:{{ section.settings.mobile_height }}px;--hero-aspect-ratio:{{ hero_desktop_aspect_ratio }};--hero-mobile-aspect-ratio:{{ hero_mobile_aspect_ratio }};--hero-overlay:{{ section.settings.overlay | divided_by: 100.0 }};--hero-desktop-heading:{{ section.settings.desktop_heading_size | default: 56 }}px;--hero-mobile-heading:{{ section.settings.mobile_heading_size | default: 32 }}px" role="region" aria-roledescription="carousel" aria-label="{{ 'atelier.hero.label' | t }}">
+<hero-banner-slider id="Hero-{{ section.id }}" class="atelier-hero banner--{{ image_height_setting }}{% if image_height_setting == 'adapt' %} banner--adapt{% endif %}" data-image-height="{{ image_height_setting }}" data-autoplay="{{ section.settings.autoplay }}" data-interval="{{ section.settings.interval | times: 1000 }}" data-content="{{ section.settings.show_content }}" data-responsive-height="{{ section.settings.responsive_height }}" data-adapt-height="{% if image_height_setting == 'adapt' %}true{% else %}false{% endif %}" style="--hero-arrow-background:{{ section.settings.arrow_background }};--hero-arrow-color:{{ section.settings.arrow_color }};--hero-desktop-height:{{ section.settings.desktop_height }}px;--hero-mobile-height:{{ section.settings.mobile_height }}px;--hero-aspect-ratio:{{ hero_desktop_aspect_ratio }};--hero-mobile-aspect-ratio:{{ hero_mobile_aspect_ratio }};--hero-overlay:{{ section.settings.overlay | divided_by: 100.0 }};--hero-desktop-heading:{{ section.settings.desktop_heading_size | default: 56 }}px;--hero-mobile-heading:{{ section.settings.mobile_heading_size | default: 32 }}px" role="region" aria-roledescription="carousel" aria-label="{{ 'atelier.hero.label' | t }}">
   <div class="atelier-hero__viewport">
     <div class="atelier-hero__track" id="HeroTrack-{{ section.id }}">
       {% assign hero_position = 0 %}{% for block in section.blocks %}{% assign entry_token = block.id | prepend:'|' | append:'|' %}{% unless hero_entries contains entry_token %}{% continue %}{% endunless %}
@@ -239,10 +268,28 @@
       "default": 999
     },
     {
-      "type": "checkbox",
-      "id": "adapt_height_to_image",
-      "label": "Adapt banner height to images",
-      "default": true
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to first image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "adapt",
+      "label": "Height"
     },
     {
       "type": "checkbox",

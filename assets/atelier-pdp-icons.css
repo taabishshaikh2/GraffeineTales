@@ -69,8 +69,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: var(--icon-bg, #FDF0ED);
   color: var(--icon-color, #9E3B2B);
@@ -82,15 +82,15 @@
 }
 
 .atelier-trust-bar__icon-bubble svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   stroke: currentColor;
   display: block;
 }
 
 .atelier-trust-bar__icon-bubble img {
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   object-fit: contain;
   display: block;
 }

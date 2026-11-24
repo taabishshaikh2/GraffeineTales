@@ -36,11 +36,11 @@
     position: relative;
     overflow: hidden;
     {%- if section.settings.header_clearance or is_collection_page -%}
-      padding-top: calc(var(--header-height, 90px) + 16px);
+      padding-top: calc(var(--header-pill-height, var(--header-height, 90px)) + 14px);
     {%- else -%}
-      padding-top: {{ section.settings.padding_top | default: 24 }}px;
+      padding-top: {{ section.settings.padding_top | default: 20 }}px;
     {%- endif -%}
-    padding-bottom: {{ section.settings.padding_bottom | default: 24 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | default: 20 }}px;
     border-top: 1px solid rgba(198, 181, 142, 0.15);
     border-bottom: 1px solid rgba(198, 181, 142, 0.15);
   }
@@ -616,7 +616,7 @@
   #MainContent > .shopify-section:first-child #gt-customizer-{{ section.id }},
   div[id*="sticker_customizer"] #gt-customizer-{{ section.id }},
   div[id*="gt_sticker_customizer"] #gt-customizer-{{ section.id }} {
-    padding-top: calc(var(--header-height, 90px) + 16px) !important;
+    padding-top: calc(var(--header-pill-height, var(--header-height, 90px)) + 14px) !important;
   }
 
   @media (max-width: 1024px) {
@@ -883,10 +883,10 @@
       height: auto !important;
     }
     .gt-customizer-header {
-      margin-bottom: 20px !important;
+      margin-bottom: 14px !important;
     }
     .gt-customizer-toolbar {
-      margin-bottom: 24px !important;
+      margin-bottom: 16px !important;
     }
   }
 {%- endstyle -%}
