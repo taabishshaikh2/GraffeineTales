@@ -81,6 +81,42 @@
             "page": "",
             "open": false
           }
+        },
+        "feature_gbVRa4": {
+          "type": "feature",
+          "settings": {
+            "icon": "heart",
+            "text": "Quirky, feel-good design",
+            "icon_bg": "#fdece8",
+            "icon_color": "#c0392b"
+          }
+        },
+        "feature_zDQcp3": {
+          "type": "feature",
+          "settings": {
+            "icon": "heart",
+            "text": "Quirky, feel-good design",
+            "icon_bg": "#fdece8",
+            "icon_color": "#c0392b"
+          }
+        },
+        "feature_erdzbT": {
+          "type": "feature",
+          "settings": {
+            "icon": "heart",
+            "text": "Quirky, feel-good design",
+            "icon_bg": "#fdece8",
+            "icon_color": "#c0392b"
+          }
+        },
+        "feature_4jmRRe": {
+          "type": "feature",
+          "settings": {
+            "icon": "heart",
+            "text": "Quirky, feel-good design",
+            "icon_bg": "#fdece8",
+            "icon_color": "#c0392b"
+          }
         }
       },
       "block_order": [
@@ -90,7 +126,11 @@
         "accordion_bG7qH7",
         "accordion_F4UEh4",
         "accordion_36en6E",
-        "accordion_xKf4Dh"
+        "accordion_xKf4Dh",
+        "feature_gbVRa4",
+        "feature_zDQcp3",
+        "feature_erdzbT",
+        "feature_4jmRRe"
       ],
       "settings": {
         "show_arrows": false,
