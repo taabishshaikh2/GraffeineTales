@@ -86,8 +86,9 @@
           "type": "feature",
           "settings": {
             "icon": "heart",
+            "custom_icon": "shopify://shop_images/1.png",
             "text": "Quirky, feel-good design",
-            "icon_bg": "#fdece8",
+            "icon_bg": "#FFFFFF",
             "icon_color": "#c0392b"
           }
         },
@@ -95,8 +96,9 @@
           "type": "feature",
           "settings": {
             "icon": "heart",
-            "text": "Quirky, feel-good design",
-            "icon_bg": "#fdece8",
+            "custom_icon": "shopify://shop_images/3.png",
+            "text": "&nbsp;Premium print quality&nbsp;",
+            "icon_bg": "#FFFFFF",
             "icon_color": "#c0392b"
           }
         },
@@ -104,8 +106,9 @@
           "type": "feature",
           "settings": {
             "icon": "heart",
-            "text": "Quirky, feel-good design",
-            "icon_bg": "#fdece8",
+            "custom_icon": "shopify://shop_images/2.png",
+            "text": "&nbsp;Perfect for gifting&nbsp;",
+            "icon_bg": "#FFFFFF",
             "icon_color": "#c0392b"
           }
         },
@@ -113,8 +116,9 @@
           "type": "feature",
           "settings": {
             "icon": "heart",
-            "text": "Quirky, feel-good design",
-            "icon_bg": "#fdece8",
+            "custom_icon": "shopify://shop_images/4.png",
+            "text": "&nbsp;Designed with love&nbsp;",
+            "icon_bg": "#FFFFFF",
             "icon_color": "#c0392b"
           }
         }
