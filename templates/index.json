@@ -124,7 +124,7 @@
         "journals": {
           "type": "category",
           "settings": {
-            "title": "Journals",
+            "title": "Everyday Journals",
             "collection": "journals",
             "link": "",
             "reference_image": "cat_journals.jpg",
