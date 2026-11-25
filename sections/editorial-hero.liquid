@@ -131,6 +131,7 @@
               <img src="{{ block.settings.reference_image | asset_url }}" alt="{{ block.settings.image_description | escape }}" width="1600" height="900" loading="{{ loading }}" fetchpriority="{{ priority }}">
             {% endif %}
           </picture>
+          {% if block.settings.link != blank %}<a class="atelier-hero__link" href="{{ block.settings.link }}" aria-label="{{ block.settings.heading | default: block.settings.image_description | default: shop.name | escape }}"></a>{% endif %}
           {% unless section.settings.show_content %}{% if hero_position == 0 %}<h1 class="visually-hidden">{{ block.settings.heading | default: shop.name | escape }}</h1>{% endif %}{% endunless %}
           <div class="atelier-hero__content page-width{% unless section.settings.show_content %} visually-hidden{% endunless %}"{% unless section.settings.show_content %} inert{% endunless %}>
             {% if block.settings.eyebrow != blank %}<p class="atelier-eyebrow">{{ block.settings.eyebrow | escape }}</p>{% endif %}
@@ -280,6 +281,11 @@
           "id": "mobile_image",
           "label": "Mobile image",
           "info": "Recommended: 1080 × 1080 px (1:1 square). Falls back to desktop image."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Banner link"
         },
         {
           "type": "text",

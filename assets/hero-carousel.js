@@ -54,7 +54,7 @@ if (!customElements.get('hero-banner-slider')) {
       on(document, 'visibilitychange', () => this.schedule());
       on(this.motion, 'change', () => this.schedule());
       const viewport = this.querySelector('.atelier-hero__viewport');
-      on(viewport, 'pointerdown', event => {if (event.pointerType === 'mouse' || event.target.closest('a,button')) return; this.pointer = {x:event.clientX,y:event.clientY}; clearTimeout(this.timer);});
+      on(viewport, 'pointerdown', event => {if (event.pointerType === 'mouse' || event.target.closest('a:not(.atelier-hero__link),button')) return; this.pointer = {x:event.clientX,y:event.clientY}; clearTimeout(this.timer);});
       on(viewport, 'pointerup', event => {
         if (!this.pointer) return;
         const dx = event.clientX - this.pointer.x;
