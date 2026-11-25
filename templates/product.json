@@ -144,72 +144,6 @@
         "show_breadcrumb": false
       }
     },
-    "pdp-features": {
-      "type": "pdp-features-banner",
-      "blocks": {
-        "feature_1": {
-          "type": "feature",
-          "settings": {
-            "icon": "heart",
-            "text": "Quirky, feel-good design",
-            "icon_bg": "#fdece8",
-            "icon_color": "#c0392b"
-          }
-        },
-        "feature_2": {
-          "type": "feature",
-          "settings": {
-            "icon": "sparkles",
-            "text": "Premium print quality",
-            "icon_bg": "#fef7e6",
-            "icon_color": "#d4a017"
-          }
-        },
-        "feature_3": {
-          "type": "feature",
-          "settings": {
-            "icon": "gift",
-            "text": "Perfect for gifting",
-            "icon_bg": "#fdf0ed",
-            "icon_color": "#9e3b2b"
-          }
-        },
-        "feature_4": {
-          "type": "feature",
-          "settings": {
-            "icon": "leaf",
-            "text": "Designed with love",
-            "icon_bg": "#edf7ee",
-            "icon_color": "#2d7a3e"
-          }
-        }
-      },
-      "block_order": [
-        "feature_1",
-        "feature_2",
-        "feature_3",
-        "feature_4"
-      ],
-      "settings": {
-        "heading": "",
-        "heading_color": "#363638",
-        "heading_size": 26,
-        "mobile_heading_size": 22,
-        "background": "#ffffff",
-        "border_color": "#efece6",
-        "text_color": "#363638",
-        "border_radius": 20,
-        "padding_y": 24,
-        "padding_x": 26,
-        "columns_desktop": "4",
-        "columns_mobile": "2",
-        "max_width": 1320,
-        "padding_top": 24,
-        "padding_bottom": 24,
-        "mobile_padding_top": 16,
-        "mobile_padding_bottom": 16
-      }
-    },
     "preview": {
       "type": "journal-flipbook",
       "settings": {
@@ -408,7 +342,6 @@
   },
   "order": [
     "main",
-    "pdp-features",
     "preview",
     "video-gallery",
     "disclosures",
