@@ -17,19 +17,25 @@
         "padding_bottom": 28
       }
     },
-    "custom_liquid_FmEaVz": {
-      "type": "custom-liquid",
-      "name": "t:sections.custom-liquid.presets.name",
+    "bulk_enquiry_form": {
+      "type": "bulk-enquiry-form",
       "settings": {
-        "custom_liquid": "<iframe data-tally-src=\"https://tally.so/embed/VpzNVa?dynamicHeight=1&formEventsForwarding=1\" loading=\"lazy\" width=\"100%\" height=\"2795\" frameborder=\"0\" marginheight=\"0\" marginwidth=\"0\" title=\"BULK ORDERS &amp; CUSTOM ENQUIRIES\"></iframe>\n<script>var d=document,w=\"https://tally.so/widgets/embed.js\",v=function(){\"undefined\"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll(\"iframe[data-tally-src]:not([src])\").forEach((function(e){e.src=e.dataset.tallySrc}))};if(\"undefined\"!=typeof Tally)v();else if(d.querySelector('script[src=\"'+w+'\"]')==null){var s=d.createElement(\"script\");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>",
-        "color_scheme": "",
-        "padding_top": 0,
-        "padding_bottom": 0
+        "webhook_url": "",
+        "show_banner": true,
+        "heading": "BULK ORDERS & CUSTOM ENQUIRIES",
+        "subheading": "Let's create something meaningful, together.",
+        "intro_line_1": "Whether you're planning a corporate gifting experience, a special celebration, or looking for thoughtfully designed merchandise, we'd love to bring your ideas to life.",
+        "intro_line_2": "Tell us a little about your requirements, and we'll get back to you with a personalised proposal.",
+        "bg_color": "#333333",
+        "heading_color": "#E2D8BF",
+        "button_color": "#EE9A90",
+        "submit_label": "Submit",
+        "padding_bottom": 72
       }
     }
   },
   "order": [
     "main",
-    "custom_liquid_FmEaVz"
+    "bulk_enquiry_form"
   ]
 }
