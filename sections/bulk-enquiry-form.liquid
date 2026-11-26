@@ -3,7 +3,12 @@
   assign looking_for_opts = s.looking_for_options | default: 'Corporate Gifting, Wedding & Event Favours, Personalised / Custom Merchandise, Bulk Stationery & Journals, Workshop / Event Kits, Other' | split: ','
   assign customise_opts = s.customise_options | default: 'Journals & Notebooks, Wooden Bookmarks, Coasters, Stickers & Decals, Desk Hydration / Mugs, Personalised Gift Sets, Multiple Products, Other' | split: ','
   assign quantity_opts = s.quantity_options | default: '10 – 25 pieces, 25 – 50 pieces, 50 – 100 pieces, 100 – 250 pieces, 250 – 500 pieces, 500+ pieces' | split: ','
-  assign budget_opts = s.budget_options | default: 'Under ₹10,000, ₹10,000 – ₹25,000, ₹25,000 – ₹50,000, ₹50,000 – ₹1,00,000, ₹1,00,000+' | split: ','
+  assign budget_raw = s.budget_options | default: 'Under ₹10,000 | ₹10,000 – ₹25,000 | ₹25,000 – ₹50,000 | ₹50,000 – ₹1,00,000 | ₹1,00,000+'
+  if budget_raw contains '|'
+    assign budget_opts = budget_raw | split: '|'
+  else
+    assign budget_opts = budget_raw | split: ', '
+  endif
   assign occasion_opts = s.occasion_options | default: 'Corporate Event / Onboarding, Wedding / Engagement, Birthday / Milestone, Festival / Holiday Gifting, Brand Merch / Launch, Personal / Other' | split: ','
 %}
 
@@ -805,6 +810,7 @@
         form.reset();
         successBox.hidden = false;
       } catch (err) {
+        console.error('[BulkEnquiry] Submit failed:', err);
         errorText.textContent = 'Could not submit your enquiry right now. Please try again or email us at support@graffeinetales.com.';
         errorBox.hidden = false;
       } finally {
@@ -892,7 +898,8 @@
       "type": "textarea",
       "id": "budget_options",
       "label": "Approximate budget options",
-      "default": "Under ₹10,000, ₹10,000 – ₹25,000, ₹25,000 – ₹50,000, ₹50,000 – ₹1,00,000, ₹1,00,000+"
+      "info": "Separate options with | (pipe) so commas inside ₹ amounts don't split.",
+      "default": "Under ₹10,000 | ₹10,000 – ₹25,000 | ₹25,000 – ₹50,000 | ₹50,000 – ₹1,00,000 | ₹1,00,000+"
     },
     {
       "type": "textarea",
