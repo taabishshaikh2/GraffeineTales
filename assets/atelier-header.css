@@ -146,24 +146,51 @@
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* Header overlay on Index and Collection pages so hero banner goes behind the header */
-body.template-index .atelier-header-section,
-body.template-collection .atelier-header-section,
-body[class*="template-collection"] .atelier-header-section {
+/* Header overlay only when the page starts with a full-bleed hero/banner or studio customizer */
+body.has-hero-under-header .atelier-header-section,
+body:not(.has-header-grey-backdrop):has(#MainContent > .shopify-section:first-child .atelier-hero),
+body:not(.has-header-grey-backdrop):has(#MainContent > .shopify-section:first-child .atelier-col-hero),
+body:not(.has-header-grey-backdrop):has(#MainContent > .shopify-section:nth-child(-n+2) [id^="gt-customizer-"]),
+body:not(.has-header-grey-backdrop):has(#MainContent > .shopify-section:first-child [data-hero-banner]) {
   margin-bottom: calc(-1 * var(--header-pill-height, 135px)) !important;
 }
 
 @media screen and (max-width: 767px) {
-  body.template-index .atelier-header-section,
-  body.template-collection .atelier-header-section,
-  body[class*="template-collection"] .atelier-header-section {
+  body.has-hero-under-header .atelier-header-section,
+  body:not(.has-header-grey-backdrop):has(#MainContent > .shopify-section:first-child .atelier-hero),
+  body:not(.has-header-grey-backdrop):has(#MainContent > .shopify-section:first-child .atelier-col-hero),
+  body:not(.has-header-grey-backdrop):has(#MainContent > .shopify-section:nth-child(-n+2) [id^="gt-customizer-"]),
+  body:not(.has-header-grey-backdrop):has(#MainContent > .shopify-section:first-child [data-hero-banner]) {
     margin-bottom: calc(-1 * var(--header-pill-height, 96px)) !important;
   }
 }
 
-/* On standard interior pages, keep normal flow so title isn't covered */
-body:not(.template-index):not([class*="template-collection"]):not(.template-collection) .atelier-header-section {
+/* On pages/collections/templates with page body (no hero banner), keep header in flow and grey the top backdrop behind the glass pill */
+body.has-header-grey-backdrop .atelier-header-section {
   margin-bottom: 0 !important;
+}
+
+body.has-header-grey-backdrop,
+body:not(.has-hero-under-header):not(:has(#MainContent > .shopify-section:first-child .atelier-hero, #MainContent > .shopify-section:first-child .atelier-col-hero, #MainContent > .shopify-section:nth-child(-n+2) [id^="gt-customizer-"], #MainContent > .shopify-section:first-child [data-hero-banner])) {
+  position: relative;
+}
+
+body.has-header-grey-backdrop::before,
+body:not(.has-hero-under-header):not(:has(#MainContent > .shopify-section:first-child .atelier-hero, #MainContent > .shopify-section:first-child .atelier-col-hero, #MainContent > .shopify-section:nth-child(-n+2) [id^="gt-customizer-"], #MainContent > .shopify-section:first-child [data-hero-banner]))::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height, 114px);
+  background: #333333;
+  z-index: 0;
+  pointer-events: none;
+}
+
+body.has-header-grey-backdrop .atelier-header__bar,
+body:not(.has-hero-under-header):not(:has(#MainContent > .shopify-section:first-child .atelier-hero, #MainContent > .shopify-section:first-child .atelier-col-hero, #MainContent > .shopify-section:nth-child(-n+2) [id^="gt-customizer-"], #MainContent > .shopify-section:first-child [data-hero-banner])) .atelier-header__bar {
+  padding: var(--gap-top, 14px) var(--gap-side, 24px) var(--gap-top, 14px) !important;
 }
 
 /* On Product Detail Pages, header sits cleanly above PDP with no excessive gap */
@@ -217,30 +244,19 @@ atelier-header button {
 .atelier-header__pill {
   pointer-events: auto !important;
   position: relative !important;
-  isolation: isolate !important;
-  background: transparent !important;
-  border-radius: var(--header-radius, 18px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.5) !important;
-  box-shadow: 0 12px 32px -14px rgba(28, 27, 25, 0.28),
-              inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
-  transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease !important;
-}
-
-.atelier-header__pill::before {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: -1 !important;
-  border-radius: inherit !important;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.05) 60%),
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.02) 60%),
               var(--header-glass, rgba(248, 245, 237, 0.50)) !important;
   -webkit-backdrop-filter: blur(var(--header-blur, 20px)) saturate(170%) !important;
   backdrop-filter: blur(var(--header-blur, 20px)) saturate(170%) !important;
-  transition: background 0.4s ease !important;
+  border-radius: var(--header-radius, 18px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.48) !important;
+  box-shadow: 0 12px 32px -14px rgba(28, 27, 25, 0.28),
+              inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease !important;
 }
 
 @supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
-  .atelier-header__pill::before {
+  .atelier-header__pill {
     background: var(--header-solid, #F8F5ED) !important;
   }
 }
@@ -753,6 +769,14 @@ atelier-header button {
 @media screen and (max-width: 989px) {
   .atelier-header__bar {
     padding: var(--gap-top-mobile, 8px) var(--gap-side-mobile, 10px) 0 !important;
+  }
+  body.has-header-grey-backdrop::before,
+  body:not(.has-hero-under-header):not(:has(#MainContent > .shopify-section:first-child .atelier-hero, #MainContent > .shopify-section:first-child .atelier-col-hero, #MainContent > .shopify-section:nth-child(-n+2) [id^="gt-customizer-"], #MainContent > .shopify-section:first-child [data-hero-banner]))::before {
+    height: var(--header-height, 72px);
+  }
+  body.has-header-grey-backdrop .atelier-header__bar,
+  body:not(.has-hero-under-header):not(:has(#MainContent > .shopify-section:first-child .atelier-hero, #MainContent > .shopify-section:first-child .atelier-col-hero, #MainContent > .shopify-section:nth-child(-n+2) [id^="gt-customizer-"], #MainContent > .shopify-section:first-child [data-hero-banner])) .atelier-header__bar {
+    padding: var(--gap-top-mobile, 10px) var(--gap-side-mobile, 10px) var(--gap-top-mobile, 10px) !important;
   }
   .atelier-header__pill {
     position: relative !important;

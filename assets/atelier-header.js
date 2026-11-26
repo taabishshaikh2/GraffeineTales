@@ -64,10 +64,11 @@ if (!customElements.get('atelier-header')) {
       // 1. Measure and set CSS variables & negative margin
       this.measure();
       window.addEventListener('resize', () => this.measure(), { passive: true });
+      window.addEventListener('load', () => this.measure(), { once: true });
 
-      document.addEventListener('shopify:section:load', (e) => {
-        if (e.target.contains(this) || e.target === this.section) this.measure();
-      });
+      document.addEventListener('shopify:section:load', () => this.measure());
+      document.addEventListener('shopify:section:unload', () => this.measure());
+      document.addEventListener('shopify:section:reorder', () => this.measure());
       document.addEventListener('shopify:section:select', (e) => {
         if (e.target.contains(this) || e.target === this.section) this.measure();
       });
@@ -323,16 +324,26 @@ if (!customElements.get('atelier-header')) {
       const pill = this.querySelector('.atelier-header__pill');
       const ann = this.section.querySelector('.atelier-announcement');
 
+      const main = document.getElementById('MainContent');
+      const sections = main ? Array.from(main.children) : [];
+      const firstVisible = sections.find((el) => {
+        const style = window.getComputedStyle(el);
+        return style.display !== 'none' && style.visibility !== 'hidden' && el.children.length > 0;
+      });
+      const heroSelector = '.atelier-hero, .atelier-col-hero, [id^="gt-customizer-"], [data-hero-banner]';
+      const isOverlayPage = Boolean(
+        firstVisible && (firstVisible.matches(heroSelector) || firstVisible.querySelector(heroSelector))
+      );
+
+      document.body.classList.toggle('has-hero-under-header', isOverlayPage);
+      document.body.classList.toggle('has-header-grey-backdrop', !isOverlayPage);
+
       const pillH = bar ? bar.offsetHeight : (pill ? pill.offsetHeight + 14 : this.offsetHeight);
       const annH = (ann && ann.offsetParent !== null) ? ann.offsetHeight : 0;
       const totalH = pillH + annH;
 
       document.documentElement.style.setProperty('--header-height', totalH + 'px');
       document.documentElement.style.setProperty('--header-pill-height', pillH + 'px');
-
-      const isOverlayPage = document.body.classList.contains('template-index')
-        || document.body.classList.contains('template-collection')
-        || (document.body.className && document.body.className.indexOf('template-collection') !== -1);
 
       if (isOverlayPage) {
         this.section.style.marginBottom = '-' + pillH + 'px';
