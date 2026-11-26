@@ -679,12 +679,13 @@
   overflow: hidden !important;
 }
 
-/* Footer row: Price on left, Button on right */
+/* Footer row: Price on left, Button on right (wraps cleanly on narrow cards) */
 .card-wrapper .atelier-card__footer {
   display: flex !important;
+  flex-wrap: wrap !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 8px !important;
+  gap: 6px 8px !important;
   margin-top: auto !important;
   padding-top: 6px !important;
   width: 100% !important;
@@ -699,30 +700,37 @@
 
 .card-wrapper .atelier-card__pricing .price {
   margin: 0 !important;
+  letter-spacing: 0 !important;
   display: flex !important;
   align-items: baseline !important;
+}
+
+.card-wrapper .atelier-card__pricing .price .price-item {
+  margin: 0 !important;
 }
 
 /* Reverse price display so Current Price is first, compare price is second strikethrough */
 .card-wrapper .price__sale {
   display: flex !important;
   align-items: baseline !important;
-  gap: 6px !important;
-  flex-wrap: nowrap !important;
+  gap: 2px 6px !important;
+  flex-wrap: wrap !important;
   margin: 0 !important;
 }
 
-.card-wrapper .price-item--sale {
+.card-wrapper .price-item--sale,
+.card-wrapper .price__regular .price-item--regular {
   order: 1 !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 15.5px !important;
   font-weight: 700 !important;
   color: #1A1614 !important;
+  text-decoration: none !important;
   white-space: nowrap !important;
   margin: 0 !important;
 }
 
-.card-wrapper .price-item--regular,
+.card-wrapper .price__sale .price-item--regular,
 .card-wrapper .price__sale s {
   order: 2 !important;
   font-family: 'Inter', sans-serif !important;
@@ -864,7 +872,6 @@
 .card-wrapper .quick-add__submit.button:disabled,
 .card-wrapper .quick-add .button:disabled {
   opacity: 0.5 !important;
-}
   cursor: not-allowed !important;
   transform: none !important;
 }
@@ -877,27 +884,57 @@
   .card-wrapper .card__content {
     padding: 10px 2px 2px !important;
   }
+  .card-wrapper .atelier-product-card__category {
+    font-size: 9.5px !important;
+    letter-spacing: 0.06em !important;
+    margin: 0 0 4px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
   .card-wrapper .card__heading,
   .card-wrapper .card__heading a {
     font-size: 14px !important;
   }
+  .card-wrapper .card__heading {
+    margin: 0 0 8px !important;
+  }
   .card-wrapper .atelier-card__footer {
-    gap: 4px !important;
-    padding-top: 4px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding-top: 6px !important;
   }
-  .card-wrapper .price-item--sale {
-    font-size: 13.5px !important;
+  .card-wrapper .atelier-card__pricing {
+    width: 100% !important;
+    flex: none !important;
   }
-  .card-wrapper .price-item--regular,
+  .card-wrapper .price__sale {
+    flex-wrap: wrap !important;
+    gap: 2px 6px !important;
+  }
+  .card-wrapper .price-item--sale,
+  .card-wrapper .price__regular .price-item--regular {
+    font-size: 14px !important;
+  }
+  .card-wrapper .price__sale .price-item--regular,
   .card-wrapper .price__sale s {
-    font-size: 10px !important;
+    font-size: 11px !important;
+  }
+  .card-wrapper .atelier-card__footer .quick-add,
+  .card-wrapper .atelier-card__footer .quick-add product-form,
+  .card-wrapper .atelier-card__footer .quick-add modal-opener,
+  .card-wrapper .atelier-card__footer .quick-add form {
+    width: 100% !important;
+    display: block !important;
   }
   .card-wrapper .quick-add__submit.button,
   .card-wrapper .quick-add .button {
-    min-height: 28px !important;
-    min-width: 74px !important;
-    font-size: 10px !important;
-    padding: 5px 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 36px !important;
+    font-size: 11.5px !important;
+    padding: 7px 10px !important;
   }
   .card-wrapper .atelier-product-card__wishlist {
     width: 32px !important;
@@ -912,5 +949,11 @@
   .card-wrapper .card__badge {
     top: 8px !important;
     left: 8px !important;
+    max-width: calc(100% - 52px) !important;
+  }
+  .card-wrapper .card__badge .badge,
+  .card-wrapper .badge {
+    font-size: 9.5px !important;
+    padding: 4px 8px !important;
   }
 }

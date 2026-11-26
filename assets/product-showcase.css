@@ -200,19 +200,21 @@ atelier-product-showcase[data-showcase-columns="2"] .atelier-product-card {
 
 .atelier-product-card__footer {
   display: flex !important;
+  flex-wrap: wrap !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 8px !important;
+  gap: 6px 8px !important;
   margin-top: auto !important;
   padding-top: 4px !important;
 }
 
 .atelier-product-card__pricing {
-  flex: 1 1 50% !important;
-  max-width: 50% !important;
+  flex: 1 1 auto !important;
+  max-width: none !important;
   display: flex !important;
+  flex-wrap: wrap !important;
   align-items: baseline !important;
-  gap: 6px !important;
+  gap: 2px 6px !important;
   margin: 0 !important;
   min-width: 0 !important;
 }
@@ -232,11 +234,14 @@ atelier-product-showcase[data-showcase-columns="2"] .atelier-product-card {
 }
 
 .atelier-product-card__form {
-  flex: 0 0 50% !important;
-  max-width: 50% !important;
-  width: 50% !important;
+  flex: 0 0 auto !important;
+  max-width: 100% !important;
+  width: auto !important;
+  margin-left: auto !important;
   display: flex !important;
-  margin: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-right: 0 !important;
 }
 
 .atelier-product-card__add {
@@ -250,11 +255,11 @@ atelier-product-showcase[data-showcase-columns="2"] .atelier-product-card {
   color: #e2d8bf !important;
   text-decoration: none !important;
   font: 600 11.5px/1 Inter, sans-serif !important;
-  padding: 7px 8px !important;
+  padding: 7px 14px !important;
   margin: 0 !important;
-  width: 50% !important;
-  max-width: 50% !important;
-  flex: 0 0 50% !important;
+  width: auto !important;
+  max-width: 100% !important;
+  flex: 0 0 auto !important;
   box-sizing: border-box !important;
   white-space: nowrap !important;
   cursor: pointer !important;
@@ -363,9 +368,9 @@ atelier-product-showcase[data-showcase-columns="2"] .atelier-product-card {
   }
   .atelier-showcase__grid.is-centered,
   .atelier-showcase__grid[data-few-products="true"] {
-    justify-content: center !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    justify-content: safe center !important;
+    margin-left: -16px !important;
+    margin-right: -16px !important;
   }
   .atelier-product-card {
     flex: 0 0 min(var(--showcase-mobile-width, 280px), calc(100vw - 48px)) !important;

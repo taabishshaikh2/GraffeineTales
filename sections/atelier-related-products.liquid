@@ -197,16 +197,18 @@
     }
     .atelier-related-card__footer {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px 8px;
       margin-top: auto;
       padding-top: 4px;
     }
     .atelier-related-card__prices {
       display: flex;
+      flex-wrap: wrap;
       align-items: baseline;
-      gap: 6px;
+      gap: 2px 6px;
       font: 600 16px/1 Inter, sans-serif;
       color: var(--related-text, #1A1614);
       margin: 0;
@@ -277,6 +279,10 @@
       .atelier-related__grid {
         margin: 0 -16px;
         padding: 0 16px 8px;
+      }
+      .atelier-related__grid.is-centered,
+      .atelier-related__grid[data-few-products="true"] {
+        justify-content: safe center !important;
       }
       .atelier-related-card {
         flex: 0 0 76%;
