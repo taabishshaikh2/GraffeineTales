@@ -22,6 +22,7 @@
       "settings": {
         "webhook_url": "https://script.google.com/macros/s/AKfycbxWBJfkuBjOSLmeAx2ZX_JMjiWTjEceIqI0zSKPEdelZTB3XQ1Bgb5PvI_rsCxzIF_j/exec",
         "show_banner": true,
+        "banner_image": "shopify://shop_images/Cozy_Cat_Desk_Vignette_Sticker.png",
         "heading": "BULK ORDERS & CUSTOM ENQUIRIES",
         "subheading": "Let's create something meaningful, together.",
         "intro_line_1": "Whether you're planning a corporate gifting experience, a special celebration, or looking for thoughtfully designed merchandise, we'd love to bring your ideas to life.",
