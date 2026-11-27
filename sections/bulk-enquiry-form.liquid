@@ -619,9 +619,9 @@
         <input id="BulkWebsite-{{ section.id }}" type="text" name="website" tabindex="-1" autocomplete="off">
       </div>
 
-      {%- comment -%} 01 — Tell us what you have in mind {%- endcomment -%}
+      {%- comment -%} 01 Tell us what you have in mind {%- endcomment -%}
       <div class="bulk-enquiry__group">
-        <h3 class="bulk-enquiry__group-title">{{ s.group_1_title | default: '01 — Tell us what you have in mind' | escape }}</h3>
+        <h3 class="bulk-enquiry__group-title">{{ s.group_1_title | default: '01 Tell us what you have in mind' | escape }}</h3>
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkLookingFor-{{ section.id }}">
             {{ s.looking_for_label | default: 'What are you looking for?' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
@@ -648,9 +648,9 @@
         </div>
       </div>
 
-      {%- comment -%} 02 — A little more about your order {%- endcomment -%}
+      {%- comment -%} 02 A little more about your order {%- endcomment -%}
       <div class="bulk-enquiry__group">
-        <h3 class="bulk-enquiry__group-title">{{ s.group_2_title | default: '02 — A little more about your order' | escape }}</h3>
+        <h3 class="bulk-enquiry__group-title">{{ s.group_2_title | default: '02 A little more about your order' | escape }}</h3>
 
         <div class="bulk-enquiry__field" data-field>
           <span class="bulk-enquiry__label" id="BulkCustomiseLabel-{{ section.id }}">
@@ -773,9 +773,9 @@
         </div>
       </div>
 
-      {%- comment -%} 03 — Let's plan the details {%- endcomment -%}
+      {%- comment -%} 03 Let's plan the details {%- endcomment -%}
       <div class="bulk-enquiry__group">
-        <h3 class="bulk-enquiry__group-title">{{ s.group_3_title | default: "03 — Let's plan the details" | escape }}</h3>
+        <h3 class="bulk-enquiry__group-title">{{ s.group_3_title | default: "03 Let's plan the details" | escape }}</h3>
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkNeededBy-{{ section.id }}">
             {{ s.needed_by_label | default: 'When do you need your order?' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
@@ -827,9 +827,9 @@
         </div>
       </div>
 
-      {%- comment -%} 04 — Let's get in touch {%- endcomment -%}
+      {%- comment -%} 04 Let's get in touch {%- endcomment -%}
       <div class="bulk-enquiry__group">
-        <h3 class="bulk-enquiry__group-title">{{ s.group_4_title | default: "04 — Let's get in touch" | escape }}</h3>
+        <h3 class="bulk-enquiry__group-title">{{ s.group_4_title | default: "04 Let's get in touch" | escape }}</h3>
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkName-{{ section.id }}">
             {{ s.name_label | default: 'Your Name' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
@@ -908,14 +908,22 @@
 
       {%- comment -%} Closing & Submit {%- endcomment -%}
       <div class="bulk-enquiry__closing">
-        <h3 class="bulk-enquiry__closing-title">Ready to make something special?</h3>
-        <p class="bulk-enquiry__closing-copy">
-          We'll review your requirements and get back to you with the next steps. Every order is thoughtfully curated to suit your vision, quantity, and budget.
-        </p>
-        <p class="bulk-enquiry__signoff">
-          <strong>Graffeine Tales</strong>
-          Thoughtfully made. Beautifully personalised.
-        </p>
+        {%- assign closing_title = s.closing_title | default: 'Ready to make something special?' -%}
+        {%- if closing_title != blank -%}
+          <h3 class="bulk-enquiry__closing-title">{{ closing_title | escape }}</h3>
+        {%- endif -%}
+        {%- assign closing_copy = s.closing_copy | default: "We'll review your requirements and get back to you with the next steps. Every order is thoughtfully curated to suit your vision, quantity, and budget." -%}
+        {%- if closing_copy != blank -%}
+          <p class="bulk-enquiry__closing-copy">{{ closing_copy | escape }}</p>
+        {%- endif -%}
+        {%- assign signoff_brand = s.signoff_brand | default: 'Graffeine Tales' -%}
+        {%- assign signoff_tagline = s.signoff_tagline | default: 'Thoughtfully made. Beautifully personalised.' -%}
+        {%- if signoff_brand != blank or signoff_tagline != blank -%}
+          <p class="bulk-enquiry__signoff">
+            {%- if signoff_brand != blank -%}<strong>{{ signoff_brand | escape }}</strong>{%- endif -%}
+            {{ signoff_tagline | escape }}
+          </p>
+        {%- endif -%}
 
         <button class="bulk-enquiry__submit" type="submit" data-submit-btn>
           <span data-submit-label>{{ s.submit_label | default: 'Submit' | escape }}</span>
@@ -925,12 +933,12 @@
         </button>
 
         <div class="bulk-enquiry__status bulk-enquiry__status--success" data-status-success role="status" hidden>
-          <p style="margin: 0;"><strong>Thank you!</strong> Your bulk &amp; custom order enquiry has been submitted. Our team will reach out shortly with a personalised proposal.</p>
-          <button type="button" class="bulk-enquiry__reset-btn" data-reset-form>Submit another enquiry</button>
+          <p style="margin: 0;"><strong>{{ s.success_heading | default: 'Thank you!' | escape }}</strong> {{ s.success_message | default: 'Your bulk & custom order enquiry has been submitted. Our team will reach out shortly with a personalised proposal.' | escape }}</p>
+          <button type="button" class="bulk-enquiry__reset-btn" data-reset-form>{{ s.reset_label | default: 'Submit another enquiry' | escape }}</button>
         </div>
 
         <div class="bulk-enquiry__status bulk-enquiry__status--error" data-status-error role="alert" hidden>
-          <p style="margin: 0;" data-error-text>Something went wrong while submitting your enquiry. Please try again or email us at support@graffeinetales.com.</p>
+          <p style="margin: 0;" data-error-text>{{ s.error_message | default: 'Something went wrong while submitting your enquiry. Please try again or email us at support@graffeinetales.com.' | escape }}</p>
         </div>
       </div>
     </form>
@@ -1240,13 +1248,13 @@
     },
     {
       "type": "header",
-      "content": "01 — Tell us what you have in mind"
+      "content": "01 Tell us what you have in mind"
     },
     {
       "type": "text",
       "id": "group_1_title",
       "label": "Section 01 heading",
-      "default": "01 — Tell us what you have in mind"
+      "default": "01 Tell us what you have in mind"
     },
     {
       "type": "text",
@@ -1269,13 +1277,13 @@
     },
     {
       "type": "header",
-      "content": "02 — A little more about your order"
+      "content": "02 A little more about your order"
     },
     {
       "type": "text",
       "id": "group_2_title",
       "label": "Section 02 heading",
-      "default": "02 — A little more about your order"
+      "default": "02 A little more about your order"
     },
     {
       "type": "text",
@@ -1293,7 +1301,7 @@
       "type": "textarea",
       "id": "customise_options",
       "label": "Customise items choices",
-      "info": "Separate options with commas (or |). Rendered as multi-select checkboxes.",
+      "info": "Separate options with commas (or |). Rendered as a tag multi-select dropdown.",
       "default": "Notebooks & Journals, Personalised Gifts, Coasters & Home Décor, Stickers & Stationery, Thread Art & Embroidery, Gift Hampers, Custom Merchandise, Other"
     },
     {
@@ -1342,13 +1350,13 @@
     },
     {
       "type": "header",
-      "content": "03 — Let's plan the details"
+      "content": "03 Let's plan the details"
     },
     {
       "type": "text",
       "id": "group_3_title",
       "label": "Section 03 heading",
-      "default": "03 — Let's plan the details"
+      "default": "03 Let's plan the details"
     },
     {
       "type": "text",
@@ -1383,13 +1391,13 @@
     },
     {
       "type": "header",
-      "content": "04 — Let's get in touch"
+      "content": "04 Let's get in touch"
     },
     {
       "type": "text",
       "id": "group_4_title",
       "label": "Section 04 heading",
-      "default": "04 — Let's get in touch"
+      "default": "04 Let's get in touch"
     },
     {
       "type": "text",
@@ -1453,6 +1461,64 @@
     },
     {
       "type": "header",
+      "content": "Closing, Button & Messages"
+    },
+    {
+      "type": "text",
+      "id": "closing_title",
+      "label": "Closing heading",
+      "default": "Ready to make something special?"
+    },
+    {
+      "type": "textarea",
+      "id": "closing_copy",
+      "label": "Closing description",
+      "default": "We'll review your requirements and get back to you with the next steps. Every order is thoughtfully curated to suit your vision, quantity, and budget."
+    },
+    {
+      "type": "text",
+      "id": "signoff_brand",
+      "label": "Sign-off brand name",
+      "default": "Graffeine Tales"
+    },
+    {
+      "type": "text",
+      "id": "signoff_tagline",
+      "label": "Sign-off tagline",
+      "default": "Thoughtfully made. Beautifully personalised."
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Submit button title",
+      "default": "Submit"
+    },
+    {
+      "type": "text",
+      "id": "success_heading",
+      "label": "Success heading",
+      "default": "Thank you!"
+    },
+    {
+      "type": "textarea",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Your bulk & custom order enquiry has been submitted. Our team will reach out shortly with a personalised proposal."
+    },
+    {
+      "type": "text",
+      "id": "reset_label",
+      "label": "Reset button title",
+      "default": "Submit another enquiry"
+    },
+    {
+      "type": "textarea",
+      "id": "error_message",
+      "label": "Error message",
+      "default": "Something went wrong while submitting your enquiry. Please try again or email us at support@graffeinetales.com."
+    },
+    {
+      "type": "header",
       "content": "Appearance"
     },
     {
@@ -1472,12 +1538,6 @@
       "id": "button_color",
       "label": "Submit button colour",
       "default": "#EE9A90"
-    },
-    {
-      "type": "text",
-      "id": "submit_label",
-      "label": "Submit button label",
-      "default": "Submit"
     },
     {
       "type": "range",
