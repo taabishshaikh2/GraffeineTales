@@ -195,6 +195,7 @@
 
   .bulk-enquiry__multiselect-placeholder {
     color: var(--bulk-placeholder);
+    font-size: 12.5px;
     padding: 2px;
     user-select: none;
   }
@@ -377,11 +378,13 @@
 
   .bulk-enquiry__select:invalid {
     color: var(--bulk-placeholder);
+    font-size: 12.5px;
   }
 
   .bulk-enquiry__select option {
     background-color: #2c2c2c;
     color: #F2EFE9;
+    font-size: 14px;
   }
 
   .bulk-enquiry__caret {
@@ -397,6 +400,7 @@
   .bulk-enquiry__input::placeholder,
   .bulk-enquiry__textarea::placeholder {
     color: var(--bulk-placeholder);
+    font-size: 12.5px;
   }
 
   .bulk-enquiry__input:focus,
@@ -848,7 +852,7 @@
 
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkCompany-{{ section.id }}">
-            {{ s.company_label | default: 'Company / Organisation (Optional)' | escape }}
+            {{ s.company_label | default: 'Company / Organisation' | escape }}
           </label>
           <input
             class="bulk-enquiry__input"
@@ -894,7 +898,7 @@
 
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkNotes-{{ section.id }}">
-            {{ s.notes_label | default: "Anything else you'd like us to know? (Optional)" | escape }}
+            {{ s.notes_label | default: "Anything else you'd like us to know?" | escape }}
           </label>
           <textarea
             class="bulk-enquiry__textarea"
@@ -1415,7 +1419,7 @@
       "type": "text",
       "id": "company_label",
       "label": "Company field label",
-      "default": "Company / Organisation (Optional)"
+      "default": "Company / Organisation"
     },
     {
       "type": "text",
@@ -1451,7 +1455,7 @@
       "type": "text",
       "id": "notes_label",
       "label": "Additional notes label",
-      "default": "Anything else you'd like us to know? (Optional)"
+      "default": "Anything else you'd like us to know?"
     },
     {
       "type": "text",
