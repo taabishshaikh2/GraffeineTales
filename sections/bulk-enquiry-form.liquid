@@ -301,6 +301,11 @@
     display: none;
   }
 
+  #bulk-enquiry-{{ section.id }} [data-multiselect-input],
+  #bulk-enquiry-{{ section.id }} .bulk-enquiry__multiselect [hidden] {
+    display: none !important;
+  }
+
   .bulk-enquiry__tag-option:nth-of-type(8n + 1) { background-color: #FADAD8; color: #5F1F1B; }
   .bulk-enquiry__tag-option:nth-of-type(8n + 2) { background-color: #FDE4CF; color: #623311; }
   .bulk-enquiry__tag-option:nth-of-type(8n + 3) { background-color: #F4E49C; color: #57440B; }
