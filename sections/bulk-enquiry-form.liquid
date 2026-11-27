@@ -334,6 +334,8 @@
   .bulk-enquiry__select,
   .bulk-enquiry__textarea {
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
     background-color: var(--bulk-surface);
     color: var(--bulk-text);
     border: 1px solid var(--bulk-border);
@@ -354,6 +356,16 @@
 
   .bulk-enquiry__input[type="date"] {
     color-scheme: dark;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .bulk-enquiry__input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
   }
 
   .bulk-enquiry__textarea {
