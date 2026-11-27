@@ -1,15 +1,41 @@
 {% liquid
   assign s = section.settings
-  assign looking_for_opts = s.looking_for_options | default: 'Corporate Gifting, Wedding & Event Favours, Personalised / Custom Merchandise, Bulk Stationery & Journals, Workshop / Event Kits, Other' | split: ','
-  assign customise_opts = s.customise_options | default: 'Journals & Notebooks, Wooden Bookmarks, Coasters, Stickers & Decals, Desk Hydration / Mugs, Personalised Gift Sets, Multiple Products, Other' | split: ','
-  assign quantity_opts = s.quantity_options | default: '10 – 25 pieces, 25 – 50 pieces, 50 – 100 pieces, 100 – 250 pieces, 250 – 500 pieces, 500+ pieces' | split: ','
-  assign budget_raw = s.budget_options | default: 'Under ₹10,000 | ₹10,000 – ₹25,000 | ₹25,000 – ₹50,000 | ₹50,000 – ₹1,00,000 | ₹1,00,000+'
+  assign select_placeholder = s.select_placeholder | default: 'Select an option'
+
+  assign looking_for_raw = s.looking_for_options | default: 'Corporate Gifting, Customised Stationery, Event & Wedding Gifting, Custom Bulk Orders, Something Else'
+  if looking_for_raw contains '|'
+    assign looking_for_opts = looking_for_raw | split: '|'
+  else
+    assign looking_for_opts = looking_for_raw | split: ','
+  endif
+
+  assign customise_raw = s.customise_options | default: 'Notebooks & Journals, Personalised Gifts, Coasters & Home Décor, Stickers & Stationery, Thread Art & Embroidery, Gift Hampers, Custom Merchandise, Other'
+  if customise_raw contains '|'
+    assign customise_opts = customise_raw | split: '|'
+  else
+    assign customise_opts = customise_raw | split: ','
+  endif
+
+  assign quantity_raw = s.quantity_options | default: '25–50 pieces, 50–100 pieces, 100–250 pieces, 250–500 pieces, 500+ pieces, Not sure yet'
+  if quantity_raw contains '|'
+    assign quantity_opts = quantity_raw | split: '|'
+  else
+    assign quantity_opts = quantity_raw | split: ','
+  endif
+
+  assign budget_raw = s.budget_options | default: 'Under ₹10,000 | ₹10,000 – ₹25,000 | ₹25,000 – ₹50,000 | ₹50,000 – ₹1,00,000 | ₹1,00,000+ | Open to suggestions'
   if budget_raw contains '|'
     assign budget_opts = budget_raw | split: '|'
   else
     assign budget_opts = budget_raw | split: ', '
   endif
-  assign occasion_opts = s.occasion_options | default: 'Corporate Event / Onboarding, Wedding / Engagement, Birthday / Milestone, Festival / Holiday Gifting, Brand Merch / Launch, Personal / Other' | split: ','
+
+  assign occasion_raw = s.occasion_options | default: 'Corporate Event, Wedding, Festival, Employee Gifting, Client Appreciation, Personal Celebration, Other'
+  if occasion_raw contains '|'
+    assign occasion_opts = occasion_raw | split: '|'
+  else
+    assign occasion_opts = occasion_raw | split: ','
+  endif
 %}
 
 {%- style -%}
@@ -126,6 +152,59 @@
     font-weight: 600;
     line-height: 1.4;
     color: var(--bulk-text);
+  }
+
+  .bulk-enquiry__hint {
+    margin: -2px 0 9px;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--bulk-muted);
+  }
+
+  .bulk-enquiry__checkboxes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .bulk-enquiry__check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    padding: 8px 12px;
+    background-color: var(--bulk-surface);
+    border: 1px solid var(--bulk-border);
+    border-radius: 6px;
+    font-size: 13.5px;
+    line-height: 1.35;
+    color: var(--bulk-text);
+    cursor: pointer;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16);
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .bulk-enquiry__check-item:hover {
+    background-color: var(--bulk-surface-focus);
+  }
+
+  .bulk-enquiry__check-item:has(input:checked) {
+    background-color: var(--bulk-surface-focus);
+    border-color: rgba(226, 216, 191, 0.55);
+    box-shadow: 0 0 0 1px rgba(226, 216, 191, 0.18);
+  }
+
+  .bulk-enquiry__check-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    flex-shrink: 0;
+    accent-color: var(--bulk-accent);
+    cursor: pointer;
+  }
+
+  .bulk-enquiry__field.is-invalid .bulk-enquiry__check-item {
+    border-color: var(--bulk-required);
   }
 
   .bulk-enquiry__req {
@@ -373,6 +452,10 @@
       font-size: 16px;
     }
 
+    .bulk-enquiry__checkboxes {
+      grid-template-columns: 1fr;
+    }
+
     .bulk-enquiry__submit {
       width: 100%;
       min-height: 44px;
@@ -418,16 +501,20 @@
         <input id="BulkWebsite-{{ section.id }}" type="text" name="website" tabindex="-1" autocomplete="off">
       </div>
 
-      {%- comment -%} Group 1 {%- endcomment -%}
+      {%- comment -%} 01 — Tell us what you have in mind {%- endcomment -%}
       <div class="bulk-enquiry__group">
-        <h3 class="bulk-enquiry__group-title">Tell us what you have in mind</h3>
+        <h3 class="bulk-enquiry__group-title">{{ s.group_1_title | default: '01 — Tell us what you have in mind' | escape }}</h3>
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkLookingFor-{{ section.id }}">
-            What are you looking for?<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+            {{ s.looking_for_label | default: 'What are you looking for?' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
           </label>
+          {%- assign looking_for_hint = s.looking_for_hint | default: 'Select the category that best describes your enquiry.' -%}
+          {%- if looking_for_hint != blank -%}
+            <p class="bulk-enquiry__hint">{{ looking_for_hint | escape }}</p>
+          {%- endif -%}
           <div class="bulk-enquiry__select-wrap">
             <select class="bulk-enquiry__select" id="BulkLookingFor-{{ section.id }}" name="looking_for" required>
-              <option value="" disabled selected hidden></option>
+              <option value="" disabled selected>{{ select_placeholder | escape }}</option>
               {%- for opt in looking_for_opts -%}
                 {%- assign opt_clean = opt | strip -%}
                 {%- if opt_clean != blank -%}
@@ -443,55 +530,53 @@
         </div>
       </div>
 
-      {%- comment -%} Group 2 {%- endcomment -%}
+      {%- comment -%} 02 — A little more about your order {%- endcomment -%}
       <div class="bulk-enquiry__group">
-        <h3 class="bulk-enquiry__group-title">A little more about your order</h3>
+        <h3 class="bulk-enquiry__group-title">{{ s.group_2_title | default: '02 — A little more about your order' | escape }}</h3>
+
         <div class="bulk-enquiry__field" data-field>
-          <label class="bulk-enquiry__label" for="BulkCustomise-{{ section.id }}">
-            What would you like to customise?<span class="bulk-enquiry__req" aria-hidden="true">*</span>
-          </label>
-          <div class="bulk-enquiry__select-wrap">
-            <select class="bulk-enquiry__select" id="BulkCustomise-{{ section.id }}" name="customise" required>
-              <option value="" disabled selected hidden></option>
-              {%- for opt in customise_opts -%}
-                {%- assign opt_clean = opt | strip -%}
-                {%- if opt_clean != blank -%}
-                  <option value="{{ opt_clean | escape }}">{{ opt_clean | escape }}</option>
-                {%- endif -%}
-              {%- endfor -%}
-            </select>
-            <span class="bulk-enquiry__caret" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-            </span>
+          <span class="bulk-enquiry__label" id="BulkCustomiseLabel-{{ section.id }}">
+            {{ s.customise_label | default: 'What would you like to customise?' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+          </span>
+          {%- assign customise_hint = s.customise_hint | default: 'Select all that apply.' -%}
+          {%- if customise_hint != blank -%}
+            <p class="bulk-enquiry__hint">{{ customise_hint | escape }}</p>
+          {%- endif -%}
+          <div
+            class="bulk-enquiry__checkboxes"
+            id="BulkCustomise-{{ section.id }}"
+            data-checkbox-group="customise"
+            data-required="true"
+            role="group"
+            aria-labelledby="BulkCustomiseLabel-{{ section.id }}"
+          >
+            {%- for opt in customise_opts -%}
+              {%- assign opt_clean = opt | strip -%}
+              {%- if opt_clean != blank -%}
+                <label class="bulk-enquiry__check-item">
+                  <input type="checkbox" name="customise" value="{{ opt_clean | escape }}">
+                  <span>{{ opt_clean | escape }}</span>
+                </label>
+              {%- endif -%}
+            {%- endfor -%}
           </div>
-          <span class="bulk-enquiry__field-error">Please select what you would like to customise.</span>
+          <span class="bulk-enquiry__field-error">Please select at least one option.</span>
         </div>
 
-        <div class="bulk-enquiry__field" data-field>
-          <label class="bulk-enquiry__label" for="BulkOtherRequirements-{{ section.id }}">
-            Mention the requirements for others or multiple things
-          </label>
-          <textarea
-            class="bulk-enquiry__textarea"
-            id="BulkOtherRequirements-{{ section.id }}"
-            name="other_requirements"
-            rows="3"
-          ></textarea>
-        </div>
-      </div>
-
-      {%- comment -%} Group 3 {%- endcomment -%}
-      <div class="bulk-enquiry__group">
-        <h3 class="bulk-enquiry__group-title">Tell us about your idea.</h3>
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkIdeaDetails-{{ section.id }}">
-            Share a few details about what you have in mind.<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+            {{ s.idea_label | default: 'Tell us about your idea.' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
           </label>
+          {%- assign idea_hint = s.idea_hint | default: 'Share a few details about what you have in mind.' -%}
+          {%- if idea_hint != blank -%}
+            <p class="bulk-enquiry__hint">{{ idea_hint | escape }}</p>
+          {%- endif -%}
           <textarea
             class="bulk-enquiry__textarea"
             id="BulkIdeaDetails-{{ section.id }}"
             name="idea_details"
             rows="3"
+            {% if s.idea_placeholder != blank %}placeholder="{{ s.idea_placeholder | escape }}"{% endif %}
             required
           ></textarea>
           <span class="bulk-enquiry__field-error">Please share a few details about your idea.</span>
@@ -499,11 +584,11 @@
 
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkQuantity-{{ section.id }}">
-            How many pieces are you looking for?<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+            {{ s.quantity_label | default: 'How many pieces are you looking for?' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
           </label>
           <div class="bulk-enquiry__select-wrap">
             <select class="bulk-enquiry__select" id="BulkQuantity-{{ section.id }}" name="quantity" required>
-              <option value="" disabled selected hidden></option>
+              <option value="" disabled selected>{{ select_placeholder | escape }}</option>
               {%- for opt in quantity_opts -%}
                 {%- assign opt_clean = opt | strip -%}
                 {%- if opt_clean != blank -%}
@@ -520,11 +605,11 @@
 
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkBudget-{{ section.id }}">
-            What is your approximate budget?<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+            {{ s.budget_label | default: 'What is your approximate budget?' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
           </label>
           <div class="bulk-enquiry__select-wrap">
             <select class="bulk-enquiry__select" id="BulkBudget-{{ section.id }}" name="budget" required>
-              <option value="" disabled selected hidden></option>
+              <option value="" disabled selected>{{ select_placeholder | escape }}</option>
               {%- for opt in budget_opts -%}
                 {%- assign opt_clean = opt | strip -%}
                 {%- if opt_clean != blank -%}
@@ -540,12 +625,12 @@
         </div>
       </div>
 
-      {%- comment -%} Group 4 {%- endcomment -%}
+      {%- comment -%} 03 — Let's plan the details {%- endcomment -%}
       <div class="bulk-enquiry__group">
-        <h3 class="bulk-enquiry__group-title">Let's plan the details</h3>
+        <h3 class="bulk-enquiry__group-title">{{ s.group_3_title | default: "03 — Let's plan the details" | escape }}</h3>
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkNeededBy-{{ section.id }}">
-            When do you need your order?<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+            {{ s.needed_by_label | default: 'When do you need your order?' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
           </label>
           <input
             class="bulk-enquiry__input"
@@ -559,11 +644,11 @@
 
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkOccasion-{{ section.id }}">
-            Is this for a special occasion?<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+            {{ s.occasion_label | default: 'Is this for a special occasion?' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
           </label>
           <div class="bulk-enquiry__select-wrap">
             <select class="bulk-enquiry__select" id="BulkOccasion-{{ section.id }}" name="occasion" required>
-              <option value="" disabled selected hidden></option>
+              <option value="" disabled selected>{{ select_placeholder | escape }}</option>
               {%- for opt in occasion_opts -%}
                 {%- assign opt_clean = opt | strip -%}
                 {%- if opt_clean != blank -%}
@@ -580,26 +665,26 @@
 
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkDeliveryLocation-{{ section.id }}">
-            Where should we deliver your order?<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+            {{ s.delivery_location_label | default: 'Where should we deliver your order?' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
           </label>
-          <textarea
-            class="bulk-enquiry__textarea"
+          <input
+            class="bulk-enquiry__input"
             id="BulkDeliveryLocation-{{ section.id }}"
+            type="text"
             name="delivery_location"
-            rows="3"
-            placeholder="[City / Location field]"
+            placeholder="{{ s.delivery_location_placeholder | default: 'City / Location' | escape }}"
             required
-          ></textarea>
+          >
           <span class="bulk-enquiry__field-error">Please enter your delivery city or location.</span>
         </div>
       </div>
 
-      {%- comment -%} Group 5 {%- endcomment -%}
+      {%- comment -%} 04 — Let's get in touch {%- endcomment -%}
       <div class="bulk-enquiry__group">
-        <h3 class="bulk-enquiry__group-title">Let's get in touch</h3>
+        <h3 class="bulk-enquiry__group-title">{{ s.group_4_title | default: "04 — Let's get in touch" | escape }}</h3>
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkName-{{ section.id }}">
-            Your Name<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+            {{ s.name_label | default: 'Your Name' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
           </label>
           <input
             class="bulk-enquiry__input"
@@ -607,7 +692,7 @@
             type="text"
             name="name"
             autocomplete="name"
-            placeholder="Tony Stark"
+            placeholder="{{ s.name_placeholder | default: 'Your full name' | escape }}"
             required
           >
           <span class="bulk-enquiry__field-error">Please enter your name.</span>
@@ -615,23 +700,21 @@
 
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkCompany-{{ section.id }}">
-            Company / Organisation<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+            {{ s.company_label | default: 'Company / Organisation (Optional)' | escape }}
           </label>
-          <textarea
-            class="bulk-enquiry__textarea"
+          <input
+            class="bulk-enquiry__input"
             id="BulkCompany-{{ section.id }}"
+            type="text"
             name="company"
             autocomplete="organization"
-            rows="3"
-            placeholder="Stark Industries"
-            required
-          ></textarea>
-          <span class="bulk-enquiry__field-error">Please enter your company or organisation.</span>
+            placeholder="{{ s.company_placeholder | default: 'Company or organisation name' | escape }}"
+          >
         </div>
 
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkEmail-{{ section.id }}">
-            Email Address<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+            {{ s.email_label | default: 'Email Address' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
           </label>
           <input
             class="bulk-enquiry__input"
@@ -639,7 +722,7 @@
             type="email"
             name="email"
             autocomplete="email"
-            placeholder="tony@gmail.com"
+            placeholder="{{ s.email_placeholder | default: 'you@example.com' | escape }}"
             required
           >
           <span class="bulk-enquiry__field-error">Please enter a valid email address.</span>
@@ -647,7 +730,7 @@
 
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkPhone-{{ section.id }}">
-            Phone / WhatsApp Number<span class="bulk-enquiry__req" aria-hidden="true">*</span>
+            {{ s.phone_label | default: 'Phone / WhatsApp Number' | escape }}<span class="bulk-enquiry__req" aria-hidden="true">*</span>
           </label>
           <input
             class="bulk-enquiry__input"
@@ -655,7 +738,7 @@
             type="tel"
             name="phone"
             autocomplete="tel"
-            placeholder="+91 10000 28000"
+            placeholder="{{ s.phone_placeholder | default: '+91 98765 43210' | escape }}"
             required
           >
           <span class="bulk-enquiry__field-error">Please enter your phone or WhatsApp number.</span>
@@ -663,13 +746,14 @@
 
         <div class="bulk-enquiry__field" data-field>
           <label class="bulk-enquiry__label" for="BulkNotes-{{ section.id }}">
-            Anything else you'd like us to know?
+            {{ s.notes_label | default: "Anything else you'd like us to know? (Optional)" | escape }}
           </label>
           <textarea
             class="bulk-enquiry__textarea"
             id="BulkNotes-{{ section.id }}"
             name="additional_notes"
             rows="3"
+            {% if s.notes_placeholder != blank %}placeholder="{{ s.notes_placeholder | escape }}"{% endif %}
           ></textarea>
         </div>
       </div>
@@ -748,11 +832,18 @@
       if (hp && hp.value.trim() !== '') return;
 
       let firstInvalid = null;
-      form.querySelectorAll('[required]').forEach((el) => {
+      form.querySelectorAll('[required], [data-checkbox-group][data-required="true"]').forEach((el) => {
         const wrap = el.closest('[data-field]');
-        const valid = el.checkValidity() && el.value.trim() !== '';
+        let valid = true;
+        let focusEl = el;
+        if (el.matches('[data-checkbox-group]')) {
+          valid = el.querySelectorAll('input[type="checkbox"]:checked').length > 0;
+          focusEl = el.querySelector('input[type="checkbox"]') || el;
+        } else {
+          valid = el.checkValidity() && el.value.trim() !== '';
+        }
         if (wrap) wrap.classList.toggle('is-invalid', !valid);
-        if (!valid && !firstInvalid) firstInvalid = el;
+        if (!valid && !firstInvalid) firstInvalid = focusEl;
       });
 
       if (firstInvalid) {
@@ -769,10 +860,11 @@
       }
 
       const fd = new FormData(form);
+      const customiseSelected = fd.getAll('customise').map((v) => v.toString().trim()).filter(Boolean).join(', ');
       const payload = {
         looking_for: (fd.get('looking_for') || '').toString().trim(),
-        customise: (fd.get('customise') || '').toString().trim(),
-        other_requirements: (fd.get('other_requirements') || '').toString().trim(),
+        customise: customiseSelected,
+        other_requirements: '',
         idea_details: (fd.get('idea_details') || '').toString().trim(),
         quantity: (fd.get('quantity') || '').toString().trim(),
         budget: (fd.get('budget') || '').toString().trim(),
@@ -834,6 +926,13 @@
       "info": "Deploy your Graffeine Leads Apps Script as a Web App and paste its /exec URL here."
     },
     {
+      "type": "text",
+      "id": "select_placeholder",
+      "label": "Default dropdown prompt text",
+      "default": "Select an option",
+      "info": "Shown as the initial non-blank prompt on all dropdowns."
+    },
+    {
       "type": "header",
       "content": "Banner & Intro"
     },
@@ -874,38 +973,216 @@
     },
     {
       "type": "header",
-      "content": "Dropdown Options (comma-separated)"
+      "content": "01 — Tell us what you have in mind"
+    },
+    {
+      "type": "text",
+      "id": "group_1_title",
+      "label": "Section 01 heading",
+      "default": "01 — Tell us what you have in mind"
+    },
+    {
+      "type": "text",
+      "id": "looking_for_label",
+      "label": "Enquiry category label",
+      "default": "What are you looking for?"
+    },
+    {
+      "type": "text",
+      "id": "looking_for_hint",
+      "label": "Enquiry category helper text",
+      "default": "Select the category that best describes your enquiry."
     },
     {
       "type": "textarea",
       "id": "looking_for_options",
-      "label": "What are you looking for? options",
-      "default": "Corporate Gifting, Wedding & Event Favours, Personalised / Custom Merchandise, Bulk Stationery & Journals, Workshop / Event Kits, Other"
+      "label": "Enquiry category options",
+      "info": "Separate options with commas (or |).",
+      "default": "Corporate Gifting, Customised Stationery, Event & Wedding Gifting, Custom Bulk Orders, Something Else"
+    },
+    {
+      "type": "header",
+      "content": "02 — A little more about your order"
+    },
+    {
+      "type": "text",
+      "id": "group_2_title",
+      "label": "Section 02 heading",
+      "default": "02 — A little more about your order"
+    },
+    {
+      "type": "text",
+      "id": "customise_label",
+      "label": "Customise items label",
+      "default": "What would you like to customise?"
+    },
+    {
+      "type": "text",
+      "id": "customise_hint",
+      "label": "Customise items helper text",
+      "default": "Select all that apply."
     },
     {
       "type": "textarea",
       "id": "customise_options",
-      "label": "What would you like to customise? options",
-      "default": "Journals & Notebooks, Wooden Bookmarks, Coasters, Stickers & Decals, Desk Hydration / Mugs, Personalised Gift Sets, Multiple Products, Other"
+      "label": "Customise items choices",
+      "info": "Separate options with commas (or |). Rendered as multi-select checkboxes.",
+      "default": "Notebooks & Journals, Personalised Gifts, Coasters & Home Décor, Stickers & Stationery, Thread Art & Embroidery, Gift Hampers, Custom Merchandise, Other"
+    },
+    {
+      "type": "text",
+      "id": "idea_label",
+      "label": "Idea details label",
+      "default": "Tell us about your idea."
+    },
+    {
+      "type": "text",
+      "id": "idea_hint",
+      "label": "Idea details helper text",
+      "default": "Share a few details about what you have in mind."
+    },
+    {
+      "type": "text",
+      "id": "idea_placeholder",
+      "label": "Idea details placeholder",
+      "default": "Share any design ideas, themes, branding, or preferences..."
+    },
+    {
+      "type": "text",
+      "id": "quantity_label",
+      "label": "Quantity label",
+      "default": "How many pieces are you looking for?"
     },
     {
       "type": "textarea",
       "id": "quantity_options",
-      "label": "How many pieces are you looking for? options",
-      "default": "10 – 25 pieces, 25 – 50 pieces, 50 – 100 pieces, 100 – 250 pieces, 250 – 500 pieces, 500+ pieces"
+      "label": "Quantity options",
+      "info": "Separate options with commas (or |).",
+      "default": "25–50 pieces, 50–100 pieces, 100–250 pieces, 250–500 pieces, 500+ pieces, Not sure yet"
+    },
+    {
+      "type": "text",
+      "id": "budget_label",
+      "label": "Approximate budget label",
+      "default": "What is your approximate budget?"
     },
     {
       "type": "textarea",
       "id": "budget_options",
       "label": "Approximate budget options",
       "info": "Separate options with | (pipe) so commas inside ₹ amounts don't split.",
-      "default": "Under ₹10,000 | ₹10,000 – ₹25,000 | ₹25,000 – ₹50,000 | ₹50,000 – ₹1,00,000 | ₹1,00,000+"
+      "default": "Under ₹10,000 | ₹10,000 – ₹25,000 | ₹25,000 – ₹50,000 | ₹50,000 – ₹1,00,000 | ₹1,00,000+ | Open to suggestions"
+    },
+    {
+      "type": "header",
+      "content": "03 — Let's plan the details"
+    },
+    {
+      "type": "text",
+      "id": "group_3_title",
+      "label": "Section 03 heading",
+      "default": "03 — Let's plan the details"
+    },
+    {
+      "type": "text",
+      "id": "needed_by_label",
+      "label": "Needed by date label",
+      "default": "When do you need your order?"
+    },
+    {
+      "type": "text",
+      "id": "occasion_label",
+      "label": "Special occasion label",
+      "default": "Is this for a special occasion?"
     },
     {
       "type": "textarea",
       "id": "occasion_options",
       "label": "Special occasion options",
-      "default": "Corporate Event / Onboarding, Wedding / Engagement, Birthday / Milestone, Festival / Holiday Gifting, Brand Merch / Launch, Personal / Other"
+      "info": "Separate options with commas (or |).",
+      "default": "Corporate Event, Wedding, Festival, Employee Gifting, Client Appreciation, Personal Celebration, Other"
+    },
+    {
+      "type": "text",
+      "id": "delivery_location_label",
+      "label": "Delivery location label",
+      "default": "Where should we deliver your order?"
+    },
+    {
+      "type": "text",
+      "id": "delivery_location_placeholder",
+      "label": "Delivery location placeholder",
+      "default": "City / Location"
+    },
+    {
+      "type": "header",
+      "content": "04 — Let's get in touch"
+    },
+    {
+      "type": "text",
+      "id": "group_4_title",
+      "label": "Section 04 heading",
+      "default": "04 — Let's get in touch"
+    },
+    {
+      "type": "text",
+      "id": "name_label",
+      "label": "Name field label",
+      "default": "Your Name"
+    },
+    {
+      "type": "text",
+      "id": "name_placeholder",
+      "label": "Name field placeholder",
+      "default": "Your full name"
+    },
+    {
+      "type": "text",
+      "id": "company_label",
+      "label": "Company field label",
+      "default": "Company / Organisation (Optional)"
+    },
+    {
+      "type": "text",
+      "id": "company_placeholder",
+      "label": "Company field placeholder",
+      "default": "Company or organisation name"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email field label",
+      "default": "Email Address"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email field placeholder",
+      "default": "you@example.com"
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "Phone field label",
+      "default": "Phone / WhatsApp Number"
+    },
+    {
+      "type": "text",
+      "id": "phone_placeholder",
+      "label": "Phone field placeholder",
+      "default": "+91 98765 43210"
+    },
+    {
+      "type": "text",
+      "id": "notes_label",
+      "label": "Additional notes label",
+      "default": "Anything else you'd like us to know? (Optional)"
+    },
+    {
+      "type": "text",
+      "id": "notes_placeholder",
+      "label": "Additional notes placeholder",
+      "default": "Any extra details, links, or questions..."
     },
     {
       "type": "header",
