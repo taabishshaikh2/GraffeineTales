@@ -161,49 +161,162 @@
     color: var(--bulk-muted);
   }
 
-  .bulk-enquiry__checkboxes {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 9px;
+  .bulk-enquiry__multiselect {
+    position: relative;
   }
 
-  .bulk-enquiry__check-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-height: 40px;
-    padding: 8px 12px;
+  .bulk-enquiry__multiselect-trigger {
+    width: 100%;
+    min-height: 42px;
+    padding: 6px 36px 6px 10px;
     background-color: var(--bulk-surface);
+    color: var(--bulk-text);
     border: 1px solid var(--bulk-border);
     border-radius: 6px;
-    font-size: 13.5px;
-    line-height: 1.35;
-    color: var(--bulk-text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
     cursor: pointer;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16);
     transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .bulk-enquiry__check-item:hover {
-    background-color: var(--bulk-surface-focus);
-  }
-
-  .bulk-enquiry__check-item:has(input:checked) {
+  .bulk-enquiry__multiselect-trigger:focus,
+  .bulk-enquiry__multiselect.is-open .bulk-enquiry__multiselect-trigger {
     background-color: var(--bulk-surface-focus);
     border-color: rgba(226, 216, 191, 0.55);
-    box-shadow: 0 0 0 1px rgba(226, 216, 191, 0.18);
+    box-shadow: 0 0 0 2px rgba(226, 216, 191, 0.16);
+    outline: none;
   }
 
-  .bulk-enquiry__check-item input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    flex-shrink: 0;
-    accent-color: var(--bulk-accent);
+  .bulk-enquiry__multiselect-placeholder {
+    color: var(--bulk-placeholder);
+    padding: 2px;
+    user-select: none;
+  }
+
+  .bulk-enquiry__multiselect-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .bulk-enquiry__multiselect-tags:empty {
+    display: none;
+  }
+
+  .bulk-enquiry__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background-color: #E5E2DC;
+    color: #2B2B2B;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  .bulk-enquiry__tag-remove {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: #5C5852;
+    font-size: 15px;
+    line-height: 1;
+    padding: 0 2px;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .bulk-enquiry__field.is-invalid .bulk-enquiry__check-item {
+  .bulk-enquiry__tag-remove:hover {
+    color: #111111;
+  }
+
+  .bulk-enquiry__multiselect .bulk-enquiry__caret {
+    top: 21px;
+    transition: transform 0.15s ease;
+  }
+
+  .bulk-enquiry__multiselect.is-open .bulk-enquiry__caret {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  .bulk-enquiry__multiselect-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 30;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 10px;
+    max-height: 260px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+    background-color: #2c2c2c;
+    border: 1px solid rgba(226, 216, 191, 0.35);
+    border-radius: 6px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  .bulk-enquiry__multiselect.is-open .bulk-enquiry__multiselect-menu {
+    display: flex;
+  }
+
+  .bulk-enquiry__tag-option {
+    appearance: none;
+    border: 0;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    cursor: pointer;
+    text-align: left;
+    transition: filter 0.15s ease, transform 0.1s ease;
+    background-color: #E6E2DA;
+    color: #2B2B2B;
+  }
+
+  .bulk-enquiry__tag-option:hover {
+    filter: brightness(0.95);
+    transform: translateX(2px);
+  }
+
+  .bulk-enquiry__tag-option[hidden] {
+    display: none;
+  }
+
+  .bulk-enquiry__tag-option:nth-of-type(8n + 1) { background-color: #FADAD8; color: #5F1F1B; }
+  .bulk-enquiry__tag-option:nth-of-type(8n + 2) { background-color: #FDE4CF; color: #623311; }
+  .bulk-enquiry__tag-option:nth-of-type(8n + 3) { background-color: #F4E49C; color: #57440B; }
+  .bulk-enquiry__tag-option:nth-of-type(8n + 4) { background-color: #D7F2D9; color: #184D24; }
+  .bulk-enquiry__tag-option:nth-of-type(8n + 5) { background-color: #D5E6FA; color: #1B3E6B; }
+  .bulk-enquiry__tag-option:nth-of-type(8n + 6) { background-color: #E8DCFB; color: #44236B; }
+  .bulk-enquiry__tag-option:nth-of-type(8n + 7) { background-color: #FAD6F2; color: #661F58; }
+  .bulk-enquiry__tag-option:nth-of-type(8n + 8) { background-color: #E6E2DA; color: #33302A; }
+
+  .bulk-enquiry__multiselect-empty {
+    font-size: 12.5px;
+    color: var(--bulk-muted);
+    padding: 2px 4px;
+  }
+
+  .bulk-enquiry__field.is-invalid .bulk-enquiry__multiselect-trigger {
     border-color: var(--bulk-required);
   }
 
@@ -448,12 +561,9 @@
 
     .bulk-enquiry__input,
     .bulk-enquiry__select,
-    .bulk-enquiry__textarea {
+    .bulk-enquiry__textarea,
+    .bulk-enquiry__multiselect-trigger {
       font-size: 16px;
-    }
-
-    .bulk-enquiry__checkboxes {
-      grid-template-columns: 1fr;
     }
 
     .bulk-enquiry__submit {
@@ -543,22 +653,52 @@
             <p class="bulk-enquiry__hint">{{ customise_hint | escape }}</p>
           {%- endif -%}
           <div
-            class="bulk-enquiry__checkboxes"
+            class="bulk-enquiry__multiselect"
             id="BulkCustomise-{{ section.id }}"
+            data-multiselect
             data-checkbox-group="customise"
             data-required="true"
-            role="group"
-            aria-labelledby="BulkCustomiseLabel-{{ section.id }}"
+            data-placeholder="{{ select_placeholder | escape }}"
           >
-            {%- for opt in customise_opts -%}
-              {%- assign opt_clean = opt | strip -%}
-              {%- if opt_clean != blank -%}
-                <label class="bulk-enquiry__check-item">
-                  <input type="checkbox" name="customise" value="{{ opt_clean | escape }}">
-                  <span>{{ opt_clean | escape }}</span>
-                </label>
-              {%- endif -%}
-            {%- endfor -%}
+            <div
+              class="bulk-enquiry__multiselect-trigger"
+              id="BulkCustomiseTrigger-{{ section.id }}"
+              data-multiselect-trigger
+              role="combobox"
+              tabindex="0"
+              aria-haspopup="listbox"
+              aria-expanded="false"
+              aria-labelledby="BulkCustomiseLabel-{{ section.id }}"
+            >
+              <span class="bulk-enquiry__multiselect-placeholder" data-multiselect-placeholder>{{ select_placeholder | escape }}</span>
+              <div class="bulk-enquiry__multiselect-tags" data-multiselect-tags></div>
+              <span class="bulk-enquiry__caret" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </span>
+            </div>
+            <div
+              class="bulk-enquiry__multiselect-menu"
+              role="listbox"
+              aria-multiselectable="true"
+              aria-labelledby="BulkCustomiseLabel-{{ section.id }}"
+              data-multiselect-menu
+            >
+              {%- for opt in customise_opts -%}
+                {%- assign opt_clean = opt | strip -%}
+                {%- if opt_clean != blank -%}
+                  <input type="checkbox" name="customise" value="{{ opt_clean | escape }}" data-multiselect-input hidden>
+                  <button
+                    type="button"
+                    class="bulk-enquiry__tag-option"
+                    role="option"
+                    aria-selected="false"
+                    data-multiselect-option
+                    data-value="{{ opt_clean | escape }}"
+                  >{{ opt_clean | escape }}</button>
+                {%- endif -%}
+              {%- endfor -%}
+              <span class="bulk-enquiry__multiselect-empty" data-multiselect-empty hidden>All options selected</span>
+            </div>
           </div>
           <span class="bulk-enquiry__field-error">Please select at least one option.</span>
         </div>
@@ -808,14 +948,133 @@
       if (wrap) wrap.classList.remove('is-invalid');
     };
 
+    const multiselects = Array.from(form.querySelectorAll('[data-multiselect]'));
+
+    const closeMultiselect = (ms) => {
+      ms.classList.remove('is-open');
+      const trig = ms.querySelector('[data-multiselect-trigger]');
+      if (trig) trig.setAttribute('aria-expanded', 'false');
+    };
+
+    const syncMultiselect = (ms) => {
+      const tagsWrap = ms.querySelector('[data-multiselect-tags]');
+      const placeholderEl = ms.querySelector('[data-multiselect-placeholder]');
+      const emptyEl = ms.querySelector('[data-multiselect-empty]');
+      const inputs = Array.from(ms.querySelectorAll('[data-multiselect-input]'));
+      const optBtns = Array.from(ms.querySelectorAll('[data-multiselect-option]'));
+      if (!tagsWrap) return;
+
+      tagsWrap.textContent = '';
+      let selectedCount = 0;
+
+      inputs.forEach((input, idx) => {
+        const optBtn = optBtns[idx];
+        if (input.checked) {
+          selectedCount += 1;
+          if (optBtn) {
+            optBtn.hidden = true;
+            optBtn.setAttribute('aria-selected', 'true');
+          }
+          const tag = document.createElement('span');
+          tag.className = 'bulk-enquiry__tag';
+
+          const label = document.createElement('span');
+          label.textContent = input.value;
+
+          const removeBtn = document.createElement('button');
+          removeBtn.type = 'button';
+          removeBtn.className = 'bulk-enquiry__tag-remove';
+          removeBtn.setAttribute('aria-label', 'Remove ' + input.value);
+          removeBtn.textContent = '\u00D7';
+          removeBtn.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            input.checked = false;
+            syncMultiselect(ms);
+          });
+
+          tag.appendChild(label);
+          tag.appendChild(removeBtn);
+          tagsWrap.appendChild(tag);
+        } else if (optBtn) {
+          optBtn.hidden = false;
+          optBtn.setAttribute('aria-selected', 'false');
+        }
+      });
+
+      if (placeholderEl) placeholderEl.hidden = selectedCount > 0;
+      if (emptyEl) emptyEl.hidden = selectedCount < inputs.length;
+    };
+
+    multiselects.forEach((ms) => {
+      const trigger = ms.querySelector('[data-multiselect-trigger]');
+      const inputs = Array.from(ms.querySelectorAll('[data-multiselect-input]'));
+      const optBtns = Array.from(ms.querySelectorAll('[data-multiselect-option]'));
+
+      const toggleOpen = () => {
+        const nextOpen = !ms.classList.contains('is-open');
+        multiselects.forEach((other) => {
+          if (other !== ms) closeMultiselect(other);
+        });
+        ms.classList.toggle('is-open', nextOpen);
+        if (trigger) trigger.setAttribute('aria-expanded', nextOpen ? 'true' : 'false');
+      };
+
+      if (trigger) {
+        trigger.addEventListener('click', (ev) => {
+          if (ev.target.closest('.bulk-enquiry__tag-remove')) return;
+          toggleOpen();
+        });
+        trigger.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Enter' || ev.key === ' ') {
+            ev.preventDefault();
+            toggleOpen();
+          } else if (ev.key === 'Escape') {
+            closeMultiselect(ms);
+          }
+        });
+      }
+
+      optBtns.forEach((btn, idx) => {
+        btn.addEventListener('click', () => {
+          const input = inputs[idx];
+          if (!input) return;
+          input.checked = true;
+          syncMultiselect(ms);
+          clearFieldError(ms);
+        });
+      });
+
+      syncMultiselect(ms);
+    });
+
+    document.addEventListener('click', (ev) => {
+      multiselects.forEach((ms) => {
+        if (!ms.contains(ev.target)) closeMultiselect(ms);
+      });
+    });
+
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') {
+        multiselects.forEach((ms) => closeMultiselect(ms));
+      }
+    });
+
     form.querySelectorAll('input, select, textarea').forEach((el) => {
       el.addEventListener('input', () => clearFieldError(el));
       el.addEventListener('change', () => clearFieldError(el));
     });
 
+    const resetFormUI = () => {
+      form.reset();
+      multiselects.forEach((ms) => {
+        closeMultiselect(ms);
+        syncMultiselect(ms);
+      });
+    };
+
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
-        form.reset();
+        resetFormUI();
         successBox.hidden = true;
         errorBox.hidden = true;
         form.querySelectorAll('[data-field].is-invalid').forEach((w) => w.classList.remove('is-invalid'));
@@ -838,7 +1097,7 @@
         let focusEl = el;
         if (el.matches('[data-checkbox-group]')) {
           valid = el.querySelectorAll('input[type="checkbox"]:checked').length > 0;
-          focusEl = el.querySelector('input[type="checkbox"]') || el;
+          focusEl = el.querySelector('[data-multiselect-trigger]') || el.querySelector('input[type="checkbox"]') || el;
         } else {
           valid = el.checkValidity() && el.value.trim() !== '';
         }
@@ -899,7 +1158,7 @@
           throw new Error(result.error || 'Submission failed');
         }
 
-        form.reset();
+        resetFormUI();
         successBox.hidden = false;
       } catch (err) {
         console.error('[BulkEnquiry] Submit failed:', err);
